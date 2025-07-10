@@ -1,0 +1,106 @@
+
+
+MÓDULOS -> migrar los módulos de Geri a Erp -> REALIZADO 30/07/2024
+Agregar "Signo" a la tabla unidades -> REALIZADO 30/07/2024
+Una Vez Revisado todo comenzar con la migración de controladores, interfaces y modelos y migraciones -> SE COMENZÓ EL 30/07/2024
+Empresa_usuarios está mas desarrollado en erp2 que tiene Roles -> Se decide no migrarla desde Geri 30/07/2024
+
+Tabla Empresas  Usar el de Geri
+imagen          Nulo Si
+actividad1      Nulo Si
+email           usar geri
+habilitada      usar geri
+nombretitular   usar geri
+dnititular      usar geri       HECHO 02/08/2024
+- Redactar denuevo las leyendas de los módulos en el ModuloSeeder REALIZADO 02/08/2024
+- Ivas unificar nombre de campos, creo que el de geri no está tan desarrollado -> Agregar campo empresa_id realizando nuevamente la migración REALIZADO 02/08/2024
+- Modulos_usuario Geri tiene un campo más -> Revisado 04/08/2024
+- Modulos_usuario -> Agregar funcionalidad en el controlador de quien modifica el registro -> REALIZADO 04/08/2024
+- Seeder de Empresa_Modulos debe habilitar a la empresa los módulos básicos para trabajar cada vez que se crea una -> REALIZADO 04/08/2024
+- Arreglar los botones de Categorias que aparezcan horizontalmente -> REALIZADO 04/08/2024
+- Empresas -> controlar casillero de habilitada -> REALIZADO 06/07/2024
+- Usuarios x Módulo -> Hacer Paginación x 7 -> REALIZADO 26/08/24
+- Actualizar Roles -> No funciona -> REALIZADO 26/08/24
+- Se agregaron los permisos de Agregar/Eliminar/Modificar/Ver de módulos adicionales -> REALIZADO 26/08/24
+- Usuarios x Módulo -> hay que revisar funcionamiento -> REALIZADO 26/08/24
+- Revisar Tabs a los que les falta funcionalidad en ERP -> REALIZADO
+- Terminar de configurar Permission y Roles -> REALIZADO
+- Permitir abrir sólo módulos habilitados -> REALIZADO
+- Empresas -> Arreglar que cargue la imagen al dar de alta -> REALIZADO
+- Dar de Alta una categoría de producto -> REALIZADO 10/12/2024
+- Hacer interfaz de Listas -> REALIZADO 10/12/2024
+- Empresas -> Arreglar agregar distintos roles al usuario agregado -> REALIZADO
+
+- Revisar Compra simple ->permisos y funcionamiento -> REVISADO 11/12/2024
+- Revisar Venta simple ->permisos y funcionamiento -> REVISADO 11/12/2024
+- Estructura de tabla modulo_usuarios -> Revisar índices en la tabla -> REVISADO 11/12/2024
+- Generar todos los permisos para Ventas -> REVISADO 11/12/2024
+- Gestión de Módulos -> FUNCIONANDO 11/12/2024
+- Gestión de Roles -> FUNCIONANDO 11/12/2024
+
+- Generar todos los permisos para haberes -> REVISADO 13/12/2024
+- Terminar módulo VentaMostrador -> REALIZADO 13/12/2024
+
+- Revisar Vistaprevia.blade.php antigua para ver que información tenía en su momento -> REVISADO. Se mejoró el funcionamiento 17/12/2024
+- Revisar otras tablas faltantes que estaban en las hojas impresas -> Empezando en Geri 03/08/2024 ->REVISDO 16/12/2024
+
+- Pensar si la tabla recordset es necesaria desarrollarla ya que podría ser un Patron que tenga el mismo formato para hacer solicitudes a la base de datos -> REVISADO por ahora no se tendrá en cuenta
+- Agregar campo de Buscar en la interfaz de Elementos -> REALIZADO 26/12/2024
+
+- Geri ->  REALIZADO 29/12/2024
+    - Estados de Personas   Ok
+    - Tipos de Personas     Ok
+    - Beneficios            OK
+
+
+- tblCheques      Puede utilizarse el nombre Documentos - Revisar Backup para ver como se utilizaban
+- tblPagos hacer que al pagar por billeteras virtuales se impacte el pago en la tabla de Ventas
+
+No migrar recursos -> SE MIGRÓ PARA NO PERDER INFORMACIÓN SI MÁS ADELANTE NO ES NECESARIO SE ELIMINA
+Revisar que las tablas migradas tengan agregada la empresa a la que prertenecen
+-- Ingredientes no se si es necesario empresa_id -> Se entiende que Elementos tiene el id necesario 05/08/2024
+-- Artículos       Puede incluirse en Productos -> Se entiende que Elementos tiene el id necesario 05/08/2024
+
+
+--- /http/venta/ventacomponent.php   ->   // include('AfipControllerGuzze.php');  Se eliminó -> 03/01/2025
+- se eliminó del archivo composer.json  ->  -> 03/01/2025
+- se eliminaron todos los archivos del controlador de Ventas que generaran problema con ps4 -> 03/01/2025
+- Se eliminaron a clsempleados relrecibosempleados etc -> 03/01/2025
+-- Se corrieron los siguientes comandos para poder actualizar todo :
+    - composer clearcache
+    - rm -rf vendor/*
+    - composer install
+    - Se sube todo al directorio erp2, se actualiza el pull y luego se copia a cp -R erp2/ barber1/ porque parece que hay un problema con la redirección. 
+    el archivo .htaccess se copia por separado ya que no lo copia el cp. Hay que registrar en url register y luego relacionar el usuario en empresausuarios
+
+
+-- Medicamentos se considera que es necesario empresa_id, se deja para una próxima actualización -> Se entiende que Elementos tiene el id necesario 05/08/2024
+-- Camas no se si es necesario empresa_id -> Si es necesario. Se agrega 05/08/2024
+
+Ingredientes    REALIZADO 05/07/2024
+- Se mejoró la redirección de las páginas que se vence la sesión y se mejoraron la asignación de permisos a los módulos que tiene habilitado el usuario y la empresa -> 07/01/2025
+- Hacer Paciente_Medicamentos -> Realizado 07/01/2025 -> Pensar en el tema de la unidad/cantidad
+
+- Desarrollar RelPacienteMenu -> Se relaciona a travéz del Plan Alimentario que se elige para el paciente 01/05/2025
+
+- Medicamentos    REVISAR PORQUE HAY DOS INTERFACES MEDICAMENTOS Y ELEMENTOS-MEDICAMENTOS
+- FALTA AGREGAR ROLES Y PERMISOS POR EMPRESA, NO A NIVEL GENERAL, SINO PARTICULAR -> Por ahora se consifura cada usuario en particular cada uno de los permisos. Hay que habilitar la posibilidad de copiar usuarios y permisos
+
+- Gestión de Certificados
+
+- Desarrollar Faltantes de Stock  
+
+
+- CanonMensual    Puede incluirse en venta de Producto/servicio
+
+- Hacer StockMedicamentos
+
+Elementos -> Agregar Imágenes
+Artículos -> Agregar Imágenes
+Descartables -> Agregar Imágenes
+
+Revisar: no dar de alta a ventas/compras si faltan datos en proveedor/cliente, area y cuenta. Además agregar campo de detalle
+
+Revisar interfacesComponent para ver que sirve y si se puede utilizr para algo
+Revisar si PersonaComponent sigue vigente i ya no hace falta
+Verificar que TiposdePersonas esté a nivel global y no en Geri

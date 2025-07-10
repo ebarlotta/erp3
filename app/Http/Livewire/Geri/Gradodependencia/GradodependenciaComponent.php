@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Livewire\Geri\Gradodependencia;
+
+use App\Models\Geri\GradoDependencia;
+
+use Livewire\Component;
+
+class GradodependenciaComponent extends Component
+{
+    
+    public $gradodependenciaDescripcion, $gradodependencia_id;
+    public $gradodependencias;
+    public $isModalOpen = false;
+
+    public function render() {
+        if(auth()->check() && auth()->user()->hasPermissionTo('gradodependencia.Ver')) {
+            if(session('empresa_id')) {
+                $this->gradodependencias = GradoDependencia::all();
+                return view('livewire.geri.gradodependencia.gradodependencia-component',['isModalOpen'=>$this->isModalOpen, 'gradodependencias'=>$this->gradodependencias])->extends('layouts.adminlte');
+            } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
+        } else {
+            return view('SinPermiso')->extends('layouts.adminlte');
+        }
+    }
+
+    public function create()
+    {
+        $this->resetCreateForm();   
+        $this->openModalPopover();
+        $this->isModalOpen=true;
+        return view('livewire.geri.gradodependencia.gradodependencia-component',['isModalOpen'=>$this->isModalOpen, 'gradodependencias'=>$this->gradodependencias])->extends('layouts.adminlte');
+    }
+
+    public function openModalPopover()
+    {
+        $this->isModalOpen = true;
+    }
+
+    public function closeModalPopover()
+    {
+        $this->isModalOpen = false;
+    }
+
+    private function resetCreateForm(){
+        $this->gradodependencia_id = '';
+        $this->gradodependenciaDescripcion = '';
+    }
+    
+    public function store()
+    {
+        $this->validate([
+            'gradodependenciaDescripcion' => 'required',
+        ]);
+    
+        GradoDependencia::updateOrCreate(['id' => $this->gradodependencia_id], [
+            'gradodependenciaDescripcion' => $this->gradodependenciaDescripcion,
+        ]);
+
+        session()->flash('message', $this->gradodependencia_id ? 'Grado de dependencia Actualizada.' : 'Grado de dependencia Creada.');
+
+        $this->closeModalPopover();
+        $this->resetCreateForm();
+    }
+
+    public function edit($id)
+    {
+        $gradodependencia = GradoDependencia::findOrFail($id);
+        $this->id = $id;
+        $this->gradodependencia_id=$id;
+        $this->gradodependenciaDescripcion = $gradodependencia->gradodependenciaDescripcion;
+        
+        $this->openModalPopover();
+    }
+    
+    public function delete($id)
+    {
+        GradoDependencia::find($id)->delete();
+        session()->flash('message', 'Grado de dependencia Eliminada.');
+    }
+}

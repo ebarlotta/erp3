@@ -25,9 +25,9 @@ class DatabaseSeeder extends Seeder
         $this->call(CondicionivaSeeder::class);
         $this->call(PermissionsSeeder::class);
         $this->call(SexoSeeder::class);
-        
-        DB::table('empresas')->insert(['name' => 'Empresa de Pruebas','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'BarBer.png','establecimiento' => '0','telefono' => '12345678','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'enzo@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
-      
+
+        DB::table('empresas')->insert(['name' => 'Administración','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'enzobarlotta@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
+
         DB::table('roles')->insert(['name' => 'Administrador','guard_name' => 'web',]);
         DB::table('roles')->insert(['name' => 'Usuario','guard_name' => 'web',]);
 
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EmpresaModuloSeeder::class);
 
         $this->call(EscolaridadesSeeder::class);
-        
+
         // $this->call(TipoDePersonaSeeder::class);
         DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Agente',]);
         DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Referente',]);
@@ -109,7 +109,7 @@ class DatabaseSeeder extends Seeder
         DB::table('areas')->insert(['name'=>'Historia De Vida','empresa_id'=>1,'habilitada'=>1]);
         DB::table('areas')->insert(['name'=>'Pagos','empresa_id'=>1,'habilitada'=>1]);
         DB::table('areas')->insert(['name'=>'Nutricional','empresa_id'=>1,'habilitada'=>1]);
-        
+
         $this->call(ModSeeder::class);
 
         $this->call(MomentosDelDiaSeeder::class);

@@ -26,7 +26,7 @@ class Roles extends Model
         ->get('rol_id');
         // ->get();
         session(['rol_id' => $a[0]['rol_id']]);
-        
+
         $r = Roles::find($a[0]['rol_id']);
         $rol = $r->name;
         //Trae el Rol del usuario y lo almacena en una variable global
@@ -35,7 +35,7 @@ class Roles extends Model
         foreach($todos as $permiso) {
             session([$permiso->name => false ]);
         }
-        
+
         //Busca todos los permisos habilitados para el Rol y los coloca a nivel global
         $sql = 'select roles.name, permissions.name as nombre from roles inner join role_has_permissions inner join permissions where roles.name="' . $rol . '" and roles.id = role_has_permissions.role_id and role_has_permissions.permission_id = permissions.id';
         $a = DB::select($sql);

@@ -10,6 +10,8 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 
+use Spatie\Permission\Models\Permission;
+
 // Dispatch::all() => Returns a Collection
 // Dispatch::all()->where() => Returns a Collection
 // Dispatch::where() => Returns a Query
@@ -60,7 +62,7 @@ class ModuloUsuariosComponent extends Component
     public function closeModalPopover()
     {
         $this->isModalOpen = false;
-    }   
+    }
 
     public function CargarUsuarios($id)
     {
@@ -93,10 +95,24 @@ class ModuloUsuariosComponent extends Component
     {
         if(isset($this->moduloseleccionado->id) && isset( $user_id) && isset(Auth()->user()->id)) {
             ModuloUsuario::create([
-                'modulo_id' => $this->moduloseleccionado->id, 
-                'user_id' => $user_id, 
+                'modulo_id' => $this->moduloseleccionado->id,
+                'user_id' => $user_id,
                 'modificado_user_id'=>Auth()->user()->id]
             );
+
+            $modulo = "'" . strtolower($this->moduloseleccionado->pagina.'.%') . "'";
+            $modulo = strtolower($this->moduloseleccionado->pagina.'.%');
+
+            $adicionales = Permission::whereRaw("name LIKE ?", [$modulo])->get();
+            // $adicionales = Permission::where('name', 'LIKE', $modulo)->get();
+            // dd($adicionales);
+            foreach ($adicionales as $adic) {
+                DB::table('model_has_permissions')->insert([
+                    'permission_id' => $adic->id,
+                    'model_type' => 'App\Models\User',
+                    'model_id' => Auth::id()
+                ]);
+            }
         } else { session()->flash('message', 'Se ha producido un error, revise los datos y vuelva a intentarlo'); }
 
         $this->closeModalPopover();

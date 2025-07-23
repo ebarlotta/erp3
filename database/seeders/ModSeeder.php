@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 class ModSeeder extends Seeder
 {
@@ -18,46 +19,58 @@ class ModSeeder extends Seeder
      */
     public function run()
     {
-        // $modulos=Modulo::all();
-        // // dd($modulos);
-        // $a=[];
-        // foreach($modulos as $modulo) {
-        //     DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Agregar','guard_name'=>'web']);
-        //     DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Eliminar','guard_name'=>'web']);
-        //     DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Modificar','guard_name'=>'web']);
-        //     DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name'=>'web']);
-        // }
+        $modulos=Modulo::all();
+        $a=[];
+        foreach($modulos as $modulo) {
+            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Agregar','guard_name'=>'web']);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Eliminar','guard_name'=>'web']);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Modificar','guard_name'=>'web']);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name'=>'web']);
+        }
+        $modulos = array(  'GestionModulo', 'Certificado', 'Disenar', 'CompraSimple', 'Actor', 'Informe', 'Persona', 'Carts');
 
-        // $modulos = array('Diseñar', 'Informe', 'Persona', 'Carts');
-        // // $modulos = array('EmpresaUsuarios', 'PersonActivo', 'ModuloUsuarios', 'Modulo', 'GestionModulo', 'Roles', 'Localidades', 'Nacionalidad', 'Elementos', 'Certificado', 'Tablas', 'Categoriaprofesional', 'Disenar', 'CompraSimple', 'Actor', 'Beneficios', 'EstadosCiviles', 'TiposDePersonas', 'TiposDeDocumentos', 'PersonActivo', 'Escolaridades', 'Informe', 'Medicamentos', 'Persona', 'Carts');
+        // // $modulos = array(  'Carts','Persona','Informe','Diseñar','EmpresaUsuarios', 'PersonActivo', 'ModuloUsuarios', 'Modulo', 'Roles', 'Localidades', 'Nacionalidad', 'Elementos', 'Tablas', 'Categoriaprofesional', 'Beneficios', 'EstadosCiviles', 'TiposDePersonas', 'TiposDeDocumentos', 'PersonActivo', 'Escolaridades', 'Medicamentos');
 
+        foreach($modulos as $modulo) {
+            DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Agregar','guard_name'=>'web']);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Eliminar','guard_name'=>'web']);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Modificar','guard_name'=>'web']);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Ver','guard_name'=>'web']);
+        }
 
-        // foreach($modulos as $modulo) {
-        //     DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Agregar','guard_name'=>'web']);
-        //     DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Eliminar','guard_name'=>'web']);
-        //     DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Modificar','guard_name'=>'web']);
-        //     DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Ver','guard_name'=>'web']);
-        // }
-
-        // // acá van todos los sistemas o subsistemas para que puedan ser visibles
-        // DB::table('permissions')->insert(['name'=>strtolower('Administracion') . '.Ver','guard_name'=>'web']);
-        // DB::table('permissions')->insert(['name'=>strtolower('ERP') . '.Ver','guard_name'=>'web']);
-        // DB::table('permissions')->insert(['name'=>strtolower('Geri') . '.Ver','guard_name'=>'web']);
-        // DB::table('permissions')->insert(['name'=>strtolower('Localizacion') . '.Ver','guard_name'=>'web']);
-        // DB::table('permissions')->insert(['name'=>strtolower('Generales') . '.Ver','guard_name'=>'web']);
+        // acá van todos los sistemas o subsistemas para que puedan ser visibles
+        DB::table('permissions')->insert(['name'=>strtolower('Administracion') . '.Ver','guard_name'=>'web']);
+        DB::table('permissions')->insert(['name'=>strtolower('ERP') . '.Ver','guard_name'=>'web']);
+        DB::table('permissions')->insert(['name'=>strtolower('Geri') . '.Ver','guard_name'=>'web']);
+        DB::table('permissions')->insert(['name'=>strtolower('Localizacion') . '.Ver','guard_name'=>'web']);
+        DB::table('permissions')->insert(['name'=>strtolower('Generales') . '.Ver','guard_name'=>'web']);
         // // // DB::table('permissions')->insert(['name'=>strtolower('Informe') . '.Ver','guard_name'=>'web']);
 
         //Asigna al Usuario Administrador todos los permisos
         $permisos = Permission::all();
-        $user = User::find(1);   // Busca a cada usuario y
-        foreach($permisos as $permiso) {
-            $user->givePermissionTo($permiso->name); // Agrega en model_has_permissions
-            $aux = 'INSERT INTO role_has_permissions (permission_id, role_id) VALUES ('.$permiso->id.', 1)';
-            db::select($aux);  // Agrega en role_has_permissions
+        $role = Role::find(1); // Rol Administrador
+
+        $role->syncPermissions($permisos); // Asigna todos los permisos
+
+        // $user = User::find(1);   // Busca a cada usuario y
+        // foreach($permisos as $permiso) {
+            // $user->givePermissionTo($permiso->name); // Agrega en model_has_permissions
+        //     $aux = 'INSERT INTO role_has_permissions (permission_id, role_id) VALUES ('.$permiso->id.', 1)';
+        //     db::select($aux);  // Agrega en role_has_permissions
+        // }
+
+        DB::table('empresa_usuarios')->insert(['empresa_id'=>1,'user_id'=>1,'rol_id'=>1]);
+        DB::table('modulo_usuarios')->insert(['modulo_id'=>1,'user_id'=>1,'modificado_user_id'=>1]);
+        DB::table('modulo_usuarios')->insert(['modulo_id'=>2,'user_id'=>1,'modificado_user_id'=>1]);
+        DB::table('modulo_usuarios')->insert(['modulo_id'=>3,'user_id'=>1,'modificado_user_id'=>1]);
+        DB::table('modulo_usuarios')->insert(['modulo_id'=>4,'user_id'=>1,'modificado_user_id'=>1]);
+        DB::table('modulo_usuarios')->insert(['modulo_id'=>5,'user_id'=>1,'modificado_user_id'=>1]);
+        DB::table('modulo_usuarios')->insert(['modulo_id'=>6,'user_id'=>1,'modificado_user_id'=>1]);
+        DB::table('modulo_usuarios')->insert(['modulo_id'=>7,'user_id'=>1,'modificado_user_id'=>1]);
+
+        for($i=1;$i<=24;$i++) {
+            DB::table('model_has_permissions')->insert(['permission_id'=>$i,'model_type'=>'App\Models\User','model_id'=>1]);
         }
-
-
 
     }
 }
-       

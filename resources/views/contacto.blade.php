@@ -261,7 +261,7 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('fondo-blur.jpg') no-repeat center center fixed;
+      /* background: url('fondo-blur.jpg') no-repeat center center fixed; */
       background-size: cover;
       backdrop-filter: blur(4px);
     }

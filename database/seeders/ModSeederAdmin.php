@@ -23,7 +23,7 @@ class ModSeederAdmin extends Seeder
 
 
         // Relaciona a la empresa Administración con todos los módulos administrativos
-        DB::table('modulo_usuarios')->insert(['modulo_id'=>1,'user_id'=>1,'modificado_user_id'=>1]);
+        // DB::table('modulo_usuarios')->insert(['modulo_id'=>1,'user_id'=>1,'modificado_user_id'=>1]);
         DB::table('modulo_usuarios')->insert(['modulo_id'=>2,'user_id'=>1,'modificado_user_id'=>1]);
         DB::table('modulo_usuarios')->insert(['modulo_id'=>3,'user_id'=>1,'modificado_user_id'=>1]);
         DB::table('modulo_usuarios')->insert(['modulo_id'=>4,'user_id'=>1,'modificado_user_id'=>1]);

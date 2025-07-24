@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ModSeederNewUser extends Seeder
 {
@@ -22,7 +23,7 @@ class ModSeederNewUser extends Seeder
     public function run()
     {
         // Relaciona al usuario con los módulos de la empresa de Prueba
-        $array = ['compras','ventas'];
+        $array = ['compras','ventas','actores','clientes','proveedores','productos','cuentas','areas'];
         foreach($array as $m) {
             $modulo = strtolower($m.'%');
             // $modulo = strtolower('compras.%');
@@ -31,7 +32,7 @@ class ModSeederNewUser extends Seeder
                 DB::table('model_has_permissions')->insert([
                     'permission_id' => $adic->id,
                     'model_type' => 'App\Models\User',
-                    'model_id' => Auth::id()
+                    'model_id' => $this->user_id
                 ]);
             }
         }

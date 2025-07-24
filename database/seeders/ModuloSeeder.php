@@ -14,6 +14,7 @@ class ModuloSeeder extends Seeder
      */
     public function run()
     {
+        // modulos del 1-7
         DB::table('modulos')->insert(['name' => 'Empresas', 'pagina' => 'empresagestion','imagen'=>'empresa.jpg','leyenda'=>'ABM de Empresas.','habilitado'=>1]);
         DB::table('modulos')->insert(['name' => 'Módulos x Empresa', 'pagina' => 'empresamodulos','imagen'=>'empresamodulos.jpg','leyenda'=>'ABM de Módulos x Empresa.','habilitado'=>1]);
         DB::table('modulos')->insert(['name' => 'Gestión de Módulos', 'pagina' => 'gestionmodulos','imagen'=>'gestionmodulos.jpg','leyenda'=>'Gestión de Módulos.','habilitado'=>1]);
@@ -22,7 +23,7 @@ class ModuloSeeder extends Seeder
         DB::table('modulos')->insert(['name' => 'Roles', 'pagina' => 'roles','imagen'=>'roles.jpg','leyenda'=>'Gestión de Roles.','habilitado'=>1]);
         DB::table('modulos')->insert(['name' => 'Certificados', 'pagina' => 'certificados','imagen'=>'certificados.jpg','leyenda'=>'Gestión de Certificados.','habilitado'=>1]);
         
-
+        // modulos 8-22
         DB::table('modulos')->insert(['name' => 'Unidades', 'pagina' => 'unidades','imagen'=>'unidades.jpg','leyenda'=>'Permite individualizar a cada producto con sus unidades de medida precisa a la hora de tener un control del stock de los mismos.','habilitado'=>1]);
         DB::table('modulos')->insert(['name' => 'Cuentas', 'pagina' => 'cuentas','imagen'=>'cuentas.jpg','leyenda'=>'Divida los movimientos en distintas cuentas contables que puede utilizar para filtrar información.','habilitado'=>1]);
         DB::table('modulos')->insert(['name' => 'Areas', 'pagina' => 'areas','imagen'=>'areas.jpg','leyenda'=>'Genere áreas/sectores/unidades de negocio de su organización para poder llevar un control más detallado.','habilitado'=>1]);
@@ -39,6 +40,7 @@ class ModuloSeeder extends Seeder
         DB::table('modulos')->insert(['name' => 'Escolaridades', 'pagina' => 'escolaridades','imagen'=>'escolaridades.jpg','leyenda'=>'Gestiona las escolaridades de las personas','habilitado'=>1]);
         DB::table('modulos')->insert(['name' => 'Tablas/Informes', 'pagina' => 'tablas','imagen'=>'tablas.jpg','leyenda'=>'Gestiona informes','habilitado'=>1]);
         
+        // modulos 23-36
         DB::table('modulos')->insert(['name' => 'Clientes', 'pagina' => 'clientes','imagen'=>'clientes.jpg','leyenda'=>'Agregue nuevos clientes o modifique los datos ya ingresados.','habilitado'=>1]);    //erp 
         DB::table('modulos')->insert(['name' => 'Compras', 'pagina' => 'compras','imagen'=>'compras.jpg','leyenda'=>'Registre todos los comprobantes de las compras/gastos realizados. Ingrese al stock los productos adquiridos.','habilitado'=>1]);   //erp 
         DB::table('modulos')->insert(['name' => 'Empleados', 'pagina' => 'empleados','imagen'=>'empleados.jpg','leyenda'=>'Realice altas, modificaciones, y bajas del personal que desarrolla las actividades en su organización.','habilitado'=>1]);   //erp 
@@ -54,6 +56,7 @@ class ModuloSeeder extends Seeder
         DB::table('modulos')->insert(['name' => 'Compra-Ventas Simple', 'pagina' => 'VentaSimple','imagen'=>'compraventa.jpg','leyenda'=>'Registre comprobantes de ventas o de compras facilmente desde su dispositivo móvil, registre rápidamente sus operaciones','habilitado'=>1]);    //erp
         DB::table('modulos')->insert(['name' => 'Estado de Personas', 'pagina' => 'personactivo','imagen'=>'personactivo.jpg','leyenda'=>'Registre los distintos estados de las personas que participan.','habilitado'=>1]);    //erp
         
+        // modulos 37-50
         DB::table('modulos')->insert(['name' => 'Categorias', 'pagina' => 'categorias','imagen'=>'categorias.jpg','leyenda'=>'Configure las distintas categorias de Ingredientes.','habilitado'=>1]);    // Geri
         DB::table('modulos')->insert(['name' => 'Estado de Cama', 'pagina' => 'estadocama','imagen'=>'estadocama.jpg','leyenda'=>'Estado individual de cada una de las camas en la institución.','habilitado'=>1]);    // Geri
         DB::table('modulos')->insert(['name' => 'Grado de pendencia', 'pagina' => 'gradodependencia','imagen'=>'dependencia.jpg','leyenda'=>'Resgitre el estado de dependencia de una persona.','habilitado'=>1]);  // Geri

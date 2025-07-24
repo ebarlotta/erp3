@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Livewire\erp\Venta\AfipComponent;
+
+
 // include_once __DIR__.'/Afip.php';
 
 // use Afip as Afip;
@@ -33,7 +36,7 @@ use Illuminate\Support\Facades\Auth;
 // include('AfipControllerGuzze.php');
 
 use Illuminate\Support\Facades\Storage;
-
+use PHPUnit\Framework\EmptyStringException;
 
 class VentaComponent extends Component
 {
@@ -76,18 +79,16 @@ class VentaComponent extends Component
     public function render()
     {
         if ( !Auth::check() ) { return view('welcome');  return route('dashboard'); }
-
+        // $a = new AfipComponent();
+        
+        // $a->FESolici
         $anio = date("Y");
         if(is_null($this->gfanio)) { $this->gfanio = $anio; }; //La primara vez que inicia revisa si es nulo y en ese caso cambia al año actual, sino no lo toca más
     
         if ($this->ddesde==null || $this->dhasta==null || $this->cdesde==null || $this->chasta==null || $this->ccdesde==null || $this->cchasta==null ) { $anio = date("Y"); } 
 
-        $this->ddesde = date($anio.'-01-01');
-        $this->dhasta = date($anio.'-12-31');
-        $this->cdesde = date($anio.'-01-01');
-        $this->chasta = date($anio.'-12-31');
-        $this->ccdesde = date($anio.'-01-01');
-        $this->cchasta = date($anio.'-12-31');
+        $this->ddesde = $this->ccdesde = $this->cdesde = date($anio.'-01-01');
+        $this->dhasta = $this->chasta = $this->cchasta = date($anio.'-12-31');
 
         if (!is_null(session('empresa_id'))) { $this->empresa_id = session('empresa_id'); } 
         else { 

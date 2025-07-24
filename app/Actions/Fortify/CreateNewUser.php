@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 use App\Models\EmpresaUsuario;
-use Illuminate\Database\Seeder;
+use Database\Seeders\ModSeederNewUser as SeedersModSeederNewUser;
+use Illuminate\Support\Facades\DB;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -36,9 +37,22 @@ class CreateNewUser implements CreatesNewUsers
 
         //Relaciona el usuario creado con la empresa de prueba
         EmpresaUsuario::create(['empresa_id' => 2,'user_id' => $user->id,'rol_id' => 2]);
-        $this->call(ModSeederNewUser::class);
+        
+        $uu = new SeedersModSeederNewUser();
+        $uu->user_id = $user->id;
+        $uu->run();
+        // $this->call(ModSeederNewUser::class);
         //Relaciona al usuario creado con los módulos de la empresa de prueba
 
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '9', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '10', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '11', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '17', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '23', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '24', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '26', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '27', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '28', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
 
         return $user;
         // return User::create([

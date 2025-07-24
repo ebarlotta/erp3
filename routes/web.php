@@ -98,6 +98,10 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::get('/portfolio', function () { return view('portfolio'); });
+Route::get('/nosotros', function () { return view('nosotros'); });
+Route::view('/contacto', 'contacto')->name('contacto');
+
 Route::get('areas',AreaComponent::class)->name('areas');
 Route::get('categorias',CategoriasComponent::class)->name('categorias');
 Route::get('categoriaprofesional',CategoriaprofesionalComponent::class)->name('categoriaprofesional');

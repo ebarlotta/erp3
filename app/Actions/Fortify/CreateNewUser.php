@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
+use App\Models\EmpresaUsuario;
+use Illuminate\Database\Seeder;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -26,12 +28,26 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
-        $user->assignRole('user'); // Asignar rol por defecto
+
+        //Relaciona el usuario creado con la empresa de prueba
+        EmpresaUsuario::create(['empresa_id' => 2,'user_id' => $user->id,'rol_id' => 2]);
+        $this->call(ModSeederNewUser::class);
+        //Relaciona al usuario creado con los módulos de la empresa de prueba
+
+
+        return $user;
+        // return User::create([
+        //     'name' => $input['name'],
+        //     'email' => $input['email'],
+        //     'password' => Hash::make($input['password']),
+        // ]);
+        $user->assignRole('usuario'); // Asignar rol por defecto
+        // $user->assignRole('user'); // Asignar rol por defecto
 
     }
 }

@@ -21,7 +21,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        dd('aca es en fortify');
+        // dd('aca es en fortify');
     }
 
     /**

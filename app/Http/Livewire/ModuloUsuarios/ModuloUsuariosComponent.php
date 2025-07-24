@@ -100,7 +100,7 @@ class ModuloUsuariosComponent extends Component
                 'modificado_user_id'=>Auth()->user()->id]
             );
 
-            $modulo = "'" . strtolower($this->moduloseleccionado->pagina.'.%') . "'";
+            // $modulo = "'" . strtolower($this->moduloseleccionado->pagina.'.%') . "'";
             $modulo = strtolower($this->moduloseleccionado->pagina.'.%');
 
             $adicionales = Permission::whereRaw("name LIKE ?", [$modulo])->get();

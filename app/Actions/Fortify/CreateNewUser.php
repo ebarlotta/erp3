@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 use App\Models\EmpresaUsuario;
-use Database\Seeders\ModSeederNewUser as SeedersModSeederNewUser;
+use Database\Seeders\ModSeederNewUser;
 use Illuminate\Support\Facades\DB;
 
 class CreateNewUser implements CreatesNewUsers
@@ -37,8 +37,8 @@ class CreateNewUser implements CreatesNewUsers
 
         //Relaciona el usuario creado con la empresa de prueba
         EmpresaUsuario::create(['empresa_id' => 2,'user_id' => $user->id,'rol_id' => 2]);
-        
-        $uu = new SeedersModSeederNewUser();
+
+        $uu = new ModSeederNewUser();
         $uu->user_id = $user->id;
         $uu->run();
         // $this->call(ModSeederNewUser::class);

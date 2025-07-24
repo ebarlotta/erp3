@@ -95,7 +95,7 @@
                                     </select>
                                     @error('viviendapropia') <span class="text-red-500">{{ $message }}</span>@enderror
                                 </div>
-                                
+
                                 <div class="mb-2 col-4">
                                     <label class="block text-gray-700 text-sm font-bold mb-2">Cant. hijos varones</label>
                                     <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Cantidad de hijos varones" wire:model="canthijosvarones">
@@ -137,7 +137,7 @@
                                     <label class="block text-gray-700 text-sm font-bold mb-2">Fecha de Ingreso</label>
                                     <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="fingreso" wire:model="fingreso">
                                     @error('fingreso') <span class="text-red-500">{{ $message }}</span>@enderror
-                                </div>                            
+                                </div>
                                 <div class="mb-2 col-4">
                                     <label class="block text-gray-700 text-sm font-bold mb-2">Ingreso Mínimo</label>
                                     <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="iminimo" wire:model="iminimo">
@@ -191,7 +191,7 @@
                                     <select class="col-12 form-control" name="iva_id" id="" wire:model="iva_id" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;">
                                         <option value="">-</option>
                                         @foreach($ivas as $iva)
-                                            <option value="{{ $iva->id }}">{{ $iva->descripcion}}</option>
+                                            <option value="{{ $iva->id }}">{{ $iva->descripcion }}</option>
                                         @endforeach
                                     </select>
                                     @error('iva_id') <span class="text-red-500">{{ $message }}</span>@enderror
@@ -211,10 +211,10 @@
                             @if($tipopersona_id==7)
                                 <div class="mb-2 col-4">
                                     <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de IVA</label>
-                                    <select class="col-12 form-control" name="iva_id" id="" wire:model="iva_id" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;">
+                                    <select class="col-12 form-control" name="iva_id" wire:model="iva_id" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;">
                                         <option value="">-</option>
                                         @foreach($ivas as $iva)
-                                            <option value="{{ $iva->id }}">{{ $iva->descripcioniva}}</option>
+                                            <option value="{{ $iva->id }}">{{ $iva->descripcion}}</option>
                                         @endforeach
                                     </select>
                                     @error('iva_id') <span class="text-red-500">{{ $message }}</span>@enderror
@@ -239,8 +239,8 @@
                                     </div>
                                 @endif
                             @endif
-                        </div>                        
-                    </div>                    
+                        </div>
+                    </div>
 
                 </div>
                 <!-- Botones -->

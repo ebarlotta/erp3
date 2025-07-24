@@ -262,7 +262,7 @@
 
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
         <div class="background-container">
-            <img class="background-image" src="images/fondo.jpeg" alt="Fondo">
+            <img class="background-image" src="{{ asset('images/fondo.jpeg') }}" alt="Fondo">
         </div>
 
         <section class="hero">

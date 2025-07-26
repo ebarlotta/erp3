@@ -14,15 +14,22 @@
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
+            <div class="flex d-flex col-12">
+                <div class="col-8 pr-4">
 
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            </div>
+                    <div>
+                        <x-label for="email" value="{{ __('Email') }}" />
+                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                    </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                    <div class="mt-4">
+                        <x-label for="password" value="{{ __('Password') }}" />
+                        <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                    </div>
+                </div>
+                <div class="col-4 d-none d-md-block">
+                    <img src="{{ asset('images/login1.jpeg') }}" alt="Imagen" class="img-fluid h-100 w-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px;">
+                </div>
             </div>
 
             <div class="block mt-4">

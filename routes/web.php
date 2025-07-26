@@ -83,6 +83,14 @@ use App\Http\Controllers\Productos;
 use App\Http\Livewire\Expendio\ExpendioComponent;
 use App\Http\Livewire\Listas\ListaComponent;
 
+
+//Imprenta
+//========
+use App\Http\Livewire\Imprenta\EnviarComponent;
+use App\Http\Livewire\Imprenta\AdminComponent;
+use App\Http\Livewire\Imprenta\PedidoComponent;
+
+
 Route::get('/', function () {
     return redirect()->route('login');
     // return view('welcome');
@@ -232,3 +240,8 @@ Route::get('modalpreguntas',[ActorComponent::class,'ResponderInforme1'])->name('
 //     Route::get('statusgetLastVoucher', [AfipController::class, 'getLastVoucher'])->name('statusgetLastVoucher');
 //     // Otras rutas web...
 // });
+
+Route::get('/imprenta/envios', EnviarComponent::class)->name('enviar');
+Route::get('/imprenta/admin', AdminComponent::class)->name('admin');
+Route::get('/imprenta/pedidos', PedidoComponent::class)->name('pedidos');
+

@@ -123,5 +123,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call(MomentosDelDiaSeeder::class);
         $this->call(DiasDeLaSemanaSeeder::class);
+
+        $this->call(ImprentaSistemaimpresionSeeder::class);
+        $this->call(ImprentaPapelSeeder::class);
+        $this->call(ImprentaLadoSeeder::class);
+        $this->call(ImprentaEstadosSeeder::class);
+        $this->call(ImprentaTipodocumentoSeeder::class);
     }
 }

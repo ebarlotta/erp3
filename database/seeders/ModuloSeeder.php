@@ -72,5 +72,11 @@ class ModuloSeeder extends Seeder
         DB::table('modulos')->insert(['name' => 'Tipos de Personas', 'pagina' => 'tiposdepersonas','imagen'=>'tiposdepersonas.jpg','leyenda'=>'Administra los distintos actores/personas dentro del sistema.','habilitado'=>1]);   // Geri
         DB::table('modulos')->insert(['name' => 'Planes Alimentarios', 'pagina' => 'planalimentario','imagen'=>'planalimentario.jpg','leyenda'=>'Administra los distintos Planes alimentarios de la institución.','habilitado'=>1]);   // Geri
         DB::table('modulos')->insert(['name' => 'Expendio', 'pagina' => 'expendio','imagen'=>'expendio.jpg','leyenda'=>'Administra el expendio de los menúes.','habilitado'=>1]);   // Geri
+
+        // Módulos 51-53  --- IMPRENTA
+        DB::table('modulos')->insert(['name' => 'Pedidos', 'pagina' => 'imprenta/pedidos','imagen'=>'pedido.jpg','leyenda'=>'Gestiona los pedidos de clientes','habilitado'=>1]);   // 51
+        DB::table('modulos')->insert(['name' => 'Envíos', 'pagina' => 'imprenta/envios','imagen'=>'envio.jpg','leyenda'=>'Gestiona los envíos.','habilitado'=>1]);   // 52
+        DB::table('modulos')->insert(['name' => 'Administración Imprenta', 'pagina' => 'imprenta/admin','imagen'=>'administracion.jpg','leyenda'=>'Administra la Imprenta/Centro de Copiado.','habilitado'=>1]);   // 53
+
     }
 }

@@ -29,8 +29,9 @@ class DatabaseSeeder extends Seeder
         DB::table('empresas')->insert(['name' => 'Administración','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'enzobarlotta@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
 
         DB::table('empresas')->insert(['name' => 'Empresa ERP SA','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'prueba@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
-        DB::table('empresas')->insert(['name' => 'Empresa Inmobiliaria','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'prueba@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
+        DB::table('empresas')->insert(['name' => 'Empresa Imprenta SA','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'prueba@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
         DB::table('empresas')->insert(['name' => 'Empresa Gastronómica','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'prueba@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
+        DB::table('empresas')->insert(['name' => 'Empresa Inmobiliaria','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'prueba@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
 
         DB::table('roles')->insert(['name' => 'Administrador','guard_name' => 'web',]);
         DB::table('roles')->insert(['name' => 'Usuario','guard_name' => 'web',]);
@@ -119,5 +120,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call(MomentosDelDiaSeeder::class);
         $this->call(DiasDeLaSemanaSeeder::class);
+
+        $this->call(ImprentaSistemaimpresionSeeder::class);
+        $this->call(ImprentaPapelSeeder::class);
+        $this->call(ImprentaLadoSeeder::class);
+        $this->call(ImprentaEstadosSeeder::class);
+        $this->call(ImprentaTipodocumentoSeeder::class);
     }
 }

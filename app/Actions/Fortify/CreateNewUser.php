@@ -35,8 +35,14 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
-        //Relaciona el usuario creado con la empresa de prueba
+        //Relaciona el usuario creado con la empresa ERP
         EmpresaUsuario::create(['empresa_id' => 2,'user_id' => $user->id,'rol_id' => 2]);
+        //Relaciona el usuario creado con la empresa Imprenta
+        EmpresaUsuario::create(['empresa_id' => 3,'user_id' => $user->id,'rol_id' => 2]);
+        //Relaciona el usuario creado con la empresa de Gastronómica
+        EmpresaUsuario::create(['empresa_id' => 4,'user_id' => $user->id,'rol_id' => 2]);
+        //Relaciona el usuario creado con la empresa Inmobiliaria
+        EmpresaUsuario::create(['empresa_id' => 5,'user_id' => $user->id,'rol_id' => 2]);
 
         $uu = new ModSeederNewUser();
         $uu->user_id = $user->id;
@@ -53,6 +59,12 @@ class CreateNewUser implements CreatesNewUsers
         DB::table('modulo_usuarios')->insert(['modulo_id' => '26', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
         DB::table('modulo_usuarios')->insert(['modulo_id' => '27', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
         DB::table('modulo_usuarios')->insert(['modulo_id' => '28', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+
+        // Imprenta
+        // ========
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '51', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '52', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        DB::table('modulo_usuarios')->insert(['modulo_id' => '53', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
 
         return $user;
         // return User::create([

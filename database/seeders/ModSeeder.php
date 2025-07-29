@@ -42,6 +42,7 @@ class ModSeeder extends Seeder
         DB::table('permissions')->insert(['name'=>strtolower('Administracion') . '.Ver','guard_name'=>'web']);
         DB::table('permissions')->insert(['name'=>strtolower('ERP') . '.Ver','guard_name'=>'web']);
         DB::table('permissions')->insert(['name'=>strtolower('Geri') . '.Ver','guard_name'=>'web']);
+        DB::table('permissions')->insert(['name'=>strtolower('Imprenta') . '.Ver','guard_name'=>'web']);
         DB::table('permissions')->insert(['name'=>strtolower('Localizacion') . '.Ver','guard_name'=>'web']);
         DB::table('permissions')->insert(['name'=>strtolower('Generales') . '.Ver','guard_name'=>'web']);
         // // // DB::table('permissions')->insert(['name'=>strtolower('Informe') . '.Ver','guard_name'=>'web']);

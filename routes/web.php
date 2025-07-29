@@ -83,6 +83,13 @@ use App\Http\Controllers\Productos;
 use App\Http\Livewire\Expendio\ExpendioComponent;
 use App\Http\Livewire\Listas\ListaComponent;
 
+
+// Geri
+// ===============================================
+use App\Http\Livewire\Menu\MenuCategoriaComponent;
+use App\Http\Livewire\Menu\MenuesComponent;
+
+
 Route::get('/', function () {
     return redirect()->route('login');
     // return view('welcome');
@@ -232,3 +239,10 @@ Route::get('modalpreguntas',[ActorComponent::class,'ResponderInforme1'])->name('
 //     Route::get('statusgetLastVoucher', [AfipController::class, 'getLastVoucher'])->name('statusgetLastVoucher');
 //     // Otras rutas web...
 // });
+
+//ROUTES PARA <MENU>
+//================
+
+Route::get('menu_categorias', MenuCategoriaComponent::class);
+Route::get('/menu', MenuesComponent::class)->name('menu');
+Route::get('/menu/menueditar', ['Menu@editar'])->name('menueditar');

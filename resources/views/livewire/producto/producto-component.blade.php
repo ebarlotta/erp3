@@ -26,11 +26,11 @@
 					{{-- @if ($seleccionado) --}}
 					<div class="text-left flex">
 						@can('productos.Agregar')
-							<button wire:click="mostrarmodal()"	class="col-2 bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded">
+							<button wire:click="mostrarmodal()"	class="col-5 col-md-3 bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded">
 								Agregar Producto
 							</button>
 						@endcan
-						<input class="form-control col-2 ml-2" type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar">
+						<input class="form-control col-5 ml-2" type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar">
                         {{-- <div class="col justify-end">{{ $productos->links() }}</div> --}}
 					</div>
 					{{-- @endif --}}

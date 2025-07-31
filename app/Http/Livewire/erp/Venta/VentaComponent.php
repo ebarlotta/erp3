@@ -78,7 +78,7 @@ class VentaComponent extends Component
 
     public function render()
     {
-        if ( !Auth::check() ) { return view('welcome');  return route('dashboard'); }
+        if ( !Auth::check() ) { return view('SinPermiso'); return route('dashboard');return view('welcome');   }
         // $a = new AfipComponent();
         
         // $a->FESolici

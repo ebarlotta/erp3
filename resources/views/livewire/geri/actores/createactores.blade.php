@@ -4,20 +4,19 @@
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
-        <div class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle col-7 sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle col-md-7 col-sm-12 sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
             <form>
                 <!-- Controles -->
-
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div style="display:flex; flex-wrap:wrap;">
-                        <div class="mb-2 col-8" style="display:flex; flex-wrap:wrap;">
-                            <div class="mb-2 col-4">
+                        <div class="mb-2 col-12" style="display:flex; flex-wrap:wrap;">
+                            <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Apellido y Nombre</label>
                                 <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese Apellido y Nombre" wire:model="name">
                                 @error('name') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             
-                            <div class="mb-2 col-4">
+                            <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de documento</label>
                                 <select name="tipodocumento_id" class="form-control" wire:model="tipodocumento_id">
                                     <option value="">-</option>
@@ -28,7 +27,7 @@
                                 @error('tipodocumento_id') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             
-                            <div class="mb-2 col-4">
+                            <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Número de Documento</label>
                                 <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese documento" wire:model="documento" maxlength="8">
                                 @error('documento') <span class="text-red-500">{{ $message }}</span>@enderror
@@ -38,17 +37,17 @@
                                 <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese fecha de nacimiento" wire:model="nacimiento">
                                 @error('nacimiento') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div> --}}
-                            <div class="mb-2 col-4">
+                            <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Domicilio</label>
                                 <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese domicilio" wire:model="domicilio">
                                 @error('domicilio') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
-                            <div class="mb-2 col-4">
+                            <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">E-mail</label>
                                 <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese Email" wire:model="email">
                                 @error('email') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
-                            <div class="mb-2 col-4">
+                            <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Beneficio Social</label>
                                 <select name="beneficio_id" class="form-control"  wire:model="beneficio_id">
                                     <option value="">-</option>
@@ -59,13 +58,13 @@
                                 @error('beneficio_id') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                         </div>
-                        <div class="mb-2 col-4" style="display:flex; flex-wrap:wrap; justify-content: center;">
+                        <div class="mb-2 col-sm-6 col-md-6 col-xl-4" style="display:flex; flex-wrap:wrap; justify-content: center;">
                             <img class="col-8 shadow-md rounded-circle py-2" src="{{ asset('images/sin_imagen.jpg') }}" alt="" style="width: 70%;">
                             <i class="fa fa-edit mt-4 mr-4" style="position: absolut ;position: absolute;top: 70%;right: 70px; width:100px;"></i>
                         </div>
                     </div>                    
-                    <div style="display:flex; flex-wrap:wrap;">                                               
-                        <div class="mb-2 col-2">
+                    <div class="flex- d-flex flex-wrap">
+                        <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Persona</label>
                             <select name="tipopersona_id" class="form-control" wire:model="tipopersona_id">
                                 <option value="">-</option>
@@ -76,7 +75,7 @@
                             @error('tipopersona_id') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
 
-                        <div class="mb-2 col-2">
+                        <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Nacionalidad</label>
                             <select name="nacionalidad_id" class="form-control"  wire:model="nacionalidad_id">
                                 <option value="">-</option>
@@ -86,7 +85,7 @@
                             </select>
                             @error('nacionalidad_id') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
-                        <div class="mb-2 col-2">
+                        <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Localidad</label>
                             <select name="localidad_id" class="form-control"  wire:model="localidad_id">
                                 <option value="">-</option>
@@ -96,7 +95,7 @@
                             </select>
                             @error('localidad_id') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
-                        <div class="mb-2 col-2">
+                        <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Responsable Iva</label>
                             <select name="condicioniva_id"  class="form-control" wire:model="condicioniva_id">
                                 <option value=""></option>
@@ -106,7 +105,7 @@
                             </select>
                             @error('condicioniva_id') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
-                        <div class="mb-2 col-2">
+                        <div class="mb-2 col-sm-6 col-md-6 col-xl-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Estado de Persona</label>
                             <select name="personactivo_id" class="form-control"  wire:model="personactivo_id">
                                 <option value="">-</option>

@@ -14,7 +14,7 @@
             @endif
             <div class="flex d-flex" style="flex-wrap: wrap;">
                 <x-crear>Alta de Actores</x-crear>
-                <div class="flex d-flex align-middle" style="margin-top: 23px">
+                <div class="flex d-flex text-center flex-wrap justify-content-between" style="margin-top: 23px">
                     <div class="form-check mx-3" wire:click="Filtrar()">
                         <input class="form-check-input" wire:model="radios" type="radio" value="Todos">
                         <label class="form-check-label" for="flexRadioDefault1">
@@ -80,7 +80,7 @@
             <table class="table-fixed">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="px-4 py-2 col-3">Apellido y Nombre</th>
+                        <th class="px-4 py-2 col-5">Apellido y Nombre</th>
                         <th class="px-4 py-2 col-2">Tipo</th>
                         <th class="px-4 py-2">Opciones</th>
                     </tr>
@@ -89,7 +89,7 @@
                     @if($actores)
                         @foreach ($actores as $actor)
                         <tr>
-                            <td class="border px-4 py-2 col-3" style="width: 10%">{{ $actor->nombre }}</td>
+                            <td class="border px-4 py-2 col-5" style="width: 10%">{{ $actor->nombre }}</td>
                             <td class="border px-4 py-2 col-2">{{ $actor->TipoDePersona->tipodepersona }}</td>
                             <td class="border px-4 py-2">
                                 <div class="flex justify-center">

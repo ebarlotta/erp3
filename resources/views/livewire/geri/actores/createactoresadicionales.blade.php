@@ -4,38 +4,38 @@
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
-        <div class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle col-7 sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle col-md-7 col-sm-12 sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
             <form>
                 <!-- Controles -->
                 <h3>Datos Adicionales</h3>
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="bg-white sm:px-0 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div style="display:flex; flex-wrap:wrap;">
-                        <div class="mb-2 col-12" style="display:flex; flex-wrap:wrap;">
+                        <div class="mb-2 col-12 flex d-flex- flex-wrap">
 
                             <!-- Agente -->
                             @if($tipopersona_id==1)
-                                <div class="mb-2 col-3">
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">Fecha de Ingreso</label>
+                                <div class="mb-2 col-6 col-md-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-1">Fecha de Ingreso</label>
                                     <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Fecha de ingreso" wire:model="fingreso">
                                     @error('fingreso') <span class="text-red-500">{{ $message }}</span>@enderror
                                 </div>
-                                <div class="mb-2 col-3">
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">Fecha de Egreso</label>
+                                <div class="mb-2 col-6 col-md-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-1">Fecha de Egreso</label>
                                     <input type="date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Fecha de egreso" wire:model="fegreso">
                                     @error('fegreso') <span class="text-red-500">{{ $message }}</span>@enderror
                                 </div>
-                                <div class="mb-2 col-3">
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">Alias</label>
+                                <div class="mb-2 col-6 col-md-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-1">Alias</label>
                                     <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Sobrenombre" wire:model="alias">
                                     @error('alias') <span class="text-red-500">{{ $message }}</span>@enderror
                                 </div>
-                                <div class="mb-2 col-3">
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">Peso</label>
+                                <div class="mb-2 col-6 col-md-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-1">Peso</label>
                                     <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="peso del agente" wire:model="peso">
                                     @error('peso') <span class="text-red-500">{{ $message }}</span>@enderror
                                 </div>
-                                <div class="mb-2 col-3">
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">Referente</label>
+                                <div class="mb-2 col-6 col-md-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-1">Referente</label>
                                     <select class="col-12 form-control" name="referente_id" id="" wire:model="referente_id" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;">
                                         <option value="">-</option>
                                         @foreach($referentes as $referente)
@@ -48,8 +48,8 @@
                                     </select>
                                     @error('referente_id') <span class="text-red-500">{{ $message }}</span>@enderror
                                 </div>
-                                <div class="mb-2 col-3">
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">Cama</label>
+                                <div class="mb-2 col-6 col-md-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-1">Cama</label>
                                     <select class="col-12 form-control" name="cama_id" id="" wire:model="cama_id" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;">
                                         <option value="">-</option>
                                         @if($camas22)

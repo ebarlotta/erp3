@@ -63,7 +63,7 @@ class CompraComponent extends Component
     public function render() {
 
                 
-        if ( !Auth::check() ) { return view('welcome');  return route('empresas'); }
+        if ( !Auth::check() ) {  return view('SinPermiso'); }
 
         $anio = date("Y");
         if(is_null($this->gfanio)) { $this->gfanio = $anio; }; //La primara vez que inicia revisa si es nulo y en ese caso cambia al año actual, sino no lo toca más

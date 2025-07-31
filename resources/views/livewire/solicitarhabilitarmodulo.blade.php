@@ -1,6 +1,10 @@
 <div>
     <div class="text-center">
         <h2 style="padding-top: 100px; font-size: 1.5rem;">No tiene ningún módulo habilitado. Avise al Administrador de la situación</h2>
-        <input type="button" wire:click="LlevarALogin()" value="Login" style="background-color: lightgreen; margin: 10px; padding: 9px;border-radius: 10px; width: 100px; box-shadow: 5px 10px:;">
+        <a href="{{ route('empresas') }}">
+            
+            <input type="button" value="Volver a la página principal" style="background-color: lightgreen; margin: 10px; padding: 9px;border-radius: 10px; box-shadow: 5px 10px:;">
+        </a>
+        {{-- <input type="button" wire:click="LlevarALogin()" value="Login" style="background-color: lightgreen; margin: 10px; padding: 9px;border-radius: 10px; width: 100px; box-shadow: 5px 10px:;"> --}}
     </div>
 </div>

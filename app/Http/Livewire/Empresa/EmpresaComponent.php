@@ -71,8 +71,8 @@ class EmpresaComponent extends Component
     }
 
     public function LlevarALogin() {
-        dd('entro);');
-        // return redirect('public/public/public/login');
+        // dd('entro);');
+        return redirect('login');
     }
 
     public function cargamodulos($id) {

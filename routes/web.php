@@ -255,7 +255,7 @@ Route::get('/menu/menueditar', ['Menu@editar'])->name('menueditar');
 
 //ROUTES PARA <IMPRENTA>
 //================
-Route::get('/imprenta/envios', EnviarComponent::class)->name('enviar');
-Route::get('/imprenta/admin', AdminComponent::class)->name('admin');
-Route::get('/imprenta/pedidos', PedidoComponent::class)->name('pedidos');
+Route::get('/imprenta_envios', EnviarComponent::class)->name('enviar');
+Route::get('/imprenta_admin', AdminComponent::class)->name('admin');
+Route::get('/imprenta_pedidos', PedidoComponent::class)->name('pedidos');
 

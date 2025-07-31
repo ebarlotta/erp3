@@ -8,6 +8,7 @@ use App\Models\Imprenta\ImprentaSistemaimpresion as sistema_impresion;
 use App\Models\Imprenta\ImprentaPedido as Pedido;
 use App\Models\Imprenta\ImprentaLado as lado;
 use App\Models\Imprenta\ImprentaPapel as papel;
+use App\Models\erp\Cliente;
 
 use Livewire\WithFileUploads;
 

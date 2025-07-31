@@ -74,9 +74,9 @@ class ModuloSeeder extends Seeder
         DB::table('modulos')->insert(['name' => 'Expendio', 'pagina' => 'expendio','imagen'=>'expendio.jpg','leyenda'=>'Administra el expendio de los menúes.','habilitado'=>1]);   // Geri
 
         // Módulos 51-53  --- IMPRENTA
-        DB::table('modulos')->insert(['name' => 'Pedidos', 'pagina' => 'imprenta_pedidos','imagen'=>'pedido.jpg','leyenda'=>'Gestiona los pedidos de clientes','habilitado'=>1]);   // 51
-        DB::table('modulos')->insert(['name' => 'Envíos', 'pagina' => 'imprenta_envios','imagen'=>'envio.jpg','leyenda'=>'Gestiona los envíos.','habilitado'=>1]);   // 52
-        DB::table('modulos')->insert(['name' => 'Administración Imprenta', 'pagina' => 'imprenta_admin','imagen'=>'administracion.jpg','leyenda'=>'Administra la Imprenta/Centro de Copiado.','habilitado'=>1]);   // 53
+        DB::table('modulos')->insert(['name' => 'Pedidos', 'pagina' => 'imprentapedidos','imagen'=>'pedido.jpg','leyenda'=>'Gestiona los pedidos de clientes','habilitado'=>1]);   // 51
+        DB::table('modulos')->insert(['name' => 'Envíos', 'pagina' => 'imprentaenvios','imagen'=>'envio.jpg','leyenda'=>'Gestiona los envíos.','habilitado'=>1]);   // 52
+        DB::table('modulos')->insert(['name' => 'Administración Imprenta', 'pagina' => 'imprentaadmin','imagen'=>'administracion.jpg','leyenda'=>'Administra la Imprenta/Centro de Copiado.','habilitado'=>1]);   // 53
 
     }
 }

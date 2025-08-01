@@ -19,6 +19,7 @@ class ModSeederNewUser extends Seeder
      */
 
     public string $user_id;
+    public int $empresa_id;
 
     public function run()
     {
@@ -36,6 +37,14 @@ class ModSeederNewUser extends Seeder
                 ]);
             }
         }
+
+        // DB::table('areas')->insert(['name'=>'Administración','empresa_id'=>2,'habilitada'=>1]);
+        // DB::table('areas')->insert(['name'=>'Médica','empresa_id'=>2,'habilitada'=>1]);
+        // DB::table('areas')->insert(['name'=>'Social','empresa_id'=>2,'habilitada'=>1]);
+        // DB::table('areas')->insert(['name'=>'Historia De Vida','empresa_id'=>2,'habilitada'=>1]);
+        // DB::table('areas')->insert(['name'=>'Pagos','empresa_id'=>2,'habilitada'=>1]);
+        // DB::table('areas')->insert(['name'=>'Nutricional','empresa_id'=>2,'habilitada'=>1]);
+
     }
 }
 

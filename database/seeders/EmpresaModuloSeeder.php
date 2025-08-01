@@ -38,6 +38,5 @@ class EmpresaModuloSeeder extends Seeder
         DB::table('empresa_modulos')->insert(['modulo_id' => '52', 'empresa_id' => 3,]);
         DB::table('empresa_modulos')->insert(['modulo_id' => '53', 'empresa_id' => 3,]);
 
-
     }
 }

@@ -7,9 +7,9 @@
                 {{-- max-w-7xl --}}
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg py-4">
                     <div>
-                        <div style="background-color: rgb(205, 207, 209)">
+                        <div style="background-color: rgb(205, 207, 209); font-size: 2rem;">
                             Ingredientes del menú
-                            <table class="min-w-full border text-center text-sm font-light dark:border-neutral-500">
+                            <table class="min-w-full border text-center font-light dark:border-neutral-500" style="font-size: 1.1rem;">
                                 {{-- <tr class="border-b dark:border-neutral-500">
                                     <td colspan="2" align="left" class="whitespace-nowrap border-r px-6 py-4 font-medium dark:border-neutral-500">Ingredientes del menú</td>
                                 </tr> --}}
@@ -27,7 +27,7 @@
                                             <td>{{$ingredientedelmenu->cantidad}}</td>
                                             <td>{{$ingredientedelmenu->nombre_unidad}}</td> <!-- Imprime la unidad -->
                                             <td>
-                                                <button class="inline-flex justify-center w-full rounded-md border border-transparent px-4 bg-red-300 text-base leading-6 font-bold text-white-900 shadow-sm hover:bg-red-400 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5" wire:click="EliminarRelacionMenuIngrediente({{ $ingredientedelmenu->menu_id}},{{ $ingredientedelmenu->elemento_id}})">Eliminar</button>
+                                                <button class="inline-flex justify-center rounded-md border border-transparent px-4 bg-red-300 text-base leading-6 font-bold text-white-900 shadow-md hover:bg-red-400 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5 mt-1" wire:click="EliminarRelacionMenuIngrediente({{ $ingredientedelmenu->menu_id}},{{ $ingredientedelmenu->elemento_id}})">Eliminar</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -36,16 +36,16 @@
 
                         <div style="background-color:  rgb(205, 207, 209)">
                             Seleccione los ingredientes del menú
-                            <table class="min-w-full border text-center text-sm font-light dark:border-neutral-500">
+                            <table class="min-w-full border text-center font-light dark:border-neutral-500" style="font-size: 1.1rem;">
                                 <thead class="border-b font-medium dark:border-neutral-500">
                                     <th class="col-9 border-r px-6 dark:border-neutral-500">Ingredientes</th>
                                     <th class="col-2 border-r px-6 dark:border-neutral-500">Cantidad</th>
                                     <th class="col-1 border-r px-6 dark:border-neutral-500">Opciones</th>
                                 </thead>
-                                <tbody>
+                                <tbody class="border-b font-medium dark:border-neutral-500">
                                     <tr>
-                                        <td>
-                                            <select class="col-12 btn bg-primary-100" style="background-color: darkgray;" wire:model="ingrediente_gestionar_id">
+                                        <td class="border" style="padding-right: 1.4rem;">
+                                            <select class="col-12 mx-3 btn bg-primary-100" style="background-color: darkgray;" wire:model="ingrediente_gestionar_id">
                                                 <option value="0" selected>-</option>
                                                 @foreach ($ingredientes as $ingrediente)
                                                     <option value="{{ $ingrediente->id }}">{{$ingrediente->name}}</option>
@@ -53,13 +53,13 @@
                                             </select>
                                             @error('ingrediente_gestionar_id') <span class="text-red-500">{{ $message }}</span>@enderror
                                         </td>
-                                        <td>
-                                            <input type="text" class="col-12 btn" style="background-color: darkgray;" wire:model="cantidad">
+                                        <td class="border">
+                                            <input type="text" class="col-11 btn" style="background-color: darkgray;" wire:model="cantidad">
                                             @error('cantidad') <span class="text-red-500">{{ $message }}</span>@enderror
 
                                         </td>
-                                        <td>
-                                            <button wire:click="AgregarElementoAlMenu()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-300 text-base leading-6 font-bold text-white-900 shadow-sm hover:bg-green-400 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                        <td class="border">
+                                            <button wire:click="AgregarElementoAlMenu()" type="button" class="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-green-300 text-base leading-6 font-bold text-white-900 shadow-sm hover:bg-green-400 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                                 Guardar
                                             </button>
                                         </td>

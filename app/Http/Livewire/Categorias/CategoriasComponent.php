@@ -17,7 +17,7 @@ class CategoriasComponent extends Component
     {
         $this->empresa_id=session('empresa_id');
         $this->categorias = Categorias::where('empresa_id', $this->empresa_id)->get();
-        return view('livewire.categorias.categoria-component',['datos'=> Categorias::where('empresa_id', $this->empresa_id)->paginate(3),])->extends('layouts.adminlte');
+        return view('livewire.categorias.categoria-component',['datos'=> Categorias::where('empresa_id', $this->empresa_id)->paginate(13),])->extends('layouts.adminlte');
     }
 
     public function create()

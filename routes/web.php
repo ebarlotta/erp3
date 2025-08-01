@@ -249,9 +249,9 @@ Route::get('modalpreguntas',[ActorComponent::class,'ResponderInforme1'])->name('
 //ROUTES PARA <MENU>
 //================
 
-Route::get('menu_categorias', MenuCategoriaComponent::class);
-Route::get('/menu', MenuesComponent::class)->name('menu');
-Route::get('/menu/menueditar', ['Menu@editar'])->name('menueditar');
+// Route::get('menu_categorias', MenuCategoriaComponent::class);
+// Route::get('/menu', MenuesComponent::class)->name('menu');
+// Route::get('/menu/menueditar', ['Menu@editar'])->name('menueditar');
 
 //ROUTES PARA <IMPRENTA>
 //================

@@ -69,10 +69,9 @@
 							<div style="width: 65%">
 								<div class="bg-transparent"><b>Módulos</b></div>
 									@if ($modulosdelaempresa)
-										<div class="flex-wrap flex">
+										<div class="flex-wrap flex">											
 										@foreach ($modulosdelaempresa as $modulo)
-											{{-- <ul> --}}
-												{{-- <li class="border px-4 text-left bg-red-100"> --}}
+												@if($modulo['estado_suscripcion']=="SUSCRITO")
 													<div class="w-35 p-2 hover:scale-110 transition-all duration-500 hover:bg-green-300">
 														<div class="flex-wrap d-flex rounded overflow-hidden border">
 															<div class="">
@@ -89,14 +88,10 @@
 																		{{ $modulo['name'] }}
 																	</div>
 																</div>
-																{{-- @if ($usuario->activo) --}}
-																
-																{{-- @endif --}}
 															</div>
 														</div>
 													</div>
-												{{-- </li> --}}
-											{{-- </ul>											 --}}
+												@endif
 										@endforeach
 										</div>
 									@else

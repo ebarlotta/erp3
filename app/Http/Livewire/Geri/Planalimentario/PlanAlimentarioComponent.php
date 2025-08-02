@@ -21,6 +21,8 @@ class PlanAlimentarioComponent extends Component
 
     public $empresa_id;
 
+    // protected $listeners = ['actualizarCantidad'];
+
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('planalimentario.Ver')) {
             if(session('empresa_id')) {
@@ -51,6 +53,7 @@ class PlanAlimentarioComponent extends Component
         $this->plan_nombre = $plan->nombre;
         $this->planalimentario_id = $plan_id; 
         $this->listadomenues = Menu::where('empresa_id','=',session('empresa_id'))->orderby('nombremenu')->get();
+        // dd($this->listadomenues);
         $this->CargarRelaciones();
         $this->isModalOpenGestionar = true; 
     }
@@ -160,4 +163,28 @@ class PlanAlimentarioComponent extends Component
         ->delete(); 
         $this->CargarRelaciones();
     }
+
+    public function EliminarRelMenuPlan($momento_dia_id, $dia, $menu_id) {
+        // SELECT * FROM `menu_plans` WHERE momento_dia_id=2 and dia=2 and menu_id=14;
+        MenuPlan::where('plan_id','=',$this->planalimentario_id)
+        ->where('momento_dia_id','=',$momento_dia_id)
+        ->where('dia','=',$dia)
+        ->where('menu_id','=',$menu_id)
+        ->delete();
+        $this->CargarRelaciones();
+
+    }
+
+    public function ActualizarCantidad($momento_dia_id, $dia, $menu_id, $cantidad) {
+        $a = MenuPlan::where('plan_id','=',$this->planalimentario_id)
+        ->where('momento_dia_id','=',$momento_dia_id)
+        ->where('dia','=',$dia)
+        ->where('menu_id','=',$menu_id)
+        ->update(['cantidad'=>$cantidad]);
+        // dd($cantidad);
+        // MenuPlan::where('id', $a->id)
+        $this->CargarRelaciones();
+        
+    }
+
 }

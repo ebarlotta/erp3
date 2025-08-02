@@ -52,11 +52,11 @@ class ElementosComponent extends Component
                 $this->listas = Lista::where('empresa_id','=',session('empresa_id'))->get();
 
                 switch ($this->seleccionado) {
-                    case "Medicamento" : $this->datos = Elemento::join('elemento_medicamentos','elemento_medicamentos.elemento_id','=','elementos.id')->paginate(7); break;
-                    case "Ingrediente" : $this->datos = Elemento::join('elemento_ingredientes','elemento_ingredientes.elemento_id','=','elementos.id')->paginate(7); break;
-                    case "Producto" : $this->datos = Elemento::join('elemento_productos','elemento_productos.elemento_id','=','elementos.id')->paginate(7); break;
-                    case "Descartable" : $this->datos = Elemento::join('elemento_descartables','elemento_descartables.elemento_id','=','elementos.id')->paginate(7); break;
-                    case "Articulo" : $this->datos = Elemento::join('elemento_articulos','elemento_articulos.elemento_id','=','elementos.id')->paginate(7); break;
+                    case "Medicamento" : $this->datos = Elemento::join('elemento_medicamentos','elemento_medicamentos.elemento_id','=','elementos.id')->paginate(13); break;
+                    case "Ingrediente" : $this->datos = Elemento::join('elemento_ingredientes','elemento_ingredientes.elemento_id','=','elementos.id')->paginate(13); break;
+                    case "Producto" : $this->datos = Elemento::join('elemento_productos','elemento_productos.elemento_id','=','elementos.id')->paginate(13); break;
+                    case "Descartable" : $this->datos = Elemento::join('elemento_descartables','elemento_descartables.elemento_id','=','elementos.id')->paginate(13); break;
+                    case "Articulo" : $this->datos = Elemento::join('elemento_articulos','elemento_articulos.elemento_id','=','elementos.id')->paginate(13); break;
                 }
                 // dd($this->datos);
                 $this->unidades = Unidad::where('empresa_id','=',session('empresa_id'))->get();

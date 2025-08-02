@@ -51,28 +51,28 @@
                         @if ($isModalDelete) @include('livewire.elementos.deleteelemento') @endif
                         {{-- <div class="w-1/2 justify-end">{{ $datos->links() }}</div> --}}
                     </div>
-                    <div style="display: block">
+                    <div class="mt-2" style="display: block">
                         <table class="table-fixed w-full">
                             <thead>
                                 <tr class="bg-gray-100">
-                                    <th class="px-4 py-2">Elemento</th>
-                                    <th class="px-4 py-2">Existencia</th>
-                                    <th class="px-4 py-2">Precio de Compra</th>
-                                    <th class="px-4 py-2">Precio de Venta</th>
-                                    <th class="py-2">Stock Mínimo</th>
-                                    <th class="px-4 py-2">Opciones</th>
+                                    <th class="px-4 py-1">Elemento</th>
+                                    <th class="px-4 py-1 col-1 text-center">Existencia</th>
+                                    <th class="px-4 py-1 col-2 text-center">Precio de Compra</th>
+                                    <th class="px-4 py-1 col-1 text-center">Precio de Venta</th>
+                                    <th class="py-1 col-1 text-center">Stock Mínimo</th>
+                                    <th class="px-4 py-1 col-2 text-center">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if($datos)
                                     @foreach ($datos as $elemento)
                                         <tr>
-                                            <td class="border px-4 py-2">{{ $elemento->name }}</td>
-                                            <td class="border px-4 py-2">{{ $elemento->existencia }}</td>
-                                            <td class="border px-4 py-2">{{ $elemento->precio_compra }}</td>
-                                            <td class="border px-4 py-2">{{ $elemento->precio_venta }}</td>
-                                            <td class="border py-2">{{ $elemento->stock_minimo }}</td>
-                                            <td class="border px-4 py-2">
+                                            <td class="border px-4 py-1">{{ $elemento->name }}</td>
+                                            <td class="border px-4 py-1 col-1 text-center">{{ $elemento->existencia }}</td>
+                                            <td class="border px-4 py-1 col-2 text-center">{{ $elemento->precio_compra }}</td>
+                                            <td class="border px-4 py-1 col-1 text-center">{{ $elemento->precio_venta }}</td>
+                                            <td class="border py-1 col-1 text-center">{{ $elemento->stock_minimo }}</td>
+                                            <td class="border px-4 py-1 col-2">
                                                 <div class="block justify-center flex">
                                                 {{--  style="width: 20%; margin: auto; justify-content: space-around;align-items: center;" --}}
                                                     @can('elementos.Modificar')
@@ -102,6 +102,7 @@
                                 @endif
                             </tbody>
                         </table>
+                        {{ $datos->links()}}
                     </div>
                 </div>
             </div>

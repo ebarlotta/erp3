@@ -6,12 +6,9 @@
                 {{-- max-w-7xl --}}
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg py-4">
                     @if (session()->has('message'))
-                        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
-                            role="alert">
+                        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
                             <div class="flex">
-                                <div>
-                                    <p class="text-xm bg-lightgreen">{{ session('message') }}</p>
-                                </div>
+                                <div><p class="text-xm bg-lightgreen">{{ session('message') }}</p></div>
                             </div>
                         </div>
                     @endif
@@ -19,15 +16,15 @@
                         @include('livewire.geri.menu.gestionarmenu')
                     @else
                         <div class="flex justify-around">
-                        @can('menu.Agregar')
-                            <x-crear>Nuevo Menú</x-crear>
-                            @if ($isModalOpen)
-                                @include('livewire.geri.menu.createmenu')
-                            @endif
-                        @endcan
-                            <div><a href="{{ route('elementos') }}">
-                                    <button wire:click="create()"
-                                        class="bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded my-3">
+                            @can('menu.Agregar')
+                                <x-crear>Nuevo Menú</x-crear>
+                                @if ($isModalOpen)
+                                    @include('livewire.geri.menu.createmenu')
+                                @endif
+                            @endcan
+                            <div>
+                                <a href="{{ route('elementos') }}">
+                                    <button wire:click="create()" class="bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded my-3">
                                         Nuevo Ingrediente
                                     </button>
                                 </a>
@@ -35,21 +32,20 @@
                             <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
                         </div>
                         <div class="px-4" style="display: block">
-
-                            <table class="table table-sm table-bordered">
+                            <table class="table table-sm table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th scope="col ml-2">Nombre del Menú</th>
-                                        <th scope="col">Activo</th>
-                                        <th scope="col">Tiempo de Preparción</th>
-                                        <th scope="col">Opciones</th>
+                                        <th class="table-primary align-middle text-center ml-2">Nombre del Menú</th>
+                                        <th class="table-primary align-middle text-center col-1">Activo</th>
+                                        <th class="table-primary align-middle text-center col-1">Tiempo de Preparción</th>
+                                        <th class="table-primary align-middle text-center">Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($datos as $menu)
                                         <tr>
                                             <td class="pl-2">{{ $menu->nombremenu }}</td>
-                                            <td>
+                                            <td class=" col-1">
                                                 <div class="flex justify-center">
                                                     @if($menu->menuactivo)
                                                         <span class="border rounded-full border-grey bg-green-400 flex items-center cursor-pointer w-12 justify-start" wire:click="habilitar({{ $menu->id }}, {{ $menu->menuactivo }})">
@@ -65,8 +61,8 @@
                                                     @endif
                                                 </div>
                                             </td>
-                                            <td>{{ $menu->tiempopreparacion }}</td>
-                                            <td style="width: 20%;">
+                                            <td class="col-1">{{ $menu->tiempopreparacion }}</td>
+                                            <td class="" style="width: 20%;">
                                                 <div style="display: flex">
                                                     <!-- Gestionar  -->
                                                     <x-gestionar id="{{ $menu->id }}"></x-gestionar>

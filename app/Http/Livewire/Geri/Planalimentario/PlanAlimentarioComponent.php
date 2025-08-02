@@ -19,6 +19,8 @@ class PlanAlimentarioComponent extends Component
     public $listadomenues, $listadomenuesenelplan;
     public $momentos, $momento_dia_id;
 
+    public $isModalOpenCopiarMenuPlan, $dia_copia, $momento_dia_id_copia, $CopiarMenuPlanDia,$CopiarMenuPlanMomento;
+
     public $empresa_id;
 
     // protected $listeners = ['actualizarCantidad'];
@@ -46,6 +48,10 @@ class PlanAlimentarioComponent extends Component
 
     public function openModalPopover() { $this->isModalOpen = true; }
     public function closeModalPopover() { $this->isModalOpen = false; $this->isModalOpenGestionar = false; }
+    public function openisModalOpenCopiarMenuPlan() { $this->isModalOpenCopiarMenuPlan = !$this->isModalOpenCopiarMenuPlan; $this->CargarRelaciones(); }
+    public function OcultarMensaje() { session()->flash('message', null); $this->CargarRelaciones();}
+
+
     // public function closeModalGestionar() { $this->isModalOpenGestionar = false; }
     
     public function show($plan_id) {
@@ -126,32 +132,33 @@ class PlanAlimentarioComponent extends Component
         $this->activo = $planalimentario->activo;
         
         $this->openModalPopover();
+
+        session()->flash('message', 'Plan Alimentario Modificado.');
     }
     
     public function delete($id)
     {
         PlanAlimentario::find($id)->delete();
+
         session()->flash('message', 'Plan Alimentario Eliminado.');
     }
 
     public function habilitar($plan_id, $estado) {
         PlanAlimentario::where('id', $plan_id)->update(['activo' => !$estado]);
+
         session()->flash('message', 'Plan Alimentario Habilitado/Desabilitado.');
     }
 
     public function habilitarMenuPlan($menu_id, $plan_id, $dia, $momento_dia_id, $estado) {
-    // public function habilitarMenuPlan($menu_plan_id, $estado) {
-        // MenuPlan::where('id', $menu_plan_id)->update(['activo' => !$estado]);
-        // {{$menuadherido->menu_id}},{{$menuadherido->plan_id}},{{$menuadherido->dia}},{{$menuadherido->momento_dia_id}}
-        $a = MenuPlan::where('menu_id', $menu_id)
+    
+        MenuPlan::where('menu_id', $menu_id)
         ->where('plan_id', $plan_id)
         ->where('dia', $dia)
         ->where('momento_dia_id', $momento_dia_id)
         ->update(['activo' => !$estado]);
-        // ->get();
-        // dd($estado);
-        // dd($a);
+    
         $this->CargarRelaciones();
+
         session()->flash('message', 'Plan Alimentario Habilitado/Desabilitado.');
     }
 
@@ -161,7 +168,8 @@ class PlanAlimentarioComponent extends Component
         ->where('dia','=',$dia)
         ->where('momento_dia_id','=',$momento_dia_id)
         ->delete(); 
-        $this->CargarRelaciones();
+        
+        $this->CargarRelaciones();        
     }
 
     public function EliminarRelMenuPlan($momento_dia_id, $dia, $menu_id) {
@@ -171,20 +179,52 @@ class PlanAlimentarioComponent extends Component
         ->where('dia','=',$dia)
         ->where('menu_id','=',$menu_id)
         ->delete();
-        $this->CargarRelaciones();
 
+        session()->flash('message', 'Relación Eliminada.');
+
+        $this->CargarRelaciones();
     }
 
     public function ActualizarCantidad($momento_dia_id, $dia, $menu_id, $cantidad) {
-        $a = MenuPlan::where('plan_id','=',$this->planalimentario_id)
+        MenuPlan::where('plan_id','=',$this->planalimentario_id)
         ->where('momento_dia_id','=',$momento_dia_id)
         ->where('dia','=',$dia)
         ->where('menu_id','=',$menu_id)
         ->update(['cantidad'=>$cantidad]);
-        // dd($cantidad);
-        // MenuPlan::where('id', $a->id)
-        $this->CargarRelaciones();
         
+        session()->flash('message', 'Cantidad Actualizada.');
+
+        $this->CargarRelaciones();   
+    }
+
+    public function CopiarMenuPlan($dia,$momento) {    
+        
+        $this->CopiarMenuPlanDia = $dia;
+        $this->CopiarMenuPlanMomento = $momento;
+
+        $this->openisModalOpenCopiarMenuPlan();
+    }
+
+    public function CopiarMenuPlanStore() {
+        $a = MenuPlan::where('plan_id', $this->planalimentario_id)
+        ->where('dia', $this->CopiarMenuPlanDia)
+        ->where('momento_dia_id', $this->CopiarMenuPlanMomento)
+        ->get();
+        foreach($a as $menuplan) {
+            $b = new MenuPlan();
+            $b->dia = $this->dia_copia;
+            $b->momento_dia_id = $this->momento_dia_id_copia;
+            $b->plan_id = $this->planalimentario_id;
+            $b->momento_dia_id = $this->momento_dia_id_copia;
+            $b->menu_id = $menuplan->menu_id;
+            $b->cantidad = $menuplan->cantidad;
+            $b->activo = $menuplan->activo;
+            $b->save();
+        }
+
+        session()->flash('message', $b->id ? 'Menú Copiado':'Error');
+
+        $this->openisModalOpenCopiarMenuPlan();
     }
 
 }

@@ -56,6 +56,7 @@ class ExpendioComponent extends Component
                 menus.nombremenu,
                 momentos_del_dias.descripcion,
                 menu_plans.dia,
+                menu_plans.cantidad,
                 IF(actors.id > 0, true, false) as presente
             ')
             ->where('menu_plans.momento_dia_id', '=', $momento) // parámetro de momento del día: 1:Desayuno, 2:Almuerzo, 3:Mediatarde, 4:Cena
@@ -68,7 +69,8 @@ class ExpendioComponent extends Component
                 'plan_alimentarios.nombre',
                 'menus.nombremenu',
                 'momentos_del_dias.descripcion',
-                'menu_plans.dia'
+                'menu_plans.dia',
+                'menu_plans.cantidad'
             )
             ->orderBy('menu_plans.momento_dia_id')
             ->orderBy('nombreactor')
@@ -98,7 +100,7 @@ class ExpendioComponent extends Component
                 'fecha' => $this->fecha,
                 'actor_id'=> $reg['actor_id'],
                 'menu_id'=> $reg['menu_id'],
-                'cantidad'=> 1,
+                'cantidad'=> $reg['cantidad'],
                 'momento_del_dia_id'=> $momento,
                 'dia_de_la_semana'=> $this->diaDelCiclo,
                 'empresa_id'=> session('empresa_id'),]
@@ -128,5 +130,14 @@ class ExpendioComponent extends Component
     public function PreguntarSiCerrar($servicio) {
         $this->confirmacion = true;
         $this->servicioacerrar = $servicio;
+    }
+
+    public function CambiarEstado($momento) {
+        $a = Consumido::where('fecha','=',$this->fecha)
+        ->where('momento_del_dia_id','=',$momento)
+        ->where('empresa_id','=', session('empresa_id'))
+        ->where('consumido','=', 0)
+        ->get();
+        dd($a);
     }
 }

@@ -37,6 +37,8 @@
                             </a>
                             @if ($isModalOpen)          @include('livewire.geri.plan-alimentario.createplanalimentario') @endif
                             @if ($isModalOpenGestionar) @include('livewire.geri.plan-alimentario.gestionarplanalimentario') @endif
+                            @if ($isModalOpenCopiarMenuPlan) @include('livewire.geri.plan-alimentario.copiarmenuplan') @endif
+
                         {{-- @endcan --}}
                         <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
                     </div>

@@ -48,7 +48,7 @@
             <x-label>Está seguro de que quiere cerrar el servicio de {{ $servicioacerrar }} del día {{date('d-m-Y', strtotime($fecha)) }}?</x-label>
         </x-slot>
         <x-slot name="footer">
-            <x-button class="btn bg-yellow-300 btn-warning mr-2" wire:click="CambiarEstado()">Si, cerrar</x-button>
+            <x-button class="btn bg-yellow-300 btn-warning mr-2" wire:click="CambiarEstado({{ $servicioacerrar }})">Si, cerrar</x-button>
             <x-button class="btn btn-info" wire:click="$set('confirmacion',false)">Volver sin cerrar</x-button>
         </x-slot>
       </x-dialog-modal>       

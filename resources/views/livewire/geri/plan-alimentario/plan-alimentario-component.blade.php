@@ -43,12 +43,7 @@
                         <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
                     </div>
                     <div style="display: block">
-                        {{-- @foreach ($datos as $plan) --}}
-
                         <table class="table table-sm table-bordered">
-                            {{-- <tr class="border-b dark:border-neutral-500">
-                                <td colspan="2" align="left" class="whitespace-nowrap border-r px-6 py-4 font-medium dark:border-neutral-500">plans del menú</td>
-                            </tr> --}}
                             <thead class="border-b font-medium dark:border-neutral-500">
                                 <th class="col-2 border-r px-6 dark:border-neutral-500">Nombre</th>
                                 <th class="col-8 border-r px-6 dark:border-neutral-500">Descripción</th>

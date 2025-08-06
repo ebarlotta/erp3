@@ -298,7 +298,7 @@ class ActorComponent extends Component
                         switch ($momentos) { 
                             case(1) : $registros = $registros . '<td><b class="ml-2">Mañana</b></td>';break;
                             case(2) : $registros = $registros . '<td><b class="ml-2">Almuerzo</b></td>';break;
-                            case(3) : $registros = $registros . '<td><b class="ml-2">Mediatarde</b></td>';break;
+                            case(3) : $registros = $registros . '<td><b class="ml-2">Merienda</b></td>';break;
                             case(4) : $registros = $registros . '<td><b class="ml-2">Cena</b></td>';break;                                                        
                         }
                         for($dias=1;$dias<=count($this->dias);$dias++) {                            

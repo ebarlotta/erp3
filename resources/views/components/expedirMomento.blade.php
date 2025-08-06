@@ -4,15 +4,19 @@
         <div class="card-header ui-sortable-handle flex" style="cursor: move; justify-content: space-between;">
             <h3 class="card-title ml-3" style="justify-content: right;width: 10%;"><b>{{ $titulo }}</b>
             @php
-                if($cerrado=='true') { echo '<br><input type="text" style="text-align: center; background-color: lightgreen; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px; width: 100%; height: 22px;" value="Cerrado" disabled>'; }
+                if($cerrado=='Cerrado') { echo '<br><input type="text" style="text-align: center; background-color: lightgreen; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px; width: 100%; height: 22px;" value="Cerrado" disabled>'; }
             @endphp
-
             @php
-                if($cerrado=='false') { echo '<br><input type="text" style="text-align: center; background-color: lightcoral; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px; width: 100%; height: 22px;" value="Abierto" disabled>'; }
+                if($cerrado=='Abierto') { echo '<br><input type="text" style="text-align: center; background-color: lightcoral; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px; width: 100%; height: 22px;" value="Abierto" disabled>'; }
             @endphp
             </h3> 
             <div style="justify-content: right;width: 75%;display: flex;">
-              <input type="button" class="btn ml-4 hover:scale-105 h-5" value="Cerrar Servicio" style="margin: 6px 30px;padding: 0px 20px;background-color: beige;box-shadow: 3px 3px 3px grey;" wire:click="PreguntarSiCerrar('{{ $momento }}')" @if($cerrado=='true') disabled title="Tooltip on top" @endif>
+                @if($cerrado=='Abierto')
+                    {{-- Agregar nuevo --}}
+                    <input type="button" class="btn ml-4 hover:scale-105 h-5" value="+ Agregar" style="margin: 6px 30px;padding: 0px 20px;background-color: lightblue;box-shadow: 3px 3px 3px grey;" wire:click="PreguntarSiAgregar('{{ $momento }}')" title="Tooltip on top">
+                    {{-- Cerrar Servicio --}}
+                    <input type="button" class="btn ml-4 hover:scale-105 h-5" value="Cerrar Servicio" style="margin: 6px 30px;padding: 0px 20px;background-color: beige;box-shadow: 3px 3px 3px grey;" wire:click="PreguntarSiCerrar('{{ $momento }}')" title="Tooltip on top">
+                @endif
             </div>
             <div class="card-tools" style="margin-top: 18px; width: 5%;">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" style="border: 1px black solid">
@@ -35,10 +39,10 @@
                         </tr>
                         @php
                            switch ($momento) {
-                            case '1': $regs = $this->registros_desayuno; break;
-                            case '2': $regs = $this->registros_almuerzo; break;
-                            case '3': $regs = $this->registros_mediatarde; break;
-                            case '4': $regs = $this->registros_cena; break;
+                            case '1': $regs = $this->registros_desayuno; $cerrado=$this->cerradoDesayuno; break;
+                            case '2': $regs = $this->registros_almuerzo; $cerrado=$this->cerradoAlmuerzo; break;
+                            case '3': $regs = $this->registros_merienda; $cerrado=$this->cerradoMerienda; break;
+                            case '4': $regs = $this->registros_cena; $cerrado=$this->cerradoCena; break;
                         }
                         @endphp
                         
@@ -46,14 +50,23 @@
                         {{-- {{ var_dump($registro) }} --}}
                             <tr wire:click="CambiarCondicionMenu('{{ $momento.'-'.$registro['indice'].'-'.$registro['actor_id'].'-'.$registro['menu_id'] }}')">
                                 {{-- <td>{{ $registro->indice }}</td> --}}
+                                
                                 <td>{{ $registro['nombreactor'] }}</td>
                                 <td>{{ $registro['nombreplan'] }}</td>
                                 <td>{{ $registro['nombremenu'] }}</td>
                                 <td>{{ $registro['descripcion'] }}</td>
                                 {{-- <td><input style="width: 20px;height: 20px;" type="checkbox"  @if($registro->presente) checked @endif></td> --}}
-                                <td><input style="width: 20px;height: 20px;" type="checkbox"  @if($registro['presente']) checked @endif></td>
+                                <td>
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                        @if($registro['presente']) checked @endif 
+                                        @if($cerrado=='Cerrado') disabled @endif
+                                    >
+                                </td>
                             </tr>
                         @endforeach
+                        @foreach($registro['menusnoasignados'] as $NoAsig)
+                            <tr><td>1</td></tr>
+                        @foreach
                     </table>
                 </div>
             </div>

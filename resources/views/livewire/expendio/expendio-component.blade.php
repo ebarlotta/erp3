@@ -32,31 +32,65 @@
           </div>
         </div>
 
-        <x-expedirMomento momento="1" cerrado="true"  titulo="Desayuno">Desayuno</x-expedirMomento> 
-        <x-expedirMomento momento="2" cerrado="false" titulo="Almuerzo"></x-expedirMomento>
-        <x-expedirMomento momento="3" cerrado="false" titulo="Mediatarde"></x-expedirMomento>
-        <x-expedirMomento momento="4" cerrado="false" titulo="Cena"></x-expedirMomento>
+        <x-expedirMomento momento="1" cerrado="{{ $cerradoDesayuno }}" titulo="Desayuno"></x-expedirMomento> 
+        <x-expedirMomento momento="2" cerrado="{{ $cerradoAlmuerzo }}" titulo="Almuerzo"></x-expedirMomento>
+        <x-expedirMomento momento="3" cerrado="{{ $cerradoMerienda }}" titulo="Merienda"></x-expedirMomento>
+        <x-expedirMomento momento="4" cerrado="{{ $cerradoCena }}" titulo="Cena"></x-expedirMomento>
 
       </div>
 
     
-      <x-dialog-modal  class="max-w-lg w-full mt-10" wire:model="confirmacion" style="margin-top: 100px">
-        <x-slot name="title" style="margin-top: 100px; padding-top: 100px;">
-            Cerrar Servicio
-        </x-slot>
-        <x-slot name="content">
-            <x-label>Está seguro de que quiere cerrar el servicio de {{ $servicioacerrar }} del día {{date('d-m-Y', strtotime($fecha)) }}?</x-label>
-        </x-slot>
-        <x-slot name="footer">
-            <x-button class="btn bg-yellow-300 btn-warning mr-2" wire:click="CambiarEstado({{ $servicioacerrar }})">Si, cerrar</x-button>
-            <x-button class="btn btn-info" wire:click="$set('confirmacion',false)">Volver sin cerrar</x-button>
-        </x-slot>
-      </x-dialog-modal>       
+        <x-dialog-modal  class="max-w-lg w-full mt-10" wire:model="confirmacion" style="margin-top: 100px">
+            <x-slot name="title" style="margin-top: 100px; padding-top: 100px;">
+                Cerrar Servicio
+            </x-slot>
+            <x-slot name="content">
+                <x-label>Está seguro de que quiere cerrar el servicio de {{ $servicioacerrar }} del día {{date('d-m-Y', strtotime($fecha)) }}?</x-label>
+            </x-slot>
+            <x-slot name="footer">
+                <x-button class="btn bg-yellow-300 btn-warning mr-2" wire:click="CambiarEstado({{ $servicioacerrar }})">Si, cerrar</x-button>
+                <x-button class="btn btn-info" wire:click="$set('confirmacion',false)">Volver sin cerrar</x-button>
+            </x-slot>
+        </x-dialog-modal>
+
+        <x-dialog-modal  class="max-w-lg w-full mt-10" wire:model="agregar" style="margin-top: 100px">
+            <x-slot name="title" style="margin-top: 100px; padding-top: 100px;">
+                Agregar Servivio
+            </x-slot>
+            <x-slot name="content">
+                <x-label>Seleccione los menúes a agregar</x-label>
+                <div class="flex d-flex">
+                    <div class="col-5">
+                        <x-label>Actor</x-label>
+                        <select class="form-control" wire:model="actor_id_agregar">
+                            <option value="">Seleccione un actor</option>
+                            @foreach($agregarActores as $actor)
+                                <option value="{{ $actor['id'] }}">{{ $actor['nombre'] }}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
+                    <div class="col-5">
+                        <x-label>Menú</x-label>
+                        <select class="form-control" wire:model="menu_id_agregar">
+                            <option value="">Seleccione un menú</option>
+                            @foreach($agregarMenu as $menu)
+                                <option value="{{ $menu['id'] }}">{{ $menu['nombremenu'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <x-label>Cantidad</x-label>
+                        <x-input type="number" class="form-control" wire:model="cantidad_agregar" value="1"></x-input>
+                    </div>
+                </div>
+            </x-slot>
+            <x-slot name="footer">
+                <x-button class="btn bg-yellow-300 btn-warning mr-2" wire:click="AgregarMenu()">Agregar</x-button>
+                <x-button class="btn btn-info" wire:click="$set('agregar',false)">Cerrar</x-button>
+            </x-slot>
+        </x-dialog-modal>
       <div class="tab-pane" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">Medicamentos Expedidos</div>
       <div class="tab-pane" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">Descartables Expedidos</div>
     </div>
-
-    {{-- <div class="fixed inset-0 flex items-center justify-center"> --}}
- 
-    {{-- </div> --}}
 </div>

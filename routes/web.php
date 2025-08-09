@@ -95,6 +95,9 @@ use App\Http\Livewire\Imprenta\EnviarComponent;
 use App\Http\Livewire\Imprenta\AdminComponent;
 use App\Http\Livewire\Imprenta\PedidoComponent;
 
+// Registro
+//=========
+use App\Http\Livewire\Registro\TramitesonlineComponent;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -258,4 +261,23 @@ Route::get('modalpreguntas',[ActorComponent::class,'ResponderInforme1'])->name('
 Route::get('/imprentaenvios', EnviarComponent::class)->name('enviar');
 Route::get('/imprentaadmin', AdminComponent::class)->name('admin');
 Route::get('/imprentapedidos', PedidoComponent::class)->name('pedidos');
+
+// Route::get('/registro', function () {
+//     return view('registro.index'); 
+// })->name('registro');
+
+Route::view('/registro', 'registro.principal')->name('registro');
+Route::view('/registro/transferenciadigital/first', 'registro.transferenciadigital.first')->name('transferenciadigital.first');
+Route::view('/registro/tramite_online/first', 'registro.tramite_online.first')->name('tramite_online.first');
+Route::view('/registro/tramite_online/second', 'registro.tramite_online.deepseek_html_20250809_cf6807')->name('tramite_online.second');
+
+Route::view('tramite', TramitesonlineComponent::class)->name('tramite');
+
+Route::get('/tramites-online', TramitesonlineComponent::class)->name('tramites.online');
+
+
+
+
+
+
 

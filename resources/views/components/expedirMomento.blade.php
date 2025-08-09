@@ -38,6 +38,7 @@
                             <td><b>Está ?</b></td>
                         </tr>
                         @php
+                        
                            switch ($momento) {
                             case '1': $regs = $this->registros_desayuno; $cerrado=$this->cerradoDesayuno; break;
                             case '2': $regs = $this->registros_almuerzo; $cerrado=$this->cerradoAlmuerzo; break;
@@ -47,7 +48,6 @@
                         @endphp
                         
                         @foreach ($regs as $registro)
-                        {{-- {{ var_dump($registro) }} --}}
                             <tr wire:click="CambiarCondicionMenu('{{ $momento.'-'.$registro['indice'].'-'.$registro['actor_id'].'-'.$registro['menu_id'] }}')">
                                 {{-- <td>{{ $registro->indice }}</td> --}}
                                 
@@ -64,9 +64,25 @@
                                 </td>
                             </tr>
                         @endforeach
-                        @foreach($registro['menusnoasignados'] as $NoAsig)
-                            <tr><td>1</td></tr>
-                        @foreach
+
+                        
+                        <div wire:ignore>
+                            @php $extras = $this->menuextra[$momento]; @endphp
+                            @foreach($extras as $ext)
+                                <tr wire:click="CambiarCondicionMenu('{{ $momento.'-'.$ext['presente'].'-'.$ext['actor_id'].'-'.$ext['menu_id'] }}')">
+                                    <td>{{ $ext['nombreactor'] }}</td>
+                                    <td>-{{ $ext['nombreplan'] }}</td>
+                                    <td>{{ $ext['nombremenu'] }}</td>
+                                    <td>{{ $ext['descripcion'] }}</td>
+                                    <td>
+                                        <input style="width: 20px;height: 20px;" type="checkbox"
+                                            @if(!$ext['presente']) checked @endif 
+                                            @if($cerrado=='Cerrado') disabled @endif
+                                        >
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </div>
                     </table>
                 </div>
             </div>

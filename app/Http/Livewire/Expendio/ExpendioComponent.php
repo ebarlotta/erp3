@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class ExpendioComponent extends Component
 {
     public $fecha, $confirmacion, $servicioacerrar;
-    public $agregar, $servicioaagregar, $agregarActores, $agregarMenu, $actor_id_agregar, $menu_id_agregar, $cantidad_agregar;
+    public $agregar, $servicioaagregar, $agregarActores, $agregarMenu, $actor_id_agregar, $menu_id_agregar, $cantidad_agregar, $menuextra;
     public $registros_desayuno, $registros_almuerzo, $registros_merienda, $registros_cena;
     public $cerradoDesayuno=false, $cerradoAlmuerzo=false, $cerradoMerienda=false, $cerradoCena=false, $regs, $diaDelCiclo, $otro;
 
@@ -70,41 +70,21 @@ class ExpendioComponent extends Component
     public function Cargar_Registros($momento) {
 
         $estado = Consumido::where('fecha','=',$this->fecha)->where('cerrado','=',1)->where('momento_del_dia_id','=',$momento)->get();
-           // 1. Obtener los IDs de los menús ya asignados en el recordset actual
-            $menuIdsAsignados = DB::table('plan_alimentario_actors')
-                ->join('menu_plans', 'menu_plans.plan_id', '=', 'plan_alimentario_actors.plan_id')
-                ->where('menu_plans.momento_dia_id', $momento)
-                ->where('menu_plans.dia', $this->diaDelCiclo)
-                ->pluck('menu_plans.menu_id')
-                ->unique()
-                ->toArray();
 
-            // 2. Consulta para obtener los menús NO asignados pero que cumplen con el día y momento
-            $menusNoAsignados = DB::table('menus')
-                ->join('menu_plans', 'menus.id', '=', 'menu_plans.menu_id')
-                ->join('momentos_del_dias', 'momentos_del_dias.id', '=', 'menu_plans.momento_dia_id')
-                ->leftJoin('plan_alimentarios', 'plan_alimentarios.id', '=', 'menu_plans.plan_id')
-                ->select(
-                    'menus.id as menu_id',
-                    'menus.nombremenu',
-                    'momentos_del_dias.descripcion',
-                    'menu_plans.dia',
-                    'menu_plans.cantidad'
-                )
-                // ->where('menu_plans.momento_dia_id', $momento)
-                ->where('menu_plans.dia', $this->diaDelCiclo)
-                ->whereNotIn('menus.id', $menuIdsAsignados)
-                ->groupBy(
-                    'menus.id',
-                    'menus.nombremenu',
-                    'momentos_del_dias.descripcion',
-                    'menu_plans.dia',
-                    'menu_plans.cantidad'
-                )
-                ->orderBy('menus.nombremenu')
-                ->get()
-                ->toArray();
+            $this->sincronizarConsumos($momento);
 
+            $registros = $this->TraerListadoDeMenuesAConsumir($momento);
+
+            switch ($momento) {
+                case 1: $this->registros_desayuno = $registros; $this->cerradoDesayuno = count($estado) ? 'Cerrado' : 'Abierto'; break;
+                case 2: $this->registros_almuerzo = $registros; $this->cerradoAlmuerzo = count($estado) ? 'Cerrado' : 'Abierto'; break;
+                case 3: $this->registros_merienda = $registros; $this->cerradoMerienda = count($estado) ? 'Cerrado' : 'Abierto'; break;
+                case 4: $this->registros_cena = $registros; $this->cerradoCena = count($estado) ? 'Cerrado' : 'Abierto'; break;
+            }
+
+    }
+
+    public function TraerListadoDeMenuesAConsumir($momento) {
         $registros = DB::table('plan_alimentario_actors')
             ->join('actors', 'plan_alimentario_actors.actor_id', '=', 'actors.id')
             ->join('plan_alimentarios', 'plan_alimentarios.id', '=', 'plan_alimentario_actors.plan_id')
@@ -148,40 +128,42 @@ class ExpendioComponent extends Component
             })
             ->toArray();
 
- 
-                
-            //Agrega el estado del momento para saber si debe dejarlo abierto o cerrado
-            // foreach ($registros as &$registro) {
-            //     $registro['estado'] = count($estado) ? 'cerrado' : 'abierto';
-            // }
-            // $registros= $registro;
-            // unset($registro); // Eliminar la referencia
+            // 1. Obtener los IDs de los menús ya asignados en el recordset actual
+            $menuIdsAsignados = DB::table('plan_alimentario_actors')
+            ->join('menu_plans', 'menu_plans.plan_id', '=', 'plan_alimentario_actors.plan_id')
+            ->where('menu_plans.momento_dia_id', $momento)
+            ->where('menu_plans.dia', $this->diaDelCiclo)
+            ->pluck('menu_plans.menu_id')
+            ->unique()
+            ->toArray();
 
-            // $registros = collect($registros->toArray()); // Convertir a colección
-            // $registros = $registros->merge(['menusnoasignados' => $menusNoAsignados]);
-            
-            $registros['menusnoasignados'] = $menusNoAsignados;
-            dd($registros);
-            $registros->toArray();
+            // 2. Consulta para obtener los menús NO asignados pero que cumplen con el día y momento
 
-            // if(count($menusNoAsignados)) {
-                // dd($menusNoAsignados);
+            $menusNoAsignados = Consumido::select('consumidos.*','menus.nombremenu','actors.nombre as nombreactor','momentos_del_dias.descripcion','consumido as presente')
+            ->join('actors','consumidos.actor_id','=','actors.id')
+            ->join('menus','consumidos.menu_id','=','menus.id')
+            ->join('momentos_del_dias','consumidos.momento_del_dia_id','=','momentos_del_dias.id')
+            ->where('fecha','=',$this->fecha)
+            ->where('momento_del_dia_id','=',$momento)
+            ->where('dia_de_la_semana','=',$this->diaDelCiclo)
+            ->where('consumidos.empresa_id','=',session('empresa_id'))
+            ->whereNotIn('menu_id', $menuIdsAsignados)
+            ->get();
+            // dd($menusNoAsignados);
+            $this->menuextra[$momento] = $menusNoAsignados;
 
-                // array_push($registros, array($menusNoAsignados));
-            // }
-
-            switch ($momento) {
-                case 1: $this->registros_desayuno = $registros; $this->cerradoDesayuno = count($estado) ? 'Cerrado' : 'Abierto'; break;
-                case 2: $this->registros_almuerzo = $registros; $this->cerradoAlmuerzo = count($estado) ? 'Cerrado' : 'Abierto'; break;
-                case 3: $this->registros_merienda = $registros; $this->cerradoMerienda = count($estado) ? 'Cerrado' : 'Abierto'; break;
-                case 4: $this->registros_cena = $registros; $this->cerradoCena = count($estado) ? 'Cerrado' : 'Abierto'; break;
-            }
-            $this->sincronizarConsumos($momento,$registros);
-
+        return $registros;
     }
 
-    public function sincronizarConsumos($momento, $registros) {
+    public function sincronizarConsumos($momento) {
         // En este procedimiento se crea un nuevo registro en la tabla de consumos si es que no se ha entrado nunca ese día
+
+        //Busca los regstros según la planificación del Plan Alimentario
+        $registros = $this->TraerListadoDeMenuesAConsumir($momento);
+
+        // dd($this->menuextra);
+        // $registrosMenosUno = array_slice($registros, 0, -1); // Excluye el último elemento
+        // Itera, si es nuevo lo agrega
         foreach($registros as $reg) {
             Consumido::firstOrCreate([
                 'fecha' => $this->fecha,

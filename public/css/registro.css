@@ -20,6 +20,12 @@
     .boton {
         text-transform: uppercase; padding: 1.2rem !important; font-weight: bold !important; margin-top: 20px; background-color: #63bf65 !important; display: flex !important;
     }
+
+    .texto {
+        text-transform: uppercase; padding: 1.2rem !important; font-weight: bold !important; display: flex !important; height: 3.4rem; font-size: 25px !important; width: 15rem !important; letter-spacing: 4px !important;
+        /* width: 200px !important; */
+    }
+
     .panel_inferior {
         -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); line-height: 1.42857143; font-size: 16px; font-weight: 500; color: #111; word-wrap: break-word; word-break: break-word; box-sizing: border-box; padding: 15px 20px; background-color: #c8c8c8 !important;
     }
@@ -32,8 +38,18 @@
         -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); line-height: 1.42857143; word-wrap: break-word; box-sizing: border-box; margin: 0 0 10px; font-weight: 300; font-size: 18px; color: #c4bfbf; transition: background 0.15s; margin-bottom: 0;
     }
 
-    .tarjeta-celeste { margin-top: 2rem; box-sizing: border-box; border: 2px #418d9d solid; background-color: #cff4fc; padding: 2rem; display: flex; border-radius: 7px;
+    .tarjeta-celeste { 
+        margin-top: 2rem; box-sizing: border-box; border: 2px #418d9d solid; background-color: #cff4fc; padding: 2rem; display: flex; border-radius: 7px;
     }
+    
+    .tarjeta-verde { 
+        margin-top: 2rem; box-sizing: border-box; border: 2px #d0ebd0 solid; background-color: #d0ebd0; padding: 2rem; border-radius: 7px; display: block; height: min-content;
+    }
+
+    .tarjeta-gris { 
+        border:1px solid #bbb6b6; padding:2rem; background-color: #ededed8c !important; margin-bottom: 30px;
+    }
+
     .verde {  background-color: #46a948 !important; }
     .amarillo { background-color: #ffce00 !important; }
     .rosado { background-color: #ea1d76 !important;}

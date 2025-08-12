@@ -94,7 +94,7 @@ use App\Http\Livewire\Menu\MenuesComponent;
 use App\Http\Livewire\Imprenta\EnviarComponent;
 use App\Http\Livewire\Imprenta\AdminComponent;
 use App\Http\Livewire\Imprenta\PedidoComponent;
-
+use App\Http\Livewire\Registro\InformesonlineComponent;
 // Registro
 //=========
 use App\Http\Livewire\Registro\TramitesonlineComponent;
@@ -274,6 +274,7 @@ Route::view('/registro/tramite_online/second', 'registro.tramite_online.deepseek
 Route::view('tramite', TramitesonlineComponent::class)->name('tramite');
 
 Route::get('/tramites-online', TramitesonlineComponent::class)->name('tramites.online');
+Route::get('/informes-online', InformesonlineComponent::class)->name('informes.online');
 
 
 

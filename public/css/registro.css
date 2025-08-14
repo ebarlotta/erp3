@@ -1,5 +1,5 @@
     .titulo1 {
-        font-size: 2.5em;font-family: sans-serif; font-weight: 700; margin: .5em 0; max-width: 100%; overflow-x: hidden;
+        font-size: 2.5em;font-family: sans-serif; font-weight: 700; max-width: 100%; overflow-x: hidden;
     }
     
     .titulo2 {
@@ -19,6 +19,18 @@
 
     .boton {
         text-transform: uppercase; padding: 1.2rem !important; font-weight: bold !important; margin-top: 20px; background-color: #63bf65 !important; display: flex !important;
+    }
+
+      .boton-azul {
+        text-transform: uppercase; padding: 1.2rem !important; font-weight: bold !important; margin-top: 20px; background-color: #0072bc !important; display: flex !important; color:#F9F9F9"
+    }
+ 
+    .boton-warning {
+        text-transform: uppercase; padding: 1.2rem !important; font-weight: bold !important; margin-top: 20px; background-color: #ffc107 !important; display: flex !important; color:white !important; border-color: grey !important;
+    }
+
+    .error-message {
+        color: red; font-size: 16px; margin-top: -18px; margin-left: 80px;
     }
 
     .texto {
@@ -43,7 +55,7 @@
     }
     
     .tarjeta-verde { 
-        margin-top: 2rem; box-sizing: border-box; border: 2px #d0ebd0 solid; background-color: #d0ebd0; padding: 2rem; border-radius: 7px; display: block; height: min-content;
+        margin-top: 1rem; box-sizing: border-box; border: 2px #d0ebd0 solid; background-color: #d0ebd0; padding-top: 2rem; padding-bottom: 2rem; padding-left: 2rem; border-radius: 7px; display: block; height: min-content;
     }
 
     .tarjeta-gris { 

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombretramite');
             $table->string('descripciontramite');
+            $table->string('modulo')->default('tramites');
             $table->timestamps();
         });
     }

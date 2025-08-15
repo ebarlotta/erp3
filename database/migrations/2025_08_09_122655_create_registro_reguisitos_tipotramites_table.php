@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('descripcionrequisitotipotramite');
             $table->unsignedBigInteger('tipotramite_id');
+            $table->double('precio');
+            $table->double('cantidad');
             $table->timestamps();
 
             $table->foreign('tipotramite_id')->references('id')->on('registro_tipotramites');

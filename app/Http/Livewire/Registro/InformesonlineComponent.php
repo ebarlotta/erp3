@@ -6,20 +6,25 @@ use App\Models\erp\Cliente;
 use Livewire\Component;
 use App\Models\Condicioniva;
 use App\Models\Elementos\ElementoVehiculo;
+use App\Models\registroReguisitosTipotramite;
+use App\Models\registroTipotramite;
 
 class InformesonlineComponent extends Component
 {
-    public $cuil, $tramite, $estado_inicial=1, $ivas;
+    public $cuil, $tramiteid, $detalles, $total, $estado_inicial=1, $ivas;
 
-    public $datos_solicitante_validados, $solicitante, $necesita_agregar_solicitante, $agregar_apellido, $agregar_nombre, $agregar_email, $agregar_celular, $agregar_direccion, $agregar_iva_id, $apellido, $nombre;
+    public $datos_solicitante_validados, $solicitante, $necesita_agregar_solicitante, $agregar_apellido, $agregar_nombre, $agregar_email, $agregar_celular, $agregar_direccion, $agregarivaid, $apellido, $nombre;
 
     public $patente, $vehiculo, $datos_vehiculo_validados, $necesita_agregar_vehiculo, $marca, $modelo, $ano, $agregar_modelo, $agregar_marca ,$agregar_ano;
 
     public $resumen, $datos_solicitante, $datos_vehiculo, $seleccion_tramite, $forma_pago, $pago; 
 
+    public $datos_tramite_validados, $tramite_descripcion, $informes;
+
     public function render()
     {
         $this->ivas = Condicioniva::where('activo','=',1)->get();
+        $this->informes = registroTipotramite::where('modulo','=','informes')->get();
         return view('livewire.registro.informesonline-component')->extends('layouts.adminlte');
     }
 
@@ -33,15 +38,38 @@ class InformesonlineComponent extends Component
         }
     }
 
-    public function Agregar_Solicitante() {
+    public function ElegirTramite() {
+        $this->informes = registroTipotramite::find($this->tramiteid);
 
+        if($this->tramiteid == 0 ) { 
+            $this->datos_tramite_validados=0; $this->tramite_descripcion = ""; 
+        } else {
+            $this->datos_tramite_validados=1; 
+            $this->tramite_descripcion = $this->informes->nombretramite;
+            $this->detalles = registroReguisitosTipotramite::where('tipotramite_id','=',$this->tramiteid)->get();
+            $this->total = registroReguisitosTipotramite::where('tipotramite_id', $this->tramiteid)
+                ->selectRaw('SUM(precio * cantidad) as total')
+                ->value('total');
+        }
+    }
+
+    public function Agregar_Solicitante() {
+// dd($this->agregarivaid);
         $this->validate([
             'agregar_apellido' => 'required',
             'agregar_nombre' => 'required',
             'agregar_direccion' => 'required',
             'agregar_email' => 'required|email',
             'agregar_celular' => 'required',
-            'agregar_iva_id' => 'required',
+            'agregarivaid' => 'required|integer|min:1',
+        ], [
+            'agregar_apellido.required' => 'El Apellido es obligatorio',
+            'agregar_nombre.required' => 'La Nombre es obligatoria',
+            'agregar_direccion.required' => 'La dirección es obligatoria',
+            'agregar_email.required' => 'El correo electrónico es obligatorio',
+            'agregar_celular.required' => 'El teléfono es obligatorio',
+            'agregarivaid.required' => 'La condición de iva es obligatoria',
+            'agregarivaid.min' => 'Debe seleccionar una condición de iva, es obligatoria',
         ]);
         Cliente::firstOrCreate([
             'name' => $this->agregar_apellido . ', ' . $this->agregar_nombre,
@@ -49,10 +77,13 @@ class InformesonlineComponent extends Component
             'direccion'=> $this->agregar_direccion,
             'email'=> $this->agregar_email,
             'telefono'=> $this->agregar_celular,
-            'iva_id'=> $this->agregar_iva_id,
+            'iva_id'=> $this->agregarivaid,
             'empresa_id'=> 1,
             // 'empresa_id'=> session('empresa_id'),
         ]);
+
+        $this->BuscarSolicitante();
+        
         session()->flash('message', 'Solicitante Agregado!.');
         $this->necesita_agregar_solicitante = 0;
     }
@@ -62,7 +93,7 @@ class InformesonlineComponent extends Component
             'cuil' => 'numeric|digits:11',
         ]);
         $this->reset('apellido','nombre','agregar_apellido','agregar_nombre','agregar_email','agregar_celular','agregar_direccion');
-        $this->agregar_iva_id = 0;
+        $this->agregarivaid = 0;
         $this->solicitante = Cliente::where('cuil','=',$this->cuil)->first();
         if($this->solicitante) {
             $this->datos_solicitante_validados = 1;
@@ -86,6 +117,13 @@ class InformesonlineComponent extends Component
         $this->reset('marca','modelo','ano');
         $this->reset('agregar_modelo','agregar_marca','agregar_ano');
 
+        $this->validate([
+            'patente' => [
+                'required',
+                'regex:/^[A-Z0-9]{6}$/'
+            ]
+        ]);
+
         $this->vehiculo = ElementoVehiculo::where('patente','like','%'.$this->patente.'%')->first();
         if($this->vehiculo) {
             $this->datos_vehiculo_validados = 1;
@@ -108,6 +146,10 @@ class InformesonlineComponent extends Component
             'agregar_modelo' => 'required',
             'agregar_marca' => 'required',
             'agregar_ano' => 'required',
+        ], [
+            'agregar_modelo.required' => 'El modelo es obligatorio',
+            'agregar_marca.required' => 'La marca es obligatoria',
+            'agregar_ano.required' => 'El año del vehículo es obligatorio',
         ]);
         ElementoVehiculo::firstOrCreate([
             'patente' => $this->patente,
@@ -116,6 +158,9 @@ class InformesonlineComponent extends Component
             'ano'=> $this->agregar_ano,
             'elemento_id'=> 1,
         ]);
+
+        $this->BuscarPatente();
+
         session()->flash('messageVehículo', 'Vehículo Agregado!.');
         $this->necesita_agregar_vehiculo = 0;
     }

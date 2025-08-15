@@ -26,17 +26,24 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        @if($datos_vehiculo_validados)
+                                        @if($datos_solicitante_validados)
                                             <tr class="p-3" style="border:white 10px:">
-                                                <td class="text-muted text-right" style="width: 15%">Solicitante</td><td colspan="3">{{ $apellido }}, {{ $nombre }}</td>
+                                                <td class="text-muted text-right" style="width: 15%">Solicitante</td><td>{{ $apellido }}, {{ $nombre }}</td>
                                                 <td class="text-muted text-right" style="width: 15%">CUIL / CUIT</td><td>{{ $cuil }} </td>
-                                                <td class="text-muted text-right" style="width: 15%">Email</td><td colspan="3">{{ $solicitante['email'] }} </td>
+                                                <td class="text-muted text-right" style="width: 15%"> Email:</td><td>{{ $solicitante['email'] }} </td>
                                             </tr>
                                         @endif
                                         @if($datos_vehiculo_validados)
                                             <tr>
-                                                <td class="text-muted text-right" style="width: 15%"> Patente:</td><td colspan="3"> {{ $patente }} </td>
-                                                <td class="text-muted text-right" style="width: 15%"> Trámite:</td><td colspan="3"> {{ $solicitante['email'] }} </td>
+                                                <td class="text-muted text-right" style="width: 15%"> Patente:</td><td style="text-transform: uppercase;"> {{ $patente }} </td>
+                                                <td class="text-muted text-right" style="width: 15%"> Marca:</td><td style="text-transform: uppercase;"> {{ $marca }} </td>
+                                                <td class="text-muted text-right" style="width: 15%"> Modelo:</td><td style="text-transform: uppercase;"> {{ $modelo }} </td>
+                                                <td class="text-muted text-right" style="width: 15%"> Año:</td><td style="text-transform: uppercase;"> {{ $ano }} </td>
+                                            </tr>
+                                        @endif
+                                        @if($datos_tramite_validados)
+                                            <tr>
+                                                <td class="text-muted text-right" style="width: 15%"> Trámite:</td><td colspan="8"> {{ $tramite_descripcion }} </td>
                                             </tr>
                                         @endif
                                     </tbody>
@@ -53,7 +60,7 @@
                     <div class="flex d-flex flex-wrap">
                         <div class="form-group col-12 col-md-6">
                             <h2 class="titulo1">Datos del solicitante</h2>
-                            <label class="titulo_card" for="codigoTramite">CUIL / CUIT</label>
+                            <label class="titulo_card">CUIL / CUIT</label>
                             <input class="form-control texto" type="text" tooltip="CUIL / CUIT" wire:model="cuil" id="cuil" maxlength="11" onkeypress="return soloNumeros(event)">
                             @if ($errors->any())
                                 <div class="alert alert-danger">
@@ -65,11 +72,9 @@
                                 </div>
                             @endif
                             <p class="text-muted">Ingresa el CUIL / CUIT sin espacios ni guiones.</p>
-
-                            <button type="submit" class="btn btn-info boton-azul mr-3" wire:click="BuscarSolicitante();">Buscar Solicitante&nbsp; 
+                            <button type="submit" class="btn btn-info boton" style="background-color: #0072bc !important; color:#F9F9F9" wire:click="BuscarSolicitante();">Buscar Solicitante&nbsp; 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
                             </button>
-
                             @if (session()->has('solicitante'))
                                 <div class="bg-yellow-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3 mr-3" role="alert">
                                     <div class="flex">
@@ -103,13 +108,13 @@
                                     <p class="flex">Celular<input class="form-control ml-3" type="text" wire:model="agregar_celular" id="agregar_celular" maxlength="11" onkeypress="return soloNumeros(event)"></p>@error('agregar_celular')<p class="error-message">{{ $message }}</p>@enderror</p>
                                     <p class="flex">Dirección<input class="form-control ml-3" type="text" wire:model="agregar_direccion"></p>@error('agregar_direccion')<p class="error-message">{{ $message }}</p>@enderror</p>
                                     <p class="flex w-100" style="justify-content: flex-start;">Condición iva
-                                        <select class="form-control" wire:model="agregar_iva_id" style="width: 96%;">
+                                        <select class="form-control" wire:model="agregarivaid" style="width: 96%;">
                                             <option value="0">--- Seleccione una opción ---</option>
                                             @foreach ($ivas as $iva)
                                                 <option value="{{ $iva->id }}">{{ $iva->descripcion}}</option>
                                             @endforeach
                                         </select>
-                                        @error('agregar_iva_id')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                        @error('agregarivaid')<p class="error-message">{{ $message }}</p>@enderror</p>
 
                                         @if (session()->has('message'))
                                             <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
@@ -123,8 +128,8 @@
                                     </p>
                                 </div>
                                 <div style="width: 100%; display: flex; justify-content: space-around;">
-                                    <input class="btn btn-info btn-warning" type="button" value="Guardar" wire:click="Agregar_Solicitante()">
-                                    <input class="btn btn-info boton-azul" type="button" value="Cerrar" wire:click="Ocultar_Solicitante();">
+                                    <button type="submit" class="btn boton-warning mr-3" wire:click="Agregar_Solicitante()">Guardar</button>
+                                    <button type="submit" class="btn btn-info boton" style="background-color: #0072bc !important; color:#F9F9F9" wire:click="Ocultar_Solicitante();">Cerrar</button>
                                 </div>
                             </div>
                         @endif
@@ -143,12 +148,6 @@
                     @endif
 
                     <div class="flex d-flex">
-                        {{-- <button type="submit" class="btn boton-warning mr-3" wire:click="Mostrar('inicial')">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-                            </svg>&nbsp;Volver&nbsp; 
-                        
-                        </button> --}}
                         <button type="submit" class="btn btn-success boton" wire:click="Mostrar('datos_vehiculo')" @if(!$datos_solicitante_validados) disabled @endif>Continuar&nbsp; &nbsp; 
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
                         </button>
@@ -162,28 +161,50 @@
                     <div class="flex d-flex flex-wrap">
                         <div class="form-group col-12 col-md-6 ">
                             <h2 class="titulo1">Datos del Vehículo</h2>
-                            <label class="titulo_card" for="codigoTramite">Patente</label>
-                            <input class="form-control texto" type="text" tooltip="PATENTE" wire:model="patente">
+                            <label class="titulo_card">Patente</label>
+                            <input class="form-control texto" type="text" tooltip="PATENTE" wire:model="patente" oninput="convertirAMayusculas(event)">
                             <p class="text-muted">Ingresa la patente sin espacios ni guiones ni barras</p>
+                            @error('patente')
+                                <div class="bg-yellow-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3 mr-3" role="alert">
+                                    <div class="flex">
+                                        <div>
+                                            <p class="text-xm bg-lightred text-danger">{{ $message }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            <button type="submit" class="btn btn-info boton" style="background-color: #0072bc !important; color:#F9F9F9" wire:click="BuscarPatente();">Validar&nbsp; 
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
+                            </button>
+                            @if (session()->has('vehiculo'))
+                                <div class="bg-yellow-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3 mr-3" role="alert">
+                                    <div class="flex">
+                                        <div>
+                                            <p class="text-xm bg-lightgreen">{{ session('vehiculo') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         
                         @if($datos_vehiculo_validados)
-                        <div class="col-12 col-md-6 tarjeta-verde">
-                            <label class="titulo_card" style="margin-bottom: 20px">Detalles del Vehículo</label><br>
-                            <div style="width: 100%">
-                                <p class="flex">Modelo<input class="form-control ml-3" type="text" value="{{ $modelo }}" disabled></p>
-                                <p class="flex">Marca<input class="form-control ml-3" type="text" value="{{ $marca }}" disabled></p>
-                                <p class="flex">Año<input class="form-control ml-3" type="text" value="{{ $ano }}" disabled></p>
-                                {{-- <p class="flex">Registro<input class="form-control ml-3" type="text" value="{{  }}" disabled></p> --}}
-                            </div>                                
-                        </div>
+                            <div class="col-12 col-md-6 tarjeta-verde">
+                                <label class="titulo_card" style="margin-bottom: 20px">Detalles del Vehículo</label><br>
+                                <div style="width: 100%">
+                                    <p class="flex">Modelo<input class="form-control ml-3" type="text" value="{{ $modelo }}" disabled></p>
+                                    <p class="flex">Marca<input class="form-control ml-3" type="text" value="{{ $marca }}" disabled></p>
+                                    <p class="flex">Año<input class="form-control ml-3" type="text" value="{{ $ano }}" disabled></p>
+                                    {{-- <p class="flex">Registro<input class="form-control ml-3" type="text" value="{{  }}" disabled></p> --}}
+                                </div>                                
+                            </div>
                         @endif
+
                         @if($necesita_agregar_vehiculo)
                             <div class="col-12 col-md-6 tarjeta-verde">
                                 <label class="titulo_card mb-3">Detalles del vehículo</label><br>
                                 <div style="width: 100%">
-                                    <p class="flex">Modelo<input class="form-control ml-3" type="text" wire:model="agregar_modelo">@error('agregar_modelo')<p class="error-message">{{ $message }}</p>@enderror</p>
-                                    <p class="flex">Marca<input class="form-control ml-3" type="text" wire:model="agregar_marca"></p>@error('agregar_marca')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Modelo<input class="form-control ml-3" type="text" wire:model="agregar_modelo" oninput="convertirAMayusculas(event)">@error('agregar_modelo')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Marca<input class="form-control ml-3" type="text" wire:model="agregar_marca" oninput="convertirAMayusculas(event)"></p>@error('agregar_marca')<p class="error-message">{{ $message }}</p>@enderror</p>
                                     <p class="flex">Año<input class="form-control ml-3" type="text" wire:model="agregar_ano" id="agregar_ano" maxlength="4" onkeypress="return soloNumeros(event)"></p>@error('agregar_ano')<p class="error-message">{{ $message }}</p>@enderror</p>
                                         @if (session()->has('message'))
                                             <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
@@ -206,25 +227,11 @@
                                     @endif
                                 </div>
                                 <div style="width: 100%; display: flex; justify-content: space-around;">
-                                    <input class="btn btn-info btn-warning" type="button" value="Guardar" wire:click="Agregar_Vehiculo();">
-                                    <input class="btn btn-info boton-azul" type="button" value="Cerrar" wire:click="Ocultar_Vehículo();">
+                                    <button type="submit" class="btn boton-warning mr-3" wire:click="Agregar_Vehiculo();">Guardar</button>
+                                    <button type="submit" class="btn btn-info boton" style="background-color: #0072bc !important; color:#F9F9F9" wire:click="Ocultar_Vehículo();">Cerrar</button>
                                 </div>
                             </div>
                         @endif
-
-                        @if (session()->has('vehiculo'))
-                            <div class="bg-yellow-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3 mr-3" role="alert">
-                                <div class="flex">
-                                    <div>
-                                        <p class="text-xm bg-lightgreen">{{ session('vehiculo') }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
-                        <button type="submit" class="btn btn-info boton" style="background-color: #0072bc !important; color:#F9F9F9" wire:click="BuscarPatente();">Validar&nbsp; 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
-                        </button>
                                                     
                     </div>
                     <div class="flex d-flex">
@@ -233,7 +240,7 @@
                                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                             </svg>&nbsp;Volver&nbsp; 
                         </button>
-                        <button type="submit" class="btn btn-success boton" wire:click="Mostrar('datos_tramite')">Continuar&nbsp; 
+                        <button type="submit" class="btn btn-success boton" wire:click="Mostrar('datos_tramite')" @if(!$datos_vehiculo_validados) disabled @endif>Continuar&nbsp; 
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
                         </button>
                     </div> 
@@ -246,23 +253,27 @@
                     <div class="form-group">
                         <label class="text-muted mb-3">Elegí qué trámite querés iniciar.</label>            
                         <h2 class="titulo1">Selección de Trámite</h2>
-                        <label class="titulo_card" for="codigoTramite">Tipo de Trámite</label>
-                        <select class="form-control" style="font-size:1.2rem; height: 3.2rem;" wire:model="tramite" >
+                        <label class="titulo_card">Tipo de Trámite</label>
+                        <select class="form-control" wire:model="tramiteid" wire:change="ElegirTramite" style="font-size:1.2rem; height: 3.2rem;"> 
+                            {{-- wire:change="ElegirTramite({{ $tramite_id }});" --}}
                             <option value="0">--- Seleccione alguna opción ---</option>
-                            <option value="1">INFORME DE MULTAS POR INFRACCIONES DE TRÁNSITO</option>
-                            <option value="2">INFORME ESTADO DE DOMINIO</option>
-                            <option value="3">INFORME HISTORICO DE TITULARIDAD Y DE ESTADO DE DOMINIO</option>
+                            @foreach($informes as $informe)
+                                <option value="{{ $informe->id }}">{{ $informe->nombretramite }}</option>
+                            {{-- <option value="2">INFORME ESTADO DE DOMINIO</option>
+                            <option value="3">INFORME HISTORICO DE TITULARIDAD Y DE ESTADO DE DOMINIO</option> --}}
+                            @endforeach
                         </select>
                     </div>
                 
                     <div class="flex d-flex">
                             
-                    <button type="submit" class="btn boton-warning mr-3" wire:click="Mostrar('inicial')">
+                    <button type="submit" class="btn boton-warning mr-3" wire:click="Mostrar('datos_vehiculo')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                             </svg>&nbsp;Volver&nbsp; 
                         </button>
-                        <button type="submit" class="btn btn-success boton" wire:click="Mostrar('forma_pago')">Continuar&nbsp; 
+                        {{-- Label {{ $tramite_id }} --}}
+                        <button type="submit" class="btn btn-success boton" wire:click="Mostrar('forma_pago')" @if($tramite_id=0) disabled @endif>Continuar&nbsp; 
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
                         </button>
                     </div>
@@ -275,39 +286,45 @@
                     <div class="form-group">
                         <h2 class="titulo1">Pagar la solicitud</h2>           
                         <label class="titulo_card" for="codigoTramite">Presupuesto</label> 
-                        <table class="table-striped" style="font-size: 0.9rem; width: 113%; margin-left:-20px">
+                        <table class="table-striped col-12" style="font-size: 0.9rem; margin-left:-20px">
                             <tbody>
                                 <tr class="titulo_card blue-300" style="background-color: lightblue;">
-                                    <td style="width: 9rem">Item</td>
+                                    <td class="text-center" style="width: 9rem">Item</td>
                                     {{-- <td style="width: 28px">Item</td> --}}
                                     <td>Descripción</td>
-                                    <td>Precio Unitario</td>
-                                    <td style="width: 14rem">Cant.</td>
-                                    <td>Total</td>
+                                    <td class="text-right">Precio Unitario</td>
+                                    <td class="text-center" style="width: 14rem">Cant.</td>
+                                    <td class="text-center">Total</td>
                                 </tr>
-                                <tr style="height: 30px;">
-                                    <td class="text-center">1</td>
-                                    <td>INFORME ESTADO DE DOMINIO</td>
-                                    <td class="text-right pr-2">$260,00</td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-right pr-2">$260,00</td>
-                                </tr>
-                                <tr style="height: 30px;">
-                                    <td class="text-center">2</td>
-                                    <td>FORMULARIO TP</td>
-                                    <td class="text-right pr-2">$4.188,00</td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-right pr-2">$4.188,00</td>
-                                </tr>
-                                <tr style="background-color: lightblue; height: 30px;">
-                                    <td colspan=5 class="text-right pr-2">$4.188,00</td>
+
+                                @foreach($detalles as $detalle)
+                                    <tr style="height: 30px;">
+                                        <td class="text-center">1</td>
+                                        <td>{{ $detalle->descripcionrequisitotipotramite}}</td>
+                                        <td class="text-right pr-2">$ {{ $detalle['precio']}}</td>
+                                        <td class="text-center">{{ $detalle['cantidad']}}</td>
+                                        <td class="text-right pr-2">$ {{ $detalle['precio'] * $detalle['cantidad']}}</td>
+                                        
+
+                                    </tr>
+                                @endforeach
+                                    <tr style="background-color: lightblue; height: 30px;">
+                                    <td colspan=5 class="text-right pr-2">$ {{ $total }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <h2 class="titulo1">Forma de Pago</h2>
-                    inluir formas acá
+                    <button class="btn btn-info mr-2"><i class="fa fa-qrcode fa-lg" aria-hidden="true"></i> QR Billetera Virtual</button>
+                    {{-- <button class="btn btn-info mr-2"><i class="fa fa-credit-card fa-lg" aria-hidden="true"></i> Tarjeta de Crédito</button> --}}
+
+                    {{-- <i class="fa fa-money" aria-hidden="true"></i>
+                    <i class="fa fa-cc-stripe" aria-hidden="true"></i>
+                    <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
+                    <i class="fa fa-cc-amex" aria-hidden="true"></i>
+                    <i class="fa fa-cc-visa" aria-hidden="true"></i>
+                    <i class="fa fa-paypal" aria-hidden="true"></i> --}}
                     
                     <div class="flex d-flex">    
                         <button type="submit" class="btn boton-warning mr-3" wire:click="Mostrar('datos_tramite')">
@@ -315,9 +332,9 @@
                                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                             </svg>&nbsp;Volver&nbsp; 
                         </button>
-                        <button type="submit" class="btn btn-success boton" wire:click="Mostrar('pago')">Continuar&nbsp; 
+                        {{-- <button type="submit" class="btn btn-success boton" wire:click="Mostrar('pago')">Continuar&nbsp; 
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
             @endif
@@ -330,6 +347,11 @@
             if (key < 48 || key > 57) {
                 e.preventDefault();
             }
+        }
+
+        function convertirAMayusculas(e) {
+            const input = e.target;
+            input.value = input.value.toUpperCase();
         }
 
         document.getElementById('cuil').addEventListener('keypress', soloNumeros);

@@ -59,7 +59,7 @@
                             <h4 class="titulo2"><b>Descripción</b></h4>
                             <p class="text-muted">Trámite para incorporar el motor de los dominios inscriptos</p>
                             <h5 class="titulo2">Requisitos</h5>
-                            <ul>
+                            <ul style="list-style-type: disc !important;">
                                 @foreach($requisitos as $requisito)
                                     <li class="text-muted">{{ $requisito->descripcionrequisitotipotramite }}</li>
                                 @endforeach

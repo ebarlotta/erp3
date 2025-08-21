@@ -276,6 +276,8 @@ Route::view('tramite', TramitesonlineComponent::class)->name('tramite');
 Route::get('/tramites-online', TramitesonlineComponent::class)->name('tramites.online');
 Route::get('/informes-online', InformesonlineComponent::class)->name('informes.online');
 
+Route::view('/mercadopagosuccess', 'livewire.registro.mercadopagosuccess')
+     ->name('mercadopago.success');
 
 
 

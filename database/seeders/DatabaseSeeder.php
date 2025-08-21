@@ -133,5 +133,10 @@ class DatabaseSeeder extends Seeder
         $this->call(ImprentaLadoSeeder::class);
         $this->call(ImprentaEstadosSeeder::class);
         $this->call(ImprentaTipodocumentoSeeder::class);
+
+
+        $this->call(RegistroTipotramiteSeeder::class);
+        $this->call(RegistroReguisitosTipotramiteSeeder::class);
+
     }
 }

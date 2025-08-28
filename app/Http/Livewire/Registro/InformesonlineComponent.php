@@ -54,7 +54,6 @@ class InformesonlineComponent extends Component
     }
 
     public function Agregar_Solicitante() {
-// dd($this->agregarivaid);
         $this->validate([
             'agregar_apellido' => 'required',
             'agregar_nombre' => 'required',
@@ -165,8 +164,7 @@ class InformesonlineComponent extends Component
         $this->necesita_agregar_vehiculo = 0;
     }
     
-    function ValidateCUITCUIL($cuit)
-	{
+    function ValidateCUITCUIL($cuit) {
 		if (strlen($cuit) != 13) return false;
 		
 		$rv = false;

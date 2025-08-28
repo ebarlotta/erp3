@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\User;
 use App\Observers\UserObserver;
+use Livewire\Livewire;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,4 +25,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+    protected function configureComponents() {
+        Livewire::component('calendar-component', \App\View\Components\Registro\CalendarioComponent::class);
+    }
+
 }

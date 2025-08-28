@@ -62,6 +62,14 @@
         border:1px solid #bbb6b6; padding:2rem; background-color: #ededed8c !important; margin-bottom: 30px;
     }
 
+    .not-working-day {
+        width: 50px;
+        height: 50px;
+        background-color: lightgray;
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
     .verde {  background-color: #46a948 !important; }
     .amarillo { background-color: #ffce00 !important; }
     .rosado { background-color: #ea1d76 !important;}
@@ -73,3 +81,63 @@
     .violeta { background-color: #873299 !important; }
     .amarilloclaro { background-color: #FFD700 !important; }
     .marron { background-color: #EF6C00 !important;}
+
+
+            /* Calendar container */
+        .calendar {
+            width: 450px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Calendar header styling */
+        .calendar-header {
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Days of the week styling */
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background-color: #007bff;
+            color: white;
+        }
+
+        .calendar-days div {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Date cells styling */
+        .calendar-dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .calendar-dates div {
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        /* Highlight today */
+        .today {
+            background-color: #ffdd57;
+            font-weight: bold;
+            height: 50px;
+        }
+
+        .normal-day {
+            height: 50px;
+            justify-self: center;
+            width: 100%;
+            text-align: center;
+            padding-top: 20%;
+            border: solid 1px lightseagreen
+        }

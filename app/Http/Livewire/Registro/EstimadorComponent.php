@@ -13,12 +13,13 @@ class EstimadorComponent extends Component
 {
     public $resumen, $datos_vehiculo, $seleccion_tramite, $forma_pago, $pago; 
 
-    public $tramites, $tramite_seleccionado, $detalles, $precio_modificar, $cantidad_modificar, $total_modificar, $registro_id, $total, $tramite_descripcion;
+    public $precio_modificar, $cantidad_modificar, $total_modificar, $registro_id, $total, $tramite_descripcion;
     public $precio_agregar,$cantidad_agregar,$total_agregar, $descripcion_agregar;
-    public $ModalAgregar=false, $ModalModificar=false;
-    public $datos_tramite_validados=true, $datos_vehiculo_validados, $datos_solicitante_validados;
-
-    public $listado, $descripcion, $modelo, $registro, $seleccionado;
+    public $ModalAgregar=false, $ModalModificar=false;    
+    
+    public $registroinicial;
+    public $detalles, $tramites, $tramite_seleccionado, $listado, $descripcion, $modelo, $registro, $seleccionado;
+    public $datos_tramite_validados=false, $datos_vehiculo_validados, $datos_solicitante_validados;
 
     public function render()
     {
@@ -29,17 +30,32 @@ class EstimadorComponent extends Component
 
     public function BuscarDato() {
         if($this->modelo<>0 && strlen($this->descripcion)>3) {
-            $this->listado = resgistroAvaluosVehiculos::where('anio'.$this->modelo,'<>',null)
-            ->where('vehiculo','like','%'.$this->descripcion.'%')
-            ->where('anio'.$this->modelo,'>', 0)
-            ->select('id','vehiculo', 'anio'.$this->modelo .' as avaluo')
-            ->orderby('vehiculo')
-            ->get();
+            $this->cargarListado();
+            // $this->seleccionado = null;
         }
     }
 
     public function CargarDatos($id) {
         $this->seleccionado = $id;
+        $precio = resgistroAvaluosVehiculos::where('id','=',$this->seleccionado)
+            ->select('anio'.$this->modelo . ' as avaluo')
+            ->get();
+
+        $precio = $precio[0]->avaluo*0.01;
+        
+        $this->registroinicial = [
+            'descripcion' => 'TRANSFERENCIA',
+            'PrecioUnitario' => $precio, 
+            'Cantidad' => 1,
+            'Total' => $precio,
+        ];
+
+        $this->detalles = registroReguisitosTipotramite::where('tipotramite_id','=',$this->tramite_seleccionado)->get();
+        $this->total = registroReguisitosTipotramite::where('tipotramite_id', $this->tramite_seleccionado)
+            ->selectRaw('SUM(precio * cantidad) as total')
+            ->value('total');
+
+        $this->total= $this->total+$precio;
     }
 
     public function Calcular($param) { 
@@ -50,56 +66,36 @@ class EstimadorComponent extends Component
         }
     }
 
-    public function OpenModalAgregar() { $this->descripcion_agregar=$this->precio_agregar=$this->cantidad_agregar=$this->total_agregar=null; $this->ModalAgregar = !$this->ModalAgregar; }
+    public function cargarListado() {
+        $this->listado = resgistroAvaluosVehiculos::select('id','vehiculo', 'anio'.$this->modelo .' as avaluo')
+            ->where('vehiculo','like','%'.$this->descripcion.'%')
+            ->orderby('vehiculo','asc')
 
-    public function OpenModalModificar($precio,$cantidad,$id) {
-        $this->ModalModificar = !$this->ModalModificar;
-        $this->precio_modificar = $precio;
-        $this->cantidad_modificar = $cantidad;
-        $this->Calcular('modificar');
-        $this->registro_id = $id;
+            ->get();
+        $texto = '';
+        for($i=0; $i<count($this->listado);$i++) {
+            $texto = $texto . '<tr wire:click="CargarDatos('. $this->listado[$i]['id'] .')"><td class="text-center d-none d-md-block">'.$this->listado[$i]['vehiculo'].'</td><td>'.number_format($this->listado[$i]['avaluo'],0,",",".").'</td></tr>';
+        }
+        $this->listado = $texto;
+
+    }
+
+    public function cargarRegistro() {
+
+        // dd($precio);
+
+        
+
     }
 
     public function ElegirTramite() {
         $this->tramites = registroTipotramite::find($this->tramite_seleccionado);
-        if($this->tramite_seleccionado == 0 ) { 
+        if($this->tramite_seleccionado == 0 ) {
             $this->tramite_descripcion = ""; 
+            $this->datos_tramite_validados = false;
         } else {
             $this->tramite_descripcion = $this->tramites->nombretramite;
-            $this->detalles = registroReguisitosTipotramite::where('tipotramite_id','=',$this->tramite_seleccionado)->get();
-            $this->total = registroReguisitosTipotramite::where('tipotramite_id', $this->tramite_seleccionado)
-                ->selectRaw('SUM(precio * cantidad) as total')
-                ->value('total');
+            $this->datos_tramite_validados = true;
         }
-    }
-
-    public function modificarValores() {    
-        $a = registroReguisitosTipotramite::where('id', $this->registro_id)->update([
-            'precio' => $this->precio_modificar,
-            'cantidad' => $this->cantidad_modificar,
-        ]);
-
-    // Emitir evento o mostrar mensaje
-    session()->flash('message', 'Valores actualizados correctamente');
-    $this->OpenModalModificar(1,1,1);
-}
-
-
-public function eliminarvalores($id) {
-    registroReguisitosTipotramite::where('id', $id)->delete();
-    session()->flash('message', 'Registro eliminado');
-}
-
-    public function agregarValores() {
-        registroReguisitosTipotramite::firstOrCreate([
-            'descripcionrequisitotipotramite' => $this->descripcion_agregar,
-            'precio'=> $this->precio_agregar,
-            'cantidad'=> $this->cantidad_agregar,
-            'tipotramite_id'=> $this->tramite_seleccionado,
-            // 'empresa_id'=> 1,
-        ]);
-        
-        session()->flash('message', 'Dato Agregado!.');
-        $this->OpenModalAgregar();
     }
 }

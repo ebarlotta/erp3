@@ -74,7 +74,12 @@ class EstimadorComponent extends Component
             ->get();
         $texto = '';
         for($i=0; $i<count($this->listado);$i++) {
-            $texto = $texto . '<tr wire:click="CargarDatos('. $this->listado[$i]['id'] .')"><td class="text-center d-none d-md-block">'.$this->listado[$i]['vehiculo'].'</td><td>'.number_format($this->listado[$i]['avaluo'],0,",",".").'</td></tr>';
+            if($this->listado[$i]['avaluo']>0) {
+                $texto = $texto . '<tr wire:click="CargarDatos('. $this->listado[$i]['id'] .')"><td>'.$this->listado[$i]['vehiculo'].'</td><td>'.number_format($this->listado[$i]['avaluo'],0,",",".").'</td></tr>';
+            } 
+            // else {
+            //     $texto = $texto . '<tr><td>pepep</td></tr>';
+            // }
         }
         $this->listado = $texto;
 

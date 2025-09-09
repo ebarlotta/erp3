@@ -94,10 +94,13 @@ use App\Http\Livewire\Menu\MenuesComponent;
 use App\Http\Livewire\Imprenta\EnviarComponent;
 use App\Http\Livewire\Imprenta\AdminComponent;
 use App\Http\Livewire\Imprenta\PedidoComponent;
-use App\Http\Livewire\Registro\InformesonlineComponent;
+
 // Registro
 //=========
+use App\Http\Livewire\Registro\InformesonlineComponent;
 use App\Http\Livewire\Registro\TramitesonlineComponent;
+use App\Http\Livewire\Registro\ConfigurarRegistroComponent;
+use App\Http\Livewire\Registro\EstimadorComponent;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -275,9 +278,10 @@ Route::view('tramite', TramitesonlineComponent::class)->name('tramite');
 
 Route::get('/tramites-online', TramitesonlineComponent::class)->name('tramites.online');
 Route::get('/informes-online', InformesonlineComponent::class)->name('informes.online');
+Route::get('/configurar-registro', ConfigurarRegistroComponent::class)->name('registro.configurar');
+Route::get('/estimador-registro', EstimadorComponent::class)->name('registro.estimador');
 
-Route::view('/mercadopagosuccess', 'livewire.registro.mercadopagosuccess')
-     ->name('mercadopago.success');
+Route::view('/mercadopagosuccess', 'livewire.registro.mercadopagosuccess')->name('mercadopago.success');
 
 
 

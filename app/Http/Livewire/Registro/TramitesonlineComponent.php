@@ -29,7 +29,7 @@ class TramitesonlineComponent extends Component
     {
         $this->ivas = Condicioniva::where('activo','=',1)->get();
         $this->tramites = registroTipotramite::where('modulo','=','tramites')->get();
-        return view('livewire.registro.tramitesonline-component')->extends('layouts.adminlte');
+        return view('livewire.registro.tramitesonline-component')->extends('layouts.sinadminlte');
     }
 
     public function Mostrar($item) {

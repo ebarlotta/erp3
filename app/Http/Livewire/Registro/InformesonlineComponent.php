@@ -25,7 +25,7 @@ class InformesonlineComponent extends Component
     {
         $this->ivas = Condicioniva::where('activo','=',1)->get();
         $this->informes = registroTipotramite::where('modulo','=','informes')->get();
-        return view('livewire.registro.informesonline-component')->extends('layouts.adminlte');
+        return view('livewire.registro.informesonline-component')->extends('layouts.sinadminlte');
     }
 
     public function Mostrar($item) {

@@ -201,6 +201,7 @@
 
                         @if($necesita_agregar_vehiculo)
                             <div class="col-12 col-md-6 tarjeta-verde">
+                                <label class="titulo_card mb-3">Debe ingresar los datos del vehículo</label><br>
                                 <label class="titulo_card mb-3">Detalles del vehículo</label><br>
                                 <div style="width: 100%">
                                     <p class="flex">Modelo<input class="form-control ml-3" type="text" wire:model="agregar_modelo" oninput="convertirAMayusculas(event)">@error('agregar_modelo')<p class="error-message">{{ $message }}</p>@enderror</p>

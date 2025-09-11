@@ -3,6 +3,13 @@
         <link rel="stylesheet" href="{{ asset('css/registro.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- Button trigger modal -->
+
         <div id="cuerpo" class=" pt-4" >
             <h1 class="titulo1">Obtener Informe Web</h1>
             <label class="text-muted mb-3">Completá los datos personales y de contacto del solicitante.</label>
@@ -14,6 +21,7 @@
                     <div>
                         <div class="panel panel-info hidden-xs ng-scope" style="margin-bottom: 20px;" ng-if="resumenCtrl.solicitud.codigoTramite || resumenCtrl.solicitud.solicitante || resumenCtrl.solicitud. vehiculo || resumenCtrl.solicitud.turno || resumenCtrl.solicitud.tipoTramite">
                             <div class="panel-body">
+                                <input type="button" class="btn btn-info" name="" id="" value="Pagar Nuevo" wire:click="Pagar();">
                                 <table class="table table-striped margin-bottom-no">
                                     <tbody>
                                         <tr>
@@ -315,9 +323,82 @@
                             </tbody>
                         </table>
                     </div>
+  {{-- <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script>const mp = new MercadoPago("TEST-943c52b6-9e31-4ae8-9a63-6766f9a44d9c");</script>
+<style>
+    #form-checkout {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+    }
+
+    .container {
+      height: 18px;
+      display: inline-block;
+      border: 1px solid rgb(118, 118, 118);
+      border-radius: 2px;
+      padding: 1px 2px;
+    }
+  </style>
+  <form id="form-checkout">
+    <div id="form-checkout__cardNumber" class="container"></div>
+    <div id="form-checkout__expirationDate" class="container"></div>
+    <div id="form-checkout__securityCode" class="container"></div>
+    <input type="text" id="form-checkout__cardholderName" />
+    <select id="form-checkout__issuer"></select>
+    <select id="form-checkout__installments"></select>
+    <select id="form-checkout__identificationType"></select>
+    <input type="text" id="form-checkout__identificationNumber" />
+    <input type="email" id="form-checkout__cardholderEmail" />
+
+    <button type="submit" id="form-checkout__submit">Pagar</button>
+    <progress value="0" class="progress-bar">Cargando...</progress>
+  </form> --}}
+
+
+
+
 
                     <h2 class="titulo1">Forma de Pago</h2>
-                    <button class="btn btn-info mr-2"><i class="fa fa-qrcode fa-lg" aria-hidden="true"></i> QR Billetera Virtual</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        QR Billetera Virtual
+                    </button>
+                    
+                    
+                    <div>
+    @if($loading)
+        <div>Cargando...</div>
+    @elseif($error)
+        <div class="text-red-500">Error{{ $error }}</div>
+    @else
+        <div id="wallet_container">Contenedor</div>
+        
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
+        <script>
+            document.addEventListener('livewire:load', function() {
+                const mp = new MercadoPago('{{ $publicKey }}');
+                
+                mp.bricks().create("wallet", "wallet_container", {
+                    initialization: {
+                        preferenceId: "{{ $preferenceId }}",
+                    },
+                    callbacks: {
+                        onReady: () => {
+                            console.log('Wallet ready');
+                        },
+                        onError: (error) => {
+                            console.error('Error:', error);
+                            @this.call('handlePaymentError', error);
+                        }
+                    }
+                });
+            });
+        </script>
+    @endif
+</div>
+
+                    {{-- <button class="btn btn-info mr-2" wire:click="OpenModalQR();"><i class="fa fa-qrcode fa-lg" aria-hidden="true"></i> QR Billetera Virtual</button> --}}
+
                     {{-- <button class="btn btn-info mr-2"><i class="fa fa-credit-card fa-lg" aria-hidden="true"></i> Tarjeta de Crédito</button> --}}
 
                     {{-- <i class="fa fa-money" aria-hidden="true"></i>
@@ -339,7 +420,106 @@
                     </div>
                 </div>
             @endif
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+{{-- aria-hidden="true" --}}
+ <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          {{-- <span aria-hidden="true">&times;</span> --}}
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body flex d-flex">
+            <img src="/images/qr.png" alt="">
+            <a href="https://mpago.la/1Y6mrX7" target="_blank">
+                <button class="btn btn-info">Botón de Pago</button>
+            </a>
+            <input type="button" class="btn btn-info" name="" id="" value="Pagar Nuevo" wire:click="Pagar();">
+
+
+
+
+
+
+
+            <div id="walletBrick_container">contenedor</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
         </div>
+
+
+
+
+        @if($OpenModal)
+        {{-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"> --}}
+            <div class="modal-dialog modal-dialog-centered text-center" role="document" style="justify-content: center;">
+                <div class="modal-content col-6">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLongTitle">Agregar Valores</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    {{-- <span aria-hidden="true">&times;</span> --}}
+                    </button>
+                </div>
+
+
+                <div class="block mx-3 col-12">
+                    <label for="">Descripción</label><br><input type="text" class="text-right col-11" wire:model="descripcion_agregar">        
+                </div>
+                <div class="modal-body flex d-flex">
+                    <img src="/images/qr.png" alt="">
+                    <a href="https://mpago.la/1Y6mrX7">
+                        <button>Billetera</button>
+                    </a>
+                    {{-- <div class="block mx-3">
+                        <label for="">Precio</label><br><input type="text" class="text-right" id="precio_modificar" wire:model="precio_agregar" wire:change="Calcular('agregar');">        
+                    </div>
+
+                    <div class="block ml-3 mr-3">
+                        <label for="">Cantidad</label><br><input type="text" class="text-right" id="cantidad_modificar" wire:model="cantidad_agregar" wire:change="Calcular('agregar');">
+                    </div>
+
+                    <div class="block mx-3">
+                        <label for="">Total</label><br><input type="text" class="text-right" id="total_modificar" wire:model="total_agregar" wire:change="Calcular('agregar');" value="{{ $total_agregar }}">
+                    </div> --}}
+https://mpago.la/1EY4ebK
+
+<script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
+data-preference-id="42071682-d672df41-8dd5-4911-8cfb-d361f55194cd" data-source="button">
+</script>
+                </div>
+                <div class="modal-footer my-3">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" wire:click="OpenModalAgregar();">Cerrar</button>
+                    <button type="button" class="btn btn-success ml-3" wire:click="agregarValores();">Agregar</button>
+                </div>
+                </div>
+            </div>
+        @endif
+
+
+
+
+
+
     </main>
 
     <script>

@@ -8,24 +8,43 @@ use App\Models\Condicioniva;
 use App\Models\Elementos\ElementoVehiculo;
 use App\Models\registroReguisitosTipotramite;
 use App\Models\registroTipotramite;
+use App\Services\MercadoPagoService;
+use Illuminate\Http\Request;
+use MercadoPago\Client\Payment\PaymentClient;
+use MercadoPago\Client\Common\RequestOptions;
+use MercadoPago\Client\Preference\PreferenceClient;
+// SDK de Mercado Pago
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Resources\Preference;
+
+// Agrega credenciales
 
 class InformesonlineComponent extends Component
 {
     public $cuil, $tramiteid, $detalles, $total, $estado_inicial=1, $ivas;
-
     public $datos_solicitante_validados, $solicitante, $necesita_agregar_solicitante, $agregar_apellido, $agregar_nombre, $agregar_email, $agregar_celular, $agregar_direccion, $agregarivaid, $apellido, $nombre;
-
     public $patente, $vehiculo, $datos_vehiculo_validados, $necesita_agregar_vehiculo, $marca, $modelo, $ano, $agregar_modelo, $agregar_marca ,$agregar_ano;
-
     public $resumen, $datos_solicitante, $datos_vehiculo, $seleccion_tramite, $forma_pago, $pago; 
-
     public $datos_tramite_validados, $tramite_descripcion, $informes;
 
-    public function render()
-    {
+    public $OpenModal=false, $preference, $preferenceId;
+    public $loading,$error,$publicKey;
+
+    public function render() {        
         $this->ivas = Condicioniva::where('activo','=',1)->get();
         $this->informes = registroTipotramite::where('modulo','=','informes')->get();
         return view('livewire.registro.informesonline-component')->extends('layouts.sinadminlte');
+    }
+
+    public function __construct() {
+        // MercadoPagoConfig::setAccessToken("APP_USR-6061682654141157-091014-ac3ee7807103ae574e887feaefcf4ca0-1728706587");
+        MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN_TEST'));
+        $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY_TEST');
+        // dd(config('mercadopago.MERCADOPAGO_PUBLIC_KEY_TEST'));
+    }
+    
+    public function OpenModalQR() {
+        $this->OpenModal = !$this->OpenModal;
     }
 
     public function Mostrar($item) {
@@ -164,6 +183,112 @@ class InformesonlineComponent extends Component
         $this->necesita_agregar_vehiculo = 0;
     }
     
+
+
+//   use MercadoPago\MercadoPagoConfig;
+  
+
+//   MercadoPagoConfig::setAccessToken("YOUR_ACCESS_TOKEN");
+
+public function Pagar() {
+
+    $client = new PreferenceClient();
+    $preference = $client->create([
+        "items"=> array(
+            array(
+            "title" => "Mi producto",
+            "quantity" => 1,
+            "unit_price" => 10000
+            )
+        ),
+        "back_urls"=> array(
+            "success" => "https://localhost:8000/registro/success",
+            // "failure" => "https://localhost:8000/informes-online/",
+            "failure" => "http://localhost:8000/informes-online",
+            "pending" => "https://localhost:8000/pending"
+        ),
+        // "auto_return" => "approved",
+        "external_reference" => 'Venta on line de Adminstración'
+    ]);
+
+    $this->preferenceId = $preference->id;
+    
+    return $this->redirect($preference->init_point);
+
+}
+
+public function success(Request $request)
+{
+
+     // Acceder a los parámetros via $request
+    $collectionId = $request->input('collection_id');
+    $collectionStatus = $request->input('collection_status');
+    $paymentId = $request->input('payment_id');
+    $status = $request->input('status');
+    $externalReference = $request->input('external_reference');
+    $paymentType = $request->input('payment_type');
+    $merchantOrderId = $request->input('merchant_order_id');
+    $preferenceId = $request->input('preference_id');
+    $siteId = $request->input('site_id');
+    $processingMode = $request->input('processing_mode');
+    $merchantAccountId = $request->input('merchant_account_id');
+    
+    if ($request->has('collection_id')) {
+        dd('pepepepe');
+        // Guardar los datos de la transacción
+        $paymentData = $request->all();
+        
+        // Procesar el pago (guardar en BD, etc.)
+        $this->processPayment($paymentData);
+        
+        // Redireccionar SIN parámetros
+        
+    }
+    
+    dd($request);
+    $payment_id = $request->get('payment_id');
+    $status = $request->get('status');
+    $external_reference = $request->get('external_reference');
+    
+    return view('livewire.registro.success', compact('payment_id', 'status'));
+
+
+    
+    // Actualizar tu orden como aprobada
+    return view('livewire.registro.success', compact('payment_id', 'status'));
+}
+
+public function failure(Request $request)
+{
+    return view('payment.failure');
+}
+
+public function pending(Request $request)
+{
+    return view('payment.pending');
+}
+
+public function webhook(Request $request)
+{
+    // MercadoPago envía notificaciones POST aquí
+    $data = $request->all();
+    
+    if ($data['type'] === 'payment') {
+        $payment = MercadoPago\Payment::find_by_id($data['data']['id']);
+        
+        // Actualizar el estado del pago en tu base de datos
+        $this->updateOrderStatus($payment->external_reference, $payment->status);
+    }
+    
+    return response()->json(['status' => 'ok']);
+}
+
+
+
+
+
+
+
     function ValidateCUITCUIL($cuit) {
 		if (strlen($cuit) != 13) return false;
 		

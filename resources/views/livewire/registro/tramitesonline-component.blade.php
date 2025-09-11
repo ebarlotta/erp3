@@ -247,7 +247,7 @@
                                         <p class="flex">Apellido<input class="form-control ml-3" type="text" wire:model="agregar_apellido">@error('agregar_apellido')<p class="error-message">{{ $message }}</p>@enderror</p>
                                         <p class="flex">Nombre<input class="form-control ml-3" type="text" wire:model="agregar_nombre"></p>@error('agregar_nombre')<p class="error-message">{{ $message }}</p>@enderror</p>
                                         <p class="flex">Email<input class="form-control ml-3" type="text" wire:model="agregar_email"></p>@error('agregar_email')<p class="error-message">{{ $message }}</p>@enderror</p>
-                                        <p class="flex">Celular<input class="form-control ml-3" type="text" wire:model="agregar_celular" maxlength="11" onkeypress="return soloNumeros(event)"></p>@error('agregar_celular')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                        <p class="flex">Celular<input class="form-control ml-3" type="text" wire:model="agregar_celular" maxlength="11"></p>@error('agregar_celular')<p class="error-message">{{ $message }}</p>@enderror</p>
                                         <p class="flex">Dirección<input class="form-control ml-3" type="text" wire:model="agregar_direccion"></p>@error('agregar_direccion')<p class="error-message">{{ $message }}</p>@enderror</p>
                                         <p class="flex w-100" style="justify-content: flex-start;">Condición iva
                                             <select class="form-control" wire:model="agregarivaid" style="width: 96%;">

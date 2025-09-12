@@ -30,7 +30,7 @@
                             {{-- <td style="width: 28px">Item</td> --}}
                             <td>Descripción</td>
                             <td class="text-right">Precio Unitario</td>
-                            <td class="text-center" style="width: 14rem">Cant.</td>
+                            <td class="text-center" style="width: 5rem">Cant.</td>
                             <td class="text-center">Total</td>
                             <td class="text-center">Opciones</td>
                         </tr>
@@ -40,9 +40,9 @@
                                 <tr style="height: 30px;">
                                     {{-- <td class="text-center">1</td> --}}
                                     <td>{{ $detalle->descripcionrequisitotipotramite}}</td>
-                                    <td class="text-right pr-2">$ {{ $detalle['precio']}}</td>
+                                    <td class="text-right">$ {{ $detalle['precio']}}</td>
                                     <td class="text-center">{{ $detalle['cantidad']}}</td>
-                                    <td class="text-right pr-2">$ {{ $detalle['precio'] * $detalle['cantidad']}}</td>
+                                    <td class="text-right" style="width:5rem">$ {{ $detalle['precio'] * $detalle['cantidad']}}</td>
                                     <td class="text-right" style="width:8rem">
                                         <input type="button" class="btn btn-success" value="->" title="Modificar valores" wire:click="OpenModalModificar({{ $detalle['precio']}},{{ $detalle['cantidad']}},{{ $detalle['id']}});">
                                         <input type="button" class="btn btn-danger" value="X" title="Eliminar valores" wire:click="eliminarvalores({{ $detalle['id']}});">

@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\registroReguisitosTipotramite;
 use App\Models\registroTipotramite;
 
-class ConfigurarRegistroComponent extends Component
+class ConfigurarRegistroTramitesComponent extends Component
 {
     public $resumen, $datos_vehiculo, $seleccion_tramite, $forma_pago, $pago; 
 
@@ -16,9 +16,9 @@ class ConfigurarRegistroComponent extends Component
 
     public function render()
     {
-        $this->tramites = registroTipotramite::where('modulo','=','informes')->get();
+        $this->tramites = registroTipotramite::where('modulo','=','tramites')->get();
         $this->detalles = registroReguisitosTipotramite::where('tipotramite_id', $this->tramite_seleccionado)->get();
-        return view('livewire.registro.configurarregistro-component')->extends('layouts.sinadminlte');
+        return view('livewire.registro.configurarregistro-tramites-component')->extends('layouts.sinadminlte');
     }
 
     public function Calcular($param) { 

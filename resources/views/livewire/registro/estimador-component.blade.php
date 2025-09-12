@@ -106,17 +106,13 @@
                                     <td>Descripción del Vehículo</td>
                                     <td>Avalúo</td>
                                 </tr>
-                                {!! $listado !!}
-                                {{-- {{ $listado }} --}}
-                                {{-- @foreach($listado as $item)
-                                    @if($item['avaluo']>0)
-                                        <tr wire:click="CargarDatos({{$item['id'] }})">
-                                            <td>{{ $item->id}}</td>
-                                            <td>{{ strtoupper($item['vehiculo']) }}</td>
-                                            <td class="text-right">{{ number_format($item['avaluo'],0,",",".") }}</td>
-                                        </tr>
-                                    @endif
-                                @endforeach --}}
+                                @if($mostrarListado)
+                                    {!! $listado !!}
+                                @else
+                                <tr>
+                                    <td colspan="2" style="border: black solid;background-color: lightgreen;">{{ $nombreCompleto}}</td>
+                                </tr>
+                                @endif
                             @else
                                     <tr><td>No se encontraron datos aún</td></tr>
                             @endif

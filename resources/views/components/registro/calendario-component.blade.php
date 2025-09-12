@@ -1,9 +1,9 @@
 <div class="calendar-container">
     <!-- Controles de navegación -->
-    <div class="calendar-header flex text-center">
-        <button wire:click="cambiarMes(-1)" class="calendar-nav-btn">&lt;</button>
+    <div class="calendar-header d-flex flex" style="justify-content: center;">
+        <button wire:click="cambiarMes(-1)" class="calendar-nav-btn mr-3">&lt;</button>
         <h3 class="calendar-title">{{ $nombreMes }} {{ $anio }}</h3>
-        <button wire:click="cambiarMes(1)" class="calendar-nav-btn">&gt;</button>
+        <button wire:click="cambiarMes(1)" class="calendar-nav-btn ml-3">&gt;</button>
     </div>
 
     <!-- Días de la semana -->

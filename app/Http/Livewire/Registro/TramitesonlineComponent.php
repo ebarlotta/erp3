@@ -12,18 +12,14 @@ use App\Models\registroReguisitosTipotramite;
 class TramitesonlineComponent extends Component
 {
     public $cuil, $tramiteid, $detalles, $total, $estado_inicial=1, $ivas, $chasis, $datos_final;
-
     public $datos_solicitante_validados, $solicitante, $necesita_agregar_solicitante, $agregar_apellido, $agregar_nombre, $agregar_email, $agregar_celular, $agregar_direccion, $agregarivaid, $apellido, $nombre;
-
     public $patente, $vehiculo, $datos_vehiculo_validados, $necesita_agregar_vehiculo, $marca, $modelo, $ano, $agregar_modelo, $agregar_marca ,$agregar_ano;
-
     public $resumen, $datos_solicitante, $datos_vehiculo=0, $seleccion_tramite=1, $forma_pago, $pago, $seleccionar_turno, $datos_turno_validados;
-
     public $datos_tramite_validados, $tramite_descripcion, $tramites;
-
     public $descripciontramite, $requisitos, $tramite_seleccionado;
 
-    public $diaSeleccionado, $mes, $anio;
+    public $diaSeleccionado, $mes, $anio, $diasCalendario = [];
+    protected $listeners = ['diaSeleccionado' => 'seleccionarDia'];
 
     public function render()
     {
@@ -45,16 +41,13 @@ class TramitesonlineComponent extends Component
     }
 
     public function cambiar_tramite() {
-        //  $this->$tramite_seleccionado = $tramite_id;
-        // dd($this->tramite_seleccionado);
         if($this->seleccion_tramite <> 0) {
-            $tramite = registroTipotramite::find($this->seleccion_tramite);
+            $tramite = registroTipotramite::find($this->tramite_seleccionado);
             $this->descripciontramite = $tramite->descripciontramite;
-            $this->requisitos = registroReguisitosTipotramite::where('tipotramite_id','=',$this->seleccion_tramite)->get();
+            $this->requisitos = registroReguisitosTipotramite::where('tipotramite_id','=',$this->tramite_seleccionado)->get();
 
             $this->datos_tramite_validados = 1;
-            $this->descripciontramite =  $tramite->nombretramite; // registroTipotramite::find($this->seleccion_tramite)->get('descripciontramite');
-            // $this->datos_vehiculo = 1;
+            $this->descripciontramite =  $tramite->nombretramite;
         } else {
             $this->datos_vehiculo = 0;
             $this->datos_tramite_validados = 0;
@@ -176,8 +169,7 @@ class TramitesonlineComponent extends Component
         $this->necesita_agregar_vehiculo = 0;
     }
 
-    public function seleccionarDia($dia)
-    {          
+    public function seleccionarDia($dia) {          
         $mesHoy = date('n');
         $anioHoy = date('Y');
         $this->diaSeleccionado = str_pad($dia, 2, "0", STR_PAD_LEFT) . '/' .str_pad($mesHoy, 2, "0", STR_PAD_LEFT) . '/' . $anioHoy;
@@ -185,13 +177,60 @@ class TramitesonlineComponent extends Component
 
     }
 
-     public function cambiarMes($incremento)
-    {
+    public function cambiarMes($incremento) {
         $nuevaFecha = strtotime("{$this->anio}-{$this->mes}-01 + {$incremento} months");
         $this->mes = date('n', $nuevaFecha);
         $this->anio = date('Y', $nuevaFecha);
         $this->generarCalendario();
         $this->diaSeleccionado = null;
     }
-    
+
+    public function generarCalendario() {
+        $this->diasCalendario = [];
+        // Primer día del mes
+        $primerDia = strtotime("{$this->anio}-{$this->mes}-01");
+        $diaSemanaPrimerDia = date('N', $primerDia); // 1 (lunes) a 7 (domingo)
+        
+        // Días en el mes
+        $totalDias = date('t', $primerDia);
+        
+        // Días del mes anterior para completar la primera semana
+        $diasMesAnterior = $diaSemanaPrimerDia - 1;
+        if ($diasMesAnterior > 0) {
+            $ultimoDiaMesAnterior = date('t', strtotime("last day of previous month", $primerDia));
+            for ($i = $diasMesAnterior; $i > 0; $i--) {
+                $this->diasCalendario[] = [
+                    'numero' => $ultimoDiaMesAnterior - $i + 1,
+                    'esMesActual' => false,
+                    'esHoy' => false
+                ];
+            }
+        }
+        
+        // Días del mes actual
+        $hoy = date('j');
+        $mesHoy = date('n');
+        $anioHoy = date('Y');
+        
+        for ($dia = 1; $dia <= $totalDias; $dia++) {
+            $this->diasCalendario[] = [
+                'numero' => $dia,
+                'esMesActual' => true,
+                'esHoy' => ($dia == $hoy && $this->mes == $mesHoy && $this->anio == $anioHoy)
+            ];
+        }
+        
+        // Días del próximo mes para completar la última semana
+        $totalCeldas = 42; // 6 semanas × 7 días
+        $diasRestantes = $totalCeldas - count($this->diasCalendario);
+        
+        for ($dia = 1; $dia <= $diasRestantes; $dia++) {
+            $this->diasCalendario[] = [
+                'numero' => $dia,
+                'esMesActual' => false,
+                'esHoy' => false
+            ];
+        }
+    }
+
 }

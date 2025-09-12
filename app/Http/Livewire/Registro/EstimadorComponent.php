@@ -21,6 +21,8 @@ class EstimadorComponent extends Component
     public $detalles, $tramites, $tramite_seleccionado, $listado, $descripcion, $modelo, $registro, $seleccionado;
     public $datos_tramite_validados=false, $datos_vehiculo_validados, $datos_solicitante_validados;
 
+    public $mostrarListado,$nombreCompleto;
+
     public function render()
     {
         $this->tramites = registroTipotramite::where('modulo','=','estimador')->get();
@@ -31,18 +33,20 @@ class EstimadorComponent extends Component
     public function BuscarDato() {
         if($this->modelo<>0 && strlen($this->descripcion)>3) {
             $this->cargarListado();
-            // $this->seleccionado = null;
         }
     }
 
     public function CargarDatos($id) {
         $this->seleccionado = $id;
         $precio = resgistroAvaluosVehiculos::where('id','=',$this->seleccionado)
-            ->select('anio'.$this->modelo . ' as avaluo')
+            ->select('anio'.$this->modelo . ' as avaluo', 'vehiculo')
             ->get();
 
+        $this->nombreCompleto = $precio[0]->vehiculo;
+        
         $precio = $precio[0]->avaluo*0.01;
         
+
         $this->registroinicial = [
             'descripcion' => 'TRANSFERENCIA',
             'PrecioUnitario' => $precio, 
@@ -56,6 +60,9 @@ class EstimadorComponent extends Component
             ->value('total');
 
         $this->total= $this->total+$precio;
+
+        $this->mostrarListado=false;
+
     }
 
     public function Calcular($param) { 
@@ -70,26 +77,16 @@ class EstimadorComponent extends Component
         $this->listado = resgistroAvaluosVehiculos::select('id','vehiculo', 'anio'.$this->modelo .' as avaluo')
             ->where('vehiculo','like','%'.$this->descripcion.'%')
             ->orderby('vehiculo','asc')
-
             ->get();
+
         $texto = '';
         for($i=0; $i<count($this->listado);$i++) {
             if($this->listado[$i]['avaluo']>0) {
                 $texto = $texto . '<tr wire:click="CargarDatos('. $this->listado[$i]['id'] .')"><td>'.$this->listado[$i]['vehiculo'].'</td><td>'.number_format($this->listado[$i]['avaluo'],0,",",".").'</td></tr>';
-            } 
-            // else {
-            //     $texto = $texto . '<tr><td>pepep</td></tr>';
-            // }
+            }
         }
+        $this->mostrarListado=true;
         $this->listado = $texto;
-
-    }
-
-    public function cargarRegistro() {
-
-        // dd($precio);
-
-        
 
     }
 

@@ -167,7 +167,7 @@
         </div>
         
         <p>¡Gracias por tu compra! Tu pedido está siendo procesado y será enviado pronto.</p>
-        <p>El número de id es {{ $payment_id }}</p>
+        <p>El número de id es {{ $preferenceId }}</p>
         <a href="/registro" class="btn-back">Volver al Inicio</a>
     </div>
 

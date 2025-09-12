@@ -17,46 +17,76 @@
             {{-- Resúmen --}}
             {{-- ======= --}}
             @if($datos_solicitante || $datos_vehiculo || $seleccion_tramite || $forma_pago)
-                <div class="form-group tarjeta-gris">            
+                <div class="form-group tarjeta-gris">
                     <div>
                         <div class="panel panel-info hidden-xs ng-scope" style="margin-bottom: 20px;" ng-if="resumenCtrl.solicitud.codigoTramite || resumenCtrl.solicitud.solicitante || resumenCtrl.solicitud. vehiculo || resumenCtrl.solicitud.turno || resumenCtrl.solicitud.tipoTramite">
-                            <div class="panel-body">
-                                <input type="button" class="btn btn-info" name="" id="" value="Pagar Nuevo" wire:click="Pagar();">
-                                <table class="table table-striped margin-bottom-no">
-                                    <tbody>
-                                        <tr>
+                            {{-- <div class="panel-body"> --}}
+
+                                <div class="col-12">
+                                    <div class="d-flex flex col-12">
+                                        <div class="media-left" style="margin-right: 13px;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" color="#3498db" width="26" height="26" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"></path></svg>
+                                        </div>
+                                        <label class="titulo_card text-uppercase blue-300 col-12"> Resumen de la Solicitud</label>
+                                    </div>
+
+                                    @if($datos_solicitante_validados)
+                                        <div class="flex d-flex flex-wrap">
+                                            <div class="text-muted text-right col-6 col-md-3 col-lg-2">Solicitante</div><div class="col-6 col-md-3 col-lg-2">{{ $apellido }}, {{ $nombre }}</div>
+                                            <div class="text-muted text-right col-6 col-md-3 col-lg-2">CUIL / CUIT</div><div class="col-6 col-md-3 col-lg-2">{{ $cuil }} </div>
+                                            <div class="text-muted text-right col-6 col-md-3 col-lg-2"> Email:</div><div class="col-6 col-md-3 col-lg-2">{{ $solicitante['email'] }} </div>
+                                        </div>
+                                    @endif
+                                    @if($datos_vehiculo_validados)
+                                        <div class="flex d-flex flex-wrap">
+                                            <div class="text-muted text-right col-6 col-md-3 col-lg-2"> Patente:</div><div class="col-6 col-md-3 col-lg-2" style="text-transform: uppercase;"> {{ $patente }} </div>
+                                            <div class="text-muted text-right col-6 col-md-3 col-lg-2"> Marca:</div><div class="col-6 col-md-3 col-lg-2" style="text-transform: uppercase;"> {{ $marca }} </div>
+                                            <div class="text-muted text-right col-6 col-md-3 col-lg-2"> Modelo:</div><div class="col-6 col-md-3 col-lg-2" style="text-transform: uppercase;"> {{ $modelo }} </div>
+                                            <div class="text-muted text-right col-6 col-md-3 col-lg-2"> Año:</div><div class="col-6 col-md-3 col-lg-2" style="text-transform: uppercase;"> {{ $ano }} </div>
+                                        </div>
+                                    @endif
+                                    @if($datos_tramite_validados)
+                                        <div class="flex d-flex flex-wrap">
+                                            <div class="text-muted text-right col-6 col-md-3"> Trámite:</div><div class="col-9"> {{ $tramite_descripcion }} </td>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                {{-- <table class="table table-striped margin-bottom-no col-12">
+                                    <tbody> --}}
+                                        {{-- <tr>
                                             <td colspan="8">
                                                 <div class="d-flex flex">
                                                     <div class="media-left" style="margin-right: 13px;">
                                                         <svg xmlns="http://www.w3.org/2000/svg" color="#3498db" width="26" height="26" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"></path></svg>
                                                     </div>
-                                                    <label class="titulo_card text-uppercase blue-300"> Resumen de la Solicitud</label>
+                                                    <label class="titulo_card text-uppercase blue-300 col-12"> Resumen de la Solicitud</label>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        @if($datos_solicitante_validados)
+                                        </tr> --}}
+                                        {{-- @if($datos_solicitante_validados)
                                             <tr class="p-3" style="border:white 10px:">
                                                 <td class="text-muted text-right" style="width: 15%">Solicitante</td><td>{{ $apellido }}, {{ $nombre }}</td>
                                                 <td class="text-muted text-right" style="width: 15%">CUIL / CUIT</td><td>{{ $cuil }} </td>
                                                 <td class="text-muted text-right" style="width: 15%"> Email:</td><td>{{ $solicitante['email'] }} </td>
                                             </tr>
-                                        @endif
-                                        @if($datos_vehiculo_validados)
+                                        @endif --}}
+                                        {{-- @if($datos_vehiculo_validados)
                                             <tr>
                                                 <td class="text-muted text-right" style="width: 15%"> Patente:</td><td style="text-transform: uppercase;"> {{ $patente }} </td>
                                                 <td class="text-muted text-right" style="width: 15%"> Marca:</td><td style="text-transform: uppercase;"> {{ $marca }} </td>
                                                 <td class="text-muted text-right" style="width: 15%"> Modelo:</td><td style="text-transform: uppercase;"> {{ $modelo }} </td>
                                                 <td class="text-muted text-right" style="width: 15%"> Año:</td><td style="text-transform: uppercase;"> {{ $ano }} </td>
                                             </tr>
-                                        @endif
-                                        @if($datos_tramite_validados)
+                                        @endif --}}
+                                        {{-- @if($datos_tramite_validados)
                                             <tr>
                                                 <td class="text-muted text-right" style="width: 15%"> Trámite:</td><td colspan="8"> {{ $tramite_descripcion }} </td>
                                             </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
+                                        @endif --}}
+                                    {{-- </tbody>
+                                </table> --}}
+                            {{-- </div> --}}
                         </div>
                     </div>
                 </div>
@@ -66,10 +96,10 @@
             @if($datos_solicitante || $estado_inicial)
                 <div class="form-group tarjeta-gris">
                     <div class="flex d-flex flex-wrap">
-                        <div class="form-group col-12 col-md-6">
+                        <div class="form-group col-12 col-md-7">
                             <h2 class="titulo1">Datos del solicitante</h2>
                             <label class="titulo_card">CUIL / CUIT</label>
-                            <input class="form-control texto" type="text" tooltip="CUIL / CUIT" wire:model="cuil" id="cuil" maxlength="11" onkeypress="return soloNumeros(event)">
+                            <input class="form-control texto" type="number" tooltip="CUIL / CUIT" wire:model="cuil" id="cuil" maxlength="11" onkeypress="return soloNumeros(event)">
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
@@ -98,11 +128,11 @@
                             <div class="col-12 col-md-6 tarjeta-verde">
                                 <label class="titulo_card" style="margin-bottom: 20px">Detalles del solicitante</label><br>
                                 <div style="width: 100%">
-                                    <p class="flex">Apellido<input class="form-control ml-3" type="text" value="{{ $apellido }}" disabled></p>
-                                    <p class="flex">Nombre<input class="form-control ml-3" type="text" value="{{ $nombre }}" disabled></p>
-                                    <p class="flex">Email<input class="form-control ml-3" type="text" value="{{ $solicitante['email'] }}" disabled></p>
-                                    <p class="flex">Celular<input class="form-control ml-3" type="text" value="{{ $solicitante['telefono'] }}" disabled></p>
-                                    <p class="flex">Dirección<input class="form-control ml-3" type="text" value="{{$solicitante['direccion']}}" disabled></p>
+                                    <p class="flex">Apellido<input class="form-control ml-3 col-11" type="text" value="{{ $apellido }}" disabled></p>
+                                    <p class="flex">Nombre<input class="form-control ml-3 col-11" type="text" value="{{ $nombre }}" disabled></p>
+                                    <p class="flex">Email<input class="form-control ml-3 col-11" type="text" value="{{ $solicitante['email'] }}" disabled></p>
+                                    <p class="flex">Celular<input class="form-control ml-3 col-11" type="text" value="{{ $solicitante['telefono'] }}" disabled></p>
+                                    <p class="flex">Dirección<input class="form-control ml-3 col-11" type="text" value="{{$solicitante['direccion']}}" disabled></p>
                                 </div>                                
                             </div>
                         @endif
@@ -110,13 +140,13 @@
                             <div class="col-12 col-md-6 tarjeta-verde">
                                 <label class="titulo_card mb-3">Detalles del solicitante</label><br>
                                 <div style="width: 100%">
-                                    <p class="flex">Apellido<input class="form-control ml-3" type="text" wire:model="agregar_apellido">@error('agregar_apellido')<p class="error-message">{{ $message }}</p>@enderror</p>
-                                    <p class="flex">Nombre<input class="form-control ml-3" type="text" wire:model="agregar_nombre"></p>@error('agregar_nombre')<p class="error-message">{{ $message }}</p>@enderror</p>
-                                    <p class="flex">Email<input class="form-control ml-3" type="text" wire:model="agregar_email"></p>@error('agregar_email')<p class="error-message">{{ $message }}</p>@enderror</p>
-                                    <p class="flex">Celular<input class="form-control ml-3" type="text" wire:model="agregar_celular" id="agregar_celular" maxlength="11" onkeypress="return soloNumeros(event)"></p>@error('agregar_celular')<p class="error-message">{{ $message }}</p>@enderror</p>
-                                    <p class="flex">Dirección<input class="form-control ml-3" type="text" wire:model="agregar_direccion"></p>@error('agregar_direccion')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Apellido<input class="form-control ml-3 col-11" type="text" wire:model="agregar_apellido">@error('agregar_apellido')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Nombre<input class="form-control ml-3 col-11" type="text" wire:model="agregar_nombre"></p>@error('agregar_nombre')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Email<input class="form-control ml-3 col-11" type="text" wire:model="agregar_email"></p>@error('agregar_email')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Celular<input class="form-control ml-3 col-11" type="number" wire:model="agregar_celular" id="agregar_celular" maxlength="11" onkeypress="return soloNumeros(event)"></p>@error('agregar_celular')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Dirección<input class="form-control ml-3 col-11" type="text" wire:model="agregar_direccion"></p>@error('agregar_direccion')<p class="error-message">{{ $message }}</p>@enderror</p>
                                     <p class="flex w-100" style="justify-content: flex-start;">Condición iva
-                                        <select class="form-control" wire:model="agregarivaid" style="width: 96%;">
+                                        <select class="form-control col-11" wire:model="agregarivaid" style="width: 96%;">
                                             <option value="0">--- Seleccione una opción ---</option>
                                             @foreach ($ivas as $iva)
                                                 <option value="{{ $iva->id }}">{{ $iva->descripcion}}</option>
@@ -199,9 +229,9 @@
                             <div class="col-12 col-md-6 tarjeta-verde">
                                 <label class="titulo_card" style="margin-bottom: 20px">Detalles del Vehículo</label><br>
                                 <div style="width: 100%">
-                                    <p class="flex">Modelo<input class="form-control ml-3" type="text" value="{{ $modelo }}" disabled></p>
-                                    <p class="flex">Marca<input class="form-control ml-3" type="text" value="{{ $marca }}" disabled></p>
-                                    <p class="flex">Año<input class="form-control ml-3" type="text" value="{{ $ano }}" disabled></p>
+                                    <p class="flex">Modelo<input class="form-control ml-3 col-11" type="text" value="{{ $modelo }}" disabled></p>
+                                    <p class="flex">Marca<input class="form-control ml-3 col-11" type="text" value="{{ $marca }}" disabled></p>
+                                    <p class="flex">Año<input class="form-control ml-3 col-11" type="text" value="{{ $ano }}" disabled></p>
                                     {{-- <p class="flex">Registro<input class="form-control ml-3" type="text" value="{{  }}" disabled></p> --}}
                                 </div>                                
                             </div>
@@ -212,9 +242,9 @@
                                 <label class="titulo_card mb-3">Debe ingresar los datos del vehículo</label><br>
                                 <label class="titulo_card mb-3">Detalles del vehículo</label><br>
                                 <div style="width: 100%">
-                                    <p class="flex">Modelo<input class="form-control ml-3" type="text" wire:model="agregar_modelo" oninput="convertirAMayusculas(event)">@error('agregar_modelo')<p class="error-message">{{ $message }}</p>@enderror</p>
-                                    <p class="flex">Marca<input class="form-control ml-3" type="text" wire:model="agregar_marca" oninput="convertirAMayusculas(event)"></p>@error('agregar_marca')<p class="error-message">{{ $message }}</p>@enderror</p>
-                                    <p class="flex">Año<input class="form-control ml-3" type="text" wire:model="agregar_ano" id="agregar_ano" maxlength="4" onkeypress="return soloNumeros(event)"></p>@error('agregar_ano')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Modelo<input class="form-control ml-3 col-11" type="text" wire:model="agregar_modelo" oninput="convertirAMayusculas(event)">@error('agregar_modelo')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Marca<input class="form-control ml-3 col-11" type="text" wire:model="agregar_marca" oninput="convertirAMayusculas(event)"></p>@error('agregar_marca')<p class="error-message">{{ $message }}</p>@enderror</p>
+                                    <p class="flex">Año<input class="form-control ml-3 col-11" type="number" wire:model="agregar_ano" id="agregar_ano" maxlength="4" onkeypress="return soloNumeros(event)"></p>@error('agregar_ano')<p class="error-message">{{ $message }}</p>@enderror</p>
                                         @if (session()->has('message'))
                                             <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
                                                 <div class="flex">
@@ -294,119 +324,71 @@
                 <div class="form-group tarjeta-gris">
                     <div class="form-group">
                         <h2 class="titulo1">Pagar la solicitud</h2>           
-                        <label class="titulo_card" for="codigoTramite">Presupuesto</label> 
-                        <table class="table-striped col-12" style="font-size: 0.9rem; margin-left:-20px">
+                        <label class="titulo_card" for="codigoTramite">Presupuesto</label>
+                        {{-- <div class="container">
+                            <div class="col-12 flex d-flex">
+                                <div class="col-6">Descripción</div>
+                                <div class="col-2">Precio Unitario</div>
+                                <div class="col-2">Cant.</div>
+                                <div class="col-2">Total</div>
+                            </div>
+
+                            @if($detalles)
+                                @foreach($detalles as $detalle)
+                                    <div class="col-12 flex d-flex">
+                                        <div class="col-6">{{ $detalle->descripcionrequisitotipotramite}}</div>
+                                        <div class="text-right pr-2 col-2">$ {{ $detalle['precio']}}</div>
+                                        <div class="text-center col-2">{{ $detalle['cantidad']}}</div>
+                                        <div class="text-right pr-2 col-2">$ {{ $detalle['precio'] * $detalle['cantidad']}}</div>
+                                    </div>
+                                @endforeach
+                                    <div class="col-12 flex d-flex">
+                                        <div style="background-color: lightblue; height: 30px;">
+                                            <div colspan=5 class="text-right pr-2">$ {{ $total }}</div>
+                                        </div>
+                                    </div>
+                            @else
+                                <div class="col-12 flex d-flex">
+                                    <div colspan="5" style="text-align: center; background-color: lightcoral">DEBE SELECCIONAR UNA OPCIÓN EN LA PANTALLA ANTERIOR</div>
+                                </div>
+                            @endif
+                        </div> --}}
+                        <table class="table-striped col-12" style="font-size: 0.9rem;">
                             <tbody>
                                 <tr class="titulo_card blue-300" style="background-color: lightblue;">
-                                    <td class="text-center" style="width: 9rem">Item</td>
-                                    {{-- <td style="width: 28px">Item</td> --}}
+                                    {{-- <td class="text-center" style="width: 9rem">Item</td> --}}
                                     <td>Descripción</td>
-                                    <td class="text-right">Precio Unitario</td>
+                                    <td class="text-right col-3">Precio Unitario</td>
                                     <td class="text-center" style="width: 14rem">Cant.</td>
-                                    <td class="text-center">Total</td>
+                                    <td class="text-center col-3">Total</td>
                                 </tr>
-
-                                @foreach($detalles as $detalle)
-                                    <tr style="height: 30px;">
-                                        <td class="text-center">1</td>
-                                        <td>{{ $detalle->descripcionrequisitotipotramite}}</td>
-                                        <td class="text-right pr-2">$ {{ $detalle['precio']}}</td>
-                                        <td class="text-center">{{ $detalle['cantidad']}}</td>
-                                        <td class="text-right pr-2">$ {{ $detalle['precio'] * $detalle['cantidad']}}</td>
-                                        
-
-                                    </tr>
-                                @endforeach
-                                    <tr style="background-color: lightblue; height: 30px;">
-                                    <td colspan=5 class="text-right pr-2">$ {{ $total }}</td>
-                                </tr>
+                                @if($detalles)
+                                    @foreach($detalles as $detalle)
+                                        <tr style="height: 30px;">
+                                            {{-- <td class="text-center">1</td> --}}
+                                            <td>{{ $detalle->descripcionrequisitotipotramite}}</td>
+                                            <td class="text-right pr-2 col-3">$ {{ $detalle['precio']}}</td>
+                                            <td class="text-center col-2">{{ $detalle['cantidad']}}</td>
+                                            <td class="text-right pr-2 col-3">$ {{ $detalle['precio'] * $detalle['cantidad']}}</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr>
+                                        <tr style="background-color: lightblue; height: 30px;">
+                                        <td colspan=5 class="text-right pr-2">$ {{ $total }}</td>
+                                    </tr>                                  
+                                @else
+                                    <tr><td colspan="5" style="text-align: center; background-color: lightcoral">DEBE SELECCIONAR UNA OPCIÓN EN LA PANTALLA ANTERIOR</td></tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
-  {{-- <script src="https://sdk.mercadopago.com/js/v2"></script>
-  <script>const mp = new MercadoPago("TEST-943c52b6-9e31-4ae8-9a63-6766f9a44d9c");</script>
-<style>
-    #form-checkout {
-      display: flex;
-      flex-direction: column;
-      max-width: 600px;
-    }
-
-    .container {
-      height: 18px;
-      display: inline-block;
-      border: 1px solid rgb(118, 118, 118);
-      border-radius: 2px;
-      padding: 1px 2px;
-    }
-  </style>
-  <form id="form-checkout">
-    <div id="form-checkout__cardNumber" class="container"></div>
-    <div id="form-checkout__expirationDate" class="container"></div>
-    <div id="form-checkout__securityCode" class="container"></div>
-    <input type="text" id="form-checkout__cardholderName" />
-    <select id="form-checkout__issuer"></select>
-    <select id="form-checkout__installments"></select>
-    <select id="form-checkout__identificationType"></select>
-    <input type="text" id="form-checkout__identificationNumber" />
-    <input type="email" id="form-checkout__cardholderEmail" />
-
-    <button type="submit" id="form-checkout__submit">Pagar</button>
-    <progress value="0" class="progress-bar">Cargando...</progress>
-  </form> --}}
-
-
-
-
 
                     <h2 class="titulo1">Forma de Pago</h2>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
                         QR Billetera Virtual
                     </button>
                     
-                    
-                    <div>
-    @if($loading)
-        <div>Cargando...</div>
-    @elseif($error)
-        <div class="text-red-500">Error{{ $error }}</div>
-    @else
-        <div id="wallet_container">Contenedor</div>
-        
-        <script src="https://sdk.mercadopago.com/js/v2"></script>
-        <script>
-            document.addEventListener('livewire:load', function() {
-                const mp = new MercadoPago('{{ $publicKey }}');
-                
-                mp.bricks().create("wallet", "wallet_container", {
-                    initialization: {
-                        preferenceId: "{{ $preferenceId }}",
-                    },
-                    callbacks: {
-                        onReady: () => {
-                            console.log('Wallet ready');
-                        },
-                        onError: (error) => {
-                            console.error('Error:', error);
-                            @this.call('handlePaymentError', error);
-                        }
-                    }
-                });
-            });
-        </script>
-    @endif
-</div>
-
-                    {{-- <button class="btn btn-info mr-2" wire:click="OpenModalQR();"><i class="fa fa-qrcode fa-lg" aria-hidden="true"></i> QR Billetera Virtual</button> --}}
-
-                    {{-- <button class="btn btn-info mr-2"><i class="fa fa-credit-card fa-lg" aria-hidden="true"></i> Tarjeta de Crédito</button> --}}
-
-                    {{-- <i class="fa fa-money" aria-hidden="true"></i>
-                    <i class="fa fa-cc-stripe" aria-hidden="true"></i>
-                    <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
-                    <i class="fa fa-cc-amex" aria-hidden="true"></i>
-                    <i class="fa fa-cc-visa" aria-hidden="true"></i>
-                    <i class="fa fa-paypal" aria-hidden="true"></i> --}}
+                    <input type="button" class="btn btn-info mt-2" name="" id="" value="Tarjeta Crédito/Débito" wire:click="Pagar();">
                     
                     <div class="flex d-flex">    
                         <button type="submit" class="btn boton-warning mr-3" wire:click="Mostrar('datos_tramite')">
@@ -414,47 +396,27 @@
                                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                             </svg>&nbsp;Volver&nbsp; 
                         </button>
-                        {{-- <button type="submit" class="btn btn-success boton" wire:click="Mostrar('pago')">Continuar&nbsp; 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
-                        </button> --}}
                     </div>
                 </div>
             @endif
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-{{-- aria-hidden="true" --}}
  <script src="https://sdk.mercadopago.com/js/v2"></script>
-
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          {{-- <span aria-hidden="true">&times;</span> --}}
-        </button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
       </div>
       <div class="modal-body">
         <div class="modal-body flex d-flex">
             <img src="/images/qr.png" alt="">
-            <a href="https://mpago.la/1Y6mrX7" target="_blank">
-                <button class="btn btn-info">Botón de Pago</button>
-            </a>
-            <input type="button" class="btn btn-info" name="" id="" value="Pagar Nuevo" wire:click="Pagar();">
-
-
-
-
-
-
-
-            <div id="walletBrick_container">contenedor</div>
+            <a href="https://mpago.la/1Y6mrX7" target="_blank"><button class="btn btn-info">Botón de Pago</button></a>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar Método de Pago</button>
+        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
       </div>
     </div>
   </div>

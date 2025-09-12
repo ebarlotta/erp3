@@ -101,6 +101,7 @@ use App\Http\Livewire\Registro\InformesonlineComponent;
 use App\Http\Livewire\Registro\TramitesonlineComponent;
 use App\Http\Livewire\Registro\ConfigurarRegistroComponent;
 use App\Http\Livewire\Registro\EstimadorComponent;
+use App\Http\Livewire\Registro\ConfigurarRegistroTramitesComponent;
 
 // Mercado Pago
 // ============
@@ -284,9 +285,12 @@ Route::view('tramite', TramitesonlineComponent::class)->name('tramite');
 Route::get('/tramites-online', TramitesonlineComponent::class)->name('tramites.online');
 Route::get('/informes-online', InformesonlineComponent::class)->name('informes.online');
 Route::get('/configurar-registro', ConfigurarRegistroComponent::class)->name('registro.configurar');
+Route::get('/configurartramites-registro', ConfigurarRegistroTramitesComponent::class)->name('registro.configurar.tramites');
 Route::get('/estimador-registro', EstimadorComponent::class)->name('registro.estimador');
 
 Route::get('/registro/success', [InformesonlineComponent::class, 'success'])->name('mercadopago.success');
+Route::get('/registro/webhooks', [InformesonlineComponent::class, 'webhooks'])->name('mercadopago.webhooks');
+
 // debit_card
 // merchant_order_id=33890795805&preference_id=42071682-2d4c123a-0513-4fb6-b78d-d71d20b1ffbb&site_id=MLA&processing_mode=aggregator&merchant_account_id=null
 

@@ -107,6 +107,9 @@ use App\Http\Livewire\Registro\ConfigurarRegistroTramitesComponent;
 // ============
 use App\Http\Controllers\PaymentController;
 
+// Promociones
+// ===========
+use App\Http\Livewire\Promociones\PromocionesComponent;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -289,19 +292,15 @@ Route::get('/configurartramites-registro', ConfigurarRegistroTramitesComponent::
 Route::get('/estimador-registro', EstimadorComponent::class)->name('registro.estimador');
 
 Route::get('/registro/success', [InformesonlineComponent::class, 'success'])->name('mercadopago.success');
-Route::get('/registro/webhooks', [InformesonlineComponent::class, 'webhooks'])->name('mercadopago.webhooks');
+// Route::get('/registro/webhooks', [InformesonlineComponent::class, 'webhooks'])->name('mercadopago.webhooks');
 
-// debit_card
-// merchant_order_id=33890795805&preference_id=42071682-2d4c123a-0513-4fb6-b78d-d71d20b1ffbb&site_id=MLA&processing_mode=aggregator&merchant_account_id=null
-
-// Route::view('/mercadopagosuccess', 'livewire.registro.mercadopagosuccess')->name('mercadopago.success');
-
-Route::post('/create-payment', [PaymentController::class, 'createPayment'])->name('payment.create');
+// Route::post('/create-payment', [PaymentController::class, 'createPayment'])->name('payment.create');
 // Route::get('/payment/success', [PaymentController::class, 'success'])->name('mercadopago.success');
-Route::get('/payment/failure', [PaymentController::class, 'failure'])->name('mercadopago.failure');
-Route::get('/payment/pending', [PaymentController::class, 'pending'])->name('mercadopago.pending');
-Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('mercadopago.webhook');
+// Route::get('/payment/failure', [PaymentController::class, 'failure'])->name('mercadopago.failure');
+// Route::get('/payment/pending', [PaymentController::class, 'pending'])->name('mercadopago.pending');
+// Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('mercadopago.webhook');
 
+Route::get('/promociones', PromocionesComponent::class)->name('promociones');
 
 
 

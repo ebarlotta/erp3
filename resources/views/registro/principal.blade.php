@@ -21,6 +21,7 @@
         
         {{-- <script src="{{ asset('registro.css') }}" ></script> --}}
         <link rel="stylesheet" href="{{ asset('css/registro.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/registro-icono-arg.css') }}">
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
         {{-- <link rel="stylesheet" href="https://barber.gentepiola.net/css/tooltips.css">
@@ -80,7 +81,7 @@
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 tarjeta">
         <a href="/tramites-online" class="tarjeta-a amarillo" >
             <div class="panel_superior">
-                <i class="icono-arg-solidaridad icono-4x text-gray"></i>
+                <i class="icono-arg-digital icono-5x text-gray" style="color: white"></i>
             </div>
             <div class="panel_inferior">
                 <h4 class="titulo_card">
@@ -93,7 +94,7 @@
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 tarjeta">
         <a href="/informes-online" class="tarjeta-a rosado" >
             <div class="panel_superior">
-                <i class="icono-arg-solidaridad icono-4x text-gray"></i>
+                <i class="icono-arg-auto-informe icono-5x text-gray" style="color: white"></i>
             </div>
             <div class="panel_inferior">
                 <h4 class="titulo_card">
@@ -107,7 +108,7 @@
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 tarjeta">
         <a href="" class="tarjeta-a celeste" >
             <div class="panel_superior">
-                <i class="icono-arg-solidaridad icono-4x text-gray"></i>
+                <i class="icono-arg-turno icono-5x text-gray" style="color: white"></i>
             </div>
             <div class="panel_inferior">
                 <h4 class="titulo_card">
@@ -121,7 +122,7 @@
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 tarjeta">
         <a href="/estimador-registro" class="tarjeta-a verdemusgo" >
             <div class="panel_superior">
-                <i class="icono-arg-solidaridad icono-4x text-gray"></i>
+                <i class="icono-arg-firma-digital icono-5x text-gray" style="color: white"></i>
             </div>
             <div class="panel_inferior">
                 <h4 class="titulo_card">

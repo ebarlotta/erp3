@@ -22,7 +22,7 @@ class AreaComponent extends Component
     {
         // $role = auth()->user();
         // dd($role->permissions);
-        if(auth()->user()->hasPermissionTo('areas.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('areas.Ver')) {
             if(session('empresa_id')) {
                 // $this->empresa_id=session('empresa_id');
                 // $this->areas = Area::where('empresa_id', $this->empresa_id)->get();

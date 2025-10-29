@@ -303,8 +303,3 @@ Route::get('/registro/success', [InformesonlineComponent::class, 'success'])->na
 
 Route::get('/promociones', PromocionesComponent::class)->name('promociones');
 Route::get('configuraciones',ConfiguracionesComponent::class)->name('configuraciones');
-
-
-
-
-

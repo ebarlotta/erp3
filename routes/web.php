@@ -110,6 +110,7 @@ use App\Http\Controllers\PaymentController;
 // Promociones
 // ===========
 use App\Http\Livewire\Promociones\PromocionesComponent;
+use App\Http\Livewire\Promociones\ConfiguracionesComponent;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -301,6 +302,8 @@ Route::get('/registro/success', [InformesonlineComponent::class, 'success'])->na
 // Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('mercadopago.webhook');
 
 Route::get('/promociones', PromocionesComponent::class)->name('promociones');
+Route::get('configuraciones',ConfiguracionesComponent::class)->name('configuraciones');
+
 
 
 

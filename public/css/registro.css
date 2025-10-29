@@ -141,3 +141,11 @@
             padding-top: 20%;
             border: solid 1px lightseagreen
         }
+
+        .zoom {
+            transition: transform .2s; 
+        }
+        
+        .zoom:hover {
+            transform: scale(1.05); 
+        }

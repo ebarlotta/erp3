@@ -302,4 +302,5 @@ Route::get('/registro/success', [InformesonlineComponent::class, 'success'])->na
 // Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('mercadopago.webhook');
 
 Route::get('/promociones', PromocionesComponent::class)->name('promociones');
+Route::get('/promociones/buscar/{rubro}', PromocionesComponent::class)->name('buscar_promociones');
 Route::get('configuraciones',ConfiguracionesComponent::class)->name('configuraciones');

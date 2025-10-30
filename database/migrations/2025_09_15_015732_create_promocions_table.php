@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('promocions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('zona_id');
-            $table->string('TipoDeCompra');
+            $table->unsignedBigInteger('tipodecompra_id');
             $table->double('MontoFijoDESCUENTO');
             $table->double('PorcentajeDESCUENTO');
             $table->double('TopePorTransaccion');
@@ -34,6 +34,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('zona_id')->references('id')->on('zonas');
+            $table->foreign('tipodecompra_id')->references('id')->on('tipo_de_compras');
+            
             // $table->foreign('formadepago_id')->references('id')->on('formadepagos');
             // $table->foreign('producto_id')->references('id')->on('productos');
             // $table->foreign('mediodepago_id')->references('id')->on('mediodepagos');

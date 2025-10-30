@@ -10,7 +10,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Grid Items con Íconos Temáticos</title>
+        <title>Configuraciones</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
             * {
@@ -249,7 +249,7 @@
                     {{-- <div class="subtitle">EN FARMACIAS Y PERFUMERÍAS*</div> --}}
                 </div>
                 <div class="w-20 h-20" style="background-color: #f8f9fa; border-radius: 10px; color:black;margin: auto;" wire:click="AbrirModalPromociones()">
-                    <input type="button" value="+" style="margin-top: 15%; font-size: 40px; font-weight: bold;">
+                    <input type="button" value="+" style="font-size: 40px; /* font-weight: bold; */ width: 60px; border-radius: 10px;">
                 </div>
             </div>
             <div class="grid-container">
@@ -258,20 +258,15 @@
                     <div class="item-header">
                         <div class="icon"><i class="fas fa-map-marked-alt"></i></div>
                         <div class="item-title">Zonas</div>
-                        <div class="item-title">20%</div>
+                        {{-- <div class="item-title">20%</div> --}}
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Áreas geográficas donde aplica la promoción. Pueden ser barrios, ciudades o regiones específicas.</p>
                         <div class="item-details" style="overflow-y: auto; ">
-                            <p><i class="fas fa-check-circle"></i> Aplica en CABA y GBA</p>
-                            <p><i class="fas fa-times-circle"></i> No aplica en interior</p>
-
-                            <p><i class="fas fa-times-circle"></i> No aplica en interior</p>
-                            <p><i class="fas fa-times-circle"></i> No aplica en interior</p>
-                            <p><i class="fas fa-times-circle"></i> No aplica en interior</p>
-                            <p><i class="fas fa-times-circle"></i> No aplica en interior</p>
-                            <p><i class="fas fa-times-circle"></i> No aplica en interior</p>
-
+                            @php $iconos = ['fa-check-circle', 'fa-times-circle']; @endphp
+                            @foreach($Zonas as $Zona)
+                                <p><i class="fas {{ $iconos[rand(0,1)] }}"></i> {{ $Zona->nombre}}</p>
+                            @endforeach
                         </div>
                         <span class="tag">Geolocalización</span>
                     </div>  
@@ -285,10 +280,14 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Métodos de pago aceptados para la promoción.</p>
-                        <div class="item-details">
-                            <p><i class="fas fa-credit-card"></i> Tarjeta de crédito</p>
+                          <div class="item-details" style="overflow-y: auto; ">
+                            @php $iconos = ['fa-credit-card', 'fa-money-bill']; @endphp
+                            @foreach($FormaDePago as $Forma)
+                                <p><i class="fas {{ $iconos[rand(0,1)] }}"></i> {{ $Forma->nombre}}</p>
+                            @endforeach
+                            {{-- <p><i class="fas fa-credit-card"></i> Tarjeta de crédito</p>
                             <p><i class="fas fa-credit-card"></i> Tarjeta de débito</p>
-                            <p><i class="fas fa-money-bill"></i> Efectivo</p>
+                            <p><i class="fas fa-money-bill"></i> Efectivo</p> --}}
                         </div>
                         <span class="tag">Medios de pago</span>
                     </div>
@@ -302,10 +301,14 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Instrumentos específicos de pago que participan en la promoción.</p>
-                        <div class="item-details">
-                            <p><i class="fab fa-cc-visa"></i> Visa</p>
+                          <div class="item-details" style="overflow-y: auto; ">
+                            @php $iconos = ['fab fa-cc-visa', 'fab fa-cc-mastercard', 'fas fa-university']; @endphp
+                            @foreach($MedioDePago as $Medio)
+                                <p><i class="{{ $iconos[rand(0,2)] }}"></i> {{ $Medio->nombre}}</p>
+                            @endforeach
+                            {{-- <p><i class="fab fa-cc-visa"></i> Visa</p>
                             <p><i class="fab fa-cc-mastercard"></i> Mastercard</p>
-                            <p><i class="fas fa-university"></i> Banco Nación</p>
+                            <p><i class="fas fa-university"></i> Banco Nación</p> --}}
                         </div>
                         <span class="tag">Instrumentos financieros</span>
                     </div>
@@ -319,34 +322,46 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Productos específicos que participan en la promoción.</p>
-                        <div class="item-details">
-                            <p><i class="fas fa-pills"></i> Medicamentos</p>
+                          <div class="item-details" style="overflow-y: auto; ">
+                            @php $iconos = ['fas fa-pills', 'fas fa-soap', 'fas fa-spray-can']; @endphp
+                            @foreach($ListaDeProductos as $Producto)
+                                <p><i class="{{ $iconos[rand(0,2)] }}"></i> {{ $Producto->nombre}}</p>
+                            @endforeach
+
+                            {{-- <p><i class="fas fa-pills"></i> Medicamentos</p>
                             <p><i class="fas fa-soap"></i> Productos de higiene</p>
-                            <p><i class="fas fa-spray-can"></i> Perfumes</p>
+                            <p><i class="fas fa-spray-can"></i> Perfumes</p> --}}
                         </div>
                         <span class="tag">Productos elegibles</span>
                     </div>
                 </div>
-<br>
 
                 <!-- TipoDeCompra -->
-                <div class="grid-item">
+                <div class="grid-item" wire:click="CargarDatosModal('TipoDeCompra')">
                     <div class="item-header">
                         <div class="icon"><i class="fas fa-shopping-cart"></i></div>
                         <div class="item-title">Tipo de Compra</div>
-                        <div class="item-title">20%</div>
+                        {{-- <div class="item-title">20%</div> --}}
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Categorías de productos o servicios que son elegibles para la promoción.</p>
-                        <div class="item-details">
-                            <p><i class="fas fa-pills"></i> Farmacia</p>
+                          <div class="item-details" style="overflow-y: auto; ">
+                            @php $iconos = ['fas fa-pills', 'fas fa-times-circle', 'fas fa-spray-can']; @endphp
+                            @foreach($TipoDeCompra as $Tipo)
+                                <p><i class="{{ $iconos[rand(0,2)] }}"></i> {{ $Tipo->TipoDeCompra}}</p>
+                            @endforeach
+
+                            {{-- <p><i class="fas fa-pills"></i> Farmacia</p>
                             <p><i class="fas fa-spray-can"></i> Perfumería</p>
-                            <p><i class="fas fa-times-circle"></i> No aplica para electrónica</p>
+                            <p><i class="fas fa-times-circle"></i> No aplica para electrónica</p> --}}
                         </div>
                         <span class="tag">Categorización</span>
                     </div>
                 </div>
+            </div>
                 
+            <div class="grid-container">
+
                 <!-- MontoFijoDESCUENTO -->
                 <div class="grid-item" wire:click="CargarDatosModal('MontoFijoDESCUENTO')">
                     <div class="item-header">
@@ -356,7 +371,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Descuento de valor fijo aplicado al total de la compra, independientemente del monto.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-money-bill-wave"></i> Descuento: $500</p>
                             <p><i class="fas fa-shopping-bag"></i> Mínimo de compra: $2000</p>
                         </div>
@@ -372,7 +387,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Descuento calculado como un porcentaje del total de la compra.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-chart-pie"></i> 25% de descuento</p>
                             <p><i class="fas fa-chart-line"></i> Aplicado al total</p>
                         </div>
@@ -388,7 +403,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Límite máximo de descuento aplicable en una sola transacción.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-money-bill"></i> Máximo: $5.000</p>
                             <p><i class="fas fa-receipt"></i> Por transacción</p>
                         </div>
@@ -404,7 +419,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Fecha de inicio en la que la promoción comienza a estar vigente.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-play-circle"></i> Inicio: 01/09/2023</p>
                             <p><i class="fas fa-clock"></i> 00:00 hs</p>
                         </div>
@@ -420,7 +435,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Fecha de finalización de la vigencia de la promoción.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-stop-circle"></i> Fin: 30/09/2023</p>
                             <p><i class="fas fa-clock"></i> 23:59 hs</p>
                         </div>
@@ -436,7 +451,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Límite máximo de descuento acumulable durante un período específico.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-calendar-week"></i> Por semana: $10.000</p>
                             <p><i class="fas fa-calendar-month"></i> Por mes: $40.000</p>
                         </div>
@@ -452,7 +467,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Límites específicos según diferentes tipos de períodos (diario, semanal, mensual).</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-calendar-day"></i> Diario: $2.000</p>
                             <p><i class="fas fa-calendar-week"></i> Semanal: $10.000</p>
                         </div>
@@ -468,7 +483,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Condiciones que deben cumplirse para acceder a la promoción.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-id-card"></i> Cliente registrado</p>
                             <p><i class="fas fa-shopping-bag"></i> Compra mínima: $2.000</p>
                             <p><i class="fas fa-credit-card"></i> Pago con tarjeta</p>
@@ -485,7 +500,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Días específicos en los que aplica la promoción.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-calendar-check"></i> Lunes a Viernes</p>
                             <p><i class="fas fa-calendar-times"></i> Excepto feriados</p>
                         </div>
@@ -501,7 +516,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Tipo de moneda en la que se realiza la transacción.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-dollar-sign"></i> Pesos Argentinos (ARS)</p>
                             <p><i class="fas fa-dollar-sign"></i> Dólares Estadounidenses (USD)</p>
                         </div>
@@ -517,7 +532,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Detalles adicionales y aclaraciones sobre la promoción.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-exclamation-triangle"></i> Sujeto a disponibilidad</p>
                             <p><i class="fas fa-store"></i> Válido en locales adheridos</p>
                         </div>
@@ -533,7 +548,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Modalidad de retiro de productos adquiridos con la promoción.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-store"></i> Retiro en sucursal</p>
                             <p><i class="fas fa-truck"></i> Envío a domicilio</p>
                         </div>
@@ -549,7 +564,7 @@
                     </div>
                     <div class="item-content">
                         <p class="item-desc">Devolución de un porcentaje o monto fijo de la compra realizada.</p>
-                        <div class="item-details">
+                          <div class="item-details" style="overflow-y: auto; ">
                             <p><i class="fas fa-undo"></i> 15% de reintegro</p>
                             <p><i class="fas fa-calendar"></i> Acreditado en 72hs</p>
                         </div>
@@ -566,10 +581,16 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">{{ $titulo }}</h5>
-                            <button type="button" class="btn-close" wire:click="CerrarModal"></button>
+                            <button type="button" class="btn" wire:click="CerrarModal" style=" padding: .08rem .45rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 10px;
+                background-color:  rgb(186, 183, 183);
+                 ">X</button>
                         </div>
                         <div class="modal-body flex h-56 flex-col justify-between ">
-                            <div><h2>Listado</h2>
+                            <div>
+                                <h2>Listado</h2>
                                 <div class="flex d-flex" style="background-color: lightgray; height: 35px; border: black solid 1px">
                                     <div class="col-4"><b>Nombre</b></div>
                                     {{-- No aplica para: FormaDePago && MedioDePago --}}
@@ -582,6 +603,10 @@
                                         <div class="col-3"><b>Aplica SI/NO</b></div>
                                     @endif
 
+                                    {{-- @if($titulo=="TipoDeCompra")
+                                        <div class="col-3"><b>Tipos de Compras</b></div>
+                                    @endif --}}
+                                    
                                     <div class="col-3 mr-1"><b>Opciones</b></div>                                   
                                 </div>
 
@@ -601,6 +626,10 @@
                                             @if($titulo=="ListaDeProductos")
                                                 <div class="col-3">{{ $item->nombre }}</div>
                                                 <div class="col-6">{{ $item->aplicasino }}</div>
+                                            @endif
+
+                                            @if($titulo=="TipoDeCompra")
+                                                <div class="col-4">{{ $item->TipoDeCompra }}</div>
                                             @endif
 
                                             <div class="col-3 flex d-flex  mr-1">

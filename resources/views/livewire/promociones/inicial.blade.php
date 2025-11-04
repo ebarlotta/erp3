@@ -101,7 +101,14 @@
                     <a class="nav-link" href="#categorias">Categorías</a>
                     <a class="nav-link" href="#app">App Móvil</a>
                     <a class="btn btn-primary ms-3" href="#newsletter">Comenzar</a>
-                    <a class="btn btn-secundary ms-3" href="login">Login / Registro</a>
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-secundary ms-3">Logout 3</button>
+                        </form>
+                    @else
+                        <a class="btn btn-secundary ms-3" href="{{ route('login') }}">Login / Registro</a>
+                    @endauth
                 </div>
             </div>
         </nav>

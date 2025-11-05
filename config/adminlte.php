@@ -259,12 +259,12 @@ return [
         //     'label'       => 6,
         //     'label_color' => 'success',
         // ],
-        
+
         // ['header' => 'account_settings'],
         ['header' => 'GESTIÓN DE EMPRESAS',
-//            'can' => 'administracion.Ver',
+           'can' => 'administracion.Ver',
         ],
-        
+
         [
             'canany' => ['empresagestion.Ver','empresamodulos.Ver','gestionmodulos.Ver','modulousuarios.Ver','roles.Ver','certificados.Ver'],
             'text' => 'Administración',
@@ -332,7 +332,7 @@ return [
                 'url'  => 'categorias',
                 'icon' => 'fa fa-cubes',
                 'can' => 'categorias.Ver',
-            ],    
+            ],
             [
                 'text' => 'Cuentas',
                 'url'  => 'cuentas',
@@ -350,7 +350,7 @@ return [
                 'url'  => 'estados',
                 'icon' => 'fas fa-fw fa-building',
                 'can' => 'estados.Ver',
-            ],                
+            ],
             [
                 'text' => 'Estados Civiles',
                 'url'  => 'estadosciviles',
@@ -374,7 +374,7 @@ return [
                 'url'  => 'tiposdedocumentos',
                 'icon' => 'fa fa-server',
                 'can' => 'tiposdedocumentos.Ver',
-            ],     
+            ],
             [
                 'text' => 'Unidades',
                 'url'  => 'unidades',
@@ -402,17 +402,17 @@ return [
                         'can' => 'provincias.Ver',
                     ],
                 ],
-            ],        
+            ],
 
         ['header' => 'ERP',
-//            'can' => 'administracion.Ver',
+           'can' => 'administracion.Ver',
         ],
         [
             'text' => 'Categorías de Productos',
             'url'  => 'categoriaproducto',
             'icon' => 'fas fa-fw fa-building',
             'can' => 'categoriaproducto.Ver',
-        ],        
+        ],
         [
             'text' => 'Categorías Profesionales',
             'url'  => 'categoriaprofesional',
@@ -461,9 +461,9 @@ return [
             'icon' => 'fas fa-fw fa-chart-pie',
             'can' => 'ventas.Ver',
         ],
-//         ['header' => 'GESTIÓN CARRITO',
-// //            'can' => 'carrito.Ver',
-//         ],
+        ['header' => 'GESTIÓN CARRITO',
+                'can' => 'Carrito.Ver',
+        ],
         [
             'text' => 'Productos',
             'icon' => 'fa fa-shopping-bag',
@@ -493,7 +493,7 @@ return [
                     'text' => 'Registrar Bajas',
                     'url'  => 'productobajas',
                     'can' => 'tags.Eliminar',
-                ],   
+                ],
             ],
         ],
         [
@@ -510,7 +510,7 @@ return [
         ],
 
         ['header' => 'GERI',
-            // 'can' => 'geri.Ver',
+            'can' => 'Geri.Ver',
         ],
         [
             'text' => 'Ajustes',
@@ -608,96 +608,6 @@ return [
             ],
         ],
 
-        // ['header' => 'MÓDULOS',
-//            'can' => 'modulos.Ver',
-        // ],
-        // [
-            // 'text' => 'Ajustes',
-            // 'url'  => 'tags',
-            // 'icon' => 'fas fa-fw fa-building',
-// //            'can' => 'modulos.Ver',
-            // 'submenu' => [
-//                 [
-                    // 'text' => 'Areas',
-                    // 'url'  => 'areas',
-                    // 'icon' => 'fas fa-fw fa-building',
-                //    'can' => 'areas.Ver',
-                // ],
-                // [
-                    // 'text' => 'Categorías',
-                    // 'url'  => 'categorias',
-                    // 'icon' => 'fas fa-fw fa-building',
-                //    'can' => 'categorias.Ver',
-                // ],    
-                // [
-                    // 'text' => 'Cuentas',
-                    // 'url'  => 'cuentas',
-                    // 'icon' => 'fas fa-fw fa-building',
-                //    'can' => 'cuentas.Ver',
-                // ],
-                // [
-                    // 'text' => 'Elementos',
-                    // 'url'  => 'elementos',
-                    // 'icon' => 'fas fa-fw fa-building',
-                //    'can' => 'elementos.Ver',
-                // ],
-                // [
-                    // 'text' => 'Estados',
-                    // 'url'  => 'estados',
-                    // 'icon' => 'fas fa-fw fa-building',
-                //    'can' => 'estados.Ver',
-                // ],                
-                // [
-                    // 'text' => 'Estados Civiles',
-                    // 'url'  => 'estadosciviles',
-                    // 'icon' => 'fas fa-fw fa-venus-mars',
-                //    'can' => 'estadosciviles.Ver',
-                // ],
-                // [
-                    // 'text' => 'Proveedores',
-                    // 'url'  => 'proveedores',
-                    // 'icon' => 'fas fa-fw fa-building',
-                //    'can' => 'proveedores.Ver',
-                // ],
-                // [
-                    // 'text' => 'Tipos de Documentos',
-                    // 'url'  => 'tiposdedocumentos',
-                    // 'icon' => 'fas fa-fw fa-card',
-                //    'can' => 'tiposdedocumentos.Ver',
-                // ],     
-                // [
-                    // 'text' => 'Unidades',
-                    // 'url'  => 'unidades',
-                    // 'icon' => 'fas fa-fw fa-building',
-                //    'can' => 'unidades.Ver',
-                // ],
-                // [
-                    // 'text' => 'Localización',
-                    // 'icon' => 'fas fa-fw fa-cogs',
-                //    'can' => 'localizacion.Ver',
-                    // 'submenu' => [
-                        // [
-                            // 'text' => 'Localidades',
-                            // 'url'  => 'localidades',
-                        //    'can' => 'localidades.Ver',
-                        // ],
-                        // [
-                            // 'text' => 'Nacionalidades',
-                            // 'url'  => 'nacionalidad',
-                        //    'can' => 'nacionalidad.Ver',
-                        // ],
-                        // [
-                            // 'text' => 'Provincias',
-                            // 'url'  => 'provincias',
-                        //    'can' => 'provincias.Ver',
-                        // ],
-                    // ],
-                // ],
-// 
-            // ],
-        // ],
-
-
         ['header' => 'GESTIÓN INFORMES',
             // 'can' => 'tablasver.Ver',
             'canany' => ['tablasver.Ver','tablas.Ver'],
@@ -735,7 +645,7 @@ return [
             'text' => 'Generales',
             'url'  => 'settings',
             'icon' => 'fas fa-fw fa-cogs',
-//            'can' => 'generales.Ver',            
+//            'can' => 'generales.Ver',
                 'submenu' => [
                     [
                         'text' => 'Otras Cosas',
@@ -744,7 +654,7 @@ return [
                     [
                         'text' => 'Usuario',
                         'url'  => 'user/profile',
-                    ],    
+                    ],
                     [
                         'text' => 'Personas Campos',
                         'url'  => 'personascampos',
@@ -755,67 +665,13 @@ return [
                         'url'  => 'interfaces',
                     ],
                 ],
-        ],                
+        ],
 
         [
             'text' => 'VOLVER',
             'url'  => '/',
             'icon' => 'fas fa-fw fa-building',
         ],
-        // [
-        //     'text'    => 'multilevel',
-        //     'icon'    => 'fas fa-fw fa-share',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'level_one',
-        //             'url'  => '#',
-        //         ],
-        //         [
-        //             'text'    => 'level_one',
-        //             'url'     => '#',
-        //             'submenu' => [
-        //                 [
-        //                     'text' => 'level_two',
-        //                     'url'  => '#',
-        //                 ],
-        //                 [
-        //                     'text'    => 'level_two',
-        //                     'url'     => '#',
-        //                     'submenu' => [
-        //                         [
-        //                             'text' => 'level_three',
-        //                             'url'  => '#',
-        //                         ],
-        //                         [
-        //                             'text' => 'level_three',
-        //                             'url'  => '#',
-        //                         ],
-        //                     ],
-        //                 ],
-        //             ],
-        //         ],
-        //         [
-        //             'text' => 'level_one',
-        //             'url'  => '#',
-        //         ],
-        //     ],
-        // ],
-        // ['header' => 'labels'],
-        // [
-        //     'text'       => 'important',
-        //     'icon_color' => 'red',
-        //     'url'        => '#',
-        // ],
-        // [
-        //     'text'       => 'warning',
-        //     'icon_color' => 'yellow',
-        //     'url'        => '#',
-        // ],
-        // [
-        //     'text'       => 'information',
-        //     'icon_color' => 'cyan',
-        //     'url'        => '#',
-        // ],
     ],
 
     /*

@@ -38,16 +38,16 @@ class EmpresaComponent extends Component
                 'labels' => ['January', 'February', 'March', 'April', 'May'],
                 'data' => [65, 59, 80, 81, 56],
                 // 'data' => [
-                    
+
                 //         'label' => 'AQUI DOS LINEAS',
                 //         'data'=> [12, 19, 3, 5, 2, 3],
-                //         'backgroundColor' => 'rgba(255, 99, 132, 0.2)',    
+                //         'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
                 //         'borderWidth'=> 1
                 // ],
                 //         [
                 //         'label' => 'Xxxx',
                 //         'data' => [22, 29, 33, 55, 52, 33],
-                //         'backgroundColor' => 'rgba(255, 99, 132, 0.2)',    
+                //         'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
                 //         'borderWidth' => 1
                 //         ]
             ];
@@ -62,7 +62,7 @@ class EmpresaComponent extends Component
         else {
             return view('livewire.llevaralogin')->extends('layouts.adminlte');
             // return redirect()->route('login');
-            
+
             // return view('public/public/login');
             // return view('public/login');
             // $this->Redirecciona();
@@ -80,11 +80,11 @@ class EmpresaComponent extends Component
         session(['empresa_id' => $id]);
         //sleep(2);
         $this->empresa_id=$id;
-        
+
         $a = Empresa::find($id);
         session(['nombre_empresa' => $a->name]);
         session(['url_logo_empresa' => $a->imagen]);
-        
+
         // dd(session('empresa_id'));
         ////$empresa_modulos = EmpresaModulo::where('empresa_id',$this->empresa_id)->get('modulo_id');
         // $modulos=Modulo::find($empresa_modulos);
@@ -96,7 +96,7 @@ class EmpresaComponent extends Component
         $this->empresa_id=$id;
         return redirect('empresausuarios');
     }
-    
+
     // public static function login() {
     //     $userid=auth()->user()->id;
     //     $empresas_usuario = EmpresaUsuario::where('user_id',$userid)->get();
@@ -105,6 +105,29 @@ class EmpresaComponent extends Component
     //     }
     //     return view('livewire.empresa.empresa-component',compact(['empresas'=>$empresas_del_usuario]));
     //     //return $empresas_del_usuario;
+    // }
+
+
+     public function notFound()
+    {
+        // Opcional: Log del error
+        \Log::warning('Página no encontrada');
+
+        return response()->view('errors.404', [
+            // 'requestedUrl' => $request->fullUrl(),
+            'currentUrl' => url()->current(),
+        ], 404);
+    }
+
+    // public function notFound(Request $request)
+    // {
+    //     // Opcional: Log del error
+    //     \Log::warning('Página no encontrada: ' . $request->fullUrl());
+
+    //     return response()->view('errors.404', [
+    //         'requestedUrl' => $request->fullUrl(),
+    //         'currentUrl' => url()->current(),
+    //     ], 404);
     // }
 
 }

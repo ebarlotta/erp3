@@ -15,10 +15,10 @@ use PhpParser\JsonDecoder;
 
 class CertificadoComponent extends Component
 {
-    public $tabActivo=1; 
+    public $tabActivo=1;
     public $ModalDelete,$ModalModify,$ModalAgregarDetalle;
     public $txttax_id=null, $txtusername='', $txtpassword=null, $txtalias=null,$txtPtoVta;
-    public $txtcertificado, $txtkey, $txtvisible_guardar=true; 
+    public $txtcertificado, $txtkey, $txtvisible_guardar=true;
     public $estado='Habilitado', $estado_color='green';
     public $certificado_id, $certificado_PtoVta=null, $certificado_tax_id, $certificado_crt, $certificado_key, $certificado_alias, $certificado_production=false;
 
@@ -35,10 +35,10 @@ class CertificadoComponent extends Component
     public function render()
     {
         $this-> setDatosCertificado();  // Llama al método para cargar todos los datos del certificado si es que encuentra alguno para la empresa seleccionada
-        if(count($this->certificados)) { 
-            $this->estado = $this->certificados[0]->estado; 
+        if(count($this->certificados)) {
+            $this->estado = $this->certificados[0]->estado;
             $this->estado_color='lightgreen';
-            
+
             $puntosVtas = $this->TraerPuntosDeVentas();
             session()->flash('message', $puntosVtas ? null : 'Debe agregar un punto de venta antes de continuar');
 
@@ -48,7 +48,7 @@ class CertificadoComponent extends Component
 
     public function setDatosCertificado() {
         $this->certificados = Certificado::where('empresa_id','=',session('empresa_id'))->get();
-        if(count($this->certificados)) { 
+        if(count($this->certificados)) {
             $this->certificado_id = $this->certificados[0]->id;
             $this->certificado_tax_id = $this->certificados[0]->tax_id;
             $this->certificado_alias = $this->certificados[0]->alias;
@@ -64,13 +64,13 @@ class CertificadoComponent extends Component
 
     public function GenerarCertificado() {
         // CUIT al cual le queremos generar el certificado
-        // $tax_id = 20255083571; 
+        // $tax_id = 20255083571;
 
         // Usuario para ingresar a AFIP.
         // Para la mayoria es el mismo CUIT, pero al administrar
         // una sociedad el CUIT con el que se ingresa es el del administrador
         // de la sociedad.
-        // $username = '20255083571'; 
+        // $username = '20255083571';
 
         // Contraseña para ingresar a AFIP.
         // $password = 'sOCIEDAD2023';
@@ -101,7 +101,7 @@ class CertificadoComponent extends Component
         ]);
 
         $this->demora = true;
-        
+
         try {
             $tax_id = $this->txttax_id;
             $username =$this->txtusername;
@@ -112,14 +112,14 @@ class CertificadoComponent extends Component
         } catch (Exception $ex) {
             session(['message' => 'Se produjo un error, controle todos los datos']);
         }
-        
+
         $this->demora = false;
         $datos = $this->res->cert;
         $key   = $this->res->key;
 
         // Escribir los contenidos en el fichero,
         Storage::disk('local')->put('certificados/'.$this->txttax_id.'_'.$this->txtalias.'.crt', $datos) ? $this->estado = "Grabado" : $this->estado = 'Error!';
-        Storage::disk('local')->put('certificados/'.$this->txttax_id.'_'.$this->txtalias.'.key', $key  ) ? $this->estado = "Grabado" : $this->estado = 'Error!';    
+        Storage::disk('local')->put('certificados/'.$this->txttax_id.'_'.$this->txtalias.'.key', $key  ) ? $this->estado = "Grabado" : $this->estado = 'Error!';
 
         $cert = new Certificado;
         $cert->tax_id= $this->txttax_id;
@@ -138,13 +138,13 @@ class CertificadoComponent extends Component
 
     public function AutorizarCertificado() {
         // CUIT al cual le queremos generar la autorización
-        // $tax_id = 20255083571; 
+        // $tax_id = 20255083571;
 
         // Usuario para ingresar a AFIP.
         // Para la mayoria es el mismo CUIT, pero al administrar
         // una sociedad el CUIT con el que se ingresa es el del administrador
         // de la sociedad.
-        // $username = '20255083571'; 
+        // $username = '20255083571';
 
         // Contraseña para ingresar a AFIP.
         // $password = 'sOCIEDAD2023';
@@ -171,7 +171,7 @@ class CertificadoComponent extends Component
             $alias =$this->certificados[0]->alias;
             // $wsid = 'wsfe';
             $wsid = 'ws_sr_constancia_inscripcion';
-            
+
             $afip = new Afip(array('CUIT' => $tax_id ));
             $res = $afip->CreateWSAuth($username, $password, $alias, $wsid);
             dd($username. $password. $alias. $wsid.' ' . $res);
@@ -179,7 +179,7 @@ class CertificadoComponent extends Component
             $cert = Certificado::where('id','=',$this->certificado_id);
             $cert->estado = 'Activo - Autorizado';
             $cert->estado_color='lightgreen';
-            $cert->save();            
+            $cert->save();
 
         } catch (Exception $ex) {
             session(['message' => 'Se produjo un error, controle todos los datos']);
@@ -224,21 +224,21 @@ class CertificadoComponent extends Component
         ));
         // dd($afip->options['production']);
         $sales_points = $afip->ElectronicBilling->GetSalesPoints();
-        
+
         foreach($sales_points as $sale_point) {
-            if($sale_point->FchBaja === "NULL" && $sale_point->Bloqueado=='N') { 
-                $this->certificado_PtoVta = $sale_point->Nro;                 
+            if($sale_point->FchBaja === "NULL" && $sale_point->Bloqueado=='N') {
+                $this->certificado_PtoVta = $sale_point->Nro;
             }
         }
 
         // Revisa si el certificado es de producción o testing
-        if($afip->options['production']===FALSE) { 
-            $this->certificado_PtoVta=10; 
+        if($afip->options['production']===FALSE) {
+            $this->certificado_PtoVta=10;
             $this->certificado_production=false;
         } else {
             $this->certificado_production=true;
         }
-        
+
         // dd($this->certificado_PtoVta);
         return $this->certificado_PtoVta;
 
@@ -288,11 +288,11 @@ class CertificadoComponent extends Component
         $Conceptos = $afip->ElectronicBilling->GetConceptTypes();
         $Concepto = $Conceptos[2]->Id;  // Concepto del Comprobante: (1)Productos, (2)Servicios, (3)Productos y Servicios
         // El Concepto del arrary en la posición 2, tiene en su ID el valor 3 que es Productos y Servicios
-        // dd($Conceptos); 
+        // dd($Conceptos);
 
         $Tributos = $afip->ElectronicBilling->GetTaxTypes();
         $Tributo = $Tributos[4]->Id; // El Concepto del arrary en la posición 4, tiene en su ID el valor 99 que es Otros Tributos
-        $TributoDesc = $Tributos[4]->Desc; 
+        $TributoDesc = $Tributos[4]->Desc;
         // dd($Tributo);
 
 
@@ -303,7 +303,7 @@ class CertificadoComponent extends Component
         $data = array(
             'CantReg' 		=> 1, // Cantidad de comprobantes a registrar
             'PtoVta' 		=> $PtoVta, // Punto de venta
-            'CbteTipo' 		=> $CbteTipo, // Tipo de comprobante (ver tipos disponibles) 
+            'CbteTipo' 		=> $CbteTipo, // Tipo de comprobante (ver tipos disponibles)
             'Concepto' 		=> $Concepto, // Concepto del Comprobante: (1)Productos, (2)Servicios, (3)Productos y Servicios
             'DocTipo' 		=> $DocTipo, // Tipo de documento del comprador (ver tipos disponibles)
             'DocNro' 		=> 20111111112, // Numero de documento del comprador
@@ -319,11 +319,11 @@ class CertificadoComponent extends Component
             'FchServDesde' 	=> intval(date('Ymd')), // (Opcional) Fecha de inicio del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
             'FchServHasta' 	=> intval(date('Ymd')), // (Opcional) Fecha de fin del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
             'FchVtoPago' 	=> intval(date('Ymd')), // (Opcional) Fecha de vencimiento del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
-            'MonId' 		=> 'PES', //Tipo de moneda usada en el comprobante (ver tipos disponibles)('PES' para pesos argentinos) 
-            'MonCotiz' 	    => 1, 
+            'MonId' 		=> 'PES', //Tipo de moneda usada en el comprobante (ver tipos disponibles)('PES' para pesos argentinos)
+            'MonCotiz' 	    => 1,
             'Tributos' 		=> array( // (Opcional) Tributos asociados al comprobante
                 array(
-                    'Id' 		=>  $Tributo, // Id del tipo de tributo (ver tipos disponibles) 
+                    'Id' 		=>  $Tributo, // Id del tipo de tributo (ver tipos disponibles)
                     'Desc' 		=>  $TributoDesc, //'Ingresos Brutos', // (Opcional) Descripcion
                     'BaseImp' 	=> 150, // Base imponible para el tributo
                     'Alic' 		=> 5.2, // Alícuota
@@ -332,9 +332,9 @@ class CertificadoComponent extends Component
             ),
 	        'Iva' 			=> array( // (Opcional) Alícuotas asociadas al comprobante
 		        array(
-			        'Id' 		=> $TipoIva, // Id del tipo de IVA (ver tipos disponibles) 
+			        'Id' 		=> $TipoIva, // Id del tipo de IVA (ver tipos disponibles)
         			'BaseImp' 	=> 150, // Base imponible
-		        	'Importe' 	=> 31.5 // Importe 
+		        	'Importe' 	=> 31.5 // Importe
                 ),
             ),
         );
@@ -353,7 +353,7 @@ class CertificadoComponent extends Component
     }
 
     public function ObtenerDatosCliente() {
-        
+
 
         // $certificado_tax_id = 20255083571;
         // $certificado_alias = 'NUEVO';
@@ -381,9 +381,9 @@ class CertificadoComponent extends Component
         // CUIT del contribuyente
         // $identifier=20000000516;
         $tax_id = 20000000516;
-        $taxpayer_details = $afip->RegisterInscriptionProof->GetTaxpayerDetails($tax_id); 
+        $taxpayer_details = $afip->RegisterInscriptionProof->GetTaxpayerDetails($tax_id);
         // $taxpayer_details = $afip->RegisterScopeTen->GetTaxpayerDetails($tax_id);
-        // dd($taxpayer_details);   
+        // dd($taxpayer_details);
         // CUITs de los contribuyentes
         // $tax_ids = Array(20111111111, 20111111112);
 

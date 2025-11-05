@@ -276,7 +276,7 @@ Route::get('/imprentaadmin', AdminComponent::class)->name('admin');
 Route::get('/imprentapedidos', PedidoComponent::class)->name('pedidos');
 
 // Route::get('/registro', function () {
-//     return view('registro.index'); 
+//     return view('registro.index');
 // })->name('registro');
 
 Route::view('/registro', 'registro.principal')->name('registro');
@@ -304,3 +304,15 @@ Route::get('/registro/success', [InformesonlineComponent::class, 'success'])->na
 Route::get('/promociones', PromocionesComponent::class)->name('promociones');
 Route::get('/promociones/buscar/{rubro}', PromocionesComponent::class)->name('buscar_promociones');
 Route::get('configuraciones',ConfiguracionesComponent::class)->name('configuraciones');
+
+
+
+// Route::get('/home', function () { return view('home'); });
+Route::view('/home', 'home')->name('home');
+
+
+
+
+// Ruta para 404 - DEBE IR AL FINAL
+Route::fallback([EmpresaComponent::class, 'notFound']);
+

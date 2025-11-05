@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+{{-- @extends('layouts.app2') --}}
 <div>
     <div class="">
         @if (session()->has('message'))
@@ -10,7 +10,7 @@
             <li class="-mb-px mr-2 last:mr-0 flex-auto text-center" style="text-decoration: none;">
                 @if($tabActivo==1)
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(1)">
-                @else 
+                @else
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(1)">
                 @endif
                     <i class="fas fa-space-shuttle text-base mr-1"></i> Generar Certificado
@@ -19,7 +19,7 @@
             <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                 @if($tabActivo==2)
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(2)">
-                @else 
+                @else
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(2)">
                 @endif
                     <i class="fas fa-cog text-base mr-1"></i> Autorizar Certificado
@@ -28,7 +28,7 @@
             <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                 @if($tabActivo==3)
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(3)">
-                @else 
+                @else
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(3)">
                 @endif
                     <i class="fas fa-briefcase text-base mr-1"></i> Datos de Clientes
@@ -37,7 +37,7 @@
             <!-- <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                 @if($tabActivo==4)
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(4)">
-                @else 
+                @else
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(4)">
                 @endif
                     <i class="fas fa-cog text-base mr-1"></i> Cuentas Corrientes
@@ -46,7 +46,7 @@
             <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                 @if($tabActivo==5)
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(5)">
-                @else 
+                @else
                     <a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(5)">
                 @endif
                     <i class="fas fa-briefcase text-base mr-1"></i> Libros de Iva
@@ -136,7 +136,7 @@
                             </div>
                             <div class="col-3"></div>
                         </div>
-                            
+
                             <!-- Botones -->
                             {{-- <div class="flex justify-center">
                                 <div class="block">
@@ -144,14 +144,14 @@
                                     <button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalModify">Modificar</button>
                                     <button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalDelete">Eliminar</button>
                                     <button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalAgregarDetalle">Agregar Productos</button>
-                                
+
                                     <div class=" right-0">
                                         @if (session()->has('message'))
                                             <div class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" role="alert">
                                                     {{ session('message') }}</p>
                                             </div>
                                         @endif
-        
+
                                         @if (session()->has('message2'))
                                             <div class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" role="alert">
                                                 {{ session('message2') }}
@@ -183,7 +183,7 @@
                                     </div>
                                 </div>
                             @endif
-        
+
                             @if ($this->ModalModify)
                                 <div class="inset-0 fixed">
                                     <div class="absolute flex justify-center w-full mt-10 p-18">
@@ -201,7 +201,7 @@
                                     </div>
                                 </div>
                             @endif
-        
+
                             @if ($this->ModalAgregarDetalle)
                                 <div class="inset-0 fixed">
                                     <div class="absolute flex justify-center w-full mt-10 p-18">
@@ -221,7 +221,7 @@
                                                         </select>
                                                         @error('gselect_productos') <span class="text-red-500">{{ $message }}</span>@enderror
                                                     </div>
-        
+
                                                     <div class="w-40 mr-1">
                                                         <label for="">Cantidad</label><br>
                                                         <input class="ml-2 w-full text-xs rounded-md h-7 text-right" type="text" wire:model="gcantidad_prod">
@@ -248,7 +248,7 @@
                                                             <td style="border: solid 1px #777;">Precio</td>
                                                             <td style="border: solid 1px #777;">Opc.</td>
                                                         </tr>
-                                                        
+
                                                         @if($glistado_prod)
                                                             @foreach ($glistado_prod as $detalle)
                                                                 <tr>
@@ -275,24 +275,24 @@
                                     </div>
                                 </div>
                             @endif --}}
-        
+
                             <!-- Gestionar Comprobantes -->
                             {{-- <div class="flex flex-wrap mt-3 justify-around" style="font-size: 14px;">
-              
+
                             </div>
                             <div>
                             <div class="flex flex-wrap" style="background-color: rgb(199, 233, 233); font-size: 14px;">
-                                
+
                                 <div class="border px-2">Asc. C/Saldo<br>
                                     <input class=" mr-2 rounded-sm py-0" type="checkbox" checked wire:model="fgascendente" wire:change="gfiltro()">
                                     <input class=" mr-2 rounded-sm py-0" type="checkbox" wire:model="gfsaldo" wire:change="gfiltro()">
                                 </div>
                             </div>
-        
+
                                 {!! $filtro !!}
                             </div> --}}
                     </div>
-                
+
                     <div class="{{ $tabActivo != 2 ? 'hidden' : '' }}">
                         <div style="background-color: #E3F6CE" class="block">
                             <!-- Botones -->
@@ -326,7 +326,7 @@
                                                     </tr>
                                                 @endforeach
                                             </table>
-                                            
+
                                             {{-- @endif --}}
                                     @endif
                                 </div>
@@ -335,14 +335,14 @@
                                     <button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalModify">Modificar</button>
                                     <button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalDelete">Eliminar</button>
                                     <button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalAgregarDetalle">Agregar Productos</button>
-                                
+
                                     <div class=" right-0">
                                         @if (session()->has('message'))
                                             <div class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" role="alert">
                                                     {{ session('message') }}</p>
                                             </div>
                                         @endif
-        
+
                                         @if (session()->has('message2'))
                                             <div class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" role="alert">
                                                 {{ session('message2') }}
@@ -374,7 +374,7 @@
                                     </div>
                                 </div>
                             @endif --}}
-        
+
                             {{-- @if ($this->ModalModify)
                                 <div class="inset-0 fixed">
                                     <div class="absolute flex justify-center w-full mt-10 p-18">
@@ -392,7 +392,7 @@
                                     </div>
                                 </div>
                             @endif --}}
-        
+
                             {{-- @if ($this->ModalAgregarDetalle)
                                 <div class="inset-0 fixed">
                                     <div class="absolute flex justify-center w-full mt-10 p-18">
@@ -412,7 +412,7 @@
                                                         </select>
                                                         @error('gselect_productos') <span class="text-red-500">{{ $message }}</span>@enderror
                                                     </div>
-        
+
                                                     <div class="w-40 mr-1">
                                                         <label for="">Cantidad</label><br>
                                                         <input class="ml-2 w-full text-xs rounded-md h-7 text-right" type="text" wire:model="gcantidad_prod">
@@ -439,7 +439,7 @@
                                                             <td style="border: solid 1px #777;">Precio</td>
                                                             <td style="border: solid 1px #777;">Opc.</td>
                                                         </tr>
-                                                        
+
                                                         @if($glistado_prod)
                                                             @foreach ($glistado_prod as $detalle)
                                                                 <tr>

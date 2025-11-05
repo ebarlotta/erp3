@@ -123,7 +123,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('home');
     })->name('dashboard');
 });
 
@@ -308,8 +308,6 @@ Route::get('configuraciones',ConfiguracionesComponent::class)->name('configuraci
 
 
 // Route::get('/home', function () { return view('home'); });
-Route::view('/home', 'home')->name('home');
-
 
 
 

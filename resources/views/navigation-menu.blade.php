@@ -8,7 +8,10 @@
                     <a href="{{ route('empresas') }}" class="mr-3">
                         {{-- <a href="{{ route('dashboard') }}"> --}}
                         {{-- <x-application-mark class="block h-9 w-auto" /> --}}
+                        @if( isset(Auth::user()->name))
+
                         <img class="h-8 w-8 rounded-full object-cover" src="http://localhost:8000/storageimages/BarBer.png" alt="{{ Auth::user()->name }}" />
+                        @endif
                     </a>
                     {{ session('nombre_empresa'); }}
                 </div>
@@ -96,7 +99,7 @@
                                 <span class="inline-flex rounded-md">
                                     {{-- <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />Foto --}}
                                     <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                        
+
                                         {{ Auth::user()->name }}
 
                                         <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

@@ -112,9 +112,16 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Livewire\Promociones\PromocionesComponent;
 use App\Http\Livewire\Promociones\ConfiguracionesComponent;
 
+// Landing
+// =========
+use App\Http\Controllers\ContactController;
+
+
 Route::get('/', function () {
-    return redirect()->route('login');
-    // return view('welcome');
+    // return redirect()->route('login');
+    // return view('dashboard');
+    return view('home');
+    //return view('welcome');
 });
 
 Route::middleware([
@@ -309,7 +316,9 @@ Route::get('configuraciones',ConfiguracionesComponent::class)->name('configuraci
 
 // Route::get('/home', function () { return view('home'); });
 
-
+// Landing
+Route::post('/contacto/enviar', [ContactController::class, 'send'])->name('contact.send');
+Route::get('/contacto/gracias', [ContactController::class, 'success'])->name('contact.success');
 
 // Ruta para 404 - DEBE IR AL FINAL
 Route::fallback([EmpresaComponent::class, 'notFound']);

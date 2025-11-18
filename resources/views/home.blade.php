@@ -21,7 +21,7 @@
 					<header id="header" class="alt">
 						<a href="/" class="logo"><strong>EcoSystems</strong> <span></span></a>
 						<nav class="col-1 align-content-end">
-							<a href="/public/public/login">Ingresar</a>
+							<a href="{{ route('login') }}">Ingresar</a>
 							{{-- <a href="/public/public/login">Ingresar</a> --}}
 							<a href="#menu">Menú</a>
 						</nav>
@@ -34,11 +34,11 @@
 							<li><a href="home/landing.html">Landing</a></li>
 							<li><a href="home/generic.html">Generic</a></li>
 							<li><a href="home/elements.html">Elements</a></li>
-							<li><a href="public/public/register">REGISTRARSE</a></li>
+							<li><a href="{{ route('register') }}">REGISTRARSE</a></li>
 						</ul>
 						<ul class="actions stacked">
 							<li><a href="#" class="button primary fit">Comenzar</a></li>
-							<li><a href="/public/public/login" class="button fit">Ingresar</a></li>
+							<li><a href="{{ route('login') }}" class="button fit">Ingresar</a></li>
 							{{-- <li><a href="/public/login" class="button fit">Ingresar</a></li> --}}
 						</ul>
 					</nav>
@@ -138,43 +138,19 @@
 										<p>Control de Asistencia</p>
 									</header>
 								</article>
-								<article>
-									<span class="image">
-										<img src="home/images/pic05.jpg" alt="" />
-									</span>
-									<header class="major">
-										<h3><a href="home/landing.html" class="link">Su Proyecto...</a></h3>
-										<p>Ubique su proyecto Aquí</p>
-									</header>
-								</article>
-								<article>
-									<span class="image">
-										<img src="home/images/pic06.jpg" alt="" />
-									</span>
-									<header class="major">
-										<h3><a href="home/landing.html" class="link">Te esperamos</a></h3>
-										<p>O aquí!!</p>
-									</header>
-								</article>
+
+								<?php include('home/suproyecto.html'); ?>
+
 							</section>
 
 						<!-- Two -->
-							<section id="two">
-								<div class="inner">
-									<header class="major">
-										<h2>Nuestro Equipo</h2>
-									</header>
-									<p>Nuestro equipo de trabajo está compuesto por un grupo excepcional de profesionales apasionados y altamente capacitados, que aportan su vasta experiencia y creatividad para desarrollar tus proyectos. Nos comprometemos a transformar tus ideas en realidad, superando expectativas mediante la innovación, el trabajo en equipo y una dedicación inquebrantable a la excelencia en cada etapa del proceso. Con nosotros, tu visión está en las mejores manos para alcanzar el éxito.</p>
-									<ul class="actions">
-										<li><a href="home/landing.html" class="button next" style="border-radius: 5px;">Comenzar</a></li>
-									</ul>
-								</div>
-							</section>
+							<?php include('home/equipo.html'); ?>
 
 					</div>
 
 				<!-- Contact -->
-					<section id="contact">
+                <?php include('home/contacto.blade.php'); ?>
+					{{-- <section id="contact">
 						<div class="inner">
 							<section>
 								<form method="post" action="#">
@@ -224,23 +200,11 @@
 								</section>
 							</section>
 						</div>
-					</section>
+					</section> --}}
 
 				<!-- Footer -->
-					<footer id="footer">
-						<div class="inner">
-							<ul class="icons">
-								<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-								<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-							</ul>
-							<ul class="copyright">
-								<li>&copy; Copiright</li><li>Diseño: <a href="https://ecosystems.ar">EcoSystems</a></li>
-							</ul>
-						</div>
-					</footer>
+                    <?php include('home/redes.html'); ?>
+
 
 			</div>
 

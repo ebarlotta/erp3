@@ -82,7 +82,7 @@ class ModuloSeeder extends Seeder
         DB::table('modulos')->insert(['name' => 'Agregar Etiqueta', 'pagina' => 'producto/tag','imagen'=>'administracion.jpg','leyenda'=>'Agrega Etiqueta.','habilitado'=>1]);   // 54
         DB::table('modulos')->insert(['name' => 'Agregar Producto', 'pagina' => 'producto/create','imagen'=>'administracion.jpg','leyenda'=>'Agrega Producto.','habilitado'=>1]);   // 55
         DB::table('modulos')->insert(['name' => 'Modificar / Eliminar', 'pagina' => 'producto','imagen'=>'administracion.jpg','leyenda'=>'Modifica / Elimina Producto.','habilitado'=>1]);   // 56
-        DB::table('modulos')->insert(['name' => 'Gestión de Producto', 'pagina' => 'productos','imagen'=>'administracion.jpg','leyenda'=>'Gestiona el Producto.','habilitado'=>1]);   // 57
+        DB::table('modulos')->insert(['name' => 'Gestión de Producto', 'pagina' => 'productoscarts','imagen'=>'administracion.jpg','leyenda'=>'Gestiona el Producto.','habilitado'=>1]);   // 57
         DB::table('modulos')->insert(['name' => 'Registrar Bajas', 'pagina' => 'productobajas','imagen'=>'administracion.jpg','leyenda'=>'Registra Bajas','habilitado'=>1]);   // 58
 
     }

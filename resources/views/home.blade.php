@@ -21,8 +21,12 @@
 					<header id="header" class="alt">
 						<a href="/" class="logo"><strong>EcoSystems</strong> <span></span></a>
 						<nav class="col-1 align-content-end">
-							<a href="{{ route('login') }}">Ingresar</a>
+                            @if(auth()->check())
+							    <a href="{{ route('empresas') }}">Ingresar</a>
+                            @else
+							    <a href="{{ route('login') }}">Ingresar</a>
 							{{-- <a href="/public/public/login">Ingresar</a> --}}
+                            @endif
 							<a href="#menu">Menú</a>
 						</nav>
 					</header>
@@ -123,6 +127,7 @@
 								<article>
 									<span class="image">
 										<img src="home/images/pic04.jpg" alt="" />
+										{{-- <img src="home/images/pic04.jpg" alt="" /> --}}
 									</span>
 									<header class="major">
 										<h3><a href="home/landing.html" class="link">Bodegas</a></h3>
@@ -139,73 +144,113 @@
 									</header>
 								</article>
 
-								<?php include('home/suproyecto.html'); ?>
+								<article>
+                                    <span class="image">
+                                        <img src="home/images/pic05.jpg" alt="" />
+                                    </span>
+                                    <header class="major">
+                                        <h3><a href="home/landing.html" class="link">Su Proyecto...</a></h3>
+                                        <p>Ubique su proyecto Aquí</p>
+                                    </header>
+                                </article>
+                                <article>
+                                    <span class="image">
+                                        <img src="home/images/pic06.jpg" alt="" />
+                                    </span>
+                                    <header class="major">
+                                        <h3><a href="home/landing.html" class="link">Lo esperamos</a></h3>
+                                        <p>O aquí!!</p>
+                                    </header>
+                                </article>
 
 							</section>
 
 						<!-- Two -->
-							<?php include('home/equipo.html'); ?>
+							<section id="two">
+                                <div class="inner">
+                                    <header class="major">
+                                        <h2>Nuestro Equipo</h2>
+                                    </header>
+                                    <p>Nuestro equipo de trabajo está compuesto por un grupo excepcional de profesionales apasionados y altamente capacitados, que aportan su vasta experiencia y creatividad para desarrollar tus proyectos. Nos comprometemos a transformar tus ideas en realidad, superando expectativas mediante la innovación, el trabajo en equipo y una dedicación inquebrantable a la excelencia en cada etapa del proceso. Con nosotros, tu visión está en las mejores manos para alcanzar el éxito.</p>
+                                    <ul class="actions">
+                                        <li><a href="home/landing.html" class="button next" style="border-radius: 5px;">Comenzar</a></li>
+                                    </ul>
+                                </div>
+                            </section>
 
 					</div>
 
 				<!-- Contact -->
-                <?php include('home/contacto.blade.php'); ?>
-					{{-- <section id="contact">
-						<div class="inner">
-							<section>
-								<form method="post" action="#">
-									<div class="fields">
-										<div class="field half">
-											<label for="name">Nombre</label>
-											<input type="text" name="name" id="name" style="border-radius: 5px;" />
-										</div>
-										<div class="field half">
-											<label for="email">Correo Electrónico</label>
-											<input type="text" name="email" id="email" style="border-radius: 5px;" />
-										</div>
-										<div class="field">
-											<label for="message">Mensaje</label>
-											<textarea name="message" id="message" rows="6" style="border-radius: 5px;"></textarea>
-										</div>
-									</div>
-									<ul class="actions">
-										<li><input type="submit" value="Enviar Mensaje" class="primary" style="border-radius: 5px;" /></li>
-										<li><input type="reset" value="Limpiar" style="border-radius: 5px;" /></li>
-									</ul>
-								</form>
-							</section>
-							<section class="split">
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-envelope"></span>
-										<h3>Email</h3>
-										<a href="#">information@untitled.tld</a>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-phone"></span>
-										<h3>Phone</h3>
-										<span>(000) 000-0000 x12387</span>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-home"></span>
-										<h3>Address</h3>
-										<span>1234 Somewhere Road #5432<br />
-										Mendoza<br />
-										Argentina</span>
-									</div>
-								</section>
-							</section>
-						</div>
-					</section> --}}
+                <section id="contact">
+                    <div class="inner">
+                        <section>
+                            <form method="POST" action="{{ route('contact.send') }}">
+                                @csrf
+                                <div class="fields">
+                                    <div class="field half">
+                                        <label for="name">Nombre</label>
+                                        <input type="text" name="name" id="name" style="border-radius: 5px;" />
+                                    </div>
+                                    <div class="field half">
+                                        <label for="email">Correo Electrónico</label>
+                                        <input type="text" name="email" id="email" style="border-radius: 5px;" />
+                                    </div>
+                                    <div class="field">
+                                        <label for="message">Mensaje</label>
+                                        <textarea name="message" id="message" rows="6" style="border-radius: 5px;"></textarea>
+                                    </div>
+                                </div>
+                                <ul class="actions">
+                                    <li><input type="submit" value="Enviar Mensaje" class="primary" style="border-radius: 5px;" /></li>
+                                    <li><input type="reset" value="Limpiar" style="border-radius: 5px;" /></li>
+                                </ul>
+                            </form>
+                        </section>
+                        <section class="split">
+                            <section>
+                                <div class="contact-method">
+                                    <span class="icon solid alt fa-envelope"></span>
+                                    <h3>Email</h3>
+                                    <a href="#">information@untitled.tld</a>
+                                </div>
+                            </section>
+                            <section>
+                                <div class="contact-method">
+                                    <span class="icon solid alt fa-phone"></span>
+                                    <h3>Teléfono</h3>
+                                    <span>(000) 000-0000 x12387</span>
+                                </div>
+                            </section>
+                            <section>
+                                <div class="contact-method">
+                                    <span class="icon solid alt fa-home"></span>
+                                    <h3>Dirección</h3>
+                                    <span>1234 Somewhere Roadsss #5432<br />
+                                    Mendoza<br />
+                                    Argentina</span>
+                                </div>
+                            </section>
+                        </section>
+                    </div>
+                </section>
+
+
 
 				<!-- Footer -->
-                    <?php include('home/redes.html'); ?>
-
-
+                <footer id="footer">
+                    <div class="inner">
+                        <ul class="icons">
+                            <li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+                            <li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+                            <li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+                            <li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+                            <li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+                        </ul>
+                        <ul class="copyright">
+                            <li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+                        </ul>
+                    </div>
+                </footer>
 			</div>
 
 		<!-- Scripts -->

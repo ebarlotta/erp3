@@ -31,7 +31,7 @@ class ExpendioComponent extends Component
         ->where('menu_plans.activo', 1)
         ->distinct('menus.nombremenu')
         ->get();
-            
+
         // if(auth()->check() && auth()->user()->hasPermissionTo('expendio.Ver')) {
             if(session('empresa_id')) {
                 $this->CargarMenues();
@@ -39,7 +39,25 @@ class ExpendioComponent extends Component
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
     }
 
-    public function AgregarMenu() { 
+    public $chartData = [
+        'labels' => ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        'data' => [12, 19, 3, 5, 2, 3]
+    ];
+
+    public function updateChart()
+    {
+        // Ejemplo de actualización de datos
+        $this->chartData['data'] = [
+            rand(1, 20),
+            rand(1, 20),
+            rand(1, 20),
+            rand(1, 20),
+            rand(1, 20),
+            rand(1, 20)
+        ];
+    }
+
+    public function AgregarMenu() {
         $a = Consumido::firstOrCreate([
                 'fecha' => $this->fecha,
                 'actor_id'=> $this->actor_id_agregar,

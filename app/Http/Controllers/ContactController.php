@@ -40,6 +40,6 @@ class ContactController extends Controller {
 
     public function success()
     {
-        return view('gracias'); // Renderizará resources/views/gracias.blade.php
+        return view('home.gracias'); // Renderizará resources/views/gracias.blade.php
     }
 }

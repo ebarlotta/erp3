@@ -28,7 +28,7 @@
         @livewireStyles
         @laravelPWA
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased sidebar-collapse">
         <x-banner />
         <div class="min-h-screen bg-gray-100">
             @livewire('navigation-menu')

@@ -12,7 +12,7 @@
         <img src="home/images/pic06.jpg" alt="" />
     </span>
     <header class="major">
-        <h3><a href="home/landing.html" class="link">Te esperamos</a></h3>
+        <h3><a href="home/landing.html" class="link">Lo esperamos</a></h3>
         <p>O aquí!!</p>
     </header>
 </article>

@@ -33,7 +33,7 @@ class MenuesComponent extends Component
         ModelsMenu::updateOrCreate(['id' => $this->menu_menu_id], [
             'menu_nombre_menu'=>$this->menu_nombre_menu,
             'menu_categoria_id'=>$this->menu_categoria_id,
-        ]);        
+        ]);
     }
 
     public function editar() {
@@ -41,7 +41,7 @@ class MenuesComponent extends Component
         // $menu = ModelsMenu::find($menu_id);
         // dd($menu);
 
-        return redirect('menueditar');        
+        return redirect('menueditar');
     }
-    
+
 }

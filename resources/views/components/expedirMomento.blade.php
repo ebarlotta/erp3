@@ -2,15 +2,15 @@
 <div>
     <div class="card direct-chat direct-chat-primary">
         <div class="card-header ui-sortable-handle flex" style="cursor: move; justify-content: space-between;">
-            <h3 class="card-title ml-3" style="justify-content: right;width: 10%;"><b>{{ $titulo }}</b>
+            <h3 class="card-title ml-3" style="justify-content: right;width: 30%;"><b>{{ $titulo }}</b>
             @php
-                if($cerrado=='Cerrado') { echo '<br><input type="text" style="text-align: center; background-color: lightgreen; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px; width: 100%; height: 22px;" value="Cerrado" disabled>'; }
+                if($cerrado=='Cerrado') { echo '<br><input type="text" style="text-align: center; background-color: lightgreen; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px; width: 50%; max-width: 100px; min-width: 80px; height: 22px;" value="Cerrado" disabled>'; }
             @endphp
             @php
-                if($cerrado=='Abierto') { echo '<br><input type="text" style="text-align: center; background-color: lightcoral; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px; width: 100%; height: 22px;" value="Abierto" disabled>'; }
+                if($cerrado=='Abierto') { echo '<br><input type="text" style="text-align: center; background-color: lightcoral; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px; width: 50%; max-width: 100px; min-width: 80px; height: 22px;" value="Abierto" disabled>'; }
             @endphp
-            </h3> 
-            <div style="justify-content: right;width: 75%;display: flex;">
+            </h3>
+            <div style="justify-content: right;width: 55%;display: flex;flex-wrap: wrap-reverse;">
                 @if($cerrado=='Abierto')
                     {{-- Agregar nuevo --}}
                     <input type="button" class="btn ml-4 hover:scale-105 h-5" value="+ Agregar" style="margin: 6px 30px;padding: 0px 20px;background-color: lightblue;box-shadow: 3px 3px 3px grey;" wire:click="PreguntarSiAgregar('{{ $momento }}')" title="Tooltip on top">
@@ -38,7 +38,7 @@
                             <td><b>Está ?</b></td>
                         </tr>
                         @php
-                        
+
                            switch ($momento) {
                             case '1': $regs = $this->registros_desayuno; $cerrado=$this->cerradoDesayuno; break;
                             case '2': $regs = $this->registros_almuerzo; $cerrado=$this->cerradoAlmuerzo; break;
@@ -46,11 +46,11 @@
                             case '4': $regs = $this->registros_cena; $cerrado=$this->cerradoCena; break;
                         }
                         @endphp
-                        
+
                         @foreach ($regs as $registro)
                             <tr wire:click="CambiarCondicionMenu('{{ $momento.'-'.$registro['indice'].'-'.$registro['actor_id'].'-'.$registro['menu_id'] }}')">
                                 {{-- <td>{{ $registro->indice }}</td> --}}
-                                
+
                                 <td>{{ $registro['nombreactor'] }}</td>
                                 <td>{{ $registro['nombreplan'] }}</td>
                                 <td>{{ $registro['nombremenu'] }}</td>
@@ -58,14 +58,14 @@
                                 {{-- <td><input style="width: 20px;height: 20px;" type="checkbox"  @if($registro->presente) checked @endif></td> --}}
                                 <td>
                                     <input style="width: 20px;height: 20px;" type="checkbox"
-                                        @if($registro['presente']) checked @endif 
+                                        @if($registro['presente']) checked @endif
                                         @if($cerrado=='Cerrado') disabled @endif
                                     >
                                 </td>
                             </tr>
                         @endforeach
 
-                        
+
                         <div wire:ignore>
                             @php $extras = $this->menuextra[$momento]; @endphp
                             @foreach($extras as $ext)
@@ -76,7 +76,7 @@
                                     <td>{{ $ext['descripcion'] }}</td>
                                     <td>
                                         <input style="width: 20px;height: 20px;" type="checkbox"
-                                            @if(!$ext['presente']) checked @endif 
+                                            @if(!$ext['presente']) checked @endif
                                             @if($cerrado=='Cerrado') disabled @endif
                                         >
                                     </td>
@@ -89,4 +89,3 @@
         </div>
     </div>
 </div>
-  

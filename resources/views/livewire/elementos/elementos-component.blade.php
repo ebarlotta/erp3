@@ -31,17 +31,17 @@
                             <div class="my-auto mx-auto rounded-md p-2 @if($seleccionado=='Ingrediente') bg-red-300 @endif" wire:click="cambiarSeleccion('Ingrediente')" >
                                 <input class="mr-2" type="radio" name="elements" value="Ingrediente">
                                 <label class="mr-4" for="huey">Ingrediente</label>
-                            </div>                            
+                            </div>
                             <div class="my-auto mx-auto rounded-md p-2 @if($seleccionado=='Descartable') bg-red-200 @endif" wire:click="cambiarSeleccion('Descartable')">
                                 <input class="mr-2" type="radio" name="elements" value="Descartable">
                                 <label class="mr-4" for="huey">Descartable</label>
                             </div>
-                            
+
                             <div class="my-auto mx-auto rounded-md p-2 @if($seleccionado=='Producto') bg-red-100 @endif" wire:click="cambiarSeleccion('Producto')">
                                 <input class="mr-2" type="radio" name="elements" value="Producto">
                                 <label class="mr-4" for="huey">Producto</label>
                             </div>
-                            
+
                             <div class="my-auto mx-auto rounded-md p-2 @if($seleccionado=='Articulo') bg-red-300 @endif" wire:click="cambiarSeleccion('Articulo')">
                                 <input class="mr-2" type="radio" name="elements" value="Artíulo">
                                 <label class="mr-4" for="huey">Artículo</label>
@@ -55,7 +55,7 @@
                         <table class="table-fixed w-full">
                             <thead>
                                 <tr class="bg-gray-100">
-                                    <th class="px-4 py-1">Elemento</th>
+                                    <th class="px-4 py-1 col-5">Elemento</th>
                                     <th class="px-4 py-1 col-1 text-center">Existencia</th>
                                     <th class="px-4 py-1 col-2 text-center">Precio de Compra</th>
                                     <th class="px-4 py-1 col-1 text-center">Precio de Venta</th>

@@ -22,14 +22,18 @@
                                     @include('livewire.geri.menu.createmenu')
                                 @endif
                             @endcan
-                            <div>
+
                                 <a href="{{ route('elementos') }}">
-                                    <button wire:click="create()" class="bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded my-3">
+                                    <button wire:click="create()" class="px-2 bg-green-300 hover:bg-green-400 text-white-900 font-bold rounded" style="height: 40px; margin-bottom: 10px;">
                                         Nuevo Ingrediente
                                     </button>
                                 </a>
+
+                            <div>
+                                <input type="text"  class="bg-blue-200 p-2 rounded" placeholder="Buscar">
                             </div>
                             <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
+
                         </div>
                         <div class="px-4" style="display: block">
                             <table class="table table-sm table-bordered table-striped">

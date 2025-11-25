@@ -1,0 +1,306 @@
+{{-- resources/views/components/enhanced-pareto-chart.blade.php --}}
+@props([
+    'labels' => ['Item A', 'Item B', 'Item C', 'Item D', 'Item E', 'Item F'],
+    'data' => [45, 30, 15, 7, 5, 3],
+    'title' => 'Diagrama de Pareto - Análisis 80/20',
+    'height' => '450px',
+    'show80Line' => true
+])
+
+<div
+    x-data="enhancedPareto({
+        labels: @js($labels),
+        data: @js($data),
+        title: '{{ $title }}',
+        show80Line: {{ $show80Line ? 'true' : 'false' }}
+    })"
+    wire:ignore
+    {{ $attributes }}
+>
+    <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+        <h3 class="text-xl font-bold text-gray-800 mb-4" x-text="config.title"></h3>
+        <div class="chart-container" style="position: relative; height: {{ $height }}; width: 100%;">
+            <canvas x-ref="canvas"></canvas>
+
+            {{-- Ejemplo 1: Menús más consumidos --}}
+<x-enhancedPareto
+    title="Pareto - Menús Más Consumidos"
+    :labels="['Pollo Grill', 'Lomo Saltado', 'Ceviche', 'Tallarines', 'Arroz Chaufa', 'Pescado Frito']"
+    :data="[156, 124, 98, 76, 65, 45]"
+    height="450px"
+    class="mb-6"
+/>
+
+{{-- Ejemplo 2: Clientes por gasto --}}
+<x-enhancedPareto
+    title="Pareto - Clientes por Valor (Ingresos)"
+    :labels="['Empresa A', 'Empresa B', 'Cliente Premium', 'Cliente Regular', 'Cliente Ocasional', 'Otros']"
+    :data="[12500, 9800, 7600, 4500, 3200, 2800]"
+    height="450px"
+    class="mb-6"
+/>
+
+{{-- Ejemplo 3: Sin línea del 80% --}}
+<x-enhancedPareto
+    title="Distribución de Consumos por Día"
+    :labels="['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']"
+    :data="[45, 52, 48, 65, 89, 95]"
+    :show80Line="false"
+    height="400px"
+/>
+        </div>
+        <div x-show="paretoAnalysis" class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p class="text-sm font-semibold text-blue-800">
+                <span class="inline-block w-3 h-3 bg-blue-600 rounded-full mr-2"></span>
+                <strong>Análisis 80/20:</strong>
+                <span x-text="paretoAnalysis" class="ml-1"></span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('enhancedPareto', (config) => ({
+        chart: null,
+        paretoAnalysis: '',
+
+        init() {
+            this.$nextTick(() => {
+                this.renderEnhancedPareto();
+            });
+        },
+
+        calculateEnhancedPareto(data, labels) {
+            // Combinar datos con labels y ordenar de mayor a menor
+            const combined = data.map((value, index) => ({
+                label: labels[index],
+                value: value,
+                originalIndex: index
+            })).sort((a, b) => b.value - a.value);
+
+            const total = combined.reduce((sum, item) => sum + item.value, 0);
+
+            let cumulative = 0;
+            let eightyPercentIndex = -1;
+            let eightyPercentItems = [];
+
+            const percentages = combined.map((item, index) => {
+                cumulative += item.value;
+                const percentage = (cumulative / total) * 100;
+
+                // Encontrar dónde se alcanza el 80%
+                if (percentage >= 80 && eightyPercentIndex === -1) {
+                    eightyPercentIndex = index;
+                    eightyPercentItems = combined.slice(0, index + 1).map(item => item.label);
+                }
+
+                return percentage;
+            });
+
+            return {
+                sortedData: combined.map(item => item.value),
+                sortedLabels: combined.map(item => item.label),
+                percentages,
+                eightyPercentIndex,
+                eightyPercentItems,
+                totalItems: combined.length,
+                totalValue: total
+            };
+        },
+
+        renderEnhancedPareto() {
+            const ctx = this.$refs.canvas;
+            const analysis = this.calculateEnhancedPareto(config.data, config.labels);
+
+            // Generar análisis textual
+            if (analysis.eightyPercentIndex !== -1) {
+                const topItemsCount = analysis.eightyPercentIndex + 1;
+                const percentageOfTotal = Math.round((topItemsCount / analysis.totalItems) * 100);
+                const topItemsText = analysis.eightyPercentItems.join(', ');
+
+                this.paretoAnalysis = `${topItemsCount} de ${analysis.totalItems} items (${percentageOfTotal}%) generan el 80% del total. Focus en: ${topItemsText}`;
+            } else {
+                this.paretoAnalysis = 'No se alcanzó el 80% con los datos proporcionados';
+            }
+
+            // Configurar datos para el gráfico
+            const chartData = {
+                labels: analysis.sortedLabels,
+                datasets: [
+                    {
+                        label: 'Frecuencia / Valor',
+                        data: analysis.sortedData,
+                        backgroundColor: analysis.sortedData.map((_, index) =>
+                            index <= analysis.eightyPercentIndex
+                                ? 'rgba(54, 162, 235, 0.8)'  // Azul para el 80%
+                                : 'rgba(54, 162, 235, 0.4)'  // Azul claro para el 20%
+                        ),
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y',
+                        order: 2
+                    },
+                    {
+                        label: 'Porcentaje Acumulado',
+                        data: analysis.percentages,
+                        type: 'line',
+                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        fill: false,
+                        yAxisID: 'y1',
+                        order: 1
+                    }
+                ]
+            };
+
+            // Configurar opciones del gráfico
+            const options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Items',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Frecuencia / Valor',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            drawOnChartArea: true,
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        min: 0,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Porcentaje Acumulado %',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: config.title,
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            bottom: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.datasetIndex === 0) {
+                                    label += context.parsed.y + ' unidades';
+                                } else {
+                                    label += context.parsed.y.toFixed(1) + '% acumulado';
+                                }
+                                return label;
+                            },
+                            afterLabel: function(context) {
+                                if (context.datasetIndex === 0) {
+                                    const percentage = (context.parsed.y / analysis.totalValue * 100).toFixed(1);
+                                    return `Representa: ${percentage}% del total`;
+                                }
+                            }
+                        }
+                    },
+                    annotation: config.show80Line ? {
+                        annotations: {
+                            line80: {
+                                type: 'line',
+                                yMin: 80,
+                                yMax: 80,
+                                borderColor: 'rgba(255, 99, 132, 0.8)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                label: {
+                                    display: true,
+                                    content: 'Límite 80%',
+                                    position: 'start',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                                    color: 'white',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        }
+                    } : {}
+                }
+            };
+
+            // Crear el gráfico
+            this.chart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: options
+            });
+        },
+
+        // Método para actualizar datos
+        updateData(newData, newLabels = null) {
+            if (this.chart) {
+                this.chart.destroy();
+            }
+
+            if (newLabels) {
+                config.labels = newLabels;
+            }
+            config.data = newData;
+
+            this.renderEnhancedPareto();
+        },
+
+        destroy() {
+            if (this.chart) {
+                this.chart.destroy();
+            }
+        }
+    }));
+});
+</script>

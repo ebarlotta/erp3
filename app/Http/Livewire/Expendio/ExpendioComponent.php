@@ -6,11 +6,14 @@ use App\Models\Consumido;
 use App\Models\Geri\Actores\ActorAgente;
 use App\Models\Geri\Actor;
 use App\Models\Geri\MenuPlan;
+use App\Models\Geri\Menuingrediente;
 use App\Models\Geri\PlanAlimentario;
+use App\Models\Elementos\Elemento;
 use App\Models\User;
 use Livewire\Component;
 use DateTime;
 use Illuminate\Support\Facades\DB;
+
 
 class ExpendioComponent extends Component
 {
@@ -18,6 +21,8 @@ class ExpendioComponent extends Component
     public $agregar, $servicioaagregar, $agregarActores, $agregarMenu, $actor_id_agregar, $menu_id_agregar, $cantidad_agregar, $menuextra;
     public $registros_desayuno, $registros_almuerzo, $registros_merienda, $registros_cena;
     public $cerradoDesayuno=false, $cerradoAlmuerzo=false, $cerradoMerienda=false, $cerradoCena=false, $regs, $diaDelCiclo, $otro;
+    public $labels, $data, $colors;
+    public $Resumen;
 
     public function render() {
         $this->agregarActores = ActorAgente::join('actors','actor_agentes.actor_id','=','actors.id')
@@ -32,6 +37,8 @@ class ExpendioComponent extends Component
         ->distinct('menus.nombremenu')
         ->get();
 
+        $this->GenerarVistaResumenes();
+        $this->CalcularGraficos();
         // if(auth()->check() && auth()->user()->hasPermissionTo('expendio.Ver')) {
             if(session('empresa_id')) {
                 $this->CargarMenues();
@@ -39,23 +46,170 @@ class ExpendioComponent extends Component
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
     }
 
-    public $chartData = [
-        'labels' => ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        'data' => [12, 19, 3, 5, 2, 3]
-    ];
+    //SELECT * FROM `consumidos` inner join menus on menus.id = consumidos.menu_id INNER join menuingredientes on menuingredientes.menu_id = menus.id INNER join elementos on elementos.id = menuingredientes.elemento_id WHERE consumidos.cerrado=1 and consumidos.empresa_id=1;
+    // SELECT *, sum(menuingredientes.cantidad*elementos.precio_compra) as Costo FROM `consumidos` inner join menus on menus.id = consumidos.menu_id INNER join menuingredientes on menuingredientes.menu_id = menus.id INNER join elementos on elementos.id = menuingredientes.elemento_id WHERE consumidos.cerrado=1 and consumidos.empresa_id=1 GROUP by menus.nombremenu;
+    //SELECT consumidos.fecha, menus.nombremenu, sum(menuingredientes.cantidad*elementos.precio_compra) as Costo FROM `consumidos` inner join menus on menus.id = consumidos.menu_id INNER join menuingredientes on menuingredientes.menu_id = menus.id INNER join elementos on elementos.id = menuingredientes.elemento_id WHERE consumidos.cerrado=1 and consumidos.empresa_id=1 GROUP by menus.nombremenu;
 
-    public function updateChart()
-    {
-        // Ejemplo de actualización de datos
-        $this->chartData['data'] = [
-            rand(1, 20),
-            rand(1, 20),
-            rand(1, 20),
-            rand(1, 20),
-            rand(1, 20),
-            rand(1, 20)
-        ];
+    public function GenerarVistaResumenes() {
+
+        $this->Resumen['costomenues'] = DB::select("SELECT menus.nombremenu, elementos.name,
+            sum(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) as costototal,
+            sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal,
+            sum(menu_plans.cantidad * menuingredientes.cantidad) as cantidadelementos
+            FROM actors
+            left join plan_alimentario_actors on plan_alimentario_actors.actor_id = actors.id
+            left join menu_plans on plan_alimentario_actors.id = menu_plans.plan_id
+            left join menus on menu_plans.menu_id = menus.id
+            inner join menuingredientes on menus.id = menuingredientes.menu_id
+            inner join elementos on elementos.id = menuingredientes.elemento_id
+            WHERE actors.empresa_id = 1
+            GROUP by menus.nombremenu, elementos.name
+            ORDER BY menus.nombremenu;");
+
+        $this->Resumen['costoingredientes'] = DB::select("SELECT elementos.name,
+            sum(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) as costototal,
+            sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal,
+            sum(menu_plans.cantidad * menuingredientes.cantidad) as cantidadelementos
+            FROM actors
+            left join plan_alimentario_actors on plan_alimentario_actors.actor_id = actors.id
+            left join menu_plans on plan_alimentario_actors.id = menu_plans.plan_id
+            left join menus on menu_plans.menu_id = menus.id
+            inner join menuingredientes on menus.id = menuingredientes.menu_id
+            inner join elementos on elementos.id = menuingredientes.elemento_id
+            WHERE actors.empresa_id = 1
+            GROUP by elementos.name
+            ORDER BY elementos.name;");
+
+        // $this->Resumen['tiempoutilizado'] = DB::select("SELECT menus.nombremenu, sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal FROM actors left join plan_alimentario_actors on plan_alimentario_actors.actor_id = actors.id left join menu_plans on plan_alimentario_actors.id = menu_plans.plan_id left join menus on menu_plans.menu_id = menus.id inner join menuingredientes on menus.id = menuingredientes.menu_id inner join elementos on elementos.id = menuingredientes.elemento_id WHERE actors.empresa_id = 1 GROUP by menus.nombremenu;");
+
+        // $this->Resumen['elementosnecesarios'] =DB::select("SELECT elementos.name, sum(menu_plans.cantidad*menuingredientes.cantidad) as cantidadelementos FROM actors left join plan_alimentario_actors on plan_alimentario_actors.actor_id = actors.id left join menu_plans on plan_alimentario_actors.id = menu_plans.plan_id left join menus on menu_plans.menu_id = menus.id inner join menuingredientes on menus.id = menuingredientes.menu_id inner join elementos on elementos.id = menuingredientes.elemento_id WHERE actors.empresa_id = 1 GROUP by elementos.name;");
+
     }
+
+    public function CalcularGraficos() {
+
+        $chartData = [
+            'labels' => [],
+            'data' => [],
+            'colors' => []
+        ];
+
+        $result = DB::select("
+            SELECT
+                menus.nombremenu,
+                SUM(menuingredientes.cantidad * elementos.precio_compra) as costo
+            FROM consumidos
+            INNER JOIN menus ON menus.id = consumidos.menu_id
+            INNER JOIN menuingredientes ON menuingredientes.menu_id = menus.id
+            INNER JOIN elementos ON elementos.id = menuingredientes.elemento_id
+            WHERE consumidos.cerrado = 1
+            AND consumidos.empresa_id = 1
+            GROUP BY menus.nombremenu
+            ORDER BY costo DESC
+        ");
+
+        foreach ($result as $row) {
+            $chartData['labels'][] = $row->nombremenu;
+            $chartData['data'][] = (float) $row->costo;
+            $chartData['colors'][] = $this->generateColor(); // Método para colores
+        }
+
+        $this->labels['DespachosMenuales'] = $chartData['labels'];
+        $this->data['DespachosMenuales'] = $chartData['data'];
+        $this->colors = $chartData['colors'];
+
+        $result = DB::select("
+            SELECT
+                menus.nombremenu,
+                SUM(
+                    CASE WHEN consumidos.cerrado = 1
+                        THEN (menuingredientes.cantidad * elementos.precio_compra)
+                        ELSE 0 END
+                ) AS costo_cerrados,
+                SUM(
+                    CASE WHEN consumidos.cerrado = 0
+                        THEN (menuingredientes.cantidad * elementos.precio_compra)
+                        ELSE 0 END
+                ) AS costo_abiertos
+            FROM consumidos
+            INNER JOIN menus ON menus.id = consumidos.menu_id
+            INNER JOIN menuingredientes ON menuingredientes.menu_id = menus.id
+            INNER JOIN elementos ON elementos.id = menuingredientes.elemento_id
+            WHERE consumidos.empresa_id = 1
+            GROUP BY menus.nombremenu
+            ORDER BY costo_cerrados DESC
+        ");
+
+        // dd($result);
+        $chartData = [
+            'labels' => [],
+            'datasets' => [
+                [
+                    'label' => 'Cerrados',
+                    'data' => [],
+                    'backgroundColor' => [],
+                ],
+                [
+                    'label' => 'Abiertos',
+                    'data' => [],
+                    'backgroundColor' => [],
+                ]
+            ]
+        ];
+
+        foreach ($result as $row) {
+            $chartData['labels'][] = $row->nombremenu;
+
+            $chartData['datasets'][0]['label'] = 'Cerrados';
+            $chartData['datasets'][0]['data'][] = (float) $row->costo_cerrados;
+            $chartData['datasets'][0]['backgroundColor'][] = $this->generateColor();
+
+            $chartData['datasets'][1]['label'] = 'Abiertos';
+            $chartData['datasets'][1]['data'][] = (float) $row->costo_abiertos;
+            $chartData['datasets'][1]['backgroundColor'][] = $this->generateColor();
+        }
+
+        $this->labels['ComparativaDespachos'] = $chartData['labels'];
+        // $this->data['ComparativaDespachos'] = [$chartData['datasets'][0]['data'],$chartData['datasets'][1]['data']];
+        // $this->data['ComparativaDespachos']['data'][0] = $chartData['datasets'][0]['data'];
+        $this->data['ComparativaDespachos'][1] = $chartData['datasets'][1]['data'];
+
+        $this->data['ComparativaDespachos'][0] = $chartData['datasets'][0]['data'];
+}
+
+    private function generateColor() {
+        $colors = [
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(54, 162, 235, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(75, 192, 192, 0.8)',
+            'rgba(153, 102, 255, 0.8)',
+            'rgba(255, 159, 64, 0.8)',
+            'rgba(199, 199, 199, 0.8)',
+            'rgba(83, 102, 255, 0.8)',
+            'rgba(40, 159, 64, 0.8)',
+            'rgba(210, 99, 132, 0.8)'
+        ];
+        return $colors[array_rand($colors)];
+    }
+
+    // public $chartData = [
+    //     'labels' => ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    //     'data' => [12, 19, 3, 5, 2, 3]
+    // ];
+
+    // public function updateChart()
+    // {
+    //     // Ejemplo de actualización de datos
+    //     $this->chartData['data'] = [
+    //         rand(1, 20),
+    //         rand(1, 20),
+    //         rand(1, 20),
+    //         rand(1, 20),
+    //         rand(1, 20),
+    //         rand(1, 20)
+    //     ];
+    // }
 
     public function AgregarMenu() {
         $a = Consumido::firstOrCreate([
@@ -211,6 +365,7 @@ class ExpendioComponent extends Component
         ->where('empresa_id',session('empresa_id'))
         ->get(['id','consumido']);
 
+
         if(!empty($a)) $b = Consumido::where('id',$a[0]['id'])->update(['consumido' => !$a[0]['consumido']]);
     }
 
@@ -230,7 +385,38 @@ class ExpendioComponent extends Component
         ->where('momento_del_dia_id','=',$momento)
         ->where('empresa_id','=', session('empresa_id'))
         ->where('consumido','=', 0)
+        ->get();
+
+        foreach($a as $menu) {
+            $this->DisminuirStock($menu->menu_id, $menu->cantidad);
+        }
+
+        //Termina cerrando los menúes
+        $a = Consumido::where('fecha','=',$this->fecha)
+        ->where('momento_del_dia_id','=',$momento)
+        ->where('empresa_id','=', session('empresa_id'))
+        ->where('consumido','=', 0)
         ->update(['cerrado'=>1]);
+
         $this->confirmacion = false;
+
+    }
+
+    public function DisminuirStock($id, $cantidad_menues) {
+        // Busca los ingredientes del menu a descontar elementos
+        $a=Menuingrediente::where('menu_id','=',$id)->get();
+
+        // Por cada ingrediente...
+        foreach($a as $ingredientes) {
+            // Busca el ingrediente para saber el stock actual del mismo
+            $elemento = Elemento::where('id','=',$ingredientes->elemento_id)->get();
+
+            $stock_actual = $elemento[0]->existencia;
+
+            // Del elemento encontrado descuenta la cantidad utilizada por la cantidad de menúes consumidos
+            $elemento = Elemento::where('id','=',$ingredientes->elemento_id)
+            ->update(['existencia'=>$stock_actual - ($ingredientes->cantidad * $cantidad_menues)]);
+        }
+
     }
 }

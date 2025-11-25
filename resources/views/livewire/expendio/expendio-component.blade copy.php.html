@@ -20,19 +20,17 @@
         <li class="nav-item p-3 bg-red-400 rounded-3 ml-2" role="presentation">
             <a class="nav-link" id="simple-tab-3" data-bs-toggle="tab" href="#simple-tabpanel-3" role="tab" aria-controls="simple-tabpanel-3" aria-selected="false">Gráficos</a>
         </li>
-        <li class="nav-item p-3 bg-red-500 rounded-3 ml-2" role="presentation">
-            <a class="nav-link" id="simple-tab-4" data-bs-toggle="tab" href="#simple-tabpanel-4" role="tab" aria-controls="simple-tabpanel-4" aria-selected="false">Resúmenes</a>
-        </li>
     </ul>
 
     <div class="tab-content pt-5" id="tab-content">
         <div class="tab-pane active" id="simple-tabpanel-0" role="tabpanel" aria-labelledby="simple-tab-0">
             <div class="card direct-chat direct-chat-primary">
                 <div class="card-header ui-sortable-handle" style="cursor: move; justify-content: space-between;">
-                    <h3 class="card-title ml-3 col-md-6">Datos de Expediciones</h3>
-                    <div class="flex ml-4 col-md-12" style="padding-left: 60px;">
-                        <label>Fecha:</label>
-                        <input type="date" wire:model="fecha" wire:change="CargarMenues()" style="background-color: lightgreen; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px;">
+                    <h3 class="card-title ml-3">Datos de Expediciones</h3>
+                    <div class="flex ml-4" style="padding-left: 60px;">
+                        Fecha: <input type="date" wire:model="fecha" wire:change="CargarMenues()"
+                            style="background-color: lightgreen; border-radius: 5px; padding: 0px 5px 0px 5px; margin-left: 7px;">
+                        {{ $fecha }}
                     </div>
                 </div>
             </div>
@@ -44,7 +42,7 @@
 
         </div>
 
-        <x-dialog-modal class="max-w-lg w-full mt-10" wire:model="confirmacion" style="margin-top: 100px">
+        <!-- <x-dialog-modal class="max-w-lg w-full mt-10" wire:model="confirmacion" style="margin-top: 100px">
             <x-slot name="title" style="margin-top: 100px; padding-top: 100px;">
                 Cerrar Servicio
             </x-slot>
@@ -96,20 +94,44 @@
                 <x-button class="btn bg-yellow-300 btn-warning mr-2" wire:click="AgregarMenu()">Agregar</x-button>
                 <x-button class="btn btn-info" wire:click="$set('agregar',false)">Cerrar</x-button>
             </x-slot>
-        </x-dialog-modal>
-
-        <div class="tab-pane" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">Medicamentos Expedidos</div>
-        <div class="tab-pane" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">Descartables Expedidos</div>
-
+        </x-dialog-modal> -->
+        <div class="tab-pane" id="simple-tabpanel-1" role="tabpanel" aria-labelledby="simple-tab-1">Medicamentos
+            Expedidos</div>
+        <div class="tab-pane" id="simple-tabpanel-2" role="tabpanel" aria-labelledby="simple-tab-2">Descartables
+            Expedidos</div>
+        <!-- Comienza Gráficas -->
         <div class="tab-pane" id="simple-tabpanel-3" role="tabpanel" aria-labelledby="simple-tab-3">
-            {{-- Comienza Gráficas --}}
+        <!-- <script>
+            const ctx = document.getElementById('myChart');
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                }]
+                },
+                options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                }
+                }
+            });
+        </script> -->
+
+
             <!-- En tu vista -->
             <div class="flex d-flex flex-wrap">
 
                 <div class="col-md-6 col-xl-4  ">
                     <x-chart
-                        type="bar"
-                        title="Consumo Mensual"
+                        type="pie"
+                        title="Ventas Mensuales 12"
                         :labels="['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']"
                         :data="[12, 19, 3, 5, 2, 3]"
                         height="320px"
@@ -121,12 +143,9 @@
                 <div class="col-md-6 col-xl-4  ">
                     <x-chart
                         type="bar"
-                        fill="true"
-                        title="Despachos Mensuales"
-                        :labels="$labels['DespachosMenuales']"
-                        :data="$data['DespachosMenuales']"
-                        {{-- :datasets=$data --}}
-                        :colors=$colors
+                        title="Ventas Mensuales"
+                        :labels="['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo']"
+                        :data="[12000, 19000, 15000, 18000, 22000]"
                         height="320px"
                         class="mt-2"
                     />
@@ -135,23 +154,10 @@
                 <!-- Gráfico de Línea -->
                 <div class="col-md-6 col-xl-4  ">
                     <x-chart
-                        type="bar"
-                        title="Comparativa de despachos No efectuados"
-                        :labels="$labels['ComparativaDespachos']"
-                        :data="$data['ComparativaDespachos'][1]"
-                        :colors=$colors
-                        height="320px"
-                        class="mt-2"
-                    />
-                </div>
-
-                 <div class="col-md-6 col-xl-4  ">
-                    <x-chart
-                        type="bar"
-                        title="Comparativa de despachos Efectuados"
-                        :labels="$labels['ComparativaDespachos']"
-                        :data="$data['ComparativaDespachos'][0]"
-                        :colors=$colors
+                        type="line"
+                        title="Crecimiento de Usuarios"
+                        :labels="['2020', '2021', '2022', '2023', '2024']"
+                        :data="[100, 250, 500, 1200, 2000]"
                         height="320px"
                         class="mt-2"
                     />
@@ -310,14 +316,259 @@
                         class="mt-2"
                     />
                 </div>
-            </div>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-        </div>
 
-        <div class="tab-pane" id="simple-tabpanel-4" role="tabpanel" aria-labelledby="simple-tab-4">
-            <x-expedir-resumen-ingredientres-component titulo="Resúmenes de Ingredientes y Menúes"></x-expedir-resumen-ingredientres-component>
+
+
+<!--
+@props([
+    'labels' => ['Viernes', 'Sábado', 'Jueves', 'Miércoles', 'Martes', 'Lunes', 'Domingo'],
+    'data' => [89, 85, 65, 58, 52, 48, 35],
+    'title' => 'Diagrama de Pareto',
+    'height' => '400px',
+    'show80Line' => true
+])
+
+
+
+                <div
+    x-data="enhancedPareto({
+        labels: @js($labels),
+        data: @js($data),
+        title: '{{ $title }}',
+        show80Line: {{ $show80Line ? 'true' : 'false' }}
+    })"
+    wire:ignore
+    {{ $attributes }}
+>
+    <div class="bg-white p-4 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-2" x-text="title"></h3>
+        <div class="chart-container" style="position: relative; height: {{ $height }}; width: 100%;">
+            <x-chart
+            title="Pareto - Consumo por Día de la Semana"
+            :labels="$consumoDias['labels']"
+            :data="$consumoDias['data']"
+            height="320px"
+                class="mt-2"
+            />
+        </div>
+        <div x-show="paretoAnalysis" class="mt-3 text-sm text-gray-600">
+            <p><strong>Análisis 80/20:</strong> <span x-text="paretoAnalysis"></span></p>
         </div>
     </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    alert('pppp');
+    Alpine.data('enhancedPareto', (config) => ({
+        chart: null,
+        paretoAnalysis: '',
+
+        init() {
+            this.$nextTick(() => {
+                this.renderEnhancedPareto();
+            });
+        },
+
+        calculateEnhancedPareto(data, labels) {
+            // Combinar datos con labels y ordenar
+            const combined = data.map((value, index) => ({
+                label: labels[index],
+                value: value
+            })).sort((a, b) => b.value - a.value);
+
+            const total = combined.reduce((sum, item) => sum + item.value, 0);
+
+            let cumulative = 0;
+            let eightyPercentIndex = -1;
+
+            const percentages = combined.map((item, index) => {
+                cumulative += item.value;
+                const percentage = (cumulative / total) * 100;
+
+                // Encontrar dónde se alcanza el 80%
+                if (percentage >= 80 && eightyPercentIndex === -1) {
+                    eightyPercentIndex = index;
+                }
+
+                return percentage;
+            });
+
+            return {
+                sortedData: combined.map(item => item.value),
+                sortedLabels: combined.map(item => item.label),
+                percentages,
+                eightyPercentIndex,
+                totalItems: combined.length
+            };
+        },
+
+        renderEnhancedPareto() {
+            const ctx = this.$refs.canvas;
+            const analysis = this.calculateEnhancedPareto(config.data, config.labels);
+
+            // Generar análisis textual
+            if (analysis.eightyPercentIndex !== -1) {
+                const topItemsCount = analysis.eightyPercentIndex + 1;
+                const percentageOfTotal = Math.round((topItemsCount / analysis.totalItems) * 100);
+                this.paretoAnalysis = `El ${topItemsCount} de ${analysis.totalItems} items (${percentageOfTotal}%) generan el 80% del resultado`;
+            }
+
+            this.chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: analysis.sortedLabels,
+        datasets: [
+            {
+                label: 'Frecuencia / Valor',
+                data: analysis.sortedData,
+                backgroundColor: analysis.sortedData.map((_, index) =>
+                    index <= analysis.eightyPercentIndex
+                        ? 'rgba(54, 162, 235, 0.8)'  // Azul intenso para el 80%
+                        : 'rgba(54, 162, 235, 0.4)'  // Azul claro para el 20%
+                ),
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                yAxisID: 'y',
+                order: 2
+            },
+            {
+                label: 'Porcentaje Acumulado',
+                data: analysis.percentages,
+                type: 'line',
+                backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 3,
+                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                fill: false,
+                yAxisID: 'y1',
+                order: 1
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Items',
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    }
+                },
+                ticks: {
+                    maxRotation: 45,
+                    minRotation: 0
+                }
+            },
+            y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                title: {
+                    display: true,
+                    text: 'Frecuencia / Valor',
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    }
+                },
+                grid: {
+                    drawOnChartArea: true,
+                },
+                beginAtZero: true
+            },
+            y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                min: 0,
+                max: 100,
+                title: {
+                    display: true,
+                    text: 'Porcentaje Acumulado %',
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    }
+                },
+                grid: {
+                    drawOnChartArea: false,
+                },
+                ticks: {
+                    callback: function(value) {
+                        return value + '%';
+                    }
+                }
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: config.title,
+                font: {
+                    size: 16,
+                    weight: 'bold'
+                },
+                padding: {
+                    bottom: 20
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.datasetIndex === 0) {
+                            label += context.parsed.y + ' unidades';
+                        } else {
+                            label += context.parsed.y.toFixed(1) + '% acumulado';
+                        }
+                        return label;
+                    },
+                    afterLabel: function(context) {
+                        if (context.datasetIndex === 0) {
+                            const total = analysis.sortedData.reduce((a, b) => a + b, 0);
+                            const percentage = (context.parsed.y / total * 100).toFixed(1);
+                            return `Representa: ${percentage}% del total`;
+                        }
+                    }
+                }
+            },
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    usePointStyle: true,
+                    padding: 15
+                }
+            }
+        }
+    }
+}); -->
+        <!-- }
+    }));
+});
+</script> -->
+
+
+
+                <!-- Termina Gráficas -->
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </div>
 

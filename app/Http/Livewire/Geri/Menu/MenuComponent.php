@@ -16,17 +16,17 @@ class MenuComponent extends Component
     public $isModalOpenGestionar = false;
     public $menu, $menu_id;
     public $menues, $nombremenu, $menuactivo=true, $tiempopreparacion;
-    public $ingredientesdelmenu, $ingredientes, $ingredientea, $cantidad, $ingrediente_gestionar_id; 
-    
+    public $ingredientesdelmenu, $ingredientes, $ingredientea, $cantidad, $ingrediente_gestionar_id;
+
     public $empresa_id;
-    
+
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('menu.Ver')) {
             if(session('empresa_id')) {
                 $this->menues = Menu::where('empresa_id', session('empresa_id'))->orderby('nombremenu')->get();
                 $this->ingredientes = ElementoIngrediente::join('elementos', 'elementos.id','elemento_ingredientes.elemento_id')->orderby('elementos.name')->get();
                 $this->CargarIngredientesDelMenu();
-                return view('livewire.geri.menu.menu-component',['datos'=> Menu::where('empresa_id', session('empresa_id'))->paginate(10),])->extends('layouts.adminlte');
+                return view('livewire.geri.menu.menu-component',['datos'=> Menu::where('empresa_id', session('empresa_id'))->orderby('nombremenu')->paginate(10),])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
@@ -46,7 +46,7 @@ class MenuComponent extends Component
 
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.geri.menu.createmenu')->with('isModalOpen', $this->isModalOpen)->with('menu', $this->menu);
@@ -69,11 +69,12 @@ class MenuComponent extends Component
     public function openModalPopover() { $this->isModalOpen = true; }
     public function closeModalPopover() { $this->isModalOpen = false; }
     private function resetCreateForm(){ $this->menu_id = $this->tiempopreparacion = $this->nombremenu = ''; }
-    
+
     public function store()
     {
         $this->validate([
             'nombremenu' => 'required',
+            'tiempopreparacion' => 'required',
         ]);
         Menu::updateOrCreate(['id' => $this->menu_id], [
             'nombremenu' => $this->nombremenu,
@@ -95,10 +96,10 @@ class MenuComponent extends Component
         $this->nombremenu = $menu->nombremenu;
         $this->tiempopreparacion = $menu->tiempopreparacion;
         $this->menuactivo = $menu->menuactivo;
-        
+
         $this->openModalPopover();
     }
-    
+
     public function EliminarRelacionMenuIngrediente($menu_id,$elemento_id){
         // dd($menu_id . ' ' .$elemento_id);
         menuingrediente::where('menu_id','=',$menu_id)

@@ -31,8 +31,9 @@
                         {{-- @can('plans.Agregar') --}}
                             <x-crear>Nuevo Plan Alimentario</x-crear>
                             <a href="menu">
-                                <button class="bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded my-3">
-                                    Volver a los menúes
+                                <button class="bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                                    <i class="fa fa-arrow-left"></i>
+                                        Volver a los menúes
                                 </button>
                             </a>
                             @if ($isModalOpen)          @include('livewire.geri.plan-alimentario.createplanalimentario') @endif

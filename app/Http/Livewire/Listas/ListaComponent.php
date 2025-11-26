@@ -23,7 +23,7 @@ class ListaComponent extends Component
                 $this->empresa_id=session('empresa_id');
                 // $this->listas = Lista::where('empresa_id', $this->empresa_id)->get();
                 $this->listas = Lista::where('empresa_id', '=', $this->empresa_id)->paginate(7);
-                
+
                 return view('livewire.listas.lista-component',['listas' => $this->listas])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
@@ -33,7 +33,7 @@ class ListaComponent extends Component
 
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.listas.createlistas')->with('isModalOpen', $this->isModalOpen)->with('name', $this->name);
@@ -49,12 +49,14 @@ class ListaComponent extends Component
         $this->vigenciadesde = '';
         $this->vigenciahasta = '';
     }
-    
+
     public function store()
     {
         $this->validate([
             'name' => 'required',
-            'porcentaje' => 'required',
+            'porcentaje' => 'required|numeric',
+            'vigenciadesde' => 'required|date',
+            'vigenciahasta' => 'required|date',
         ]);
         Lista::updateOrCreate(['id' => $this->lista_id], [
             'name' => $this->name,
@@ -82,7 +84,7 @@ class ListaComponent extends Component
         $this->vigenciahasta = $lista->vigenciahasta;
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         Lista::find($id)->delete();

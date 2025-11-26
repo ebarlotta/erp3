@@ -3,13 +3,13 @@
 
     <div class="content-center flex">
         <div class="bg-white p-2 text-center rounded-lg shadow-lg w-full">
-            <div class="mx-auto sm:px-6 lg:px-8">  
+            <div class="mx-auto sm:px-6 lg:px-8">
                 {{-- max-w-7xl --}}
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg py-4">
                     <div>
                         <div style="background-color: rgb(205, 207, 209); font-size: 2rem;">
                             Ingredientes del menú
-                            <table class="min-w-full border text-center font-light dark:border-neutral-500" style="font-size: 1.1rem;">
+                            <table class="table-striped min-w-full border text-center font-light dark:border-neutral-500" style="font-size: 1.1rem;">
                                 {{-- <tr class="border-b dark:border-neutral-500">
                                     <td colspan="2" align="left" class="whitespace-nowrap border-r px-6 py-4 font-medium dark:border-neutral-500">Ingredientes del menú</td>
                                 </tr> --}}
@@ -40,12 +40,13 @@
                                 <thead class="border-b font-medium dark:border-neutral-500">
                                     <th class="col-9 border-r px-6 dark:border-neutral-500">Ingredientes</th>
                                     <th class="col-2 border-r px-6 dark:border-neutral-500">Cantidad</th>
+                                    <th class="col-2 border-r px-6 dark:border-neutral-500">Unidad</th>
                                     <th class="col-1 border-r px-6 dark:border-neutral-500">Opciones</th>
                                 </thead>
                                 <tbody class="border-b font-medium dark:border-neutral-500">
                                     <tr>
                                         <td class="border" style="padding-right: 1.4rem;">
-                                            <select class="col-12 mx-3 btn bg-primary-100" style="background-color: darkgray;" wire:model="ingrediente_gestionar_id">
+                                            <select class="col-12 mx-3 btn bg-primary-100" style="background-color: darkgray;"  wire:model="ingrediente_gestionar_id" wire:change="BuscarUnidad">
                                                 <option value="0" selected>-</option>
                                                 @foreach ($ingredientes as $ingrediente)
                                                     <option value="{{ $ingrediente->id }}">{{$ingrediente->name}}</option>
@@ -56,6 +57,10 @@
                                         <td class="border">
                                             <input type="text" class="col-11 btn" style="background-color: darkgray;" wire:model="cantidad">
                                             @error('cantidad') <span class="text-red-500">{{ $message }}</span>@enderror
+
+                                        </td>
+                                        <td class="border">
+                                            <input type="text" class="col-11 btn" style="background-color: darkgray;" wire:model="unidad" disabled>
 
                                         </td>
                                         <td class="border">
@@ -70,7 +75,7 @@
                                                 <button wire:click="closeModalPopoverGestionar()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-yellow-300 text-base leading-6 font-bold text-gray-700 shadow-sm hover:bg-yellow-400 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                             Cerrar
                                             </button>
-                                            </span>            
+                                            </span>
                                         </td>
                                     </tr>
                             </table>

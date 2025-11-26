@@ -17,8 +17,8 @@
                         <div class="col-12 flex">
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Porcentaje</label>
-                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese Descripcion" wire:model="porcentaje" min=0 value="0">
-                                @error('name') <span class="text-red-500">{{ $message }}</span>@enderror
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese Descripcion" wire:model="porcentaje" min=0 value="0" onkeypress="return soloNumeros(event)">
+                                @error('porcentaje') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Activo</label>
@@ -44,6 +44,23 @@
                     <x-guardar></x-guardar>
                     <x-cerrar></x-cerrar>
                 </div>
+                 <script>
+                    function soloNumeros(e) {
+                        var key = window.event ? e.which : e.keyCode;
+                        if (key < 48 || key > 57) {
+                            e.preventDefault();
+                        }
+                    }
+
+                    function convertirAMayusculas(e) {
+                        const input = e.target;
+                        input.value = input.value.toUpperCase();
+                    }
+
+                    document.getElementById('cuil').addEventListener('keypress', soloNumeros);
+                    document.getElementById('agregar_celular').addEventListener('keypress', soloNumeros);
+
+                </script>
             </form>
         </div>
     </div>

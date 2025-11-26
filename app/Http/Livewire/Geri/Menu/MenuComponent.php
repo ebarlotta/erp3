@@ -16,21 +16,34 @@ class MenuComponent extends Component
     public $isModalOpenGestionar = false;
     public $menu, $menu_id;
     public $menues, $nombremenu, $menuactivo=true, $tiempopreparacion;
-    public $ingredientesdelmenu, $ingredientes, $ingredientea, $cantidad, $ingrediente_gestionar_id;
+    public $ingredientesdelmenu, $ingredientes, $ingredientea, $cantidad, $ingrediente_gestionar_id, $unidad, $publico;
 
-    public $empresa_id;
+    public $empresa_id, $search;
 
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('menu.Ver')) {
             if(session('empresa_id')) {
-                $this->menues = Menu::where('empresa_id', session('empresa_id'))->orderby('nombremenu')->get();
+                $empresaId = session('empresa_id');
                 $this->ingredientes = ElementoIngrediente::join('elementos', 'elementos.id','elemento_ingredientes.elemento_id')->orderby('elementos.name')->get();
                 $this->CargarIngredientesDelMenu();
-                return view('livewire.geri.menu.menu-component',['datos'=> Menu::where('empresa_id', session('empresa_id'))->orderby('nombremenu')->paginate(10),])->extends('layouts.adminlte');
+                $this->resumir();
+                return view('livewire.geri.menu.menu-component',['datos'=> $this->datos])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
         }
+    }
+
+    public function resumir() {
+        $empresaId = session('empresa_id');
+        $this->datos = Menu::where('empresa_id', session('empresa_id'))
+        ->when($this->search, function ($query) {
+            $query->where('nombremenu', 'LIKE', '%' . $this->search . '%');
+        })
+        ->orWhere(function ($query) use ($empresaId) {
+            $query->where('publico', 1)
+            ->where('empresa_id', '<>', $empresaId); })
+        ->orderby('nombremenu')->paginate(10);
     }
 
     public function CargarIngredientesDelMenu() {
@@ -114,6 +127,13 @@ class MenuComponent extends Component
         session()->flash('message', 'Menu Eliminado.');
     }
 
+    public function BuscarUnidad() {
+        $a = elemento::join('unidads','unidads.id','=','elementos.unidad_id')
+        ->where('elementos.id','=',$this->ingrediente_gestionar_id)
+        ->get('unidads.name');
+        $this->unidad = $a[0]['name'];
+    }
+
     public function AgregarElementoAlMenu() {
         //Si Cantidad es numerico, si es positivo, si no es nulo
         $this->validate([
@@ -145,4 +165,13 @@ class MenuComponent extends Component
         if($estado) { $menu->menuactivo = 0; } else { $menu->menuactivo = 1; }
         $menu->save();
     }
+
+    public function publicar($id,$estado)
+    {
+        $menu = Menu::find($id);
+        if($estado) { $menu->publico = 0; } else { $menu->publico = 1; }
+        $menu->save();
+    }
+
+
 }

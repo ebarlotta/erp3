@@ -40,7 +40,7 @@ class PlanAlimentarioComponent extends Component
 
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.geri.plan-alimentario.createplanalimentario')->with('isModalOpen', $this->isModalOpen)->with('nombre', $this->nombre);
@@ -53,15 +53,21 @@ class PlanAlimentarioComponent extends Component
 
 
     // public function closeModalGestionar() { $this->isModalOpenGestionar = false; }
-    
+
     public function show($plan_id) {
         $plan = PlanAlimentario::find($plan_id);
         $this->plan_nombre = $plan->nombre;
-        $this->planalimentario_id = $plan_id; 
-        $this->listadomenues = Menu::where('empresa_id','=',session('empresa_id'))->orderby('nombremenu')->get();
+        $this->planalimentario_id = $plan_id;
+        $empresaId = session('empresa_id');
+        $menues = Menu::where('empresa_id', session('empresa_id'))->orWhere(function ($query) use ($empresaId) {
+            $query->where('publico', 1)
+            ->where('empresa_id', '<>', $empresaId); })
+        ->orderby('nombremenu')
+        ->get();
+        $this->listadomenues = $menues;
         // dd($this->listadomenues);
         $this->CargarRelaciones();
-        $this->isModalOpenGestionar = true; 
+        $this->isModalOpenGestionar = true;
     }
 
     public function CargarRelaciones() {
@@ -75,7 +81,7 @@ class PlanAlimentarioComponent extends Component
     }
 
     private function resetCreateForm(){ $this->planalimentario_id = ''; $this->nombre = ''; }
-    
+
     public function store()
     {
         $this->validate([
@@ -90,13 +96,13 @@ class PlanAlimentarioComponent extends Component
             'activo' => $this->activo,
             'empresa_id' => $this->empresa_id,
         ]);
-        
+
         session()->flash('message', $this->planalimentario_id ? 'Plan Alimentario Actualizado.' : 'Plan Alimentario Creado.');
-        
+
         $this->closeModalPopover();
         $this->resetCreateForm();
     }
-    
+
     public function storeDetalle()
     {
         $this->validate([
@@ -130,12 +136,12 @@ class PlanAlimentarioComponent extends Component
         $this->hasta = $planalimentario->hasta;
         $this->momento_dia_id = $planalimentario->momento_dia_id;
         $this->activo = $planalimentario->activo;
-        
+
         $this->openModalPopover();
 
         session()->flash('message', 'Plan Alimentario Modificado.');
     }
-    
+
     public function delete($id)
     {
         PlanAlimentario::find($id)->delete();
@@ -150,26 +156,26 @@ class PlanAlimentarioComponent extends Component
     }
 
     public function habilitarMenuPlan($menu_id, $plan_id, $dia, $momento_dia_id, $estado) {
-    
+
         MenuPlan::where('menu_id', $menu_id)
         ->where('plan_id', $plan_id)
         ->where('dia', $dia)
         ->where('momento_dia_id', $momento_dia_id)
         ->update(['activo' => !$estado]);
-    
+
         $this->CargarRelaciones();
 
         session()->flash('message', 'Plan Alimentario Habilitado/Desabilitado.');
     }
 
-    public function deletemenuadherido($menu_id, $plan_id, $dia, $momento_dia_id) { 
+    public function deletemenuadherido($menu_id, $plan_id, $dia, $momento_dia_id) {
         MenuPlan::where('menu_id','=',$menu_id)
         ->where('plan_id','=',$plan_id)
         ->where('dia','=',$dia)
         ->where('momento_dia_id','=',$momento_dia_id)
-        ->delete(); 
-        
-        $this->CargarRelaciones();        
+        ->delete();
+
+        $this->CargarRelaciones();
     }
 
     public function EliminarRelMenuPlan($momento_dia_id, $dia, $menu_id) {
@@ -191,14 +197,14 @@ class PlanAlimentarioComponent extends Component
         ->where('dia','=',$dia)
         ->where('menu_id','=',$menu_id)
         ->update(['cantidad'=>$cantidad]);
-        
+
         session()->flash('message', 'Cantidad Actualizada.');
 
-        $this->CargarRelaciones();   
+        $this->CargarRelaciones();
     }
 
-    public function CopiarMenuPlan($dia,$momento) {    
-        
+    public function CopiarMenuPlan($dia,$momento) {
+
         $this->CopiarMenuPlanDia = $dia;
         $this->CopiarMenuPlanMomento = $momento;
 

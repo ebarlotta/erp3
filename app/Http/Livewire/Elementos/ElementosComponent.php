@@ -23,14 +23,13 @@ use Livewire\WithFileUploads;
 
 use Exception;
 
-
 class ElementosComponent extends Component
 {
     // public $Elemento = Elemento::class;
     // public $ElementoArticulo = ElementoArticulo::class;
     protected $unidades, $categorias, $datos;
     public $seleccionado='Medicamento',$elemento_id;
-    public $name, $existencia, $stock_minimo, $precio_compra, $categoria_id, $unidad_id, $vencimiento; //General
+    public $name, $existencia, $stock_minimo, $precio_compra, $categoria_id, $unidad_id, $vencimiento, $search; //General
     public $pedira, $psiquiatrico; // Medicamento
     public $estados, $estado_id; //Ingrediente
     public $barra, $qr, $descuento, $descuento_especial, $descripcion, $calificacion, $precio_venta, $lote,  $proveedores, $proveedor_id; //producto
@@ -40,7 +39,7 @@ class ElementosComponent extends Component
     public $photos = [];
 
     use WithPagination;
-    use WithFileUploads;    
+    use WithFileUploads;
 
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('elementos.Ver')) {
@@ -51,34 +50,69 @@ class ElementosComponent extends Component
                 $this->proveedores = Proveedor::where('empresa_id','=',session('empresa_id'))->get();
                 $this->listas = Lista::where('empresa_id','=',session('empresa_id'))->get();
 
-                switch ($this->seleccionado) {
-                    case "Medicamento" : $this->datos = Elemento::join('elemento_medicamentos','elemento_medicamentos.elemento_id','=','elementos.id')->paginate(13); break;
-                    case "Ingrediente" : $this->datos = Elemento::join('elemento_ingredientes','elemento_ingredientes.elemento_id','=','elementos.id')->paginate(13); break;
-                    case "Producto" : $this->datos = Elemento::join('elemento_productos','elemento_productos.elemento_id','=','elementos.id')->paginate(13); break;
-                    case "Descartable" : $this->datos = Elemento::join('elemento_descartables','elemento_descartables.elemento_id','=','elementos.id')->paginate(13); break;
-                    case "Articulo" : $this->datos = Elemento::join('elemento_articulos','elemento_articulos.elemento_id','=','elementos.id')->paginate(13); break;
-                }
-                // dd($this->datos);
                 $this->unidades = Unidad::where('empresa_id','=',session('empresa_id'))->get();
-                // dd($this->unidades);
                 $this->categorias = Categorias::where('empresa_id','=',session('empresa_id'))->get();
+                $this->resumir();
                 return view('livewire.elementos.elementos-component',['datos'=>$this->datos, 'unidades'=>$this->unidades,'categorias'=>$this->categorias,'estados'=>$this->estados,'proveedores'=>$this->proveedores,'listas'=>$this->listas])->extends('layouts.adminlte');
             } else {
-                return view('livewire.seleccionarempresa')->extends('layouts.adminlte');    
-            } 
-        
+                return view('livewire.seleccionarempresa')->extends('layouts.adminlte');
+            }
+
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
         }
     }
 
+    public function resumir() {
+        $empresaId = session('empresa_id');
+            switch ($this->seleccionado) {
+            case "Medicamento" :
+                $this->datos = Elemento::join('elemento_medicamentos','elemento_medicamentos.elemento_id','=','elementos.id')
+                    ->when($this->search, function ($query) {
+                    $query->where('elementos.name', 'LIKE', '%' . $this->search . '%');
+                    })
+                    ->paginate(13);
+                break;
+            case "Ingrediente" :
+                $this->datos = Elemento::join('elemento_ingredientes','elemento_ingredientes.elemento_id','=','elementos.id')
+                ->when($this->search, function ($query) {
+                    $query->where('elementos.name', 'LIKE', '%' . $this->search . '%');
+                    })
+                ->orderby('elementos.name')
+                ->paginate(13);
+                break;
+            case "Producto" :
+                $this->datos = Elemento::join('elemento_productos','elemento_productos.elemento_id','=','elementos.id')
+                    ->when($this->search, function ($query) {
+                        $query->where('elementos.name', 'LIKE', '%' . $this->search . '%');
+                    })
+                    ->orderby('elementos.name')
+                    ->paginate(13); break;
+            case "Descartable" :
+                $this->datos = Elemento::join('elemento_descartables','elemento_descartables.elemento_id','=','elementos.id')
+                    ->when($this->search, function ($query) {
+                        $query->where('elementos.name', 'LIKE', '%' . $this->search . '%');
+                    })
+                    ->orderby('elementos.name')
+                ->paginate(13); break;
+            case "Articulo" :
+                $this->datos = Elemento::join('elemento_articulos','elemento_articulos.elemento_id','=','elementos.id')
+                    ->when($this->search, function ($query) {
+                        $query->where('elementos.name', 'LIKE', '%' . $this->search . '%');
+                    })
+                ->orderby('elementos.name')
+                ->paginate(13); break;
+        }
+    }
+
+
     public function closeModalPopover() { $this->isModalOpen = false; $this->isModalDelete=false; }
     public function delete($id) { $this->isModalDelete = true; $this->elemento_id = $id; }
     public function cambiarSeleccion($sel) { $this->seleccionado = $sel; }
     public function create() { $this->borrarDatos(); $this->isModalOpen = true; }
-    
+
     public function borrarDatos() {
-        $this->reset( 'elemento_id', 'name', 'existencia', 'stock_minimo', 'precio_compra', 'categoria_id', 'unidad_id', 'vencimiento', 'pedira', 'psiquiatrico', 'estados', 'estado_id', 'barra', 'qr', 'descuento', 'descuento_especial', 'descripcion', 'calificacion', 'precio_venta', 'lote', 'ruta', 'proveedores', 'proveedor_id', 'marca', 'listas', 'lista_id');    
+        $this->reset( 'elemento_id', 'name', 'existencia', 'stock_minimo', 'precio_compra', 'categoria_id', 'unidad_id', 'vencimiento', 'pedira', 'psiquiatrico', 'estados', 'estado_id', 'barra', 'qr', 'descuento', 'descuento_especial', 'descripcion', 'calificacion', 'precio_venta', 'lote', 'ruta', 'proveedores', 'proveedor_id', 'marca', 'listas', 'lista_id');
     }
 
     public function store() {
@@ -93,7 +127,7 @@ class ElementosComponent extends Component
         ]);
 
         if($this->ruta=='null' || $this->ruta=='sin_imagen.jpg') {
-            $this->ruta = "sin_imagen.jpg";   
+            $this->ruta = "sin_imagen.jpg";
         } else
         {
             $nombreCompleto = basename($this->ruta) . time().'.jpg';
@@ -102,13 +136,13 @@ class ElementosComponent extends Component
         }
 
         switch ($this->seleccionado) {
-            case "Medicamento" : 
-                $this->validate(['pedira'=> 'required',]); 
+            case "Medicamento" :
+                $this->validate(['pedira'=> 'required',]);
                 break;
-            case "Ingrediente" : 
-                $this->validate(['estado_id'=> 'required',]); 
+            case "Ingrediente" :
+                $this->validate(['estado_id'=> 'required',]);
                 break;
-            case "Producto" : 
+            case "Producto" :
                 $this->validate([
                     'barra'=> 'required|numeric|min:0',
                     'qr'=> 'required',
@@ -119,12 +153,12 @@ class ElementosComponent extends Component
                     'precio_venta'=> 'required|numeric|min:0',
                     'ruta'=> 'required',
                     'proveedor_id'=> 'required',
-                ]); 
+                ]);
                 break;
-            case "Descartable" : 
+            case "Descartable" :
                 // $this->validate(['descripcion'=> 'required',]);
                 break;
-            case "Articulo" : 
+            case "Articulo" :
                 $this->validate(['precio_venta'=> 'required|numeric|min:0','lista_id'=> 'required',]);
                 break;
         }
@@ -142,7 +176,7 @@ class ElementosComponent extends Component
 
         // is_null($nombreCompleto) ? dd('Nombrecompleto') : dd('nada');
         if(!is_null($nombreCompleto)) {
-            
+
             // dd($this->ruta.'iiii');
             // $path = request('ruta')->store('images');
             // if(is_null($path)) dd('Path nulo');
@@ -151,7 +185,7 @@ class ElementosComponent extends Component
             //     $a = $this->ruta->store('photos');
             // dd('pepe');
             // }
-            
+
             // catch (Exception $e) {
             //     dd($e->getMessage());
             // }
@@ -163,17 +197,17 @@ class ElementosComponent extends Component
         }
 
         switch ($this->seleccionado) {
-            case "Medicamento" : 
+            case "Medicamento" :
                 ElementoMedicamento::updateOrCreate(['elemento_id' => $a->id], [
-                'pedira' => $this->pedira, 'elemento_id' => $a->id, 
-                'psiquiatrico' => true,]); 
+                'pedira' => $this->pedira, 'elemento_id' => $a->id,
+                'psiquiatrico' => true,]);
                 break;
-            case "Ingrediente" : 
+            case "Ingrediente" :
                 ElementoIngrediente::updateOrCreate(['elemento_id' => $a->id], [
                 'estado_id' => $this->estado_id,
-                'elemento_id' => $a->id,]); 
+                'elemento_id' => $a->id,]);
                 break;
-            case "Producto" : 
+            case "Producto" :
                 ElementoProducto::updateOrCreate(['elemento_id' => $a->id], [
                     'barra'=> $this->barra,
                     'qr'=> $this->qr,
@@ -187,28 +221,28 @@ class ElementosComponent extends Component
                     'elemento_id'=> $a->id,
                     'estado_id'=> $this->estado_id,
                     'proveedor_id'=> $this->proveedor_id,
-                ]); 
+                ]);
                 break;
-            case "Descartable" : 
+            case "Descartable" :
                 ElementoDescartable::updateOrCreate(['elemento_id' => $a->id], [
                     'descripcion' => $this->descripcion,
                     'elemento_id' => $a->id,'pendiente' => true,
-                ]); 
+                ]);
                 break;
-            case "Articulo" : 
+            case "Articulo" :
                 ElementoArticulo::updateOrCreate(['elemento_id' => $a->id], [
                     'precio_venta' => $this->precio_venta,
-                    'marca' => $this->marca, 
+                    'marca' => $this->marca,
                     'lista_id' =>$this->lista_id,
                     'elemento_id' => $a->id,
-                ]); 
+                ]);
                 break;
         }
         session()->flash('message', $a->id ? $this->seleccionado . ' Actualizado.' : $this->seleccionado . ' Creado.');
-        
+
         $this->elemento_id = null; // Borra de la memoria el Elemento con el que se estaba trabajando
         $this->ruta = null;
-        
+
         $this->closeModalPopover();
         $this->borrarDatos();
     }
@@ -223,13 +257,13 @@ class ElementosComponent extends Component
         $this->categoria_id = $datos->categoria_id;
         $this->unidad_id = $datos->unidad_id;
         switch ($this->seleccionado) {
-            case "Medicamento" : $datos = ElementoMedicamento::where('elemento_id','=',$id)->get(); 
+            case "Medicamento" : $datos = ElementoMedicamento::where('elemento_id','=',$id)->get();
                 // dd($datos[0]);
                 if($datos[0]->pedira<>null) $this->pedira = $datos[0]->pedira;
                 $this->elemento_id = $datos[0]->elemento_id;
                 $this->psiquiatrico = $datos[0]->psiquiatrico;
                 break;
-            case "Ingrediente" : $datos = ElementoIngrediente::where('elemento_id','=',$id)->get(); 
+            case "Ingrediente" : $datos = ElementoIngrediente::where('elemento_id','=',$id)->get();
                 $this->estado_id = $datos[0]->estado_id;
                 $this->elemento_id = $datos[0]->elemento_id;
                 break;
@@ -247,26 +281,26 @@ class ElementosComponent extends Component
                 $this->estado_id = $datos[0]->estado_id;
                 $this->proveedor_id = $datos[0]->proveedor_id;
                 break;
-            case "Descartable" : $datos = ElementoDescartable::where('elemento_id','=',$id)->get(); 
+            case "Descartable" : $datos = ElementoDescartable::where('elemento_id','=',$id)->get();
                 $this->descripcion = $datos[0]->descripcion;
                 $this->elemento_id = $datos[0]->pendiente;
                 break;
-            case "Articulo" : $datos = ElementoArticulo::where('elemento_id','=',$id)->get(); 
+            case "Articulo" : $datos = ElementoArticulo::where('elemento_id','=',$id)->get();
                 $this->precio_venta = $datos[0]->precio_venta;
                 $this->marca = $datos[0]->marca;
                 $this->lista_id =$datos[0]->sta_id;
                 $this->elemento_id = $datos[0]->id;
                 break;
         }
- 
+
         $this->elemento_id = $id;   // Setea el valor para no duplicar registros cueando ya se encuentre dado de alta
-        
+
         $this->isModalOpen = true;
 
     }
 
     public function destroy() {
-        
+
         switch ($this->seleccionado) {
             case "Medicamento" : DB::table('elemento_medicamentos')->where('elemento_id', '=', $this->elemento_id)->delete(); break;
             case "Ingrediente" : DB::table('elemento_ingredientes')->where('elemento_id', '=', $this->elemento_id)->delete(); break;
@@ -274,7 +308,7 @@ class ElementosComponent extends Component
             case "Descartable" : DB::table('elemento_descartables')->where('elemento_id', '=', $this->elemento_id)->delete(); break;
             case "Articulo" :    DB::table('elemento_articulos')->where('elemento_id', '=', $this->elemento_id)->delete(); break;
         }
-        
+
         Elemento::destroy($this->elemento_id);
 
         session()->flash('message', $this->elemento_id ? $this->seleccionado . ' Eliminado.' : $this->seleccionado . ' Creado.');

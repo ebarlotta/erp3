@@ -22,15 +22,13 @@
                                     @include('livewire.geri.menu.createmenu')
                                 @endif
                             @endcan
-
                                 <a href="{{ route('elementos') }}">
                                     <button wire:click="create()" class="px-2 bg-green-300 hover:bg-green-400 text-white-900 font-bold rounded" style="height: 40px; margin-bottom: 10px;">
                                         Nuevo Ingrediente
                                     </button>
                                 </a>
-
                             <div>
-                                <input type="text"  class="bg-blue-200 p-2 rounded" placeholder="Buscar">
+                                <input type="text" class="bg-blue-200 p-2 rounded" placeholder="Buscar" wire:model="search" wire:keyup="resumir($event.target.value)">
                             </div>
                             <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
 
@@ -41,6 +39,7 @@
                                     <tr>
                                         <th class="table-primary align-middle text-center ml-2">Nombre del Menú</th>
                                         <th class="table-primary align-middle text-center col-1">Activo</th>
+                                        <th class="table-primary align-middle text-center col-1">Mantener Público</th>
                                         <th class="table-primary align-middle text-center col-1">Tiempo de Preparción</th>
                                         <th class="table-primary align-middle text-center">Opciones</th>
                                     </tr>
@@ -48,7 +47,12 @@
                                 <tbody>
                                     @foreach ($datos as $menu)
                                         <tr>
-                                            <td class="pl-2">{{ $menu->nombremenu }}</td>
+                                            <td class="pl-2">
+                                                {{ $menu->nombremenu }}
+                                                @if(session('empresa_id')<>$menu->empresa_id)
+                                                    <i class="nav-icon far fa-circle text-info" style="border: solid 1px aliceblue;padding: 3px;border-radius: 10px;background-color: antiquewhite;"> Público importado</i>
+                                                @endif
+                                            </td>
                                             <td class=" col-1">
                                                 <div class="flex justify-center">
                                                     @if($menu->menuactivo)
@@ -59,6 +63,22 @@
                                                         @else
                                                         <!------- on ----->
                                                         <span class="border rounded-full border-grey flex items-center cursor-pointer w-12 bg-red-500 justify-end"  wire:click="habilitar({{ $menu->id }}, {{ $menu->menuactivo }})">
+                                                            <span class="rounded-full border w-6 h-6 border-grey shadow-inner bg-white shadow">
+                                                            </span>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="flex justify-center">
+                                                    @if($menu->publico)
+                                                        <span class="border rounded-full border-grey bg-green-400 flex items-center cursor-pointer w-12 justify-start" wire:click="publicar({{ $menu->id }}, {{ $menu->publico }})">
+                                                            <span class="rounded-full border w-6 h-6 border-grey shadow-inner bg-white shadow">
+                                                            </span>
+                                                        </span>
+                                                        @else
+                                                        <!------- on ----->
+                                                        <span class="border rounded-full border-grey flex items-center cursor-pointer w-12 bg-red-500 justify-end"  wire:click="publicar({{ $menu->id }}, {{ $menu->publico }})">
                                                             <span class="rounded-full border w-6 h-6 border-grey shadow-inner bg-white shadow">
                                                             </span>
                                                         </span>

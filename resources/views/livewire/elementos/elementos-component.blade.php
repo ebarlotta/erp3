@@ -17,12 +17,15 @@
                     @endif
 
                     <div class="flex">
-                        <div style="width: 30%;">
+                        <div style="width: 30%; display:flex">
                             @can('elementos.Agregar')
                                 <x-crear>Nuevo Elemento</x-crear>
                             @endcan
+
+                            <input type="text" class="bg-blue-200 mx-2 mb-2 rounded pl-2" placeholder="Buscar" wire:model="search" wire:keyup="resumir($event.target.value)">
                         </div>
-                        <div style="background-color: lightgray; display: flex; justify-content: space-between;" class="w-full">
+
+                        <div style="background-color: lightgray; display: flex; justify-content: space-between; border-radius:10px" class="mb-2 w-full">
                             <div class="my-auto mx-auto rounded-md p-2 @if($seleccionado=='Medicamento') bg-red-400 @endif" wire:click="cambiarSeleccion('Medicamento')" >
                                 <input class="mr-2" type="radio" name="elements" value="Medicamento" checked>
                                 <label class="mr-4" for="huey">Medicamento</label>

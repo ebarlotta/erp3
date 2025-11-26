@@ -52,21 +52,22 @@ class ExpendioComponent extends Component
 
     public function GenerarVistaResumenes() {
 
-        $this->Resumen['costomenues'] = DB::select("SELECT menus.nombremenu, elementos.name,
-            sum(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) as costototal,
-            sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal,
-            sum(menu_plans.cantidad * menuingredientes.cantidad) as cantidadelementos
+        $this->Resumen['costomenues1'] = DB::select("SELECT
+            menus.nombremenu,
+            SUM(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) AS costototal,
+            SUM(menus.tiempopreparacion * menu_plans.cantidad) AS tiempototal
             FROM actors
-            left join plan_alimentario_actors on plan_alimentario_actors.actor_id = actors.id
-            left join menu_plans on plan_alimentario_actors.id = menu_plans.plan_id
-            left join menus on menu_plans.menu_id = menus.id
-            inner join menuingredientes on menus.id = menuingredientes.menu_id
-            inner join elementos on elementos.id = menuingredientes.elemento_id
+            LEFT JOIN plan_alimentario_actors ON plan_alimentario_actors.actor_id = actors.id
+            LEFT JOIN menu_plans ON plan_alimentario_actors.id = menu_plans.plan_id
+            LEFT JOIN menus ON menu_plans.menu_id = menus.id
+            INNER JOIN menuingredientes ON menus.id = menuingredientes.menu_id
+            INNER JOIN elementos ON elementos.id = menuingredientes.elemento_id
+            INNER JOIN unidads ON unidads.id = elementos.unidad_id
             WHERE actors.empresa_id = 1
-            GROUP by menus.nombremenu, elementos.name
+            GROUP BY menus.nombremenu
             ORDER BY menus.nombremenu;");
 
-        $this->Resumen['costoingredientes'] = DB::select("SELECT elementos.name,
+        $this->Resumen['costomenues'] = DB::select("SELECT menus.nombremenu, elementos.name, unidads.name as unidad,
             sum(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) as costototal,
             sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal,
             sum(menu_plans.cantidad * menuingredientes.cantidad) as cantidadelementos
@@ -76,9 +77,35 @@ class ExpendioComponent extends Component
             left join menus on menu_plans.menu_id = menus.id
             inner join menuingredientes on menus.id = menuingredientes.menu_id
             inner join elementos on elementos.id = menuingredientes.elemento_id
+            inner join unidads on unidads.id = elementos.unidad_id
             WHERE actors.empresa_id = 1
-            GROUP by elementos.name
+            GROUP by menus.nombremenu, elementos.name, unidads.name
+            ORDER BY menus.nombremenu;");
+
+        $this->Resumen['costoingredientes'] = DB::select("SELECT elementos.name, unidads.name as unidad,
+            sum(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) as costototal,
+            sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal,
+            sum(menu_plans.cantidad * menuingredientes.cantidad) as cantidadelementos
+            FROM actors
+            left join plan_alimentario_actors on plan_alimentario_actors.actor_id = actors.id
+            left join menu_plans on plan_alimentario_actors.id = menu_plans.plan_id
+            left join menus on menu_plans.menu_id = menus.id
+            inner join menuingredientes on menus.id = menuingredientes.menu_id
+            inner join elementos on elementos.id = menuingredientes.elemento_id
+            inner join unidads on unidads.id = elementos.unidad_id
+            WHERE actors.empresa_id = 1
+            GROUP by elementos.name, unidads.name
             ORDER BY elementos.name;");
+
+/* SELECT plan_alimentario_actors.plan_id, menus.id as menuid, nombremenu, menu_plans.cantidad as cantidadmenues, tiempopreparacion, elementos.name, menuingredientes.elemento_id, menuingredientes.cantidad, elementos.existencia, elementos.precio_compra, elementos.stock_minimo, (menu_plans.cantidad*menuingredientes.cantidad*precio_compra) as costototal
+	 FROM actors
+     left join plan_alimentario_actors on plan_alimentario_actors.actor_id = actors.id
+     left join menu_plans on plan_alimentario_actors.id = menu_plans.plan_id
+     left join menus on menu_plans.menu_id = menus.id
+     inner join menuingredientes on menus.id = menuingredientes.menu_id
+     inner join elementos on elementos.id = menuingredientes.elemento_id
+     WHERE actors.empresa_id = 1;
+     */
 
         // $this->Resumen['tiempoutilizado'] = DB::select("SELECT menus.nombremenu, sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal FROM actors left join plan_alimentario_actors on plan_alimentario_actors.actor_id = actors.id left join menu_plans on plan_alimentario_actors.id = menu_plans.plan_id left join menus on menu_plans.menu_id = menus.id inner join menuingredientes on menus.id = menuingredientes.menu_id inner join elementos on elementos.id = menuingredientes.elemento_id WHERE actors.empresa_id = 1 GROUP by menus.nombremenu;");
 

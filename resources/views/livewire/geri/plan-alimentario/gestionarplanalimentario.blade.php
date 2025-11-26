@@ -7,6 +7,10 @@
         .fondo-impar {
             background-color: #cec096; /* Blanco u otro color deseado */
         }
+        .importado {
+            font-weight: bold !important;
+            color: #007bff !important; /* azul */
+        }
     </style>
 
     <div class="flex items-end justify-center mt-24 pt-4 px-4 pb-20 text-center sm:block sm:p-0"
@@ -21,7 +25,7 @@
                 <div class="bg-white px-4 pb-1 sm:p-6 sm:pb-1">
                     <div class="mb-4">
                         <div class="flex d-flex" style="justify-content: space-between;">
-                            <label class="block text-gray-700 text-md font-bold mb-2">{{ $plan_nombre }} 
+                            <label class="block text-gray-700 text-md font-bold mb-2">{{ $plan_nombre }}
                             </label>
                             <p style="cursor:pointer; width:10px;" class="ml-1 m-0 border px-2 rounded bg-red-100" title="Eliminar del Plan" wire:click="closeModalPopover()">X</p>
                         </div>
@@ -37,14 +41,24 @@
                     </div>
                 </div>
                 <div class="bg-white px-4  pb-1 sm:pb-1">
-
                     <div class="col-12 flex d-flex">
                         <div class="mb-4 col-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Menúes Disponibles</label>
                             <select class="form-control" wire:model="menu_elegido" wire:change="OcultarMensaje();">
                                 <option value="">-- Seleccione un menú --</option>
                                 @foreach($listadomenues as $menu)
-                                    <option value="{{ $menu->id }}">{{ $menu->nombremenu}}</option>
+                                    {{-- <option value="{{ $menu->id }}">{{ $menu->nombremenu}} @if(session('empresa_id')<>$menu->empresa_id) class="select2-results__option--highlighted" @endif> Público importado</i> --}}
+                                    {{-- </option> --}}
+                                    <option value="{{ $menu->id }}"
+                                        @if(session('empresa_id') <> $menu->empresa_id)
+                                            class="importado"
+                                        @endif
+                                    >
+                                        {{ $menu->nombremenu }}
+                                        @if(session('empresa_id') <> $menu->empresa_id)
+                                            ( Público importado )
+                                        @endif
+                                    </option>
                                 @endforeach
                             </select>
                             @error('menu_elegido') <span class="text-red-500">{{ $message }}</span>@enderror
@@ -67,7 +81,7 @@
                                 <option value="12">12</option>
                                 <option value="13">13</option>
                                 <option value="14">14</option>
-                                
+
                             </select>
                             @error('menu_elegido') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
@@ -77,7 +91,7 @@
                                 <option value="">-- Seleccione un momento --</option>
                                 @foreach($momentos as $momento)
                                     <option value="{{ $momento->id }}">{{ $momento->descripcion}}</option>
-                                @endforeach                            
+                                @endforeach
                             </select>
                             @error('menu_elegido') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>

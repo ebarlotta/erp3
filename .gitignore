@@ -22,3 +22,9 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+.env.local
+.env.*.local
+*.env
+config/mail.php
+config/services.php

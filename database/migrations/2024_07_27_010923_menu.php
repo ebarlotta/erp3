@@ -18,6 +18,7 @@ class Menu extends Migration
             $table->string('nombremenu',60);
             $table->boolean('menuactivo')->default(true);
             $table->boolean('publico')->default(true);
+            $table->integer('ppersonas')->default(1);
             $table->integer('tiempopreparacion')->default(0);
             $table->unsignedBigInteger('empresa_id');
             $table->timestamps();

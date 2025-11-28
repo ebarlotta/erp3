@@ -13,6 +13,8 @@ class Menu extends Model
         'nombremenu',
         'menuactivo',
         'tiempopreparacion',
+        'publico',
+        'ppersonas',
         'empresa_id',
     ];
 

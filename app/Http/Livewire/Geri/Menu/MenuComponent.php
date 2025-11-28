@@ -14,13 +14,16 @@ class MenuComponent extends Component
 {
     public $isModalOpen = false;
     public $isModalOpenGestionar = false;
+    public $isModalOpenHacerLocal = false;
     public $menu, $menu_id;
     public $menues, $nombremenu, $menuactivo=true, $tiempopreparacion;
-    public $ingredientesdelmenu, $ingredientes, $ingredientea, $cantidad, $ingrediente_gestionar_id, $unidad, $publico;
+    public $ingredientesdelmenu, $ingredientes, $ingredientea, $cantidad, $ingrediente_gestionar_id, $unidad, $publico, $ppersonas;
 
-    public $empresa_id, $search;
+    public $empresa_id, $search, $hacerlocal, $menu_id_temporal;
+    public $local;
 
     public function render() {
+        if(!isset($this->local)) { $this->local = 0; $this->CambiarLocal(0); }
         if(auth()->check() && auth()->user()->hasPermissionTo('menu.Ver')) {
             if(session('empresa_id')) {
                 $empresaId = session('empresa_id');
@@ -34,16 +37,28 @@ class MenuComponent extends Component
         }
     }
 
+    public function CambiarLocal($loc) {
+        $this->local = $loc;
+    }
+
     public function resumir() {
         $empresaId = session('empresa_id');
-        $this->datos = Menu::where('empresa_id', session('empresa_id'))
-        ->when($this->search, function ($query) {
-            $query->where('nombremenu', 'LIKE', '%' . $this->search . '%');
-        })
-        ->orWhere(function ($query) use ($empresaId) {
-            $query->where('publico', 1)
-            ->where('empresa_id', '<>', $empresaId); })
-        ->orderby('nombremenu')->paginate(10);
+        if($this->local==1) {
+            $this->datos = Menu::where('empresa_id', session('empresa_id'))
+            ->when($this->search, function ($query) {
+                $query->where('nombremenu', 'LIKE', '%' . $this->search . '%');
+            })
+            ->orderby('nombremenu')->paginate(10);
+        } else {
+            $this->datos = Menu::where('empresa_id', session('empresa_id'))
+            ->when($this->search, function ($query) {
+                $query->where('nombremenu', 'LIKE', '%' . $this->search . '%');
+            })
+            ->orWhere(function ($query) use ($empresaId) {
+                $query->where('publico', 1)
+                ->where('empresa_id', '<>', $empresaId); })
+            ->orderby('nombremenu')->paginate(10);
+        }
     }
 
     public function CargarIngredientesDelMenu() {
@@ -71,6 +86,7 @@ class MenuComponent extends Component
         $menu = Menu::where('id',$id)->get();
         $this->menu = $menu;
         $this->menu_id = $id;
+        session('empresa_id')<>$menu[0]['empresa_id'] ? $this->hacerlocal = 1 : $this->hacerlocal = 0;
 
         $this->CargarIngredientesDelMenu();
 
@@ -82,24 +98,56 @@ class MenuComponent extends Component
     public function openModalPopover() { $this->isModalOpen = true; }
     public function closeModalPopover() { $this->isModalOpen = false; }
     private function resetCreateForm(){ $this->menu_id = $this->tiempopreparacion = $this->nombremenu = ''; }
+    public function openModalPopoverHacerLocal() { $this->isModalOpenHacerLocal = true; }
+    public function closeModalPopoverHacerLocal() { $this->isModalOpenHacerLocal = false; }
 
     public function store()
     {
         $this->validate([
             'nombremenu' => 'required',
             'tiempopreparacion' => 'required',
+            'ppersonas' => 'required',
         ]);
-        Menu::updateOrCreate(['id' => $this->menu_id], [
+
+        $a = Menu::updateOrCreate(['id' => $this->menu_id], [
             'nombremenu' => $this->nombremenu,
             'tiempopreparacion' => $this->tiempopreparacion,
             'menuactivo' => $this->menuactivo,
-            'empresa_id' =>session('empresa_id'),
+            'ppersonas' => $this->ppersonas,
+            'empresa_id' => session('empresa_id'),
         ]);
+
+        $this->menu_id_temporal = $a->id;
 
         session()->flash('message', $this->menu_id ? 'Menu Actualizadao.' : 'Menu Creadao.');
 
         $this->closeModalPopover();
         $this->resetCreateForm();
+    }
+
+    public function HacerElMenuLocal($id_menu) {
+        //Crear el nuevo menú
+        $this->menu_id=null;
+        $this->nombremenu = $this->menu[0]['nombremenu'];
+        $this->tiempopreparacion = $this->menu[0]['tiempopreparacion'];
+        $this->menuactivo = $this->menu[0]['menuactivo'];
+        $this->ppersonas = $this->menu[0]['ppersonas'];
+        $this->store();
+
+        // Crea todos los nuevos elementos que utilizará el en nuevo menú
+        // Asociar todos los elementos del viejo menú con nuevos elementos del nuevo menú
+        $a = Menuingrediente::join('elementos','menuingredientes.elemento_id','=','elementos.id')->where('menuingredientes.menu_id','=', $this->menu[0]['id'])->get();
+
+        foreach($a as $menuingrediente) {
+            // Crear Nuevos elemento_ingredientes en base a los elemento_ingredientes del viejo menú
+            $ele = elemento::create(['name' => $menuingrediente->name,'existencia'=> $menuingrediente->existencia, 'precio_compra'=> $menuingrediente->precio_compra,'stock_minimo'=> $menuingrediente->stock_minimo,'vencimiento'=> $menuingrediente->vencimiento,'categoria_id'=> $menuingrediente->categoria_id,'unidad_id'=> $menuingrediente->unidad_id, 'empresa_id'=> session('empresa_id')]);
+
+            $ele_ingr = ElementoIngrediente::create(['estado_id'=>1,'elemento_id'=>$ele->id]);
+
+            // Crear los nuevos elementos en base a los elemento_ingredientes
+            Menuingrediente::create(['menu_id'=>$this->menu_id_temporal, 'elemento_id'=>$ele->id,'cantidad'=>$menuingrediente->cantidad, ]);
+        }
+
     }
 
     public function edit($id)
@@ -109,6 +157,8 @@ class MenuComponent extends Component
         $this->nombremenu = $menu->nombremenu;
         $this->tiempopreparacion = $menu->tiempopreparacion;
         $this->menuactivo = $menu->menuactivo;
+        $this->ppersonas = $menu->ppersonas;
+        $this->publico = $menu->publico;
 
         $this->openModalPopover();
     }

@@ -13,9 +13,9 @@
             <div style="justify-content: right;width: 55%;display: flex;flex-wrap: wrap-reverse;">
                 @if($cerrado=='Abierto')
                     {{-- Agregar nuevo --}}
-                    <input type="button" class="btn ml-4 hover:scale-105 h-5" value="+ Agregar" style="margin: 6px 30px;padding: 0px 20px;background-color: lightblue;box-shadow: 3px 3px 3px grey;" wire:click="PreguntarSiAgregar('{{ $momento }}')" title="Tooltip on top">
+                    <input type="button" class="btn ml-4 hover:scale-105 h-5" value="+ Agregar" style="margin: 6px 30px;padding: 0px 20px;background-color: lightblue;box-shadow: 3px 3px 3px grey;" wire:click="PreguntarSiAgregar('{{ $momento }}')" title="Cerrar el servicio seleccionado">
                     {{-- Cerrar Servicio --}}
-                    <input type="button" class="btn ml-4 hover:scale-105 h-5" value="Cerrar Servicio" style="margin: 6px 30px;padding: 0px 20px;background-color: beige;box-shadow: 3px 3px 3px grey;" wire:click="PreguntarSiCerrar('{{ $momento }}')" title="Tooltip on top">
+                    <input type="button" class="btn ml-4 hover:scale-105 h-5" value="Cerrar Servicio" style="margin: 6px 30px;padding: 0px 20px;background-color: beige;box-shadow: 3px 3px 3px grey;" wire:click="PreguntarSiCerrar('{{ $momento }}')" title="Cerrar el servicio seleccionado">
                 @endif
             </div>
             <div class="card-tools" style="margin-top: 18px; width: 5%;">

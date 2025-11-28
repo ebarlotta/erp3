@@ -73,12 +73,32 @@
                                         <td colspan=3 style="text-align: right;">
                                             <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto col-3 text-right">
                                                 <button wire:click="closeModalPopoverGestionar()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-yellow-300 text-base leading-6 font-bold text-gray-700 shadow-sm hover:bg-yellow-400 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                            Cerrar
-                                            </button>
+                                                    Cerrar
+                                                </button>
+                                                @if($hacerlocal==1)
+                                                    <button wire:click="openModalPopoverHacerLocal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 ml-2 px-4 py-2 bg-orange-300 text-base leading-6 font-bold text-gray-700 shadow-sm hover:bg-orange-400 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                                    Hacer Local
+                                                    </button>
+                                                @endif
                                             </span>
                                         </td>
                                     </tr>
                             </table>
+                            <x-dialog-modal class="max-w-lg w-full mt-10" wire:model="isModalOpenHacerLocal" style="margin-top: 100px">
+                                <x-slot name="title" style="margin-top: 100px; padding-top: 100px;">
+                                    Hacer Local el Menú
+                                </x-slot>
+                                <x-slot name="content">
+                                    <h2>Esta acción producirá que el menú {{ $menu[0]['nombremenu'] }} aparezca en local en la lista de menúes</h2>
+                                    <x-label>Está seguro de que quiere hacerlo local ?</x-label>
+                                        {{-- {{ date('d-m-Y', strtotime($fecha)) }}?</x-label> --}}
+                                </x-slot>
+                                <x-slot name="footer">
+                                    <x-button class="btn bg-yellow-300 btn-warning mr-2"
+                                        wire:click="HacerElMenuLocal({{ $menu[0]['id'] }})">Si, hacer local</x-button>
+                                    <x-button class="btn btn-info" wire:click="$set('isModalOpenHacerLocal',false)">Volver</x-button>
+                                </x-slot>
+                            </x-dialog-modal>
                         </div>
                     </div>
                 </div>

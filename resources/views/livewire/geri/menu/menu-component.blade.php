@@ -12,6 +12,7 @@
                             </div>
                         </div>
                     @endif
+
                     @if ($isModalOpenGestionar)
                         @include('livewire.geri.menu.gestionarmenu')
                     @else
@@ -30,6 +31,10 @@
                             <div>
                                 <input type="text" class="bg-blue-200 p-2 rounded" placeholder="Buscar" wire:model="search" wire:keyup="resumir($event.target.value)">
                             </div>
+                            <div>
+                                <input type="radio" name="opciones" value="1" wire:click="CambiarLocal(1)">Sólo Locales<br>
+                                <input type="radio" name="opciones" value="0" wire:click="CambiarLocal(0)">Todos
+                            </div>
                             <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
 
                         </div>
@@ -38,6 +43,7 @@
                                 <thead>
                                     <tr>
                                         <th class="table-primary align-middle text-center ml-2">Nombre del Menú</th>
+                                        <th class="table-primary align-middle text-center col-1">Para cuántas personas</th>
                                         <th class="table-primary align-middle text-center col-1">Activo</th>
                                         <th class="table-primary align-middle text-center col-1">Mantener Público</th>
                                         <th class="table-primary align-middle text-center col-1">Tiempo de Preparción</th>
@@ -52,6 +58,9 @@
                                                 @if(session('empresa_id')<>$menu->empresa_id)
                                                     <i class="nav-icon far fa-circle text-info" style="border: solid 1px aliceblue;padding: 3px;border-radius: 10px;background-color: antiquewhite;"> Público importado</i>
                                                 @endif
+                                            </td>
+                                            <td class="text-center col-1">
+                                                {{ $menu->ppersonas }}
                                             </td>
                                             <td class=" col-1">
                                                 <div class="flex justify-center">
@@ -85,7 +94,7 @@
                                                     @endif
                                                 </div>
                                             </td>
-                                            <td class="col-1">{{ $menu->tiempopreparacion }}</td>
+                                            <td class="text-center col-1">{{ $menu->tiempopreparacion }}</td>
                                             <td class="" style="width: 20%;">
                                                 <div style="display: flex">
                                                     <!-- Gestionar  -->

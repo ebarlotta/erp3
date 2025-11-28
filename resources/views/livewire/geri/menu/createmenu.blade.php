@@ -11,19 +11,25 @@
             <form>
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="mb-4">
-                        <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2">Nombre del Menú</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Nombre del Menú</label>
                         <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese Nombre" wire:model="nombremenu">
                         @error('nombremenu') <span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                     <div class="mb-4">
-                        <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2">Tiempo de Preparación (minutos)</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Tiempo de Preparación (minutos)</label>
                         <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese tiempo estimad de preparación" wire:model="tiempopreparacion">
                         @error('tiempopreparacion') <span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                     <div class="mb-4 flex">
-                        <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2">Activo</label>
-                        <input type="checkbox" class="shadow border rounded w-6 py-2 px-3 ml-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Menú Activo?" wire:model="menuactivo" checked>
-                        @error('menuactivo') <span class="text-red-500">{{ $message }}</span>@enderror
+                        <div class="col-10">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Menú para x personas</label>
+                            <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese para cuantas personas va a generar el menú" wire:model="ppersonas" value="1">
+                        </div>
+                        <div class="col-2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Activo</label>
+                            <input type="checkbox" class="shadow border rounded w-6 py-2 px-3 ml-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Menú Activo?" wire:model="menuactivo" checked>
+                            @error('menuactivo') <span class="text-red-500">{{ $message }}</span>@enderror
+                        </div>
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

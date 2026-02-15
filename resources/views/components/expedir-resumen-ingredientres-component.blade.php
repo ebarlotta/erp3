@@ -16,14 +16,18 @@
                         <tr>
                             <td style="font-size:18px; align:center"><b>Nombre del menú</b></td>
                             <td style="font-size:18px; align:center"><b>Tiempo de preparación necesario</b></td>
-                            <td style="font-size:18px; align:center"><b>Costos</b></td>
+                            <td style="font-size:18px; align:center"><b>Costo por menú</b></td>
+                            <td style="font-size:18px; align:center"><b>Costo total</b></td>
                         </tr>
 
                         @foreach ($this->Resumen['costomenues1'] as $costo)
                             <tr>
                                 <td>{{ $costo->nombremenu }}</td>
                                 <td>{{ $costo->tiempototal }}</td>
-                                <td style="justify-content: right; display: grid; padding-right: 20%;">$ {{ number_format($costo->costototal,2, ',', '.') }}</td>
+                                <td style="justify-content: right; ">$ {{ number_format($costo->costomenu,2, ',', '.') }}</td>
+                                <td style="justify-content: right; ">$ {{ number_format($costo->costototal,2, ',', '.') }}</td>
+                                {{-- <td style="justify-content: right; display: grid; padding-right: 20%;">$ {{ number_format($costo->costomenu,2, ',', '.') }}</td> --}}
+                                {{-- <td style="justify-content: right; display: grid; padding-right: 20%;">$sss {{ number_format($costo->costototal,2, ',', '.') }}</td> --}}
                             </tr>
                         @endforeach
                     </table>
@@ -38,7 +42,8 @@
                             <td style="font-size:18px; align:center"><b>Nombre ingrediente</b></td>
                             <td style="font-size:18px; align:center"><b>Cantidad de ingrediente Necesaria</b></td>
                             <td style="font-size:18px; align:center"><b>Tiempo de preparación necesario</b></td>
-                            <td style="font-size:18px; align:center"><b>Costos</b></td>
+                            <td style="font-size:18px; align:center"><b>Costos x Menú</b></td>
+                            <td style="font-size:18px; align:center"><b>Costo Total</b></td>
                         </tr>
 
                         @foreach ($this->Resumen['costomenues'] as $costo)
@@ -47,7 +52,8 @@
                                 <td>{{ $costo->name }}</td>
                                 <td>{{ $costo->cantidadelementos }} - {{ $costo->unidad }}</td>
                                 <td>{{ $costo->tiempototal }}</td>
-                                <td style="justify-content: right; display: grid; padding-right: 20%;">$ {{ number_format($costo->costototal,2, ',', '.') }}</td>
+                                <td style="justify-content: right;">$ {{ number_format($costo->costomenu,2, ',', '.') }}</td>
+                                <td style="justify-content: right;">$ {{ number_format($costo->costototal,2, ',', '.') }}</td>
                             </tr>
                         @endforeach
                     </table>

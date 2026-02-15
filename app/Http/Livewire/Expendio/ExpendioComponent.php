@@ -54,7 +54,8 @@ class ExpendioComponent extends Component
 
         $this->Resumen['costomenues1'] = DB::select("SELECT
             menus.nombremenu,
-            SUM(menu_plans.cantidad / menus.ppersonas * menuingredientes.cantidad * precio_compra) AS costototal,
+            SUM(menu_plans.cantidad / menus.ppersonas * menuingredientes.cantidad * precio_compra) AS costomenu,
+            SUM(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) AS costototal,
             SUM(menus.tiempopreparacion * menu_plans.cantidad) AS tiempototal
             FROM actors
             LEFT JOIN plan_alimentario_actors ON plan_alimentario_actors.actor_id = actors.id
@@ -68,7 +69,8 @@ class ExpendioComponent extends Component
             ORDER BY menus.nombremenu;");
 
         $this->Resumen['costomenues'] = DB::select("SELECT menus.nombremenu, elementos.name, unidads.name as unidad,
-            sum(menu_plans.cantidad / menus.ppersonas * menuingredientes.cantidad * precio_compra) as costototal,
+            sum(menu_plans.cantidad / menus.ppersonas * menuingredientes.cantidad * precio_compra) as costomenu,
+            SUM(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) AS costototal,
             sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal,
             sum(menu_plans.cantidad * menuingredientes.cantidad) as cantidadelementos
             FROM actors

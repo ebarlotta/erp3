@@ -239,12 +239,16 @@
 				<!-- Footer -->
                 <footer id="footer">
                     <div class="inner">
-                        <ul class="icons">
-                            <li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-                            <li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-                            <li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-                            <li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-                            <li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+                        <ul class="icons">							
+                            <li>
+								<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">   
+								<a href="https://x.com/ecosystems_ar" class="icon brands alt fab fa-x"><span class="label">X ( ex Twitter )</span></a>
+							</li>
+                            <li><a href="https://www.tiktok.com/@ecosystems.ar" class="icon brands alt fa-tiktok"><span class="label">TikTok</span></a></li>
+                            <li><a href="https://www.facebook.com/people/Ecosystemsar/61588336885375/?rdid=fZybKpOohoXnebB3&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F18J9AvGAcv%2F" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+                            <li><a href="https://www.instagram.com/ecosystems.mail" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+                            {{-- <li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li> --}}
+                            <li><a href="https://www.linkedin.com/company/ecosystems-ar/" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
                         </ul>
                         <ul class="copyright">
                             <li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>

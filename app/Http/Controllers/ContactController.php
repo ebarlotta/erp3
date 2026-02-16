@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\contacto;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
-
 class ContactController extends Controller {
     public function send(Request $request)
     {
@@ -22,24 +20,17 @@ class ContactController extends Controller {
             'message' => $request->message,
         ];
 
-        try {
-            Mail::send([], [], function ($message) use ($data) {
-                $message->to('tu-correo@dominio.com') // ← Cambia esto
-                        ->from($data['email'], $data['name'])
-                        ->subject('Nuevo mensaje de contacto: ' . $data['name'])
-                        ->text($data['message']);
-            });
+        $contacto = new contacto;
+        $contacto->name = $request->name;
+        $contacto->email = $request->email;
+        $contacto->message = $request->message;
+        $contacto->save();
 
-            return redirect()->route('contact.success');
-
-        } catch (\Exception $e) {
-            Log::error('Error al enviar correo: ' . $e->getMessage());
-            return back()->withErrors(['email' => 'Hubo un problema al enviar el mensaje. Inténtalo más tarde.']);
-        }
+        echo 'Correo enviado con éxito.';
+        return redirect()->route('contact.success');
     }
 
-    public function success()
-    {
-        return view('home.gracias'); // Renderizará resources/views/gracias.blade.php
+    public function success() {
+        return view('gracias'); // Renderizará resources/views/gracias.blade.php
     }
 }

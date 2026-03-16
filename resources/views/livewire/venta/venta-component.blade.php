@@ -4,14 +4,14 @@
 
 	<script>
         $('.content-wrapper').click(function (e) {
-            var get_class = $("#cust_sidebar").attr('class');       
+            var get_class = $("#cust_sidebar").attr('class');
             console.log(get_mini);
             if (get_class == "control-sidebar control-sidebar-dark control-sidebar-open") {
                 $('#cust_sidebar').removeClass('control-sidebar-open');
-            }               
+            }
         })
     </script>
-	
+
 	<div class="content-center block">
 		<div class="bg-white p-2 text-center rounded-lg shadow-lg w-full">
 			{{-- LOADING --}}
@@ -22,7 +22,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center" style="text-decoration: none;">
 							@if($tabActivo==1)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(1)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(1)">
 							@endif
 								<i class="fas fa-space-shuttle text-base mr-1"></i> Gestionar Comprobantes
@@ -31,7 +31,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
 							@if($tabActivo==2)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(2)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(2)">
 							@endif
 								<i class="fas fa-cog text-base mr-1"></i> Deuda a Clientes
@@ -40,7 +40,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
 							@if($tabActivo==3)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(3)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(3)">
 							@endif
 								<i class="fas fa-briefcase text-base mr-1"></i> Crédito de Clientes
@@ -49,7 +49,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
 							@if($tabActivo==4)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(4)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(4)">
 							@endif
 								<i class="fas fa-cog text-base mr-1"></i> Cuentas Corrientes
@@ -58,7 +58,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
 							@if($tabActivo==5)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(5)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(5)">
 							@endif
 								<i class="fas fa-briefcase text-base mr-1"></i> Libros de Iva
@@ -191,7 +191,7 @@
 																	<td style="border: solid 1px #777;">Precio</td>
 																	<td style="border: solid 1px #777;">Opc.</td>
 																</tr>
-																
+
 																@if($glistado_prod)
 																	@foreach ($glistado_prod as $detalle)
 																		<tr>
@@ -280,7 +280,8 @@
 											<label for="">Año</label><br>
 											<select class="ml-2 w-full rounded-md h-8 leading-none" wire:model="ganio" style="box-shadow: 2px 2px 5px #999;">
 												<option value=""></option>
-												<option value="2025">2025</option>
+												<option value="2026">2026</option>
+                                                <option value="2025">2025</option>
 												<option value="2024">2024</option>
 												<option value="2023">2023</option>
 												<option value="2022">2022</option>
@@ -340,7 +341,7 @@
 											</select>
 											@error('gcuenta') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
-									
+
 										<div class="mr-1 w-28">
 											<label for="">Bruto</label><br>
 											<input class="num ml-2 w-full text-right rounded-md h-8" type="text" id="Bruto" name="Bruto" wire:model="gbruto" wire:keyup="CalcularIva()" style="box-shadow: 2px 2px 5px #999;">
@@ -476,8 +477,9 @@
 												</select>
 											</div>
 											<div class="border px-2">Año<br>
-												<select class=" rounded-md h-7 py-0 leading-none" wire:model="gfanio" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">													
-													<option value="2025">2025</option>
+												<select class=" rounded-md h-7 py-0 leading-none" wire:model="gfanio" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+													<option value="2026">2026</option>
+                                                    <option value="2025">2025</option>
 													<option value="2024">2024</option>
 													<option value="2023">2023</option>
 													<option value="2022">2022</option>
@@ -513,7 +515,7 @@
 												<td class="border border-green-600">Cuenta</td>
 												<td class="border border-green-600">Año</td>
 												<td class="border border-green-600">Asc. C/Saldo</td>
-												
+
 
 											</tr>
 											<tr>
@@ -633,7 +635,8 @@
 											<label for="">Años a incluir </label><br>
 											<select class=" text-xs rounded-md h-7 py-0 leading-none" wire:model="danio">
 												<option value="0">Todos</option>
-												<option value="2025">2025</option>
+												<option value="2026">2026</option>
+                                                <option value="2025">2025</option>
 												<option value="2024">2024</option>
 												<option value="2023">2023</option>
 												<option value="2022">2022</option>
@@ -656,7 +659,7 @@
 											Desde <br>
 											<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="ddesde">
 										</div>
-									
+
 										<div class="block mb-4 justify-center">
 											Hasta <br>
 											<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="dhasta"><br>
@@ -677,10 +680,10 @@
 											{!! $DeudaClientesFiltro !!}
 										@endif
 									</div>
-								</div>								
+								</div>
 							</div>
 							{{-- Crédito de Clientes --}}
-							{{-- ======================= --}}							
+							{{-- ======================= --}}
 							<div class="{{ $tabActivo != 3 ? 'hidden' : '' }}">
 								<div class="block">
 									{{-- Areas / Años --}}
@@ -699,7 +702,8 @@
 												<label for="">Años a incluir</label><br>
 												<select class=" text-xs rounded-md h-7 py-0 leading-none" wire:model="canio">
 													<option value="0">Todos</option>
-													<option value="2025">2025</option>
+													<option value="2026">2026</option>
+                                                    <option value="2025">2025</option>
 													<option value="2024">2024</option>
 													<option value="2023">2023</option>
 													<option value="2022">2022</option>
@@ -723,7 +727,7 @@
 												Desde <br>
 												<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="cdesde"><br>
 											</div>
-										
+
 											<div class="block mb-4 justify-center">
 												Hasta <br>
 												<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="chasta"><br>
@@ -773,12 +777,12 @@
 											<option value="0">Detalle</option>
 										</select>
 									</div>
-								
+
 									<div class="block mb-4 justify-start">
 										Desde <br>
 										<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="ccdesde"><br>
 									</div>
-								
+
 									<div class="block mb-4 justify-center">
 										Hasta <br>
 										<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="cchasta"><br>
@@ -826,7 +830,8 @@
 													<label for="">Año</label><br>
 													<select class="mr-4 w-full text-xs rounded-md h-7 leading-none" wire:model="lanio" wire:change="MostrarLibros()">
 														<option value=""></option>
-														<option value="2025">2025</option>
+														<option value="2026">2026</option>
+                                                        <option value="2025">2025</option>
 														<option value="2024">2024</option>
 														<option value="2023">2023</option>
 														<option value="2022">2022</option>

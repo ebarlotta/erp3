@@ -5,7 +5,7 @@
 
         <div id="cuerpo" class=" pt-4" >
             <h1 class="titulo1">Estimador de Costos</h1>
-            
+
             @if($datos_tramite_validados || $datos_vehiculo_validados || $datos_solicitante_validados )
                 <div class="form-group tarjeta-gris">
                     <div>
@@ -40,7 +40,7 @@
 
             <div class="form-group tarjeta-gris">
                 <p class="text-muted mt-3">Calculá los costos aproximados para la <b>inscripción</b> de un vehículo 0 KM o la <b>transferencia</b> de un vehículo usado.</p>
-                <select  id="eleccion" class="form-control col-12 mb-3" style="font-size:1.2rem; height: 3.2rem;" wire:model="tramite_seleccionado" wire:change="ElegirTramite();" > 
+                <select  id="eleccion" class="form-control col-12 mb-3" style="font-size:1.2rem; height: 3.2rem;" wire:model="tramite_seleccionado" wire:change="ElegirTramite();" >
                 {{-- wire:change="ElegirTramite()" --}}
                     <option value="0">--- Seleccione alguna opción ---</option>
                     @foreach($tramites as $tramite)
@@ -82,7 +82,8 @@
                                 <option value="2023">2023</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
-                                
+                                <option value="2026">2026</option>
+
                                 @foreach($tramites as $tramite)
                                     <option value="{{ $tramite->id }}">{{ $tramite->nombretramite }}</option>
                                 @endforeach
@@ -158,10 +159,10 @@
                                     @endif
                                 </tbody>
                             </table>
-                        </div>  
+                        </div>
                     @endif
-                </div>  
-            @endif  
+                </div>
+            @endif
         </div>
     </main>
 </div>

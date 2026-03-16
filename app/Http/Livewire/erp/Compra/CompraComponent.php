@@ -28,7 +28,7 @@ class CompraComponent extends Component
     public $detalle;
     public $productos;
     public $empresa_id; public $tabActivo=1; public $comprobante_id;
-    
+
     //Comprobantes
     public $iva_value=0;
     public $isModalOpen = false;
@@ -39,11 +39,11 @@ class CompraComponent extends Component
     public $gselect_productos, $gprecio_prod, $gcantidad_prod, $glistado_prod;
     //Variables del filtro
     public $gfmes, $gfproveedor, $gfparticipa, $gfiva, $gfdetalle, $gfarea, $gfcuenta, $gfanio, $fgascendente=true, $gfsaldo; //Comprobantes
-    
-    
+
+
     // Deuda Proveedores
     public $darea, $ddesde=0, $dhasta=0, $danio;
-    public $DeudaProveedoresFiltro, $MostrarDeudaProveedores; 
+    public $DeudaProveedoresFiltro, $MostrarDeudaProveedores;
     public $deudaPDF;
 
     // Crédito Proveedores
@@ -62,44 +62,44 @@ class CompraComponent extends Component
 
     public function render() {
 
-                
+
         if ( !Auth::check() ) {  return view('SinPermiso'); }
 
         $anio = date("Y");
         if(is_null($this->gfanio)) { $this->gfanio = $anio; }; //La primara vez que inicia revisa si es nulo y en ese caso cambia al año actual, sino no lo toca más
 
-        if ($this->ddesde==null || $this->dhasta==null || $this->cdesde==null || $this->chasta==null || $this->ccdesde==null || $this->cchasta==null ) { 
-            
+        if ($this->ddesde==null || $this->dhasta==null || $this->cdesde==null || $this->chasta==null || $this->ccdesde==null || $this->cchasta==null ) {
+
             $anio = date("Y");
             $this->ddesde = date($anio.'-01-01');
             $this->dhasta = date($anio.'-12-31');
             $this->cdesde = date($anio.'-01-01');
             $this->chasta = date($anio.'-12-31');
             $this->ccdesde = date($anio.'-01-01');
-            $this->cchasta = date($anio.'-12-31');      
+            $this->cchasta = date($anio.'-12-31');
         }
 
-        if (!is_null(session('empresa_id'))) { $this->empresa_id = session('empresa_id'); } 
-        else { 
+        if (!is_null(session('empresa_id'))) { $this->empresa_id = session('empresa_id'); }
+        else {
             if(Auth::user()) {
                 $userid = auth()->user()->id;
                 $empresas= EmpresaUsuario::where('user_id',$userid)->get();
                 return view('livewire.empresa.empresa-component')->with('empresas', $empresas);
             } else {
-                return view('empresas'); 
+                return view('empresas');
 
                 // return redirect('https://stackoverflow.com/');
                 // return Redirect::to('/')->with(['type' => 'error','message' => 'Your message']);
                 // return redirect()->intended('http://heera.it');
 
                 // return redirect('/')->with(Auth::logout());
-                // $this->redirect('/dashboard'); 
+                // $this->redirect('/dashboard');
 
-                // // $this->redirect(Auth::login($user)); 
-                // $this->redirect('/'); 
+                // // $this->redirect(Auth::login($user));
+                // $this->redirect('/');
                 // return redirect(route('areas'));
-                // return view('dashboard'); 
-                // return redirect()->route('areas'); 
+                // return view('dashboard');
+                // return redirect()->route('areas');
                 // return redirect()->intended('areas');
             }
         }
@@ -109,14 +109,14 @@ class CompraComponent extends Component
         $this->ccProveedores = $this->proveedores;
         $this->ivas = Iva::where('id','>',1)->get();
         $this->productos = Producto::where('empresa_id', $this->empresa_id)->orderBy('name','asc')->get();
-        
-        return view('livewire.compra.compra-component')->extends('layouts.app2');
+
+        // return view('livewire.compra.compra-component')->extends('layouts.app2');
         // return view('livewire.erp.compra.compra-component')->extends('layouts.app2');
-        // return view('livewire.compra.compra-component')->extends('layouts.adminlte');
+        return view('livewire.compra.compra-component')->extends('layouts.adminlte');
     }
-    
+
     // public function render2() {
-    //     return view('livewire.compra.comprasimple');    
+    //     return view('livewire.compra.comprasimple');
     // }
 
     public function openModalDelete() { $this->ModalDelete = true;  }
@@ -133,7 +133,7 @@ class CompraComponent extends Component
 
     public function subfiltro() {  $this->ccAgrupadoComp=!$this->ccAgrupadoComp; $this->ccAgrupadoDeta=!$this->ccAgrupadoDeta; }
     public function ListarCuentasCorrientes() {
-        
+
         $saldoFinal = 0;
         if($this->ccProveedor==0)  { $proveedor = ' comprobantes.proveedor_id >0 and '; }
         else { $proveedor = ' comprobantes.proveedor_id = '.$this->ccProveedor.' and '; }
@@ -149,13 +149,13 @@ class CompraComponent extends Component
 
             // Commienza a iterar la cantidad de registros a nivel general que ha encontrado
             for($i=0; $CantGeneral>$i ; $i++) {
-            
+
                 //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
                 $subParciales = DB::select('SELECT comprobantes.id, comprobantes.detalle, comprobantes.fecha, comprobantes.comprobante, comprobantes.NetoComp, comprobantes.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as proveedor_name from comprobantes inner join areas as a on comprobantes.area_id=a.id inner join cuentas as c on comprobantes.cuenta_id=c.id inner join proveedors as p on comprobantes.proveedor_id=p.id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id').' and comprobante="'.$subtotalesGenerales[$i]->comprobante.'" ORDER by comprobantes.fecha;');
-  
+
                 // Cantidad de registros encontrados a nivel detallado
-                $CantParcial = count($subParciales); 
- 
+                $CantParcial = count($subParciales);
+
                 // Cambia el recordset por un array
                 $Parcial = $subParciales[0];
                 // $Parcial = $subParciales[$i];
@@ -177,7 +177,7 @@ class CompraComponent extends Component
                     // Registra el saldoFinal
                     $saldoFinal = $saldoFinal - $sub->MontoPagadoComp;
 
-                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->NetoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>"; 
+                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->NetoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
                 }
             }
         } else {
@@ -197,7 +197,7 @@ class CompraComponent extends Component
                 $subParciales = DB::select('SELECT comprobantes.id, comprobantes.detalle, comprobantes.fecha, comprobantes.comprobante, comprobantes.NetoComp, comprobantes.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as proveedor_name from comprobantes inner join areas as a on comprobantes.area_id=a.id inner join cuentas as c on comprobantes.cuenta_id=c.id inner join proveedors as p on comprobantes.proveedor_id=p.id WHERE '.$proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id').' and detalle="'.$subtotalesGenerales[$i]->detalle.'" ORDER by comprobantes.fecha;');
 
                 // Cantidad de registros encontrados a nivel detallado
-                $CantParcial = count($subParciales); 
+                $CantParcial = count($subParciales);
 
                 // Cambia el recordset por un array
                 $Parcial = $subParciales[0];
@@ -220,7 +220,7 @@ class CompraComponent extends Component
                     // Registra el saldoFinal
                     $saldoFinal = $saldoFinal - $sub->MontoPagadoComp;
 
-                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\" style=\" height: 10px;\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">0.00</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>"; 
+                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\" style=\" height: 10px;\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">0.00</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
                 }
             }
         }
@@ -233,7 +233,7 @@ class CompraComponent extends Component
     public function ActualizarProveedores() {
         $this->proveedores = Proveedor::where('empresa_id', $this->empresa_id)->ORDERBY('name')->get();
     }
-    
+
     public function RellenarCamposVacios() {
         if(is_null($this->gfecha)) $this->gfecha=now();
         if(is_null($this->gbruto)) $this->gbruto=0.00;
@@ -246,11 +246,11 @@ class CompraComponent extends Component
         if(is_null($this->gbruto)) $this->gbruto=0.00;
         if(is_null($this->gmontopagado)) $this->gmontopagado=0.00;
         if(is_null($this->gcantidad)) $this->gcantidad=0.00;
-        if(is_null($this->giva2)) $this->giva2=0.00;        
+        if(is_null($this->giva2)) $this->giva2=0.00;
     }
 
     public function store() {
-        $this->RellenarCamposVacios();            
+        $this->RellenarCamposVacios();
 
         $this->validate([
             'gfecha'            => 'required|date',
@@ -263,7 +263,7 @@ class CompraComponent extends Component
             'gperib'            => 'numeric',
             'gretgan'           => 'numeric',
             'gneto'             => 'numeric',
-            'gmontopagado'      => 'numeric', 
+            'gmontopagado'      => 'numeric',
             'gcantidad'         => 'numeric',
             'ganio'             => 'required|integer',
             'gmes'              => 'required',
@@ -292,7 +292,7 @@ class CompraComponent extends Component
                 'RetencionIB'       => $this->gperib,
                 'RetencionGan'      => $this->gretgan,
                 'NetoComp'          => $this->gneto,
-                'MontoPagadoComp'   => $this->gmontopagado, 
+                'MontoPagadoComp'   => $this->gmontopagado,
                 'CantidadLitroComp' => $this->gcantidad,
                 'Anio'              => $this->ganio,
                 'PasadoEnMes'       => $this->gmes,
@@ -305,7 +305,7 @@ class CompraComponent extends Component
             ]);
             //updateOrCreate
             $this->gfiltro();
-            session()->flash('message', 'Comprobante Creado.');    
+            session()->flash('message', 'Comprobante Creado.');
         } else {
             session()->flash('message3', 'No se puede agragar un comprobante a un libro ya Cerrado.');
             }
@@ -316,9 +316,9 @@ class CompraComponent extends Component
     public function edit() {
         $this->RellenarCamposVacios();
         $comp = Comprobante::find($this->comprobante_id);
-        if ($comp->Cerrado) { 
+        if ($comp->Cerrado) {
             $this->closeModalModify();
-            session()->flash('message3', 'No se puede modificar un comprobante que se encuentra en un libro cerrado.'); 
+            session()->flash('message3', 'No se puede modificar un comprobante que se encuentra en un libro cerrado.');
         } else {
             $this->validate([
                 'gfecha'            => 'required|date',
@@ -331,7 +331,7 @@ class CompraComponent extends Component
                 'gperib'            => 'numeric',
                 'gretgan'           => 'numeric',
                 'gneto'             => 'numeric',
-                'gmontopagado'      => 'numeric', 
+                'gmontopagado'      => 'numeric',
                 'gcantidad'         => 'numeric',
                 'ganio'             => 'required|integer',
                 'gmes'              => 'required',
@@ -353,7 +353,7 @@ class CompraComponent extends Component
                 'RetencionIB'       => $this->gperib,
                 'RetencionGan'      => $this->gretgan,
                 'NetoComp'          => $this->gneto,
-                'MontoPagadoComp'   => $this->gmontopagado, 
+                'MontoPagadoComp'   => $this->gmontopagado,
                 'CantidadLitroComp' => $this->gcantidad,
                 'Anio'              => $this->ganio,
                 'PasadoEnMes'       => $this->gmes,
@@ -374,8 +374,8 @@ class CompraComponent extends Component
     public function delete() {
         //$this->comprobante_id = $id;
         $a = Comprobante::find($this->comprobante_id);
-        if($a->Cerrado==0) { 
-            $a->delete(); 
+        if($a->Cerrado==0) {
+            $a->delete();
             $this->comprobante_id=null;
             $this->gfiltro();
             session()->flash('message3', 'Comprobante Eliminado.');
@@ -390,32 +390,32 @@ class CompraComponent extends Component
     }
 
     public function gfiltro(){
-        
+
         $sql = $this->ProcesaSQLFiltro('comprobantes'); // Procesa los campos a mostrar
         // if ($this->fgascendente) { $sql=$sql . " ASC"; } else { $sql=$sql . " DESC"; }
         // $registros = DB::select(DB::raw($sql));       // Busca el recordset
         $registros = DB::select($sql);       // Busca el recordset
         $sqlTemp = $sql;
-        if($this->fgascendente) { 
-            $sqlTemp = substr($sqlTemp,8,-27); 
+        if($this->fgascendente) {
+            $sqlTemp = substr($sqlTemp,8,-27);
             $sqlDetalle = 'SELECT DISTINCT detalle' . $sqlTemp . 'ORDER BY detalle';
-        } else { 
+        } else {
             $sqlTemp = substr($sql,8,-38);
             $sqlDetalle = 'SELECT DISTINCT detalle' . $sqlTemp  . ' ORDER BY detalle';
         }
 
         // Extrae los distintos Detalles si es que los hay
-        $this->detalles = DB::select($sqlDetalle);        
+        $this->detalles = DB::select($sqlDetalle);
         //Dibuja el combo Detalles
         $this->combodetalle = '';
         foreach ($this->detalles as $detalle) {
-            $this->combodetalle = $this->combodetalle . 
+            $this->combodetalle = $this->combodetalle .
             '<option value="' . $detalle->detalle .'">'. $detalle->detalle . '</option>';
         }
-			
+
         //Dibuja el filtro
         $Saldo=0;
-        
+
         // <div class=\"table-responsive-sm\">word-wrap: anywhere;
         $this->filtro="
                 <table class=\"table table-striped small\" style=\"font-size:12px; padding: 0.2rem .2rem;\">
@@ -442,7 +442,7 @@ class CompraComponent extends Component
                     <th class=\"col d-none d-sm-table-cell\" scope=\"col\">Cuenta</th>
                   </tr>
                 </thead>";
-                
+
             $Cantidad = 0; $MontoPagado = 0; $Neto = 0; $RetGan = 0; $RetIB = 0; $PerIva = 0; $Exento = 0 ;$ImpInterno = 0; $Bruto = 0; $MontoIvaT =0; $NetoT = 0;
         foreach($registros as $registro) {
             $Fecha = substr($registro->fecha,8,2) ."-". substr($registro->fecha,5,2) ."-". substr($registro->fecha,0,4);
@@ -510,10 +510,10 @@ class CompraComponent extends Component
         <td class=\"px-1 d-none d-sm-table-cell\"></td>
         <td class=\"px-1 d-none d-sm-table-cell\"></td>
         <td class=\"px-1 d-none d-sm-table-cell\"></td>
-        </tr> 
+        </tr>
         </tbody>
-        </table>    
-        </div>";        
+        </table>
+        </div>";
     }
 
     public function ConvierteMesEnTexto($id) {
@@ -550,7 +550,7 @@ class CompraComponent extends Component
                 if ($this->gfparticipa) $sql=$sql ? $sql=$sql." and ParticIva='" . $this->gfparticipa . "'" : " ParticIva='" . $this->gfparticipa . "'";
                 if ($this->gfiva) $sql=$sql ? $sql=$sql." and iva_id=" . $this->gfiva : " iva_id=" . $this->gfiva;
                 if ($this->gfdetalle<>null) {
-                    
+
                     if ($this->gfdetalle<>"Todos") $sql=$sql . " and detalle='" . $this->gfdetalle. "'";
                 }
                 if ($this->gfarea) $sql=$sql ? $sql=$sql." and area_id=" . $this->gfarea : " area_id=" . $this->gfarea;
@@ -563,9 +563,9 @@ class CompraComponent extends Component
                 break;
             }
             case "deuda" : {
-                
+
                 //"SELECT proveedors.name as Name, Saldos.Saldo as Saldo FROM proveedors, (SELECT sum(NetoComp-MontoPagadoComp) as Saldo, comprobantes.proveedor_id as idproveedor FROM comprobantes WHERE fecha>='2021-09-01' and fecha<='2021-09-30' and empresa_id=1     GROUP BY comprobantes.proveedor_id ) as Saldos WHERE proveedors.id = Saldos.idproveedor and Saldos.Saldo>1
-                
+
                 if ($this->darea==0) { $darea=''; } else { $darea=' and comprobantes.area_id='.$this->darea; }  //Comprueba si se ha seleccionado un area en especìfico
                 if ($this->danio==0) { $danio=''; } else { $danio=' and comprobantes.Anio='.$this->danio; }  //Comprueba si se ha seleccionado un año en especìfico
                 if($this->darea<>0) {
@@ -597,7 +597,7 @@ class CompraComponent extends Component
             };
             case "credito" : {
                 //"SELECT proveedors.name as Name, Saldos.Saldo as Saldo FROM proveedors, (SELECT sum(NetoComp-MontoPagadoComp) as Saldo, comprobantes.proveedor_id as idproveedor FROM comprobantes WHERE fecha>='2021-09-01' and fecha<='2021-09-30' and empresa_id=1     GROUP BY comprobantes.proveedor_id ) as Saldos WHERE proveedors.id = Saldos.idproveedor and Saldos.Saldo<1
-                
+
                 if ($this->carea==0) { $carea=''; } else { $carea=' and comprobantes.area_id='.$this->carea; }  //Comprueba si se ha seleccionado un area en especìfico
                 if ($this->canio==0) { $canio=''; } else { $canio=' and comprobantes.Anio='.$this->canio; }  //Comprueba si se ha seleccionado un año en especìfico
 
@@ -659,7 +659,7 @@ class CompraComponent extends Component
         $this->gcuenta=$registro->cuenta_id;
         $this->giva=$registro->iva_id;
         $this->gproveedor=$registro->proveedor_id;
-        
+
         $this->validate([
             'gfecha'            => 'required|date',
             'gbruto'            => 'numeric',
@@ -671,7 +671,7 @@ class CompraComponent extends Component
             'gperib'            => 'numeric',
             'gretgan'           => 'numeric',
             'gneto'             => 'numeric',
-            'gmontopagado'      => 'numeric', 
+            'gmontopagado'      => 'numeric',
             'gcantidad'         => 'numeric',
             'ganio'             => 'required|integer',
             'gmes'              => 'required',
@@ -775,7 +775,7 @@ class CompraComponent extends Component
                 $Saldo = $Saldo + $registro->Saldo * -1;
             }
         }
-        
+
         $this->CreditoProveedoresFiltro = $this->CreditoProveedoresFiltro .
             "<tr class=\"bg-green-500\">
                 <td class=\"colspan-2 bg-gray-400\">Total Crédito</td>
@@ -829,7 +829,7 @@ class CompraComponent extends Component
     }
 
     public function agregar_detalle() {
-        
+
         $this->validate([
             'comprobante_id'    => 'required',
             'gselect_productos' => 'required|numeric',
@@ -854,7 +854,7 @@ class CompraComponent extends Component
     }
 
     public function eliminar_detalle($id_detalle) {
-        
+
         //Encuentra el detalle a eliminar pasa buscar la cantidad que tiene que eliminar
         $eliminar = Compras_Productos::find($id_detalle);
         $cant_a_eliminar = $eliminar->cantidad*-1;
@@ -867,7 +867,7 @@ class CompraComponent extends Component
         $detalle->user_id = $userid=auth()->user()->id;
 
         $detalle->save();
-        
+
         // Incrementa la cantidad de stock del producto
         $producto = Producto::find($eliminar->productos_id);
         $producto->existencia = $producto->existencia + $cant_a_eliminar;
@@ -875,9 +875,9 @@ class CompraComponent extends Component
 
         $this->listado_productos();
     }
-    
+
     public function listado_productos() {
-        
+
         $this->glistado_prod = Compras_Productos::join('productos','compras__productos.productos_id','productos.id')
         ->where('comprobantes_id',$this->comprobante_id)
         ->get(['compras__productos.*','productos.name']);
@@ -885,16 +885,16 @@ class CompraComponent extends Component
     }
 
 
-    
+
     public function GenerarCertificado() {
         // CUIT al cual le queremos generar el certificado
-        $tax_id = 20255083571; 
+        $tax_id = 20255083571;
 
         // Usuario para ingresar a AFIP.
         // Para la mayoria es el mismo CUIT, pero al administrar
         // una sociedad el CUIT con el que se ingresa es el del administrador
         // de la sociedad.
-        $username = '20255083571'; 
+        $username = '20255083571';
 
         // Contraseña para ingresar a AFIP.
         $password = 'sOCIEDAD2023';
@@ -921,13 +921,13 @@ class CompraComponent extends Component
 
     public function AutorizarCertificado() {
         // CUIT al cual le queremos generar la autorización
-        $tax_id = 20255083571; 
+        $tax_id = 20255083571;
 
         // Usuario para ingresar a AFIP.
         // Para la mayoria es el mismo CUIT, pero al administrar
         // una sociedad el CUIT con el que se ingresa es el del administrador
         // de la sociedad.
-        $username = '20255083571'; 
+        $username = '20255083571';
 
         // Contraseña para ingresar a AFIP.
         $password = 'sOCIEDAD2023';
@@ -1026,11 +1026,11 @@ class CompraComponent extends Component
         $Conceptos = $afip->ElectronicBilling->GetConceptTypes();
         $Concepto = $Conceptos[2]->Id;  // Concepto del Comprobante: (1)Productos, (2)Servicios, (3)Productos y Servicios
         // El Concepto del arrary en la posición 2, tiene en su ID el valor 3 que es Productos y Servicios
-        // dd($Conceptos); 
+        // dd($Conceptos);
 
         $Tributos = $afip->ElectronicBilling->GetTaxTypes();
         $Tributo = $Tributos[4]->Id; // El Concepto del arrary en la posición 4, tiene en su ID el valor 99 que es Otros Tributos
-        $TributoDesc = $Tributos[4]->Desc; 
+        $TributoDesc = $Tributos[4]->Desc;
         // dd($Tributo);
 
 
@@ -1041,7 +1041,7 @@ class CompraComponent extends Component
         $data = array(
             'CantReg' 		=> 1, // Cantidad de comprobantes a registrar
             'PtoVta' 		=> $PtoVta, // Punto de venta
-            'CbteTipo' 		=> $CbteTipo, // Tipo de comprobante (ver tipos disponibles) 
+            'CbteTipo' 		=> $CbteTipo, // Tipo de comprobante (ver tipos disponibles)
             'Concepto' 		=> $Concepto, // Concepto del Comprobante: (1)Productos, (2)Servicios, (3)Productos y Servicios
             'DocTipo' 		=> $DocTipo, // Tipo de documento del comprador (ver tipos disponibles)
             'DocNro' 		=> 20111111112, // Numero de documento del comprador
@@ -1057,11 +1057,11 @@ class CompraComponent extends Component
             'FchServDesde' 	=> intval(date('Ymd')), // (Opcional) Fecha de inicio del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
             'FchServHasta' 	=> intval(date('Ymd')), // (Opcional) Fecha de fin del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
             'FchVtoPago' 	=> intval(date('Ymd')), // (Opcional) Fecha de vencimiento del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
-            'MonId' 		=> 'PES', //Tipo de moneda usada en el comprobante (ver tipos disponibles)('PES' para pesos argentinos) 
-            'MonCotiz' 	    => 1, 
+            'MonId' 		=> 'PES', //Tipo de moneda usada en el comprobante (ver tipos disponibles)('PES' para pesos argentinos)
+            'MonCotiz' 	    => 1,
             'Tributos' 		=> array( // (Opcional) Tributos asociados al comprobante
                 array(
-                    'Id' 		=>  $Tributo, // Id del tipo de tributo (ver tipos disponibles) 
+                    'Id' 		=>  $Tributo, // Id del tipo de tributo (ver tipos disponibles)
                     'Desc' 		=>  $TributoDesc, //'Ingresos Brutos', // (Opcional) Descripcion
                     'BaseImp' 	=> 150, // Base imponible para el tributo
                     'Alic' 		=> 5.2, // Alícuota
@@ -1070,9 +1070,9 @@ class CompraComponent extends Component
             ),
 	        'Iva' 			=> array( // (Opcional) Alícuotas asociadas al comprobante
 		        array(
-			        'Id' 		=> $TipoIva, // Id del tipo de IVA (ver tipos disponibles) 
+			        'Id' 		=> $TipoIva, // Id del tipo de IVA (ver tipos disponibles)
         			'BaseImp' 	=> 150, // Base imponible
-		        	'Importe' 	=> 31.5 // Importe 
+		        	'Importe' 	=> 31.5 // Importe
                 ),
             ),
         );
@@ -1090,5 +1090,5 @@ class CompraComponent extends Component
     }
 
 
-    
+
 }

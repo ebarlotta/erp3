@@ -5,7 +5,7 @@
 	<x-tituloslim>Comprobantes de Compras - <?php echo session('nombre_empresa').'<br>'; ?></x-tituloslim>
 	<div class="content-center block">
 		<div class="bg-white p-2 text-center rounded-lg shadow-lg w-full">
-			
+
 			<!-- Tabs  -->
 			<div class="flex flex-wrap" id="tabs-id">
 				<div class="w-full">
@@ -13,7 +13,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center" style="text-decoration: none;">
 							@if($tabActivo==1)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(1)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(1)">
 							@endif
 								<i class="fas fa-space-shuttle text-base mr-1"></i> Gestionar Comprobantes
@@ -23,7 +23,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
 							@if($tabActivo==2)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(2)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(2)">
 							@endif
 								<i class="fas fa-cog text-base mr-1"></i> Deuda a Proveedores
@@ -32,7 +32,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
 							@if($tabActivo==3)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(3)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(3)">
 							@endif
 								<i class="fas fa-briefcase text-base mr-1"></i> Crédito de Proveedores
@@ -41,7 +41,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
 							@if($tabActivo==4)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(4)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(4)">
 							@endif
 								<i class="fas fa-cog text-base mr-1"></i> Cuentas Corrientes
@@ -50,7 +50,7 @@
 						<li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
 							@if($tabActivo==5)
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-white bg-pink-600" wire:click="CambiarTab(5)">
-							@else 
+							@else
 								<a class="text-xs font-bold uppercase px-5 py-1 shadow-lg rounded block leading-normal text-pink-600 bg-white" wire:click="CambiarTab(5)">
 							@endif
 								<i class="fas fa-briefcase text-base mr-1"></i> Libros de Iva
@@ -67,7 +67,7 @@
 											@can('compras.Agregar')
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="store">Agregar</button>
 											@endcan
-											@can('compras.Modificar')	
+											@can('compras.Modificar')
 												<button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalModify()">Modificar</button>
 											@endcan
 											@can('compras.Eliminar')
@@ -184,7 +184,7 @@
 																	<td style="border: solid 1px #777;">Precio</td>
 																	<td style="border: solid 1px #777;">Opc.</td>
 																</tr>
-																
+
 																@if($glistado_prod)
 																	@foreach ($glistado_prod as $detallep)
 																		<tr>
@@ -315,7 +315,7 @@
 											</select>
 											@error('gcuenta') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
-									
+
 										<div class="mr-1 w-28 grid text-left">
 											<label style="font-size: 80%;">Bruto</label>
 											<input class="num w-full text-right rounded-md h-8" type="text" id="Bruto" name="Bruto" wire:model="gbruto" wire:keyup="CalcularIva()" style="box-shadow: 2px 2px 5px #999;">
@@ -536,7 +536,7 @@
 											Desde <br>
 											<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="ddesde">
 										</div>
-									
+
 										<div class="block mb-4 justify-center">
 											Hasta <br>
 											<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="dhasta"><br>
@@ -557,10 +557,10 @@
 											{!! $DeudaProveedoresFiltro !!}
 										@endif
 									</div>
-								</div>								
+								</div>
 							</div>
 							{{-- Crédito de Proveedores --}}
-							{{-- ======================= --}}							
+							{{-- ======================= --}}
 							<div class="{{ $tabActivo != 3 ? 'hidden' : '' }}">
 								<div class="block">
 									{{-- Areas / Años --}}
@@ -612,7 +612,7 @@
 												Desde <br>
 												<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="cdesde"><br>
 											</div>
-										
+
 											<div class="block mb-4 justify-center">
 												Hasta <br>
 												<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="chasta"><br>
@@ -667,7 +667,7 @@
 										Desde <br>
 										<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="ccdesde"><br>
 									</div>
-								
+
 									<div class="block mb-4 justify-center">
 										Hasta <br>
 										<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="cchasta"><br>
@@ -685,7 +685,7 @@
 										*
 									</div>
 								</div>
-								<div class="flex justify-center">									
+								<div class="flex justify-center">
 									<div class="block mb-4 justify-center">
 										<input class="ml-2 text-xs rounded-md h-7 btn btn-info px-8 py-1 mx-2 mt-3" type="button" wire:click="ListarCuentasCorrientes" value="Calcular"><br>
 									</div>

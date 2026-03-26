@@ -212,6 +212,11 @@
 										</div>
 									@endif
 
+                                    <style>
+                                        label {
+                                            margin-bottom: 0;
+                                        }
+                                    </style>
 									<!-- Gestionar Comprobantes -->
 									<div class="flex flex-wrap mt-3 justify-around" style="font-size: 14px; padding-bottom: 10px;">
 										<div class="w-34 mr-1 grid text-left">

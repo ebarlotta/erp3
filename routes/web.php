@@ -124,21 +124,27 @@ Route::get('/', function () {
     //return view('welcome');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('home');
-    })->name('dashboard');
-});
-
 Route::get('/portfolio', function () { return view('portfolio'); });
 Route::get('/nosotros', function () { return view('nosotros'); });
 Route::view('/contacto', 'contacto')->name('contacto');
 
-Route::get('areas',AreaComponent::class)->name('areas');
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function ()
+    {
+
+        Route::get('/dashboard', function () { return view('home'); })->name('dashboard');
+        Route::get('areas',AreaComponent::class)->name('areas');
+
+
+
+
+
+
+
 Route::get('categorias',CategoriasComponent::class)->name('categorias');
 Route::get('categoriaprofesional',CategoriaprofesionalComponent::class)->name('categoriaprofesional');
 Route::get('categoriaproducto',CategoriaproductoComponent::class)->name('categoriaproducto');
@@ -285,6 +291,11 @@ Route::get('/imprentapedidos', PedidoComponent::class)->name('pedidos');
 // Route::get('/registro', function () {
 //     return view('registro.index');
 // })->name('registro');
+
+
+  }
+);
+
 
 Route::view('/registro', 'registro.principal')->name('registro');
 Route::view('/registro/transferenciadigital/first', 'registro.transferenciadigital.first')->name('transferenciadigital.first');

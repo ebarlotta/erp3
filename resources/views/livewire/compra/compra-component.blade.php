@@ -65,16 +65,16 @@
 									<div class="flex justify-center">
 										<div class="flex flex-wrap justify-center fse-1">
 											@can('compras.Agregar')
-												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="store">Agregar</button>
+												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="store"><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
 											@endcan
 											@can('compras.Modificar')
-												<button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalModify()">Modificar</button>
+												<button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalModify"><i class="fas fa-cog text-base mr-1"></i> Modificar</button>
 											@endcan
 											@can('compras.Eliminar')
-												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalDelete">Eliminar</button>
+												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalDelete"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
 											@endcan
 											@can('compras.ComprasAgregarProductos.Ver')
-												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalAgregarDetalle">Agregar Productos</button>
+												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalAgregarDetalle"> <i class="fa fa-cart-plus" aria-hidden="true"></i>Agregar Productos</button>
 											@endcan
 											<div class=" right-0">
 												@if (session()->has('message'))
@@ -487,7 +487,9 @@
 												</div>
 											</div>
 										</div>
-										{!! $filtro !!}
+                                        <div class="flex flex-wrap fse-1 justify-content-between" style="background-color: rgb(199, 233, 233); font-size: 14px;padding-bottom: 10px;">
+    										{!! $filtro !!}
+                                        </div>
 									{{-- </div> --}}
 								</div>
 							</div>

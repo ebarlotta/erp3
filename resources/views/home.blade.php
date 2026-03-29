@@ -211,21 +211,22 @@
                                 <div class="contact-method">
                                     <span class="icon solid alt fa-envelope"></span>
                                     <h3>Email</h3>
-                                    <a href="#">information@untitled.tld</a>
+                                    <a href="#">ecosystems.mail@gmail.com</a>
                                 </div>
                             </section>
                             <section>
                                 <div class="contact-method">
                                     <span class="icon solid alt fa-phone"></span>
                                     <h3>Teléfono</h3>
-                                    <span>(000) 000-0000 x12387</span>
+                                    <span>(+549) 261 747 1502</span><br>
+                                    <span>(+549) 263 463 5287</span>
                                 </div>
                             </section>
                             <section>
                                 <div class="contact-method">
                                     <span class="icon solid alt fa-home"></span>
                                     <h3>Dirección</h3>
-                                    <span>1234 Somewhere Roadsss #5432<br />
+                                    {{-- <span>1234 Somewhere Roadsss #5432<br /> --}}
                                     Mendoza<br />
                                     Argentina</span>
                                 </div>

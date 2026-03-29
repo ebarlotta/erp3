@@ -24,14 +24,14 @@ class ModuloComponent extends Component
             ->join('modulo_usuarios','modulo_usuarios.modulo_id','empresa_modulos.modulo_id')
             ->where('modulo_usuarios.user_id','=',Auth()->user()->id)
             ->get('empresa_modulos.modulo_id');
-            
+
             // dd($empresa_modulos);
-            
+
             if(count($empresa_modulos)) {
                 // dd(count($empresa_modulos));
                 $rol = new Roles;
                 $rol->Permisos();
-                
+
                 // a ----> b    a * b
                 // c ----> d    -----
                 //                c
@@ -42,8 +42,8 @@ class ModuloComponent extends Component
 
                 $this->modulos=Modulo::find($empresa_modulos);
                 // dd($this->modulos);
-                return view('livewire.modulo.modulo-component')->extends('layouts.adminlte')->section('content'); 
-                // return view('livewire.modulo.modulo-component',$this->modulos)->extends('layouts.adminlte')->section('content'); 
+                return view('livewire.modulo.modulo-component')->extends('layouts.adminlte')->section('content');
+                // return view('livewire.modulo.modulo-component',$this->modulos)->extends('layouts.adminlte')->section('content');
             } else { return view('livewire.solicitarhabilitarmodulo')->extends('layouts.adminlte'); }
         } else {
             // dd(Auth::user()->id);

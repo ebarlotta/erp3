@@ -4,22 +4,16 @@
         <?php echo session('nombre_empresa').'<br>'; ?>
         <div class="text-left" style="font-size: 15px; margin: 12px;">
             @foreach ($modulos as $modulo)
-                @if($modulo->name === "Compras")
+                @if($modulo->name === "Compras-Ventas-Mini")
                     <a wire:click="AsignarModulo('{{ $modulo->name }}')" href="{{ route('VentaSimple','Compras') }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow "><p class="text-center">M<br>i<br>n<br>i</p>
-                        {{-- <a href="{{ route('Comprassimple') }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow ">Mini --}}
-                        {{-- <a href="http://localhost:8000/VentaSimple?Compras" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow ">Mini --}}
-                        {{-- <a href="{{ base_path() . 'VentaSimple?Compras' }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow ">Mini --}}
-                @else
+                {{-- @else
                     @if($modulo->name === "Ventas")
-                        {{-- <a href="{{ route(base_path()) }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow ">Mini --}}
                     <a wire:click="AsignarModulo('{{ $modulo->name }}')" href="{{ route('VentaSimple','Ventas') }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow "><p class="text-center">M<br>i<br>n<br>i</p>
-                        {{-- <a href="{{ base_path() . 'VentaSimple?Ventas' }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow ">Mini --}}
-                        {{-- {{ resource_path() }} --}}
-                    @else
+                    @else --}}
                         {{-- <a wire:click="AsignarModulo('{{ $modulo->name }}')" href="{{ route($modulo->pagina) }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow "> --}}
-                    @endif
+                    {{-- @endif --}}
                 @endif
-                <div class="flex d-flex m-1"  wire:click="EnrutarModulo('{{ $modulo->pagina }}')">
+                <div class="flex d-flex m-1" wire:click="EnrutarModulo('{{ $modulo->pagina }}')">
                     <div class="w-20" style="width:28%">
                         <img class="rounded-l-md w-36 h-36" src="{{ asset('images/'. $modulo->imagen) }}" style="width:100%; height:{{ 100*$porc }}px;" >
                     </div>

@@ -65,16 +65,16 @@
 									<div class="flex justify-center">
 										<div class="flex flex-wrap justify-center fse-1">
 											@can('compras.Agregar')
-												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="store"><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
+												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" wire:click="store"><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
 											@endcan
 											@can('compras.Modificar')
-												<button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalModify"><i class="fas fa-cog text-base mr-1"></i> Modificar</button>
+												<button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" wire:click="openModalModify"><i class="fas fa-cog text-base mr-1"></i> Modificar</button>
 											@endcan
 											@can('compras.Eliminar')
-												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalDelete"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
+												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" wire:click="openModalDelete"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
 											@endcan
 											@can('compras.ComprasAgregarProductos.Ver')
-												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalAgregarDetalle"> <i class="fa fa-cart-plus" aria-hidden="true"></i>Agregar Productos</button>
+												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" wire:click="openModalAgregarDetalle"> <i class="fa fa-cart-plus" aria-hidden="true"></i>Agregar Productos</button>
 											@endcan
 											<div class=" right-0">
 												@if (session()->has('message'))
@@ -216,17 +216,26 @@
                                         label {
                                             margin-bottom: 0;
                                         }
+                                        .fondoblanco {
+                                            background-color: white;
+                                            box-shadow: 2px 2px 5px #999;
+                                        }
+                                        .fondogris {
+                                            background-color: rgba(255, 255, 255, 0.687);
+                                            box-shadow: 2px 2px 5px #999;
+                                        }
+
                                     </style>
 									<!-- Gestionar Comprobantes -->
 									<div class="flex flex-wrap mt-3 justify-around" style="font-size: 14px; padding-bottom: 10px;">
 										<div class="w-34 mr-1 grid text-left">
 											<label style="font-size: 80%;">Fecha</label>
-											<input class="w-full rounded-md h-8 text-xs" type="date" wire:model="gfecha" style="box-shadow: 2px 2px 5px #999;">
+											<input class="w-full rounded-md h-8 text-xs fondoblanco" type="date" wire:model="gfecha">
 											@error('gfecha') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="w-44 mr-1 grid text-left">
 											<label style="font-size: 80%;" wire:click="ActualizarProveedores()">Proveedor</label>
-											<select class="px-2 w-full rounded-md h-8 leading-none" wire:model="gproveedor" style="box-shadow: 2px 2px 5px #999;">
+											<select class="px-2 w-full rounded-md h-8 leading-none fondogris" wire:model="gproveedor">
 												<option value=" "> </option>
 												@foreach ($proveedores as $proveedor)
 													<option value="{{ $proveedor->id }}">
@@ -238,11 +247,11 @@
 										</div>
 										<div class="w-36 mr-1 grid text-left">
 											<label style="font-size: 80%;">Comprobante</label>
-											<input class="px-2 w-full rounded-md h-8" type="text" wire:model="gcomprobante" style="box-shadow: 2px 2px 5px #999;">
+											<input class="px-2 w-full rounded-md h-8 fondoblanco" type="text" wire:model="gcomprobante">
 										</div>
 										<div class="w-32 mr-1 grid text-left">
 											<label style="font-size: 80%;">Participa Iva</label>
-											<select class="w-4/5 px-2 rounded-md h-8 leading-none" wire:model="gpartiva" style="box-shadow: 2px 2px 5px #999;">
+											<select class="px-2 w-full  rounded-md h-8 leading-none fondogris" wire:model="gpartiva">
 												<option value=""></option>
 												<option value="Si">Si</option>
 												<option value="No">No</option>
@@ -254,11 +263,11 @@
 										</div>
 										<div class="w-40 mr-1 grid text-left">
 											<label style="font-size: 80%;">Detalle</label>
-											<input type="text" class="px-2 w-full rounded-md h-8" wire:model="gdetalle" style="box-shadow: 2px 2px 5px #999;">
+											<input type="text" class="px-2 w-full rounded-md h-8 fondoblanco" wire:model="gdetalle">
 										</div>
 										<div class="w-24 mr-1 grid text-left">
 											<label style="font-size: 80%;">Año</label>
-											<select class="w-2/3 px-2 rounded-md h-8 leading-none" wire:model="ganio" style="box-shadow: 2px 2px 5px #999;">
+											<select class="w-2/3 px-2 rounded-md h-8 leading-none fondogris" wire:model="ganio">
 												<option value=""></option>
 												<option value="2026">2026</option>
                                                 <option value="2025">2025</option>
@@ -280,7 +289,7 @@
 										</div>
 										<div class="w-24 mr-1 grid text-left">
 											<label style="font-size: 80%;" wire:click="gfiltro()">Mes</label>
-											<select class="w-full px-2 rounded-md h-8 leading-none" wire:model="gmes" style="box-shadow: 2px 2px 5px #999;">
+											<select class="w-full px-2 rounded-md h-8 leading-none fondogris" wire:model="gmes">
 												<option value=""></option>
 												<option value="1">enero</option>
 												<option value="2">febrero</option>
@@ -299,7 +308,7 @@
 										</div>
 										<div class="w-32 mr-1 grid text-left">
 											<label style="font-size: 80%;">Areas</label>
-											<select class="w-full px-2 rounded-md h-8 leading-none" wire:model="garea" style="box-shadow: 2px 2px 5px #999;">
+											<select class="w-full px-2 rounded-md h-8 leading-none fondogris" wire:model="garea">
 												<option value=" "> </option>
 												@foreach ($areas as $area)
 													<option value="{{ $area->id }}">
@@ -311,7 +320,7 @@
 										</div>
 										<div class="w-32 mr-1 grid text-left">
 											<label style="font-size: 80%;">Cuentas</label>
-											<select class="w-full px-2 rounded-md h-8 leading-none" wire:model="gcuenta" style="box-shadow: 2px 2px 5px #999;">
+											<select class="w-full px-2 rounded-md h-8 leading-none fondogris" wire:model="gcuenta">
 												<option value=" "> </option>
 												@foreach ($cuentas as $cuenta)
 													<option value="{{ $cuenta->id }}">
@@ -324,12 +333,12 @@
 
 										<div class="mr-1 w-28 grid text-left">
 											<label style="font-size: 80%;">Bruto</label>
-											<input class="num w-full text-right rounded-md h-8" type="text" id="Bruto" name="Bruto" wire:model="gbruto" wire:keyup="CalcularIva()" style="box-shadow: 2px 2px 5px #999;">
+											<input class="num w-full text-right rounded-md h-8 fondoblanco" type="text" id="Bruto" name="Bruto" wire:model="gbruto" wire:keyup="CalcularIva()">
 											@error('gbruto') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="w-28 mr-1 grid text-left">
 											<label style="font-size: 80%;">IVA</label>
-											<select class="w-full rounded-md h-8 leading-none" wire:model="giva" wire:change="CalcularIva()" style="box-shadow: 2px 2px 5px #999;">
+											<select class="w-full rounded-md h-8 leading-none fondogris" wire:model="giva" wire:change="CalcularIva()">
 												<option value="1" selected>Iva 0%</option>
 												@foreach ($ivas as $iva)
 													<option value="{{ $iva->id }}">
@@ -341,46 +350,46 @@
 										</div>
 										<div class="mr-1 w-24 grid text-left">
 											<label style="font-size: 80%;">Iva</label>
-											<input class="w-full text-right rounded-md h-8 leading-none" disabled type="text" wire:model="giva2" style="box-shadow: 2px 2px 5px #999;">
+											<input class="w-full text-right rounded-md h-8 leading-none fondoblanco" disabled type="text" wire:model="giva2">
 											@error('giva2') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="mr-1 w-28 grid text-left">
 											<label style="font-size: 80%;">Exento</label>
-											<input class="num w-full text-right rounded-md h-8 leading-none" type="text" wire:model="gexento" wire:keyup="CalcularNeto()" style="box-shadow: 2px 2px 5px #999;">
+											<input class="num w-full text-right rounded-md h-8 leading-none fondoblanco" type="text" wire:model="gexento" wire:keyup="CalcularNeto()">
 											@error('gexento') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="mr-1 w-24 grid text-left">
 											<label style="font-size: 80%;">Imp.Interno</label>
-											<input class="num w-full text-right rounded-md h-8" type="text" wire:model="gimpinterno" wire:keyup="CalcularNeto()" style="box-shadow: 2px 2px 5px #999;">
+											<input class="num w-full text-right rounded-md h-8 fondoblanco" type="text" wire:model="gimpinterno" wire:keyup="CalcularNeto()">
 											@error('gimpinterno') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="mr-1 w-28 grid text-left">
 											<label style="font-size: 80%;">Ret/Perc.Iva</label>
-											<input class="num w-full text-right rounded-md h-8" type="text" wire:model="gperciva" wire:keyup="CalcularNeto()" style="box-shadow: 2px 2px 5px #999;">
+											<input class="num w-full text-right rounded-md h-8 fondoblanco" type="text" wire:model="gperciva" wire:keyup="CalcularNeto()">
 											@error('gperciva') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="mr-1 w-28 grid text-left">
 											<label style="font-size: 80%;">Ret/Perc.IB</label>
-											<input class="num w-full text-right rounded-md h-8" type="text" wire:model="gperib" wire:keyup="CalcularNeto()" style="box-shadow: 2px 2px 5px #999;">
+											<input class="num w-full text-right rounded-md h-8 fondoblanco" type="text" wire:model="gperib" wire:keyup="CalcularNeto()">
 											@error('gperib') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="mr-1 w-28 grid text-left">
 											<label style="font-size: 80%;">RetGan</label>
-											<input class="num w-full text-right rounded-md h-8" type="text" wire:model="gretgan" wire:keyup="CalcularNeto()" style="box-shadow: 2px 2px 5px #999;">
+											<input class="num w-full text-right rounded-md h-8 fondoblanco" type="text" wire:model="gretgan" wire:keyup="CalcularNeto()">
 											@error('gretgan') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="mr-1 w-28 grid text-left">
 											<label style="font-size: 80%;">Neto</label>
-											<input class="w-full text-right rounded-md h-8" type="text" wire:model="gneto" style="box-shadow: 2px 2px 5px #999;">
+											<input class="w-full text-right rounded-md h-8 fondoblanco" type="text" wire:model="gneto">
 											@error('gneto') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="mr-1 w-28 grid text-left">
 											<label style="font-size: 80%;" wire:click="copiarMontoPagado()">Monto Pagado</label>
-											<input class="num w-full text-right rounded-md h-8" type="text" wire:model="gmontopagado" style="box-shadow: 2px 2px 5px #999;">
+											<input class="num w-full text-right rounded-md h-8 fondoblanco" type="text" wire:model="gmontopagado">
 										</div>
 										<div class="mr-1 w-8 grid text-left">
 											<label style="font-size: 80%;">Cantidad</label>
-											<input class="num w-full text-right rounded-md h-8" type="text" wire:model="gcantidad" style="box-shadow: 2px 2px 5px #999;">
+											<input class="num w-full text-right rounded-md h-8 fondoblanco" type="text" wire:model="gcantidad">
 										</div>
 									</div>
 									{{-- <div> --}}
@@ -388,7 +397,7 @@
 										<div class="flex flex-wrap fse-1 justify-content-between" style="background-color: rgb(199, 233, 233); font-size: 14px;padding-bottom: 10px;">
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;" wire:click="gfiltro()">Mes</label>
-												<select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfmes" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<select class="px-2 rounded-md h-7 py-0 leading-none fondogris" wire:model="gfmes" wire:change="gfiltro()">
 													<option value=""></option>
 													<option value="1">Enero</option>
 													<option value="2">Febrero</option>
@@ -405,7 +414,7 @@
 												</select></div>
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;" wire:click="ActualizarProveedores()">Proveedor</label>
-												<select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfproveedor" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<select class="px-2 rounded-md h-7 py-0 leading-none fondogris" wire:model="gfproveedor" wire:change="gfiltro()">
 													<option value=""></option>
 													@foreach ($proveedores as $proveedor)
 														<option value="{{ $proveedor->id }}">
@@ -415,7 +424,7 @@
 											</div>
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;">ParticipaIva</label>
-												<select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfparticipa" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<select class="px-2 rounded-md h-7 py-0 leading-none fondogris" wire:model="gfparticipa" wire:change="gfiltro()">
 													<option value=""></option>
 													<option value="Si">Si</option>
 													<option value="No">No</option>
@@ -425,7 +434,7 @@
 											</div>
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;">Iva</label>
-												<select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfiva" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<select class="px-2 rounded-md h-7 py-0 leading-none fondogris" wire:model="gfiva" wire:change="gfiltro()">
 													<option value=""></option>
 													@foreach ($ivas as $iva)
 														<option value="{{ $iva->id }}">
@@ -435,14 +444,14 @@
 											</div>
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;">Detalle</label>
-												<select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfdetalle" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<select class="px-2 rounded-md h-7 py-0 leading-none fondogris" wire:model="gfdetalle" wire:change="gfiltro()">
 													<option value="">Todos</option>
 														{!! $combodetalle !!}
 												</select>
 											</div>
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;">Area</label>
-												<select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfarea" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<select class="px-2 rounded-md h-7 py-0 leading-none fondogris" wire:model="gfarea" wire:change="gfiltro()">
 													<option value=""></option>
 													@foreach ($areas as $area)
 														<option value="{{ $area->id }}">{{ $area->name }}
@@ -452,7 +461,7 @@
 											</div>
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;">Cuenta</label>
-												<select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfcuenta" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<select class="px-2 rounded-md h-7 py-0 leading-none fondogris" wire:model="gfcuenta" wire:change="gfiltro()">
 													<option value=""></option>
 													@foreach ($cuentas as $cuenta)
 														<option value="{{ $cuenta->id }}">{{ $cuenta->name }}</option>
@@ -461,7 +470,7 @@
 											</div>
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;">Año</label>
-												<select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfanio" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<select class="px-2 rounded-md h-7 py-0 leading-none fondogris" wire:model="gfanio" wire:change="gfiltro()">
 												{{-- <select class="px-2 rounded-md h-7 py-0 leading-none" wire:model="gfanio" wire:change="gsetanio(gfanio)"> --}}
 													<option value="2026">2026</option>
                                                     <option value="2025">2025</option>
@@ -482,8 +491,8 @@
 											<div class="px-2 grid text-left">
 												<label style="font-size: 80%;">Asc. C/Saldo</label>
 												<div class="flex text-right">
-												<input class=" mr-2 rounded-sm py-0" type="checkbox" checked wire:model="fgascendente" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
-												<input class=" mr-2 rounded-sm py-0" type="checkbox" wire:model="gfsaldo" wire:change="gfiltro()" style="box-shadow: 2px 2px 5px #999;">
+												<input class=" mr-2 rounded-sm py-0" type="checkbox" checked wire:model="fgascendente" wire:change="gfiltro()">
+												<input class=" mr-2 rounded-sm py-0" type="checkbox" wire:model="gfsaldo" wire:change="gfiltro()">
 												</div>
 											</div>
 										</div>
@@ -529,11 +538,11 @@
 									</div>
 								</div> --}}
 								<div class="block justify-center">
-									<div class="flex justify-center">
+									<div class="flex justify-center" style="background-color:rgb(199, 233, 233);">
 										<div class="block mb-4 justify-start">
 											{{-- <label for="">Áreas a incluir</label><br> --}}
 											Áreas a incluir<br>
-											<select class="pl-2 ml-2 text-xs rounded-md h-7 leading-none mr-5" wire:model="darea">
+											<select class="pl-2 ml-2 text-xs rounded-md h-7 leading-none mr-5 fondogris" wire:model="darea">
 												<option value="0">Todas</option>
 												@foreach ($areas as $area)
 													<option value="{{ $area->id }}">{{ $area->name }}</option>
@@ -543,12 +552,12 @@
 
 										<div class="block mb-4 justify-center">
 											Desde <br>
-											<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="ddesde">
+											<input class="text-xs rounded-md h-7 ml-5 fondogris" type="date" wire:model="ddesde">
 										</div>
 
 										<div class="block mb-4 justify-center">
 											Hasta <br>
-											<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="dhasta"><br>
+											<input class="ml-2 text-xs rounded-md h-7 fondogris" type="date" wire:model="dhasta"><br>
 										</div>
 									</div>
 
@@ -605,12 +614,12 @@
 										</div>
 									</div> --}}
 									{{-- Desde / Hasta --}}
-									<div class="flex justify-center">
-										<div class="flex justify-center">
+									<div class="block justify-center">
+										<div class="flex justify-center" style="background-color:rgb(232, 204, 188);">
 											<div class="block mb-4 justify-start">
 												{{-- <label for="">Àreas a incluir</label><br> --}}
 												Àreas a incluir<br>
-												<select class="pl-2 ml-2 text-xs rounded-md h-7 leading-none mr-5" wire:model="carea">
+												<select class="pl-2 ml-2 text-xs rounded-md h-7 leading-none mr-5 fondogris" wire:model="carea">
 													<option value="0">Todas</option>
 													@foreach ($areas as $area)
 														<option value="{{ $area->id }}">{{ $area->name }}</option>
@@ -619,12 +628,12 @@
 											</div>
 											<div class="block mb-4 justify-start">
 												Desde <br>
-												<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="cdesde"><br>
+												<input class="text-xs rounded-md h-7 ml-5 fondogris" type="date" wire:model="cdesde"><br>
 											</div>
 
 											<div class="block mb-4 justify-center">
 												Hasta <br>
-												<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="chasta"><br>
+												<input class="ml-2 text-xs rounded-md h-7 fondogris" type="date" wire:model="chasta"><br>
 											</div>
 										</div>
 									</div>
@@ -652,34 +661,31 @@
 							{{-- Cuentas Corrientes  --}}
 							{{-- =================== --}}
 							<div class="{{ $tabActivo != 4 ? 'hidden' : '' }}">
-								<div class="flex justify-center">
-									<div class="block mb-4 justify-start">
-										Proveedor<br>
-										<select class="px-2 col-11 rounded-md h-8 leading-none" wire:model="ccProveedor">
-											<option value="0">-- Todos -- </option>
-											@foreach ($ccProveedores as $proveedor)
-												<option value="{{ $proveedor->id }}">{{ $proveedor->name }}</option>
-											@endforeach
-										</select>
-										@error('ccProveedor') <span class="text-red-500">{{ $message }}</span>@enderror
-									</div>
-									<div class="block mb-4 justify-start">
-										Agrupado por:<br>
-										<select class="px-2 w-full rounded-md h-8 leading-none" wire:model="ccAgrupadoComp">
+								<div class="block justify-center" style="background-color:rgb(208, 161, 206);">
+									<div class="flex d-flex flex-wrap mb-4 justify-center px-3 pb-4">
+                                        <div class="col-6">Proveedor</div><div class="col-6">Agrupado por:</div>
+                                        <select class="col-5 rounded-md h-8 mr-1 leading-none fondogris" wire:model="ccProveedor">
+                                            <option value="0">-- Todos -- </option>
+                                            @foreach ($ccProveedores as $proveedor)
+                                                <option value="{{ $proveedor->id }}">{{ $proveedor->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('ccProveedor') <span class="text-red-500">{{ $message }}</span>@enderror
+										<select class="col-5 rounded-md h-8 ml-1 leading-none fondogris" wire:model="ccAgrupadoComp">
 											<option value="1">Comprobante</option>
 											<option value="0">Detalle</option>
 										</select>
 									</div>
 								</div>
-								<div class="flex justify-center">
+								<div class="flex justify-center" style="background-color:rgb(228, 141, 206);">
 									<div class="block mb-4 justify-start">
 										Desde <br>
-										<input class="text-xs rounded-md h-7 ml-5" type="date" wire:model="ccdesde"><br>
+										<input class="text-xs rounded-md h-7 ml-5 fondoblanco" type="date" wire:model="ccdesde"><br>
 									</div>
 
 									<div class="block mb-4 justify-center">
 										Hasta <br>
-										<input class="ml-2 text-xs rounded-md h-7" type="date" wire:model="cchasta"><br>
+										<input class="ml-2 text-xs rounded-md h-7 fondoblanco" type="date" wire:model="cchasta"><br>
 									</div>
 									<div class="block mb-4 justify-center">
 										Mes <br>
@@ -704,13 +710,13 @@
 							{{-- Libros de IVA  --}}
 							{{-- ============== --}}
 							<div class="{{ $tabActivo != 5 ? 'hidden' : '' }}">
-								<div class="flex flex-auto justify-center">
+								<div class="flex flex-auto justify-center pb-3"  style="background-color:rgb(165, 198, 221);">
 									<div>
 										<table>
 											<tr>
 												<td>
 													<label for="">Mes</label><br>
-													<select class="pl-2 mr-4 w-full text-xs px-2 rounded-md h-7 leading-none" wire:model="lmes" wire:change="MostrarLibros()">
+													<select class="pl-2 mr-4 w-full text-xs px-2 rounded-md h-7 leading-none fondogris" wire:model="lmes" wire:change="MostrarLibros()">
 														<option value=""></option>
 														<option value="1">enero
 														</option>
@@ -741,7 +747,7 @@
 														</option>
 													</select>
 													<label for="">Año</label><br>
-													<select class="pl-2 mr-4 w-full text-xs rounded-md h-7 leading-none" wire:model="lanio" wire:change="MostrarLibros()">
+													<select class="pl-2 mr-4 w-full text-xs rounded-md h-7 leading-none fondogris" wire:model="lanio" wire:change="MostrarLibros()">
 														<option value=""></option>
 														<option value="2026">2026</option>
                                                         <option value="2025">2025</option>
@@ -809,8 +815,8 @@
 	</table> --}}
 
 	<footer class="text-center text-xs bg-gray-400 mt-px3 pb-2">
-		Desarrollado por: Ing. Enzo Gabriel Barlotta - Información de Contacto<a href="mailto:ebarlotta@yahoo.com.ar">
-			ebarlotta@yahoo.com.ar</a>
+		Desarrollado por: Ecosystems.ar - Información de Contacto<a href="mailto:ecosystems.mail@gmail.com">
+			ecosystems.mail@gmail.com</a>
 		{{-- &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info"
 			onclick="javascript: window.location.href='../../sistema/menu.php';">&nbsp;&nbsp;&nbsp;Volver&nbsp;&nbsp;&nbsp;</button> --}}
 	</footer>

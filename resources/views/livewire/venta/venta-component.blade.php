@@ -884,8 +884,8 @@
 	<div class="BotonVolver2 form-group col-md-2">
 	</div>
 	<footer class="text-center text-xs bg-gray-400 mt-px3 pb-2">
-		Desarrollado por: Ing. Enzo Gabriel Barlotta - Información de Contacto<a href="mailto:ebarlotta@yahoo.com.ar">
-			ebarlotta@yahoo.com.ar</a>
+		Desarrollado por: Ecosystems.ar - Información de Contacto<a href="mailto:ecosystems.mail@gmail.com">
+			ecosystems.mail@gmail.com</a>
 		{{-- &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info"
 			onclick="javascript: window.location.href='../../sistema/menu.php';">&nbsp;&nbsp;&nbsp;Volver&nbsp;&nbsp;&nbsp;</button> --}}
 	</footer>

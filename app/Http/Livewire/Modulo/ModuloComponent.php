@@ -10,11 +10,21 @@ use App\Models\Roles;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\erp\Comprobante as Compra;
+use App\Models\erp\Venta as Venta;
+use Illuminate\Support\Facades\DB;
+
 class ModuloComponent extends Component
 {
     public $empresa_id;
     public $modulos;
     public $porc;
+
+    // Propiedades públicas = accesibles en la vista
+    public $compras = [];
+    public $ventas = [];
+    public $compras_areas = [];
+    public $compras_cuentas = [];
 
     public function render()
     {
@@ -42,33 +52,73 @@ class ModuloComponent extends Component
 
                 $this->modulos=Modulo::find($empresa_modulos);
                 // dd($this->modulos);
+
+                $this->compras_areas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp',12,'area_id');
+                $this->compras_cuentas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp',12,'cuenta_id');
+
+                $this->compras = $this->obtenerDatosGrafico('comprobantes', 'NetoComp',12);
+                $this->ventas = $this->obtenerDatosGrafico('ventas', 'NetoComp');
+
                 return view('livewire.modulo.modulo-component')->extends('layouts.adminlte')->section('content');
                 // return view('livewire.modulo.modulo-component',$this->modulos)->extends('layouts.adminlte')->section('content');
             } else { return view('livewire.solicitarhabilitarmodulo')->extends('layouts.adminlte'); }
         } else {
             // dd(Auth::user()->id);
             return view('livewire.llevaralogin')->extends('layouts.adminlte');
-            // if(is_null(session('empresa_id'))) return $this->redirect('/public/public/login');
-            // if(is_null(session('empresa_id'))) {
-            //     return redirect()->route('login');
-            // } else {
-            //     $userid=auth()->user()->id;
-            // }
+
             $empresas= EmpresaUsuario::where('user_id',$userid)->get();
             $empresa_modulos = EmpresaModulo::where('empresa_id',session('empresa_id'))->get('modulo_id');
 
-            $compras = [
-                'labels' => ['January', 'February', 'March', 'April', 'May'],
-                'data' => [65, 59, 80, 81, 56],
-            ];
-            //Ventas
-            $ventas = [
-                'labels' => ['November', 'February', 'March', 'April', 'May'],
-                'data' => [15, 39, 22, 55, 16]
-            ];
-            return view('livewire.empresa.empresa-component',compact('empresas','compras','ventas'))->extends('layouts.adminlte');
-            // return view('livewire.empresa.empresa-component',compact('empresas','compras','ventas'))->extends('layouts.adminlte');
+            return view('livewire.empresa.empresa-component')->extends('layouts.adminlte');
         }
+    }
+
+    private function obtenerDatosGrafico2(string $tabla, string $campoMonto, int $meses = 6, string $areacuenta): array
+    {
+        $datos = DB::table($tabla)
+            ->selectRaw($areacuenta . ', DATE_FORMAT(fecha, "%Y-%m") as periodo, SUM(' . $campoMonto . ') as total')
+            ->whereBetween('fecha', [
+                now()->subMonths($meses)->startOfMonth(),
+                now()->endOfMonth()
+            ])
+            ->groupBy($areacuenta)
+            ->groupBy('periodo')
+            ->orderBy('periodo')
+            ->get();
+
+        return [
+            'labels' => $datos->map(fn($r) => $this->formatearMes($r->periodo))->toArray(),
+            'data' => $datos->map(fn($r) => round(floatval($r->total), 2))->toArray(),
+        ];
+    }
+
+    private function obtenerDatosGrafico(string $tabla, string $campoMonto, int $meses = 6): array
+    {
+        $datos = DB::table($tabla)
+            ->selectRaw('DATE_FORMAT(fecha, "%Y-%m") as periodo, SUM(' . $campoMonto . ') as total')
+            ->whereBetween('fecha', [
+                now()->subMonths($meses)->startOfMonth(),
+                now()->endOfMonth()
+            ])
+            ->groupBy('periodo')
+            ->orderBy('periodo')
+            ->get();
+
+        return [
+            'labels' => $datos->map(fn($r) => $this->formatearMes($r->periodo))->toArray(),
+            'data' => $datos->map(fn($r) => round(floatval($r->total), 2))->toArray(),
+        ];
+    }
+
+    private function formatearMes(string $periodo): string
+    {
+        $meses = [
+            '01' => 'Ene', '02' => 'Feb', '03' => 'Mar', '04' => 'Abr',
+            '05' => 'May', '06' => 'Jun', '07' => 'Jul', '08' => 'Ago',
+            '09' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dic'
+        ];
+        [$anio, $mes] = explode('-', $periodo);
+        return $meses[$mes] . ' ' . $anio;
     }
 
     public function LlevarALogin() {

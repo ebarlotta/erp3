@@ -234,6 +234,14 @@ class CompraComponent extends Component
         $this->proveedores = Proveedor::where('empresa_id', $this->empresa_id)->ORDERBY('name')->get();
     }
 
+    public function ActualizarAreas() {
+        $this->areas = Area::where('empresa_id', $this->empresa_id)->ORDERBY('name')->get();
+    }
+
+    public function ActualizarCuentas() {
+        $this->cuentas = Cuenta::where('empresa_id', $this->empresa_id)->ORDERBY('name')->get();
+    }
+
     public function RellenarCamposVacios() {
         if(is_null($this->gfecha)) $this->gfecha=now();
         if(is_null($this->gbruto)) $this->gbruto=0.00;
@@ -422,8 +430,8 @@ class CompraComponent extends Component
                 <table class=\"table table-striped small\" style=\"font-size:12px; padding: 0.2rem .2rem; padding: .2rem;\">
                 <thead>
                   <tr>
-                    <th style=\"width: auto; padding: .2rem\">Fecha</th>
-                    <th class=\" p-1\" scope=\"col\">Comprobante</th>
+                    <th scope=\"col\">Fecha</th>
+                    <th scope=\"col\">Comprobante</th>
                     <th class=\"col d-none d-sm-table-cell p-1 my-auto\" scope=\"col\">Proveedor</th>
                     <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Detalle</th>
                     <th class=\"p-1 scope=\"col\">Bruto</th>
@@ -469,7 +477,7 @@ class CompraComponent extends Component
             $NetoT = $NetoT + $registro->NetoComp;
             $this->filtro=$this->filtro."
             <tr wire:click=\"gCargarRegistro(". $registro->id .")\">
-                <td class=\"p-0 text-right\" style=\"width: auto;\">".substr($Fecha,0,6).substr($Fecha,8,2)."</td>
+                <td class=\"p-0 text-right\">".substr($Fecha,0,6).substr($Fecha,8,2)."</td>
                 <td class=\"p-0\">&nbsp;$registro->comprobante</td>
                 <td class=\"p-0 col d-none d-sm-table-cell text-left\">&nbsp; $Proveedor->name</td>
                 <td style=\"max-width:200px; width:200px; overflow: hidden;\" class=\"p-0 col d-none d-sm-table-cell text-left\">$registro->detalle</td>
@@ -484,9 +492,9 @@ class CompraComponent extends Component
                 <td class=\"p-0 text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
                 <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
                 <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell\">$registro->ParticIva</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Area->name</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-center\">&nbsp;$registro->ParticIva</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-center\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">&nbsp;$Area->name&nbsp;</td>
                 <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Cuenta->name</td>
                 </tr>";
         }

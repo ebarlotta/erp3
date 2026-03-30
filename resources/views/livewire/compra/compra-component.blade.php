@@ -68,7 +68,7 @@
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" wire:click="store"><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
 											@endcan
 											@can('compras.Modificar')
-												<button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" wire:click="openModalModify"><i class="fas fa-cog text-base mr-1"></i> Modificar</button>
+												<button class="flex rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" wire:click="openModalModify"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 28 28" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>Modificar</button>
 											@endcan
 											@can('compras.Eliminar')
 												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" wire:click="openModalDelete"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
@@ -307,7 +307,7 @@
 											@error('gmes') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="w-32 mr-1 grid text-left">
-											<label style="font-size: 80%;">Areas</label>
+											<label style="font-size: 80%;" wire:click="ActualizarAreas()">Areas</label>
 											<select class="w-full px-2 rounded-md h-8 leading-none fondogris" wire:model="garea">
 												<option value=" "> </option>
 												@foreach ($areas as $area)
@@ -319,7 +319,7 @@
 											@error('garea') <span class="text-red-500">{{ $message }}</span>@enderror
 										</div>
 										<div class="w-32 mr-1 grid text-left">
-											<label style="font-size: 80%;">Cuentas</label>
+											<label style="font-size: 80%;" wire:click="ActualizarCuentas()">Cuentas</label>
 											<select class="w-full px-2 rounded-md h-8 leading-none fondogris" wire:model="gcuenta">
 												<option value=" "> </option>
 												@foreach ($cuentas as $cuenta)

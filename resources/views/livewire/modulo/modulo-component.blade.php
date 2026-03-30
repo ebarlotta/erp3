@@ -2,6 +2,7 @@
     <div class="sm:block md:hidden lg:hidden xl:hidden">
 
         <?php echo session('nombre_empresa').'<br>'; ?>
+
         <div class="text-left" style="font-size: 15px; margin: 12px;">
             @foreach ($modulos as $modulo)
                 @if($modulo->name === "Compras-Ventas-Mini")
@@ -56,5 +57,185 @@
             </a>
             @endforeach
         </div>
+
+                <!-- Contenedor de gráficos (DESPUÉS del foreach de empresas) -->
+        <div class="chart-container mt-8" style="position: relative;">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Gráfico de Compras -->
+                <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
+                    <h3 class="text-lg font-semibold mb-2">Compras</h3>
+                    <canvas id="compras" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Gráfico de Ventas -->
+                <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
+                    <h3 class="text-lg font-semibold mb-2">Ventas</h3>
+                    <canvas id="ventas" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Gráfico de Ventas -->
+                <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
+                    <h3 class="text-lg font-semibold mb-2">Ventas</h3>
+                    <canvas id="compras_areas" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Gráfico de Ventas -->
+                <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
+                    <h3 class="text-lg font-semibold mb-2">Ventas</h3>
+                    <canvas id="compras_cuentas" width="400" height="200"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+        <script>
+        // Inicializar gráficos con los datos de Laravel
+        const comprasData = @json($compras);
+        const ventasData = @json($ventas);
+        console.log(comprasData);
+            var ctx = document.getElementById('compras').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($compras['labels']),
+                    datasets: [{
+                            label: 'Enzo',
+                            data: @json($compras['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Data',
+                            data: @json($ventas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: {
+                                target: 'origin',
+                                above: 'rgb(255, 0, 0)', // Area will be red above the origin
+                                below: 'rgb(0, 0, 255)' // And blue below the origin
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('compras_areas').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($compras_areas['labels']),
+                    datasets: [{
+                            label: 'Data',
+                            data: @json($compras_areas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Data',
+                            data: @json($ventas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: {
+                                target: 'origin',
+                                above: 'rgb(255, 0, 0)', // Area will be red above the origin
+                                below: 'rgb(0, 0, 255)' // And blue below the origin
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('compras_cuentas').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($compras_cuentas['labels']),
+                    datasets: [{
+                            label: 'Data',
+                            data: @json($compras_cuentas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Data',
+                            data: @json($ventas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: {
+                                target: 'origin',
+                                above: 'rgb(255, 0, 0)', // Area will be red above the origin
+                                below: 'rgb(0, 0, 255)' // And blue below the origin
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('ventas').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($ventas['labels']),
+                    datasets: [{
+                        label: 'Data',
+                        data: @json($ventas['data']),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: {
+                            target: 'origin',
+                            above: 'rgb(255, 0, 0)', // Area will be red above the origin
+                            below: 'rgb(0, 0, 255)' // And blue below the origin
+                        }
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        filler: {
+                            propagate: true
+                        }
+                    }
+                }
+            });
+        </script>
+
     </div>
+
 </div>

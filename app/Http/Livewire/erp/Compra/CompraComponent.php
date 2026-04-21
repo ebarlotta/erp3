@@ -115,10 +115,6 @@ class CompraComponent extends Component
         return view('livewire.compra.compra-component')->extends('layouts.adminlte');
     }
 
-    // public function render2() {
-    //     return view('livewire.compra.comprasimple');
-    // }
-
     public function openModalDelete() { $this->ModalDelete = true;  }
     public function closeModalDelete() { $this->ModalDelete = false;  }
 
@@ -427,7 +423,7 @@ class CompraComponent extends Component
         // <div class=\"table-responsive-sm\">word-wrap: anywhere;
         $this->filtro="
 
-                <table class=\"table table-striped small\" style=\"font-size:12px; padding: 0.2rem .2rem; padding: .2rem;\">
+                <table class=\"table table-striped small\" style=\"font-size:12px; padding: 0.2rem .2rem;\">
                 <thead>
                   <tr>
                     <th scope=\"col\">Fecha</th>
@@ -499,11 +495,13 @@ class CompraComponent extends Component
                 </tr>";
         }
 
-        $this->filtro=$this->filtro."<style> table td { padding: .2rem; }</style><tr>
+        /* <td class=\"col d-none d-sm-table-cell p-1\"></td>
         <td class=\"col d-none d-sm-table-cell p-1\"></td>
-        <td class=\"col d-none d-sm-table-cell p-1\"></td>
-        <td style=\"padding: .2rem;\"></td>
-        <td class=\" p-1\"><b>Totales</b></td>
+        <td style=\"padding: .2rem;\"></td> */
+
+        $this->filtro=$this->filtro."<tr>
+        
+        <td class=\" p-1\" colspan=3><b>Totales</b></td>
         <td class=\"px-1 text-right p-1\"><b>".number_format($Bruto, 2,'.','')."</b></td>
         <td class=\"px-1 text-right p-1\"><b>".number_format($MontoIvaT, 2,'.','')."</b></td>
         <td class=\"px-1 text-right p-1\"><b>".number_format($Exento, 2,'.','')."</b></td>

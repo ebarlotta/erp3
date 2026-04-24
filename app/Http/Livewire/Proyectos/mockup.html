@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Manager - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background-color: #0f172a; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        
+        /* Card hover effect */
+        .project-card { transition: all 0.2s ease; }
+        .project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(0,0,0,0.3); }
+        
+        /* Focus widget glow */
+        .focus-glow { box-shadow: 0 0 40px rgba(59, 130, 246, 0.15); }
+        
+        /* Timer pulse */
+        @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .timer-active { animation: pulse-green 2s ease-in-out infinite; }
+        
+        /* Sidebar active */
+        .sidebar-item.active { background: linear-gradient(90deg, #3b82f6 0%, transparent 100%); border-left: 3px solid #60a5fa; }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
+            <div class="p-6 border-b border-slate-800">
+                <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    Projects
+                </h1>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="#" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Tiempo
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                    </svg>
+                    Tareas
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    Reportes
+                </a>
+            </nav>
+            
+            <!-- Focus Mode Widget (mini) -->
+            <div class="p-4 border-t border-slate-800">
+                <div class="bg-slate-800 rounded-lg p-4 focus-glow">
+                    <div class="text-xs text-slate-400 mb-2">FOCUS MODE</div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-white">API Users</div>
+                            <div class="text-xs text-green-400 timer-active flex items-center gap-1">
+                                <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                                01:23:45
+                            </div>
+                        </div>
+                        <button class="p-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-red-400">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <rect x="6" y="6" width="12" height="12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <!-- Header -->
+            <header class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Dashboard</h2>
+                    <p class="text-slate-400 text-sm">Gestiona tus proyectos</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <!-- Search -->
+                    <div class="relative">
+                        <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <input type="text" placeholder="Buscar proyectos..." class="bg-slate-800 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 w-64">
+                    </div>
+                    <!-- Filters -->
+                    <select class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="">Todos los estados</option>
+                        <option value="active">Activo</option>
+                        <option value="paused">Pausado</option>
+                        <option value="completed">Completado</option>
+                    </select>
+                    <!-- Add Project -->
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Nuevo Proyecto
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+                    <div class="text-slate-400 text-sm mb-1">Proyectos Activos</div>
+                    <div class="text-3xl font-bold text-white">12</div>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+                    <div class="text-slate-400 text-sm mb-1">Tareas Pendientes</div>
+                    <div class="text-3xl font-bold text-white">47</div>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+                    <div class="text-slate-400 text-sm mb-1">Horas Esta Semana</div>
+                    <div class="text-3xl font-bold text-blue-400">23.5h</div>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+                    <div class="text-slate-400 text-sm mb-1">Completado</div>
+                    <div class="text-3xl font-bold text-green-400">68%</div>
+                </div>
+            </div>
+            
+            <!-- Projects Grid -->
+            <h3 class="text-lg font-semibold text-white mb-4">Tus Proyectos</h3>
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Project Card 1 -->
+                <div class="project-card bg-slate-800 rounded-xl p-6 border border-slate-700 cursor-pointer">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">API Users</h4>
+                                <p class="text-xs text-slate-400">Backend API</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-medium">Activo</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">REST API para gestión de usuarios con autenticación JWT y RBAC.</p>
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-4">
+                            <span class="text-slate-400"><span class="text-orange-400">●</span> Alta</span>
+                            <span class="text-slate-400">12 tareas</span>
+                        </div>
+                        <span class="text-slate-500">24h invertidas</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-700 flex items-center justify-between">
+                        <div class="flex -space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-purple-500 border-2 border-slate-800"></div>
+                            <div class="w-6 h-6 rounded-full bg-cyan-500 border-2 border-slate-800"></div>
+                        </div>
+                        <span class="text-xs text-slate-500">Actualizado hace 2h</span>
+                    </div>
+                </div>
+                
+                <!-- Project Card 2 -->
+                <div class="project-card bg-slate-800 rounded-xl p-6 border border-slate-700 cursor-pointer">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">E-commerce</h4>
+                                <p class="text-xs text-slate-400">Tienda Online</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded-full font-medium">Pausado</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">Plataforma de ventas online con catálogo, carrito y pagos.</p>
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-4">
+                            <span class="text-slate-400"><span class="text-red-400">●</span> Urgente</span>
+                            <span class="text-slate-400">28 tareas</span>
+                        </div>
+                        <span class="text-slate-500">56h invertidas</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-700 flex items-center justify-between">
+                        <div class="flex -space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-green-500 border-2 border-slate-800"></div>
+                        </div>
+                        <span class="text-xs text-slate-500">Actualizado hace 3d</span>
+                    </div>
+                </div>
+                
+                <!-- Project Card 3 -->
+                <div class="project-card bg-slate-800 rounded-xl p-6 border border-slate-700 cursor-pointer">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Blog Personal</h4>
+                                <p class="text-xs text-slate-400">CMS</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 bg-slate-500/20 text-slate-400 text-xs rounded-full font-medium">Completado</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">Sistema de blog con Markdown, categorías y SEO.</p>
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-4">
+                            <span class="text-slate-400"><span class="text-slate-400">●</span> Baja</span>
+                            <span class="text-slate-400">8 tareas</span>
+                        </div>
+                        <span class="text-slate-500">12h invertidas</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-700 flex items-center justify-between">
+                        <div class="flex -space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-pink-500 border-2 border-slate-800"></div>
+                        </div>
+                        <span class="text-xs text-slate-500">Actualizado hace 1w</span>
+                    </div>
+                </div>
+                
+                <!-- Project Card 4 -->
+                <div class="project-card bg-slate-800 rounded-xl p-6 border border-slate-700 cursor-pointer">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Chat App</h4>
+                                <p class="text-xs text-slate-400">Real-time</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-medium">Activo</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">Aplicación de chat en tiempo real con WebSockets.</p>
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-4">
+                            <span class="text-slate-400"><span class="text-blue-400">●</span> Media</span>
+                            <span class="text-slate-400">15 tareas</span>
+                        </div>
+                        <span class="text-slate-500">31h invertidas</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-700 flex items-center justify-between">
+                        <div class="flex -space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-yellow-500 border-2 border-slate-800"></div>
+                            <div class="w-6 h-6 rounded-full bg-blue-500 border-2 border-slate-800"></div>
+                        </div>
+                        <span class="text-xs text-slate-500">Actualizado hace 5h</span>
+                    </div>
+                </div>
+                
+                <!-- Project Card 5 -->
+                <div class="project-card bg-slate-800 rounded-xl p-6 border border-slate-700 cursor-pointer">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Dashboard Metrics</h4>
+                                <p class="text-xs text-slate-400">Analytics</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full font-medium">Planificación</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">Panel de métricas y analytics para múltiples fuentes.</p>
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-4">
+                            <span class="text-slate-400"><span class="text-blue-400">●</span> Media</span>
+                            <span class="text-slate-400">3 tareas</span>
+                        </div>
+                        <span class="text-slate-500">2h invertidas</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-700 flex items-center justify-between">
+                        <div class="flex -space-x-2">
+                            <!-- No team members -->
+                        </div>
+                        <span class="text-xs text-slate-500">Actualizado hace 6d</span>
+                    </div>
+                </div>
+                
+                <!-- Add New Card -->
+                <div class="bg-slate-800/50 rounded-xl p-6 border border-dashed border-slate-700 cursor-pointer hover:border-slate-600 hover:bg-slate-800 transition-all flex flex-col items-center justify-center min-h-[200px]">
+                    <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-400">Agregar Proyecto</span>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

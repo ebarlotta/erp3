@@ -3,17 +3,22 @@
         <h2 class="text-2xl font-bold text-white">
             {{ $project ? 'Editar Proyecto' : 'Nuevo Proyecto' }}
         </h2>
-        <a href="{{ route('projects.index') }}" class="text-slate-400 hover:text-white">
-            ← Volver
+        <a href="{{ route('projects.index') }}">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                Volver
+            </button>
         </a>
+        {{-- <a href="{{ route('projects.index') }}" class="text-slate-400 hover:text-white">
+            ← Volver
+        </a> --}}
     </div>
 
     <form wire:submit="save" class="space-y-6">
         <!-- Name -->
         <div>
             <label class="block text-sm font-medium text-slate-300 mb-2">Nombre</label>
-            <input 
-                type="text" 
+            <input
+                type="text"
                 wire:model="name"
                 class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
                 placeholder="Nombre del proyecto"
@@ -24,7 +29,7 @@
         <!-- Description -->
         <div>
             <label class="block text-sm font-medium text-slate-300 mb-2">Descripción</label>
-            <textarea 
+            <textarea
                 wire:model="description"
                 rows="3"
                 class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
@@ -36,7 +41,7 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-2">Estado</label>
-                <select 
+                <select
                     wire:model="status"
                     class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
                 >
@@ -47,7 +52,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-2">Prioridad</label>
-                <select 
+                <select
                     wire:model="priority"
                     class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
                 >
@@ -63,7 +68,7 @@
             <label class="block text-sm font-medium text-slate-300 mb-2">Color</label>
             <div class="flex gap-3">
                 @foreach($colors as $hex => $name)
-                    <button 
+                    <button
                         type="button"
                         wire:click="$set('color', '{{ $hex }}')"
                         class="w-8 h-8 rounded-lg transition-transform hover:scale-110 {{ $color === $hex ? 'ring-2 ring-white ring-offset-2 ring-offset-slate-900' : '' }}"
@@ -78,16 +83,16 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-2">Fecha de Inicio</label>
-                <input 
-                    type="date" 
+                <input
+                    type="date"
                     wire:model="start_date"
                     class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
                 >
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-2">Fecha Objetivo</label>
-                <input 
-                    type="date" 
+                <input
+                    type="date"
                     wire:model="target_date"
                     class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
                 >
@@ -96,7 +101,7 @@
 
         <!-- Submit -->
         <div class="flex gap-4 pt-4">
-            <button 
+            <button
                 type="submit"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium"
             >

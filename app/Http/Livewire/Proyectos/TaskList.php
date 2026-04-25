@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Proyectos;
 
 use Livewire\Component;
-use App\Models\Project;
-use App\Models\Task;
-use Livewire\WithSorting;
+use App\Models\Proyectos\Project;
+use App\Models\Proyectos\Task;
+// use Livewire\WithSorting;
 
 class TaskList extends Component
 {
-    use WithSorting;
+    // use WithSorting;
 
     public Project $project;
     public string $newTaskTitle = '';
     public string $filterStatus = '';
+    public string $sortBy = 'created_at'; // columna por defecto
+     public string $sortDirection = 'desc'; // columna por defecto
 
     protected $queryString = ['filterStatus'];
 
@@ -25,13 +27,13 @@ class TaskList extends Component
             $query->where('status', $this->filterStatus);
         }
 
-        $tasks = $query->orderBy($this->sortBy, $this->sortDirection)->get();
+        $tasks = $query->orderBy($this->sortBy, $this->sortDirection,'asc')->get();
 
-        return view('livewire.task-list', [
+        return view('livewire.proyectos.task-list', [
             'tasks' => $tasks,
             'statuses' => Task::statuses(),
             'priorities' => Task::priorities(),
-        ]);
+        ])->extends('layouts.adminlte');
     }
 
     public function addTask()

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Proyectos;
 
 use Livewire\Component;
-use App\Models\Project;
+use App\Models\Proyectos\Project;
 use Livewire\WithPagination;
 
 class ProjectList extends Component

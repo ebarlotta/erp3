@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Proyectos;
 
 use Livewire\Component;
-use App\Models\Project;
-use App\Models\TimeEntry;
+use App\Models\Proyectos\Project;
+use App\Models\Proyectos\TimeEntry;
 
 class FocusWidget extends Component
 {

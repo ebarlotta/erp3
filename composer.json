@@ -17,6 +17,7 @@
         "livewire/livewire": "^3.6",
         "mercadopago/dx-php": "^3.7",
         "phpmailer/phpmailer": "^7.0",
+        "rappasoft/laravel-livewire-tables": "^3.7",
         "silviolleite/laravelpwa": "^2.0",
         "spatie/laravel-permission": "^6.20"
     },

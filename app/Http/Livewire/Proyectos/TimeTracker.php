@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Proyectos;
 
 use Livewire\Component;
-use App\Models\Project;
-use App\Models\Task;
-use App\Models\TimeEntry;
+use App\Models\Proyectos\Project;
+use App\Models\Proyectos\Task;
+use App\Models\Proyectos\TimeEntry;
 use Livewire\WithPagination;
 
 class TimeTracker extends Component
@@ -27,7 +27,7 @@ class TimeTracker extends Component
             ->orderBy('name')
             ->get();
 
-        $tasks = $this->selectedProject 
+        $tasks = $this->selectedProject
             ? Project::find($this->selectedProject)?->tasks ?? collect()
             : collect();
 
@@ -35,12 +35,12 @@ class TimeTracker extends Component
             ->orderByDesc('started_at')
             ->paginate(20);
 
-        return view('livewire.time-tracker', [
+        return view('livewire.proyectos.time-tracker', [
             'projects' => $projects,
             'tasks' => $tasks,
             'timeEntries' => $timeEntries,
             'runningTime' => $this->getRunningTime(),
-        ]);
+        ])->extends('layouts.adminlte');
     }
 
     public function updatedSelectedProject($projectId)
@@ -48,6 +48,13 @@ class TimeTracker extends Component
         $this->selectedTask = '';
     }
 
+    public function changeProject($project_id ) {
+        $this->selectedProject = $project_id;
+    }
+
+    public function changeTask($task_id ) {
+        $this->selectedTask = $task_id;
+    }
     public function startTimer()
     {
         if (!$this->selectedProject) return;

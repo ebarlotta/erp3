@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Proyectos;
 
 use Livewire\Component;
-use App\Models\Project;
+use App\Models\Proyectos\Project;
 
 class ProjectForm extends Component
 {
     public ?Project $project = null;
-    
+
     public string $name = '';
     public string $description = '';
     public string $status = 'planning';
@@ -27,19 +27,27 @@ class ProjectForm extends Component
         'target_date' => 'nullable|date|after:start_date',
     ];
 
-    public function mount(Project $project = null)
-    {
-        if ($project->id) {
-            $this->project = $project;
-            $this->name = $project->name;
-            $this->description = $project->description ?? '';
-            $this->status = $project->status;
-            $this->priority = $project->priority;
-            $this->color = $project->color;
-            $this->start_date = $project->start_date?->format('Y-m-d') ?? '';
-            $this->target_date = $project->target_date?->format('Y-m-d') ?? '';
-        }
-    }
+    // public function mount(Project $project = null)
+    // {
+
+    //     dd($project->id);
+
+    // }
+        // if ($project->id) {
+        //     $this->project = $project;
+        //     $this->name = $project->name;
+        //     $this->description = $project->description ?? '';
+        //     $this->status = $project->status;
+        //     $this->priority = $project->priority;
+        //     $this->color = $project->color;
+        //     $this->start_date = $project->start_date?->format('Y-m-d') ?? '';
+        //     $this->target_date = $project->target_date?->format('Y-m-d') ?? '';
+        // } else
+        // {
+        // dd($project->id);
+
+        // }
+    // }
 
     public function save()
     {
@@ -69,11 +77,15 @@ class ProjectForm extends Component
 
     public function render()
     {
-        return view('livewire.project-form', [
+        return view('livewire.proyectos.project-form', [
             'statuses' => Project::statuses(),
             'priorities' => Project::priorities(),
             'colors' => $this->colorPresets(),
-        ]);
+        ])->extends('layouts.adminlte');
+    }
+
+    public function create() {
+        return "echo";
     }
 
     protected function colorPresets(): array

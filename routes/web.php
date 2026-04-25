@@ -325,6 +325,58 @@ Route::get('configuraciones',ConfiguracionesComponent::class)->name('configuraci
 
 
 
+use App\Http\Livewire\Proyectos\Dashboard;
+use App\Http\Livewire\Proyectos\ProjectList;
+use App\Http\Livewire\Proyectos\ProjectForm;
+use App\Http\Livewire\Proyectos\TaskList;
+use App\Http\Livewire\Proyectos\TimeTracker;
+use App\Http\Livewire\Proyectos\FocusWidget;
+use App\Models\Proyectos\Project;
+
+/*-------------------------------------------------------------------------
+| Project Manager Routes
+|--------------------------------------------------------------------------
+| Agregar estas rutas en routes/web.php de tu aplicación Laravel  */
+
+Route::prefix('projects')->name('projects.')->group(function () {
+    // Dashboard
+    Route::get('/', Dashboard::class)->name('index');
+
+    // Project CRUD
+    Route::get('/create', ProjectForm::class)->name('create');
+    Route::get('/{project}/edit', ProjectForm::class)->name('edit');
+
+    // Tasks
+    Route::get('/{project}/tasks', TaskList::class)->name('tasks');
+
+    // Time Tracker
+    Route::get('/time', TimeTracker::class)->name('time');
+});
+
+/* -------------------------------------------------------------------------
+| Focus Widget Route (para embedding)
+|--------------------------------------------------------------------------
+| Puedes incluir el widget de Focus en cualquier página */
+
+Route::get('/projects/focus-widget', FocusWidget::class)->name('projects.focus-widget');
+
+/* ------------------------------------------------------------------------
+| Uso del Focus Widget en otras páginas
+|--------------------------------------------------------------------------
+| En cualquier vista Blade, puedes usar:
+|
+|   @livewire(\App\Http\Livewire\FocusWidget::class)
+|
+| O incluir el componente:
+|
+|   <livewire:focus-widget /> */
+
+
+
+
+
+
+
 // Route::get('/home', function () { return view('home'); });
 
 // Landing

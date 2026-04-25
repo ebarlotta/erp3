@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Proyectos;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,7 +46,7 @@ class TimeEntry extends Model
         $hours = floor($seconds / 3600);
         $minutes = floor(($seconds % 3600) / 60);
         $secs = $seconds % 60;
-        
+
         return sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
     }
 

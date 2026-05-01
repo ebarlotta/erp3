@@ -17,12 +17,7 @@
         <!-- Name -->
         <div>
             <label class="block text-sm font-medium text-slate-300 mb-2">Nombre</label>
-            <input
-                type="text"
-                wire:model="name"
-                class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500"
-                placeholder="Nombre del proyecto"
-            >
+            <input type="text" wire:model="name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500" placeholder="Nombre del proyecto">
             @error('name') <span class="text-red-400 text-sm">{{ $message }}</span> @enderror
         </div>
 

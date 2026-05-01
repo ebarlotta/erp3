@@ -331,6 +331,7 @@ use App\Http\Livewire\Proyectos\ProjectForm;
 use App\Http\Livewire\Proyectos\TaskList;
 use App\Http\Livewire\Proyectos\TimeTracker;
 use App\Http\Livewire\Proyectos\FocusWidget;
+use App\Http\Livewire\Proyectos\ProductBacklog;
 use App\Models\Proyectos\Project;
 
 /*-------------------------------------------------------------------------
@@ -351,6 +352,9 @@ Route::prefix('projects')->name('projects.')->group(function () {
 
     // Time Tracker
     Route::get('/time', TimeTracker::class)->name('time');
+
+    //Product Backlog
+    Route::get('/product-backlog',ProductBacklog::class)->name('product-backlog');
 });
 
 /* -------------------------------------------------------------------------

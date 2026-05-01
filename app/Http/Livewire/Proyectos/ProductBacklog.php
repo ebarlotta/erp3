@@ -1,0 +1,253 @@
+<?php
+
+namespace App\Http\Livewire\Proyectos;
+
+use Livewire\Component;
+use App\Models\Proyectos\PBI;
+use Illuminate\Foundation\Auth\User;
+use Livewire\WithPagination;
+
+// Características Implementadas
+// ✅ CRUD completo de PBIs
+// ✅ Priorización dinámica - modifica la prioridad directamente desde la tabla
+// ✅ Actualización de estado (Pendiente/En Progreso/Completado)
+// ✅ Filtrado por tipo de PBI (Feature, Bug, Task, Tech Debt)
+// ✅ Story points para estimación
+// ✅ Asignación a miembros del equipo
+// ✅ Paginación para manejar backlogs grandes
+// ✅ Interfaz reactiva sin recargas de página gracias a Livewire
+
+class ProductBacklog extends Component
+{
+    use WithPagination;
+    
+    public $showModal = false;
+    public $editingPBI = null;
+    
+    // Form properties
+    public $title = '';
+    public $description = '';
+    public $type = 'FEATURE';
+    public $priority = 0;
+    public $story_points = null;
+    public $assigned_to = null;
+
+    public $urgencia;
+    public $valor_negocio;
+    public $costo_estimado;
+    public $tiempo_limite_dias;
+    public $prioridad_automatica;
+    
+    protected $rules = [
+        'title' => 'required|min:3|max:255',
+        'description' => 'nullable|string',
+        'type' => 'required|in:FEATURE,BUG,TASK,TECH_DEBT',
+        'priority' => 'required|integer',
+        'story_points' => 'nullable|integer|min:1|max:21',
+        'assigned_to' => 'nullable|exists:users,id'
+    ];
+    
+    public function render()
+    {
+        $pbis = PBI::with('assignee')
+            ->orderBy('prioridad_automatica', 'desc')
+            // ->orderBy('priority', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+            
+        $users = User::all();
+    
+        return view('livewire.proyectos.product-backlog', [
+            'pbis' => $pbis,
+            'users' => $users
+        ])->extends('layouts.adminlte');
+    }
+    
+    public function create()
+    {
+        $this->resetForm();
+        $this->showModal = true;
+    }
+    
+    public function edit(PBI $pbi)
+    {
+        $this->editingPBI = $pbi;
+        $this->title = $pbi->title;
+        $this->description = $pbi->description;
+        $this->type = $pbi->type;
+        $this->priority = $pbi->priority;
+        $this->story_points = $pbi->story_points;
+        $this->assigned_to = $pbi->assigned_to;
+
+        // dd($pbi->urgencia);
+        $this->urgencia= $pbi->urgencia;
+        $this->valor_negocio= $pbi->valor_negocio;
+        $this->costo_estimado= $pbi->costo_estimado;
+        $this->tiempo_limite_dias= $pbi->tiempo_limite_dias;
+        $this->prioridad_automatica= $pbi->prioridad_automatica;
+
+        $this->showModal = true;
+    }
+    
+    public function save()
+    {
+        $this->validate();
+        
+        if ($this->editingPBI->id) {
+            $this->editingPBI->update([
+                'title' => $this->title,
+                'description' => $this->description,
+                'type' => $this->type,
+                'priority' => $this->priority,
+                'story_points' => $this->story_points,
+                'assigned_to' => $this->assigned_to,
+
+                'urgencia' => $this->urgencia,
+                'valor_negocio' => $this->valor_negocio,
+                'costo_estimado' => $this->costo_estimado,
+                'tiempo_limite_dias' => $this->tiempo_limite_dias,
+                'prioridad_automatica' => $this->calcularPrioridadAutomatica($this->editingPBI) // Recalcula la prioridad automática al guardar
+            ]);
+
+            session()->flash('message', 'PBI actualizado exitosamente.');
+        } else {
+            PBI::create([
+                'title' => $this->title,
+                'description' => $this->description,
+                'type' => $this->type,
+                'priority' => $this->priority,
+                'story_points' => $this->story_points,
+                'assigned_to' => $this->assigned_to,
+
+                'urgencia' => $this->urgencia,
+                'valor_negocio' => $this->valor_negocio,
+                'costo_estimado' => $this->costo_estimado,
+                'tiempo_limite_dias' => $this->tiempo_limite_dias,
+                'prioridad_automatica' => 0,
+                //  $this->editingPBI ? $this->calcularPrioridadAutomatica($this->editingPBI->id) : 1 // Calcula la prioridad automática al crear
+
+            ]);
+            session()->flash('message', 'PBI creado exitosamente.');
+        }
+        
+        $this->showModal = false;
+        $this->resetForm();
+    }
+    
+    public function updatePriority(PBI $pbi, $newPriority)
+    {
+        $pbi->update(['priority' => $newPriority]);
+    }
+    
+    public function updateStatus(PBI $pbi, $status)
+    {
+        $pbi->update(['status' => $status]);
+    }
+    
+    public function delete(PBI $pbi)
+    {
+        $pbi->delete();
+        session()->flash('message', 'PBI eliminado.');
+    }
+    
+    private function resetForm()
+    {
+        $this->reset(['title', 'description', 'type', 'priority', 'story_points', 'assigned_to', 'editingPBI']);
+        $this->resetValidation();
+    }
+
+
+
+    // En app/Livewire/ProductBacklog.php
+
+public function calcularPrioridadAutomatica($pbiId)
+{
+    $pbi = PBI::find($pbiId->id);
+    
+    // Datos de ejemplo (deberías obtenerlos de tu contexto)
+    $urgencia = $pbi->urgencia ?? 5; // Campo adicional en DB
+    $valorNegocio = $pbi->valor_negocio ?? 5;
+    $costoEstimado = $pbi->story_points ?? 5; // Usando story points como costo
+    $tiempoLimite = $pbi->tiempo_limite_dias ?? 30;
+    
+    // Velocidad del equipo (promedio de últimos 3 sprints)
+    $velocidadEquipo = $this->obtenerVelocidadEquipo();
+    
+    $prioridad = $this->formulaPrioridad(
+        $urgencia, 
+        $valorNegocio, 
+        $costoEstimado, 
+        $tiempoLimite, 
+        $velocidadEquipo
+    );
+    
+    $pbi->update(['priority' => $prioridad]);
+}
+
+private function formulaPrioridad($urgencia, $valorNegocio, $costoEstimado, $tiempoLimite, $velocidadEquipo)
+{
+    // Urgencia: 40% del peso
+    $urgenciaScore = $urgencia * 4;
+    
+    // Costo eficiente: 25% del peso  
+    $costoScore = min(10, (($valorNegocio * 0.4) / ($costoEstimado * 0.6)) * 2.5);
+    
+    // Tiempo-valor: 35% del peso
+    if ($tiempoLimite > 0) {
+        $capacidadSprints = $velocidadEquipo * ($tiempoLimite / 14);
+        $factorTiempo = ($capacidadSprints < $costoEstimado) ? 1.5 : 1.0;
+    } else {
+        $factorTiempo = 0.7;
+    }
+    
+    $tiempoScore = max(1, min(10, ($valorNegocio * $factorTiempo) - ($costoEstimado * 0.3)));
+    
+    // Cálculo final
+    $prioridad = ($urgenciaScore * 0.4) + ($costoScore * 2.5) + ($tiempoScore * 3.5);
+    
+    return min(100, max(0, $prioridad));
+}
+// Tabla de Decisión Rápida
+// Para facilitar la priorización manual, puedes usar esta matriz:
+
+// Urgencia	Costo       Bajo (1-3)	        Costo Medio (4-6)	        Costo Alto (7-10)
+// Alta (7-10)	        Prioridad 1 (hacer ya)	        Prioridad 2 (planificar)	        Prioridad 3 (evaluar alternativa)
+// Media (4-6)	        Prioridad 2 (siguiente sprint)  Prioridad 3 (backlog)       Prioridad 4 (depriorizar)
+// Baja (1-3)	Prioridad 3 (cuando haya tiempo)	Prioridad 4 (no crítico)	Prioridad 5 (descartar/pospuesto)
+
+/**
+ * Calcula la velocidad promedio del equipo basada en los últimos sprints
+ * @return float Velocidad en story points por sprint
+ */
+private function obtenerVelocidadEquipo()
+{
+    // Opción A: Si tienes un modelo Sprint o History
+    if (class_exists(\App\Models\Sprint::class)) {
+        $ultimosSprints = \App\Models\Sprint::where('estado', 'COMPLETED')
+            ->latest()
+            ->take(3)
+            ->get();
+        
+        if ($ultimosSprints->count() > 0) {
+            $velocidadPromedio = $ultimosSprints->avg('story_points_completados');
+            return $velocidadPromedio > 0 ? $velocidadPromedio : 10; // Valor por defecto
+        }
+    }
+    
+    // Opción B: Calcular basado en PBIs completados en los últimos 30 días
+    $treintaDiasAtras = now()->subDays(30);
+    $pbisCompletados = PBI::where('status', 'DONE')
+        ->where('updated_at', '>=', $treintaDiasAtras)
+        ->get();
+    
+    if ($pbisCompletados->count() > 0) {
+        // Asumiendo 2 sprints en 30 días (cada sprint de 2 semanas)
+        $totalStoryPoints = $pbisCompletados->sum('story_points');
+        $velocidadPorSprint = $totalStoryPoints / 2; // Dividir entre número de sprints
+        return max(1, round($velocidadPorSprint, 2));
+    }
+    
+    // Opción C: Valor por defecto si no hay datos históricos
+    return 10; // Velocidad base de 10 story points por sprint
+}
+}

@@ -33,18 +33,23 @@ class Project extends Model
         return $this->hasMany(Task::class)->orderBy('order');
     }
 
+    public function pbis(): HasMany
+    {
+        return $this->hasMany(PBI::class)->orderBy('order');
+    }
+
     public function timeEntries(): HasMany
     {
         return $this->hasMany(TimeEntry::class);
     }
 
-    public function getTotalHoursAttribute(): float
-    {
-        return $this->timeEntries()
-            ->whereNotNull('ended_at')
-            ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, started_at, ended_at)) as total')
-            ->value('total') / 3600;
-    }
+    // public function getTotalHoursAttribute(): float
+    // {
+    //     return $this->timeEntries()
+    //         ->whereNotNull('ended_at')
+    //         ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, started_at, ended_at)) as total')
+    //         ->value('total') / 3600;
+    // }
 
     public function getActiveTimeEntryAttribute(): ?TimeEntry
     {

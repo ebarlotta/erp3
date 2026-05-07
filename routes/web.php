@@ -348,13 +348,13 @@ Route::prefix('projects')->name('projects.')->group(function () {
     Route::get('/{project}/edit', ProjectForm::class)->name('edit');
 
     // Tasks
-    Route::get('/{project}/tasks', TaskList::class)->name('tasks');
+    Route::get('/product-backlog/tasks', TaskList::class)->name('tasks');
 
     // Time Tracker
     Route::get('/time', TimeTracker::class)->name('time');
 
     //Product Backlog
-    Route::get('/product-backlog',ProductBacklog::class)->name('product-backlog');
+    Route::get('/product-backlog/{project}',ProductBacklog::class)->name('product-backlog');
 });
 
 /* -------------------------------------------------------------------------

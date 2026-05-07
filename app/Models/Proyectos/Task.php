@@ -14,7 +14,7 @@ class Task extends Model
     protected $table = 'pm_tasks';
 
     protected $fillable = [
-        'project_id',
+        'pbi_id',
         'title',
         'description',
         'status',
@@ -26,6 +26,11 @@ class Task extends Model
     protected $casts = [
         'due_date' => 'date',
     ];
+
+    public function pbi(): BelongsTo
+    {
+        return $this->belongsTo(PBI::class);
+    }
 
     public function project(): BelongsTo
     {

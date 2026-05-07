@@ -1,35 +1,4 @@
 <div>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Project Manager - Dashboard</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <style>
-            * { font-family: 'Inter', sans-serif; }
-            body { background-color: #0f172a; }
-
-            /* Custom scrollbar */
-            ::-webkit-scrollbar { width: 6px; height: 6px; }
-            ::-webkit-scrollbar-track { background: #1e293b; }
-            ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
-            ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-
-            /* Card hover effect */
-            .project-card { transition: all 0.2s ease; }
-            .project-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -5px rgba(0,0,0,0.3); }
-
-            /* Focus widget glow */
-            .focus-glow { box-shadow: 0 0 40px rgba(59, 130, 246, 0.15); }
-
-            /* Timer pulse */
-            @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-            .timer-active { animation: pulse-green 2s ease-in-out infinite; }
-
-            /* Sidebar active */
-            .sidebar-item.active { background: linear-gradient(90deg, #3b82f6 0%, transparent 100%); border-left: 3px solid #60a5fa; }
-        </style>
-    </head>
     <body class="text-gray-300 min-h-screen">
         <div class="flex min-h-screen">
             <!-- Sidebar -->
@@ -44,7 +13,7 @@
                 </div>
 
                 <nav class="flex-1 p-4 space-y-1">
-                    <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-white {{ echo request()->routeIs() }})">
+                    <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-white active">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                         </svg>
@@ -155,7 +124,8 @@
         <h3 class="text-lg font-semibold text-white mb-4">Tus Proyectos</h3>
         <div class="grid grid-cols-3 gap-6">
             @forelse($projects as $project)
-                <a href="{{ route('projects.tasks', $project) }}" class="project-card bg-slate-800 rounded-xl p-6 border border-slate-700 cursor-pointer hover:border-slate-600">
+                {{-- <a href="{{ route('projects.tasks', $project) }}" class="project-card bg-slate-800 rounded-xl p-6 border border-slate-700 cursor-pointer hover:border-slate-600"> --}}
+                <a href="{{ route('projects.product-backlog', $project->id) }}" class="project-card bg-slate-800 rounded-xl p-6 border border-slate-700 cursor-pointer hover:border-slate-600">
                     <div class="flex items-start justify-between mb-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background-color: {{ $project->color }}20">

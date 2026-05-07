@@ -28,7 +28,8 @@ class Dashboard extends Component
             $query->where('priority', $this->priorityFilter);
         }
 
-        $projects = $query->with(['tasks', 'timeEntries'])
+        // $projects = $query->with(['tasks', 'timeEntries'])
+        $projects = $query
             ->orderByDesc('updated_at')
             ->get();
 

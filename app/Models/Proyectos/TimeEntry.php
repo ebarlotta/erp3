@@ -10,7 +10,7 @@ class TimeEntry extends Model
     protected $table = 'pm_time_entries';
 
     protected $fillable = [
-        'project_id',
+        'pbi_id',
         'task_id',
         'started_at',
         'ended_at',
@@ -22,9 +22,9 @@ class TimeEntry extends Model
         'ended_at' => 'datetime',
     ];
 
-    public function project(): BelongsTo
+    public function pbi(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(PBI::class);
     }
 
     public function task(): BelongsTo
@@ -50,15 +50,15 @@ class TimeEntry extends Model
         return sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
     }
 
-    public static function start(Project $project, ?Task $task = null): self
+    public static function start(PBI $pbi, ?Task $task = null): self
     {
         // Stop any running timer first
-        self::whereNull('ended_at')->where('project_id', $project->id)->each(function ($entry) {
+        self::whereNull('ended_at')->where('pbi_id', $pbi->id)->each(function ($entry) {
             $entry->update(['ended_at' => now()]);
         });
 
         return self::create([
-            'project_id' => $project->id,
+            'pbi_id' => $pbi->id,
             'task_id' => $task?->id,
             'started_at' => now(),
         ]);

@@ -17,14 +17,33 @@ return new class extends Migration
             $table->string('color')->default('#3b82f6');
             $table->date('start_date')->nullable();
             $table->date('target_date')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });
 
+        Schema::create('pm_pbi', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->enum('type', ['FEATURE', 'BUG', 'TASK', 'TECH_DEBT']);
+            $table->enum('status', ['PENDING', 'IN_PROGRESS', 'DONE'])->default('PENDING');
+            $table->integer('priority')->default(0);  // Número más alto = mayor prioridad
+            $table->integer('story_points')->nullable();
+            $table->foreignId('assigned_to')->nullable()->constrained('users');
+            $table->foreignId('project_id')->constrained('pm_projects')->onDelete('cascade');
+            $table->integer('urgencia')->nullable()->comment('1-10');
+            $table->integer('valor_negocio')->nullable()->comment('1-10');
+            $table->integer('costo_estimado')->nullable()->comment('1-10');
+            $table->integer('tiempo_limite_dias')->nullable();
+            $table->boolean('prioridad_automatica')->default(false);
+
+            $table->timestamps();
+        });
+
         Schema::create('pm_tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('pm_projects')->onDelete('cascade');
+            $table->foreignId('pbi_id')->constrained('pm_pbi')->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
@@ -37,11 +56,18 @@ return new class extends Migration
 
         Schema::create('pm_time_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('pm_projects')->onDelete('cascade');
+            $table->foreignId('pbi_id')->constrained('pm_pbi')->onDelete('cascade');
             $table->foreignId('task_id')->nullable()->constrained('pm_tasks')->onDelete('set null');
             $table->timestamp('started_at');
             $table->timestamp('ended_at')->nullable();
             $table->text('notes')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('pm_pbi_users', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('pbi_id')->constrained('pm_pbi')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -51,5 +77,7 @@ return new class extends Migration
         Schema::dropIfExists('pm_time_entries');
         Schema::dropIfExists('pm_tasks');
         Schema::dropIfExists('pm_projects');
+        Schema::dropIfExists('pm_pbi');
+        Schema::dropIfExists('pm_pbi_users');
     }
 };

@@ -3,8 +3,9 @@
 namespace App\Http\Livewire\Proyectos;
 
 use Livewire\Component;
-use App\Models\Proyectos\PBI;
+use App\Models\Proyectos\Pbi;
 use Illuminate\Foundation\Auth\User;
+use App\Models\Proyectos\Project;
 use Livewire\WithPagination;
 
 // Características Implementadas
@@ -21,6 +22,7 @@ class ProductBacklog extends Component
 {
     use WithPagination;
     
+    public Project $project;
     public $showModal = false;
     public $editingPBI = null;
     
@@ -31,6 +33,7 @@ class ProductBacklog extends Component
     public $priority = 0;
     public $story_points = null;
     public $assigned_to = null;
+    public $project_id = null;
 
     public $urgencia;
     public $valor_negocio;
@@ -49,10 +52,11 @@ class ProductBacklog extends Component
     
     public function render()
     {
-        $pbis = PBI::with('assignee')
+        $pbis = Pbi::with('assignee')
             ->orderBy('prioridad_automatica', 'desc')
             // ->orderBy('priority', 'desc')
             ->orderBy('created_at', 'desc')
+            ->where('project_id', $this->project->id)
             ->paginate(10);
             
         $users = User::all();
@@ -60,16 +64,17 @@ class ProductBacklog extends Component
         return view('livewire.proyectos.product-backlog', [
             'pbis' => $pbis,
             'users' => $users
-        ])->extends('layouts.adminlte');
+        ])->extends('layouts.proyectos');
     }
     
-    public function create()
+    public function create($project_id)
     {
         $this->resetForm();
+        $this->project_id = $project_id;
         $this->showModal = true;
     }
     
-    public function edit(PBI $pbi)
+    public function edit(Pbi $pbi)
     {
         $this->editingPBI = $pbi;
         $this->title = $pbi->title;
@@ -87,13 +92,18 @@ class ProductBacklog extends Component
         $this->prioridad_automatica= $pbi->prioridad_automatica;
 
         $this->showModal = true;
+
     }
     
+    public function edit_tasks(Pbi $pbi)
+    {
+        return redirect()->route('projects.tasks', ['project_id' => $pbi->project_id, 'pbi_id' => $pbi->id]);
+    }
+
     public function save()
     {
         $this->validate();
-        
-        if ($this->editingPBI->id) {
+        if (!is_null($this->editingPBI)) {
             $this->editingPBI->update([
                 'title' => $this->title,
                 'description' => $this->description,
@@ -101,6 +111,7 @@ class ProductBacklog extends Component
                 'priority' => $this->priority,
                 'story_points' => $this->story_points,
                 'assigned_to' => $this->assigned_to,
+                'project_id' => $this->project_id,
 
                 'urgencia' => $this->urgencia,
                 'valor_negocio' => $this->valor_negocio,
@@ -109,16 +120,16 @@ class ProductBacklog extends Component
                 'prioridad_automatica' => $this->calcularPrioridadAutomatica($this->editingPBI) // Recalcula la prioridad automática al guardar
             ]);
 
-            session()->flash('message', 'PBI actualizado exitosamente.');
+            session()->flash('message', 'Product Backlog Item actualizado exitosamente.');
         } else {
-            PBI::create([
+            Pbi::create([
                 'title' => $this->title,
                 'description' => $this->description,
                 'type' => $this->type,
                 'priority' => $this->priority,
                 'story_points' => $this->story_points,
                 'assigned_to' => $this->assigned_to,
-
+                'project_id' => $this->project_id,
                 'urgencia' => $this->urgencia,
                 'valor_negocio' => $this->valor_negocio,
                 'costo_estimado' => $this->costo_estimado,
@@ -127,27 +138,32 @@ class ProductBacklog extends Component
                 //  $this->editingPBI ? $this->calcularPrioridadAutomatica($this->editingPBI->id) : 1 // Calcula la prioridad automática al crear
 
             ]);
-            session()->flash('message', 'PBI creado exitosamente.');
+            session()->flash('message', 'Product Backlog Item creado exitosamente.');
         }
         
         $this->showModal = false;
         $this->resetForm();
     }
     
-    public function updatePriority(PBI $pbi, $newPriority)
+    public function updatePriority(Pbi $pbi, $newPriority)
     {
         $pbi->update(['priority' => $newPriority]);
     }
     
-    public function updateStatus(PBI $pbi, $status)
+     public function cerrarModal()
+    {
+        $this->showModal = false;
+    }
+
+    public function updateStatus(Pbi $pbi, $status)
     {
         $pbi->update(['status' => $status]);
     }
     
-    public function delete(PBI $pbi)
+    public function delete(Pbi $pbi)
     {
         $pbi->delete();
-        session()->flash('message', 'PBI eliminado.');
+        session()->flash('message', 'Product Backlog Item eliminado.');
     }
     
     private function resetForm()
@@ -162,7 +178,7 @@ class ProductBacklog extends Component
 
 public function calcularPrioridadAutomatica($pbiId)
 {
-    $pbi = PBI::find($pbiId->id);
+    $pbi = Pbi::find($pbiId->id);
     
     // Datos de ejemplo (deberías obtenerlos de tu contexto)
     $urgencia = $pbi->urgencia ?? 5; // Campo adicional en DB
@@ -236,7 +252,7 @@ private function obtenerVelocidadEquipo()
     
     // Opción B: Calcular basado en PBIs completados en los últimos 30 días
     $treintaDiasAtras = now()->subDays(30);
-    $pbisCompletados = PBI::where('status', 'DONE')
+    $pbisCompletados = Pbi::where('status', 'DONE')
         ->where('updated_at', '>=', $treintaDiasAtras)
         ->get();
     

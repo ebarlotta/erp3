@@ -28,10 +28,10 @@ class Pbi extends Model
     ];
     
     protected $casts = [
-        'priority' => 'integer',
+        // 'priority' => 'number',
         'story_points' => 'integer',
         'urgencia' => 'integer', 
-        'prioridad_automatica' => 'integer', 
+        // 'prioridad_automatica' => 'number', 
         'valor_negocio' => 'integer',
         'costo_estimado' => 'integer',
         'tiempo_limite_dias' => 'integer'

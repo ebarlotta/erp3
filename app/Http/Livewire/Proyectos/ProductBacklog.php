@@ -34,6 +34,7 @@ class ProductBacklog extends Component
     public $story_points = null;
     public $assigned_to = null;
     public $project_id = null;
+    public $pbi_id = null;
 
     public $urgencia;
     public $valor_negocio;
@@ -45,7 +46,7 @@ class ProductBacklog extends Component
         'title' => 'required|min:3|max:255',
         'description' => 'nullable|string',
         'type' => 'required|in:FEATURE,BUG,TASK,TECH_DEBT',
-        'priority' => 'required|integer',
+        'priority' => 'required',
         'story_points' => 'nullable|integer|min:1|max:21',
         'assigned_to' => 'nullable|exists:users,id'
     ];
@@ -53,8 +54,8 @@ class ProductBacklog extends Component
     public function render()
     {
         $pbis = Pbi::with('assignee')
-            ->orderBy('prioridad_automatica', 'desc')
-            // ->orderBy('priority', 'desc')
+            // ->orderBy('prioridad_automatica', 'desc')
+            ->orderBy('priority', 'desc')
             ->orderBy('created_at', 'desc')
             ->where('project_id', $this->project->id)
             ->paginate(10);
@@ -83,6 +84,7 @@ class ProductBacklog extends Component
         $this->priority = $pbi->priority;
         $this->story_points = $pbi->story_points;
         $this->assigned_to = $pbi->assigned_to;
+        $this->project_id = $pbi->project_id;
 
         // dd($pbi->urgencia);
         $this->urgencia= $pbi->urgencia;
@@ -103,30 +105,31 @@ class ProductBacklog extends Component
     public function save()
     {
         $this->validate();
+
         if (!is_null($this->editingPBI)) {
             $this->editingPBI->update([
                 'title' => $this->title,
                 'description' => $this->description,
                 'type' => $this->type,
-                'priority' => $this->priority,
                 'story_points' => $this->story_points,
                 'assigned_to' => $this->assigned_to,
                 'project_id' => $this->project_id,
-
+                
                 'urgencia' => $this->urgencia,
                 'valor_negocio' => $this->valor_negocio,
                 'costo_estimado' => $this->costo_estimado,
                 'tiempo_limite_dias' => $this->tiempo_limite_dias,
-                'prioridad_automatica' => $this->calcularPrioridadAutomatica($this->editingPBI) // Recalcula la prioridad automática al guardar
+                'prioridad_automatica' => $this->calcularPrioridadAutomatica($this->editingPBI->id), // Recalcula la prioridad automática al guardar
+                'priority' => $this->prioridad_automatica, // Actualiza la prioridad manualmente con el valor calculado
+                // 'priority' => $this->priority,
             ]);
 
             session()->flash('message', 'Product Backlog Item actualizado exitosamente.');
         } else {
-            Pbi::create([
+            $a = Pbi::create([
                 'title' => $this->title,
                 'description' => $this->description,
                 'type' => $this->type,
-                'priority' => $this->priority,
                 'story_points' => $this->story_points,
                 'assigned_to' => $this->assigned_to,
                 'project_id' => $this->project_id,
@@ -134,51 +137,31 @@ class ProductBacklog extends Component
                 'valor_negocio' => $this->valor_negocio,
                 'costo_estimado' => $this->costo_estimado,
                 'tiempo_limite_dias' => $this->tiempo_limite_dias,
-                'prioridad_automatica' => 0,
                 //  $this->editingPBI ? $this->calcularPrioridadAutomatica($this->editingPBI->id) : 1 // Calcula la prioridad automática al crear
-
+                'priority' => 0,
+                'prioridad_automatica' => 0,
             ]);
+            $a->update(['priority' => $this->calcularPrioridadAutomatica($a->id)]);
+            // $this->updatePriority(Pbi $a, $this->calcularPrioridadAutomatica($tha->id));
             session()->flash('message', 'Product Backlog Item creado exitosamente.');
         }
         
         $this->showModal = false;
-        $this->resetForm();
-    }
-    
-    public function updatePriority(Pbi $pbi, $newPriority)
-    {
-        $pbi->update(['priority' => $newPriority]);
-    }
-    
-     public function cerrarModal()
-    {
-        $this->showModal = false;
-    }
+        return redirect()->route('projects.product-backlog', ['project' => $this->project_id]);
 
-    public function updateStatus(Pbi $pbi, $status)
-    {
-        $pbi->update(['status' => $status]);
+        // $this->resetForm();
     }
     
-    public function delete(Pbi $pbi)
-    {
-        $pbi->delete();
-        session()->flash('message', 'Product Backlog Item eliminado.');
-    }
-    
-    private function resetForm()
-    {
-        $this->reset(['title', 'description', 'type', 'priority', 'story_points', 'assigned_to', 'editingPBI']);
-        $this->resetValidation();
-    }
-
-
+    public function updatePriority(Pbi $pbi, $newPriority) { $pbi->update(['priority' => $newPriority]); }    
+    public function updateStatus(Pbi $pbi, $status) { $pbi->update(['status' => $status]); }
+    public function delete(Pbi $pbi) { $pbi->delete(); session()->flash('message', 'Product Backlog Item eliminado.'); }
+    private function resetForm() { $this->reset(['title', 'description', 'type', 'priority', 'story_points', 'assigned_to', 'editingPBI']); $this->resetValidation(); }
 
     // En app/Livewire/ProductBacklog.php
 
 public function calcularPrioridadAutomatica($pbiId)
 {
-    $pbi = Pbi::find($pbiId->id);
+    $pbi = Pbi::find($pbiId);
     
     // Datos de ejemplo (deberías obtenerlos de tu contexto)
     $urgencia = $pbi->urgencia ?? 5; // Campo adicional en DB
@@ -189,6 +172,7 @@ public function calcularPrioridadAutomatica($pbiId)
     // Velocidad del equipo (promedio de últimos 3 sprints)
     $velocidadEquipo = $this->obtenerVelocidadEquipo();
     
+    // dd($urgencia . ' - ' . $valorNegocio . ' - ' . $costoEstimado . ' - ' . $tiempoLimite . ' - ' . $velocidadEquipo);
     $prioridad = $this->formulaPrioridad(
         $urgencia, 
         $valorNegocio, 
@@ -196,18 +180,23 @@ public function calcularPrioridadAutomatica($pbiId)
         $tiempoLimite, 
         $velocidadEquipo
     );
-    
-    $pbi->update(['priority' => $prioridad]);
+
+    // dd($prioridad);
+    $this->prioridad_automatica = $prioridad;
+    return $prioridad;
+    // $pbi->update(['priority' => $prioridad]);
 }
 
 private function formulaPrioridad($urgencia, $valorNegocio, $costoEstimado, $tiempoLimite, $velocidadEquipo)
 {
     // Urgencia: 40% del peso
-    $urgenciaScore = $urgencia * 4;
-    
+    $urgenciaScore = $urgencia;
+    // $urgenciaScore = $urgencia * 4;
+    // dd($urgenciaScore*0.4);
     // Costo eficiente: 25% del peso  
-    $costoScore = min(10, (($valorNegocio * 0.4) / ($costoEstimado * 0.6)) * 2.5);
-    
+    $costoScore = min(10, (($valorNegocio * 0.4) / ($costoEstimado * 0.6)) );
+    // $costoScore = min(10, (($valorNegocio * 0.4) / ($costoEstimado * 0.6)) * 2.5);
+    // dd($costoScore);
     // Tiempo-valor: 35% del peso
     if ($tiempoLimite > 0) {
         $capacidadSprints = $velocidadEquipo * ($tiempoLimite / 14);
@@ -215,12 +204,18 @@ private function formulaPrioridad($urgencia, $valorNegocio, $costoEstimado, $tie
     } else {
         $factorTiempo = 0.7;
     }
+    // dd($factorTiempo);
     
     $tiempoScore = max(1, min(10, ($valorNegocio * $factorTiempo) - ($costoEstimado * 0.3)));
     
+    // dd($tiempoScore);
+
     // Cálculo final
-    $prioridad = ($urgenciaScore * 0.4) + ($costoScore * 2.5) + ($tiempoScore * 3.5);
+    $prioridad = ($urgenciaScore*0.4) + ($costoScore*0.25) + ($tiempoScore * 0.35);
+    // $prioridad = ($urgenciaScore * 0.4) + ($costoScore * 2.5) + ($tiempoScore * 3.5);
     
+    //  dd($prioridad);
+
     return min(100, max(0, $prioridad));
 }
 // Tabla de Decisión Rápida

@@ -158,10 +158,7 @@
                     @foreach($pbis as $pbi)
                     <tr class="border-t">
                         <td class="px-6 py-4">
-                            <input type="number" 
-                                   wire:change="updatePriority({{ $pbi->id }}, $event.target.value)"
-                                   value="{{ $pbi->priority }}"
-                                   class="w-20 border rounded px-2 py-1">
+                            <input type="text" wire:change="updatePriority({{ $pbi->id }}, $event.target.value)" value="{{ $pbi->priority }}" class="w-20 border rounded px-2 py-1">
                         </td>
                         <td class="px-6 py-4">
                             <div class="font-medium">{{ $pbi->title }}</div>
@@ -212,6 +209,7 @@
 
         <!-- Modal para crear/editar -->
         @if($showModal)
+        
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
             <div class="bg-white rounded-lg p-6 w-2/4">
                 <h2 class="text-xl font-bold mb-4">
@@ -260,8 +258,12 @@
                         le="Esfuerzo requerido para implementar (1-10)">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">Tiempo Límite (plazo máximo para tener listo)</label>
-                            <input type="number" wire:model="tiempo_limite_dias" class="w-full border rounded px-3 py-2" style="title='Plazo máximo para tener listo (en días) - afecta prioridad automática'">
+                            <label class="block text-sm font-medium mb-1">
+                                Tiempo Límite (días)
+                                <span class="text-xs text-gray-500">(plazo máximo para tener listo)</span>
+                            </label>
+                            <input type="number" wire:model="tiempo_limite_dias" class="w-full border rounded px-3 py-2">
+                            @error('tiempo_limite_dias') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1">Story Points (story_points promedio por sprint)</label>
@@ -270,8 +272,7 @@
                     </div>
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button wire:click="cerrarModal()" class="px-4 py-2 border rounded">
-                    {{-- <button wire:click="$set('showModal', false)" class="px-4 py-2 border rounded"> --}}
+                    <button wire:click="$set('showModal', false)" class="px-4 py-2 border rounded">
                         Cancelar
                     </button>
                     <button wire:click="save" class="px-4 py-2 bg-blue-500 text-white rounded">

@@ -13,6 +13,76 @@ class ImprimirPDF extends Controller
 
     public $operacion, $registros, $saldo;
 
+    public function ComprasCtaCte( Request $request) {
+
+        // FALTA POR HACER
+
+        $this->operacion = "deuda"; //$request->operacion;
+        $this->registros = DB::table('comprobantes')
+        ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo, proveedors.id, proveedors.name')
+        ->join('proveedors', 'comprobantes.proveedor_id', '=', 'proveedors.id')
+        //->whereBetween('comprobantes.fecha',["'".$this->ddesde."'","'".$this->dhasta."'"])
+        // ->whereRaw('(NetoComp-MontoPagadoComp)>1')
+        ->where('comprobantes.fecha','>=',date($request->ddesde))
+        ->where('comprobantes.fecha','<=',date($request->dhasta))
+        ->groupBy('proveedors.id');
+
+        $sql ="select sum(NetoComp-MontoPagadoComp) as Saldo, proveedors.id, proveedors.name from `comprobantes` inner join `proveedors` on `comprobantes`.`proveedor_id` = `proveedors`.`id` and `comprobantes`.`fecha` >= '$request->ddesde' and `comprobantes`.`fecha` <= '$request->dhasta' and comprobantes.empresa_id=".session('empresa_id')." group by proveedors.id, proveedors.name HAVING Saldo > 1";
+        // dd($sql);
+        // $registros = DB::select(DB::raw($sql));
+        $registros = DB::select($sql);
+        
+        $this->saldo = 0;
+        foreach($registros as $registro) { 
+            if($registro->Saldo>1) { $this->saldo = $this->saldo + $registro->Saldo; }
+            if($registro->Saldo<1) { $this->saldo = $this->saldo + $registro->Saldo * -1; }
+        }
+
+        $saldototal = $this->saldo;
+        $operacion = $this->operacion;
+        $html = $this->PrepararTabla($registros);
+        // dd($sql);
+        $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
+        
+        // download PDF file with download method
+        return $pdf->stream('pdf_file.pdf');
+    }
+
+    public function VentasCtaCte( Request $request) {
+
+        // FALTA POR HACER
+
+        $this->operacion = "deuda"; //$request->operacion;
+        $this->registros = DB::table('comprobantes')
+        ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo, proveedors.id, proveedors.name')
+        ->join('proveedors', 'comprobantes.proveedor_id', '=', 'proveedors.id')
+        //->whereBetween('comprobantes.fecha',["'".$this->ddesde."'","'".$this->dhasta."'"])
+        // ->whereRaw('(NetoComp-MontoPagadoComp)>1')
+        ->where('comprobantes.fecha','>=',date($request->ddesde))
+        ->where('comprobantes.fecha','<=',date($request->dhasta))
+        ->groupBy('proveedors.id');
+
+        $sql ="select sum(NetoComp-MontoPagadoComp) as Saldo, proveedors.id, proveedors.name from `comprobantes` inner join `proveedors` on `comprobantes`.`proveedor_id` = `proveedors`.`id` and `comprobantes`.`fecha` >= '$request->ddesde' and `comprobantes`.`fecha` <= '$request->dhasta' and comprobantes.empresa_id=".session('empresa_id')." group by proveedors.id, proveedors.name HAVING Saldo > 1";
+        // dd($sql);
+        // $registros = DB::select(DB::raw($sql));
+        $registros = DB::select($sql);
+        
+        $this->saldo = 0;
+        foreach($registros as $registro) { 
+            if($registro->Saldo>1) { $this->saldo = $this->saldo + $registro->Saldo; }
+            if($registro->Saldo<1) { $this->saldo = $this->saldo + $registro->Saldo * -1; }
+        }
+
+        $saldototal = $this->saldo;
+        $operacion = $this->operacion;
+        $html = $this->PrepararTabla($registros);
+        // dd($sql);
+        $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
+        
+        // download PDF file with download method
+        return $pdf->stream('pdf_file.pdf');
+    }
+
     public function DeudaPFD( Request $request) {
         $this->operacion = "deuda"; //$request->operacion;
         $this->registros = DB::table('comprobantes')
@@ -74,7 +144,7 @@ class ImprimirPDF extends Controller
         ->where('comprobantes.fecha','>=',$request->cdesde)
         ->where('comprobantes.fecha','<=',$request->chasta)
         ->get();
-// dd($registros);
+        // dd($registros);
 
         $saldo = 0;
         foreach($registros as $registro) { 
@@ -148,47 +218,47 @@ class ImprimirPDF extends Controller
         $libro = 0;
         if ($compraventa) { $LIBRO = 'COMPRAS'; } else { $LIBRO = 'VENTAS'; }
         $encabezado = '<table style="font-size: 14px; line-height: 16px; width:100%; border: 1px solid #ddd; font-family: Arial, Helvetica, sans-serif">
-        <tr>
-            <td style="width:33%; text-align:left;">Empresa: ' . $empresa->name.'</td>
-            <td style="width:33%; text-align:center;"></td>
-            <td style="width:33%; text-align:right;">Mes: '. $mes.'</td>
-        </tr>
-        <tr>
-            <td style="width:33%; text-align:left;">' . $empresa->direccion.'</td>
-            <td style="width:33%; text-align:center;"><u>REGISTRO IVA ' . $LIBRO . '</u></td>
-            <td style="width:33%; text-align:right;">Libro Nro: ' . $libro.'</td>
-        </tr>
-        <tr>
-            <td style="width:33%; text-align:left;">Cuit:' . $empresa->cuit.' - IB: ' . $empresa->ib.'</td>
-            <td style="width:33%; text-align:center;"></td>
-            <td style="width:33%; text-align:right;">Página Nro: ' . $pagina.'</td>
-        </tr>
-        <tr>
-            <td style="width:33%; text-align:left;">Nro Establecimiento: ' . $empresa->establecimiento.'</td>
-            <td style="width:33%; text-align:center;"></td>
-            <td style="width:33%; text-align:right;">'. $mes.' - '.$anio.'</td>
-        </tr>
-        <tr>
-            <td style="width:33%; text-align:left;">Condición IVA: ' . $empresa->actividad1.'</td>
-            <td style="width:33%; text-align:center;"></td>
-            <td style="width:33%; text-align:right;"></td>
-        </tr>
-    </table>
-    <table style=" margin-top:3px; font-size: 12px; line-height: 12px; border-collapse: collapse; width:100%;">
-        <tr style="color:black; background-color:#ddd; border: 1px solid #ddd;">
-            <td style="border: 1px solid #ddd; text-align:center;">Fecha</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Comprobante</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Vendedor</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Cuit</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Bruto</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Iva</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Exento</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Imp.Interno</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Perc.Iva</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Ret.IB</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Ret.GAN</td>
-            <td style="border: 1px solid #ddd; text-align:center;">Total</td>
-        </tr>';
+            <tr>
+                <td style="width:33%; text-align:left;">Empresa: ' . $empresa->name.'</td>
+                <td style="width:33%; text-align:center;"></td>
+                <td style="width:33%; text-align:right;">Mes: '. $mes.'</td>
+            </tr>
+            <tr>
+                <td style="width:33%; text-align:left;">' . $empresa->direccion.'</td>
+                <td style="width:33%; text-align:center;"><u>REGISTRO IVA ' . $LIBRO . '</u></td>
+                <td style="width:33%; text-align:right;">Libro Nro: ' . $libro.'</td>
+            </tr>
+            <tr>
+                <td style="width:33%; text-align:left;">Cuit:' . $empresa->cuit.' - IB: ' . $empresa->ib.'</td>
+                <td style="width:33%; text-align:center;"></td>
+                <td style="width:33%; text-align:right;">Página Nro: ' . $pagina.'</td>
+            </tr>
+            <tr>
+                <td style="width:33%; text-align:left;">Nro Establecimiento: ' . $empresa->establecimiento.'</td>
+                <td style="width:33%; text-align:center;"></td>
+                <td style="width:33%; text-align:right;">'. $mes.' - '.$anio.'</td>
+            </tr>
+            <tr>
+                <td style="width:33%; text-align:left;">Condición IVA: ' . $empresa->actividad1.'</td>
+                <td style="width:33%; text-align:center;"></td>
+                <td style="width:33%; text-align:right;"></td>
+            </tr>
+        </table>
+        <table style=" margin-top:3px; font-size: 12px; line-height: 12px; border-collapse: collapse; width:100%;">
+            <tr style="color:black; background-color:#ddd; border: 1px solid #ddd;">
+                <td style="border: 1px solid #ddd; text-align:center;">Fecha</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Comprobante</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Vendedor</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Cuit</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Bruto</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Iva</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Exento</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Imp.Interno</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Perc.Iva</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Ret.IB</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Ret.GAN</td>
+                <td style="border: 1px solid #ddd; text-align:center;">Total</td>
+            </tr>';
         return $encabezado;
     }
 

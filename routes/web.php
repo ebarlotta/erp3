@@ -203,6 +203,8 @@ Route::get('pdf/deuda/{ddesde}/{dhasta}', [ImprimirPDF::class, 'DeudaPFD'])->nam
 Route::get('pdf/credito/{cdesde}/{chasta}', [ImprimirPDF::class, 'CreditoPFD'])->name('CreditoPFD');
 Route::get('pdf/ivacompras/{anio}/{mes}', [ImprimirPDF::class, 'IvaCompras'])->name('IvaCompras');
 Route::get('pdf/ivaventas/{anio}/{mes}', [ImprimirPDF::class, 'IvaVentas'])->name('IvaVentas');
+Route::get('pdf/cta-cte-compras/{anio}/{mes}', [ImprimirPDF::class, 'ComprasCtaCte'])->name('ComprasCtaCte');
+Route::get('pdf/cta-cte-ventas/{anio}/{mes}', [ImprimirPDF::class, 'VentasCtaCte'])->name('VentasCtaCte');
 
 Route::get('pdf/recibos/{anio}/{mes}/{empleadoseleccionado}', [ImprimirPDF::class, 'Recibo'])->name('Recibos');
 Route::get('pdf/informes/{nombre}', [VisualizarTablaComponent::class, 'GenerarPDF'])->name('InformePFD');

@@ -799,9 +799,14 @@
 										Cuenta <br>
 										*
 									</div>
+								</div>
+								<div class="flex justify-center">
 									<div class="block mb-4 justify-center">
 										<input class="ml-2 text-xs rounded-md h-7 btn btn-info px-8 py-1 mx-2 mt-3" type="button" wire:click="ListarCuentasCorrientes" value="Calcular"><br>
 									</div>
+									<a href="{{ URL::to('/pdf/ivaventas'.'/'.$lanio.'/'.$lmes) }}" target="_blank">
+										<button class="rounded-md bg-green-300 px-8 py-1 ml-4 mt-6" style="color: black;">Imprimir Resumen</button>
+									</a><br>
 								</div>
 								{!! $CuentasCorrientesHtml !!}
 							</div>
@@ -812,7 +817,7 @@
 											<tr>
 												<td>
 													<label for="">Mes</label><br>
-													<select class="mr-4 w-full text-xs px-1 rounded-md h-7 leading-none" wire:model="lmes" wire:change="MostrarLibros()">
+													<select class="mr-4 w-full text-xs px-1 rounded-md h-7 leading-none" wire:model="lmes" wire:change="MostrarListadeLibros()">
 														<option value=""></option>
 														<option value="1">enero</option>
 														<option value="2">febrero</option>
@@ -828,7 +833,7 @@
 														<option value="12">diciembre</option>
 													</select>
 													<label for="">Año</label><br>
-													<select class="mr-4 w-full text-xs rounded-md h-7 leading-none" wire:model="lanio" wire:change="MostrarLibros()">
+													<select class="mr-4 w-full text-xs rounded-md h-7 leading-none" wire:model="lanio" wire:change="MostrarListadeLibros()">
 														<option value=""></option>
 														<option value="2026">2026</option>
                                                         <option value="2025">2025</option>

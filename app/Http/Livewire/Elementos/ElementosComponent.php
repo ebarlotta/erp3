@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Elementos;
 
+use Illuminate\Http\Request;
+
 use App\Models\Archivos;
 use App\Models\Unidad;
 use App\Models\Categorias;
@@ -35,7 +37,7 @@ class ElementosComponent extends Component
     public $barra, $qr, $descuento, $descuento_especial, $descripcion, $calificacion, $precio_venta, $lote,  $proveedores, $proveedor_id; //producto
     public $marca, $listas, $lista_id; //Articulo
     public $isModalOpen=false, $isModalDelete=false;
-    public $ruta;
+    public $ruta, $rutaTemporal;
     public $photos = [];
 
     use WithPagination;
@@ -115,7 +117,15 @@ class ElementosComponent extends Component
         $this->reset( 'elemento_id', 'name', 'existencia', 'stock_minimo', 'precio_compra', 'categoria_id', 'unidad_id', 'vencimiento', 'pedira', 'psiquiatrico', 'estados', 'estado_id', 'barra', 'qr', 'descuento', 'descuento_especial', 'descripcion', 'calificacion', 'precio_venta', 'lote', 'ruta', 'proveedores', 'proveedor_id', 'marca', 'listas', 'lista_id');
     }
 
-    public function store() {
+    public function store(Request $request) {
+        $rutaPath = null;
+
+        if($this->ruta) {
+            $rutaPath = $this->ruta->store('photos', 'public');
+            // $this->ruta = $rutaPath;
+            $this->rutaTemporal = $rutaPath . $rutaPath->temporaryUrl() ;
+        }
+
         $this->validate([
             'name'=> 'required',
             'existencia'=> 'required|numeric|min:0',
@@ -126,15 +136,16 @@ class ElementosComponent extends Component
             'vencimiento'=> 'required',
         ]);
 
-        if($this->ruta=='null' || $this->ruta=='sin_imagen.jpg') {
-            $this->ruta = "sin_imagen.jpg";
-        } else
-        {
-            $nombreCompleto = basename($this->ruta) . time().'.jpg';
-            // $url = $nombreCompleto;
-            // $this->ruta = $nombreCompleto;
-        }
+        // if($this->ruta=='null' || $this->ruta=='sin_imagen.jpg') {
+        //     $this->ruta = "sin_imagen.jpg";
+        // } else
+        // {
+        //     $nombreCompleto = basename($this->ruta) . time().'.jpg';
+        //     // $url = $nombreCompleto;
+        //     $this->ruta = $nombreCompleto;
+        // }
 
+        // dd($this->ruta);
         switch ($this->seleccionado) {
             case "Medicamento" :
                 $this->validate(['pedira'=> 'required',]);
@@ -162,6 +173,12 @@ class ElementosComponent extends Component
                 $this->validate(['precio_venta'=> 'required|numeric|min:0','lista_id'=> 'required',]);
                 break;
         }
+// dd($request->hasFile('ruta'));
+        // if($request->hasFile('ruta')) {
+        //     dd('entro');
+        //     $path = $request->file('ruta')->store('photos', 'public');
+        //     $this->ruta = $path; // Guardas el path para el updateOrCreate
+        // }
 
         $a = Elemento::updateOrCreate(['id' => $this->elemento_id], [
             'name'=> $this->name,
@@ -171,11 +188,12 @@ class ElementosComponent extends Component
             'vencimiento'=> $this->vencimiento,
             'categoria_id'=> $this->categoria_id,
             'unidad_id'=> $this->unidad_id,
+            'ruta'=> $rutaPath,
             'empresa_id'=> session('empresa_id'),
         ]);
 
         // is_null($nombreCompleto) ? dd('Nombrecompleto') : dd('nada');
-        if(!is_null($nombreCompleto)) {
+        // if(!is_null($nombreCompleto)) {
 
             // dd($this->ruta.'iiii');
             // $path = request('ruta')->store('images');
@@ -194,7 +212,7 @@ class ElementosComponent extends Component
             // dd($c);
             // $b = new Archivos(['archivable_type'=>'App\Models\Archivos','archivable_id'=>$a->id,'url' => $this->ruta, 'descripcion'=>'Nada']);
             // $b->save();
-        }
+        // }
 
         switch ($this->seleccionado) {
             case "Medicamento" :
@@ -256,6 +274,7 @@ class ElementosComponent extends Component
         $this->vencimiento = $datos->vencimiento;
         $this->categoria_id = $datos->categoria_id;
         $this->unidad_id = $datos->unidad_id;
+        $this->ruta =  $datos->ruta;
         switch ($this->seleccionado) {
             case "Medicamento" : $datos = ElementoMedicamento::where('elemento_id','=',$id)->get();
                 // dd($datos[0]);

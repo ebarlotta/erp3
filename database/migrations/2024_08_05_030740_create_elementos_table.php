@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('elementos', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); 
-            $table->double('existencia')->default(0); 
-            $table->double('precio_compra')->default(0); 
-            $table->double('stock_minimo')->default(0); 
+            $table->string('name');
+            $table->double('existencia')->default(0);
+            $table->double('precio_compra')->default(0);
+            $table->double('stock_minimo')->default(0);
             $table->date('vencimiento');
             $table->unsignedBigInteger('categoria_id');
             $table->unsignedBigInteger('unidad_id');
-            $table->unsignedBigInteger('empresa_id'); 
+            $table->string('ruta');
+            $table->unsignedBigInteger('empresa_id');
 
             $table->foreign('categoria_id')->references('id')->on('categorias');
             $table->foreign('unidad_id')->references('id')->on('unidads');

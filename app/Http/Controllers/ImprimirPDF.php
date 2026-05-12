@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Livewire\erp\Compra\CompraComponent;
+use App\Http\Livewire\erp\Venta\VentaComponent;
 use App\Models\Empresa;
 use Illuminate\Http\Request;
 // use Barryvdh\DomPDF\Facade as PDF;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\DB;
 use App\Http\Livewire\erp\Haberes\HaberesComponent as Haber;
+use App\Models\erp\Venta;
+
 class ImprimirPDF extends Controller
 {
 
@@ -16,54 +19,42 @@ class ImprimirPDF extends Controller
 
     public function ComprasCtaCte( Request $request) {
 
-
         $Compras = new CompraComponent();
+
+        $Compras->ccdesde = $request->desde;
+        $Compras->cchasta = $request->hasta;
+        $Compras->font_size = 9;
 
         $Compras->ListarCuentasCorrientes();
         $html = $Compras->CuentasCorrientesHtml;
 
-        $saldototal = 100;
-        $operacion = 1;
+        $operacion = "Compras";
 
-        $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
-        
+        $pdf = PDF::loadView('livewire.compra.pdf_view_cta_cte',compact('html','operacion'));
+
         // download PDF file with download method
         return $pdf->stream('pdf_file.pdf');
     }
 
     public function VentasCtaCte( Request $request) {
 
-        // FALTA POR HACER
+        $Ventas = new VentaComponent();
 
-        $this->operacion = "deuda"; //$request->operacion;
-        $this->registros = DB::table('comprobantes')
-        ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo, proveedors.id, proveedors.name')
-        ->join('proveedors', 'comprobantes.proveedor_id', '=', 'proveedors.id')
-        //->whereBetween('comprobantes.fecha',["'".$this->ddesde."'","'".$this->dhasta."'"])
-        // ->whereRaw('(NetoComp-MontoPagadoComp)>1')
-        ->where('comprobantes.fecha','>=',date($request->ddesde))
-        ->where('comprobantes.fecha','<=',date($request->dhasta))
-        ->groupBy('proveedors.id');
+        $Ventas->ccdesde = $request->desde;
+        $Ventas->cchasta = $request->hasta;
+        $Ventas->font_size = 9;
 
-        $sql ="select sum(NetoComp-MontoPagadoComp) as Saldo, proveedors.id, proveedors.name from `comprobantes` inner join `proveedors` on `comprobantes`.`proveedor_id` = `proveedors`.`id` and `comprobantes`.`fecha` >= '$request->ddesde' and `comprobantes`.`fecha` <= '$request->dhasta' and comprobantes.empresa_id=".session('empresa_id')." group by proveedors.id, proveedors.name HAVING Saldo > 1";
-        // dd($sql);
-        // $registros = DB::select(DB::raw($sql));
-        $registros = DB::select($sql);
-        
-        $this->saldo = 0;
-        foreach($registros as $registro) { 
-            if($registro->Saldo>1) { $this->saldo = $this->saldo + $registro->Saldo; }
-            if($registro->Saldo<1) { $this->saldo = $this->saldo + $registro->Saldo * -1; }
-        }
+        $Ventas->ListarCuentasCorrientes();
+        $html = $Ventas->CuentasCorrientesHtml;
 
-        $saldototal = $this->saldo;
-        $operacion = $this->operacion;
-        $html = $this->PrepararTabla($registros);
-        // dd($sql);
-        $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
-        
+        $operacion = "Ventas";
+
+        // Se utiliza el mismo archivo para ambas operaciones
+        $pdf = PDF::loadView('livewire.compra.pdf_view_cta_cte',compact('html','operacion'));
+
         // download PDF file with download method
         return $pdf->stream('pdf_file.pdf');
+
     }
 
     public function DeudaPFD( Request $request) {
@@ -81,9 +72,9 @@ class ImprimirPDF extends Controller
         // dd($sql);
         // $registros = DB::select(DB::raw($sql));
         $registros = DB::select($sql);
-        
+
         $this->saldo = 0;
-        foreach($registros as $registro) { 
+        foreach($registros as $registro) {
             if($registro->Saldo>1) { $this->saldo = $this->saldo + $registro->Saldo; }
             if($registro->Saldo<1) { $this->saldo = $this->saldo + $registro->Saldo * -1; }
         }
@@ -93,7 +84,7 @@ class ImprimirPDF extends Controller
         $html = $this->PrepararTabla($registros);
         // dd($sql);
         $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
-        
+
         // download PDF file with download method
         return $pdf->stream('pdf_file.pdf');
     }
@@ -105,7 +96,7 @@ class ImprimirPDF extends Controller
                 if ($registro->Saldo > 1) {
                     $html=$html."<tr><td class=\"border text-left pl-3 mr-3 pr-3\">". $registro->name . "</td><td class=\"border text-end mr-3 pr-3\">". number_format($registro->Saldo, 2, ',','.') ."</td></tr>";
                 } else {
-                    
+
                 }
             } else {
                 if ($registro->Saldo < 1) {
@@ -130,7 +121,7 @@ class ImprimirPDF extends Controller
         // dd($registros);
 
         $saldo = 0;
-        foreach($registros as $registro) { 
+        foreach($registros as $registro) {
             if($registro->Saldo<1) { $saldo = $saldo + $registro->Saldo; }
         }
         $saldo = $saldo *-1;
@@ -141,7 +132,7 @@ class ImprimirPDF extends Controller
 
         $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
         // $pdf = PDF::loadView('livewire.compra.pdf_view',compact('registros','saldo','operacion'));
-        
+
         // download PDF file with download method
         return $pdf->stream('pdf_file.pdf');
     }
@@ -166,7 +157,7 @@ class ImprimirPDF extends Controller
 
     // public function ejemplo(Request $request) {
     //     $registros = DB::table('comprobantes')
-    //     // ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo'       
+    //     // ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo'
     //     ->where('comprobantes.Anio','>=',$request->anio)
     //     ->where('comprobantes.PasadoEnMes','<=',$request->mes)
     //     ->where('comprobantes.empresa_id','=',session('empresa_id'))
@@ -175,15 +166,15 @@ class ImprimirPDF extends Controller
     //     ->get();
     //     // dd($registros);
     //     $BrutoComp=0; $MontoIva=0; $ExentoComp=0; $ImpInternoComp=0; $PercepcionIvaComp=0; $RetencionIB=0; $RetencionGan=0; $NetoComp=0;$MontoPagadoComp = 0; $CantidadLitroComp=0;
-        
-    //     foreach($registros as $registro) { 
-    //         $BrutoComp=$BrutoComp + $registro->BrutoComp; 
-    //         $MontoIva=$MontoIva + $registro->MontoIva; 
-    //         $ExentoComp=$ExentoComp + $registro->ExentoComp; 
-    //         $ImpInternoComp=$ImpInternoComp + $registro->ImpInternoComp; 
-    //         $PercepcionIvaComp=$PercepcionIvaComp + $registro->PercepcionIvaComp; 
-    //         $RetencionIB=$RetencionIB + $registro->RetencionIB; 
-    //         $RetencionGan=$RetencionGan + $registro->RetencionGan; 
+
+    //     foreach($registros as $registro) {
+    //         $BrutoComp=$BrutoComp + $registro->BrutoComp;
+    //         $MontoIva=$MontoIva + $registro->MontoIva;
+    //         $ExentoComp=$ExentoComp + $registro->ExentoComp;
+    //         $ImpInternoComp=$ImpInternoComp + $registro->ImpInternoComp;
+    //         $PercepcionIvaComp=$PercepcionIvaComp + $registro->PercepcionIvaComp;
+    //         $RetencionIB=$RetencionIB + $registro->RetencionIB;
+    //         $RetencionGan=$RetencionGan + $registro->RetencionGan;
     //         $NetoComp=$NetoComp + $registro->NetoComp;
     //     }
     //     $mes = $this->ConvierteMesEnTexto($request->mes);
@@ -192,7 +183,7 @@ class ImprimirPDF extends Controller
     //     $empresa = Empresa::find(session('empresa_id'));
     //     $pdf = PDF::loadView('livewire.compra.pdf_iva_view',compact('registros','BrutoComp', 'MontoIva', 'ExentoComp', 'ImpInternoComp', 'PercepcionIvaComp', 'RetencionIB', 'RetencionGan', 'NetoComp', 'empresa','mes','anio'))->setPaper('a4', 'landscape');
     //     return $pdf->stream('pdf_file.pdf');
-        
+
     // }
 
     public function encabezado($pagina, $mes, $anio, $compraventa) {
@@ -248,7 +239,7 @@ class ImprimirPDF extends Controller
     public function IvaCompras(Request $request) {
         $html = "No hay registros para este período!!!";
         $registros = DB::table('comprobantes')
-        // ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo'       
+        // ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo'
         ->where('comprobantes.Anio','=',$request->anio)
         ->where('comprobantes.PasadoEnMes','=',$request->mes)
         ->where('comprobantes.empresa_id','=',session('empresa_id'))
@@ -257,7 +248,7 @@ class ImprimirPDF extends Controller
         ->orderByRaw('fecha, comprobante,BrutoComp')
         ->get();
         $BrutoComp=0; $MontoIva=0; $ExentoComp=0; $ImpInternoComp=0; $PercepcionIvaComp=0; $RetencionIB=0; $RetencionGan=0; $NetoComp=0;
-        
+
         // <body style="font-family: Arial, Helvetica, sans-serif">';
         if(count($registros)) {
             $pagina=$registros->first()->Cerrado; $libro='0';
@@ -279,14 +270,14 @@ class ImprimirPDF extends Controller
                 <td style="text-align:right; border: 1px solid #ddd; mr-3 pr-3">'. number_format($registro->NetoComp, 2, ',', '.') .'
                 </td>
                 </tr>';
-        
-                $BrutoComp=$BrutoComp + $registro->BrutoComp; 
-                $MontoIva=$MontoIva + $registro->MontoIva; 
-                $ExentoComp=$ExentoComp + $registro->ExentoComp; 
-                $ImpInternoComp=$ImpInternoComp + $registro->ImpInternoComp; 
-                $PercepcionIvaComp=$PercepcionIvaComp + $registro->PercepcionIvaComp; 
-                $RetencionIB=$RetencionIB + $registro->RetencionIB; 
-                $RetencionGan=$RetencionGan + $registro->RetencionGan; 
+
+                $BrutoComp=$BrutoComp + $registro->BrutoComp;
+                $MontoIva=$MontoIva + $registro->MontoIva;
+                $ExentoComp=$ExentoComp + $registro->ExentoComp;
+                $ImpInternoComp=$ImpInternoComp + $registro->ImpInternoComp;
+                $PercepcionIvaComp=$PercepcionIvaComp + $registro->PercepcionIvaComp;
+                $RetencionIB=$RetencionIB + $registro->RetencionIB;
+                $RetencionGan=$RetencionGan + $registro->RetencionGan;
                 $NetoComp=$NetoComp + $registro->NetoComp;
 
                 $pie = '<tr style="background-color:#ddd;">
@@ -304,7 +295,7 @@ class ImprimirPDF extends Controller
                 <td style="text-align:right; border: 1px solid #ddd;">'.  number_format($NetoComp, 2, ',', '.').'</td>
                 </tr>
                 </table>';
-                
+
                 $i++;
                 if($i>35) {
                     $row = $row . $pie;
@@ -313,10 +304,10 @@ class ImprimirPDF extends Controller
                     $row = $row . $this->encabezado($pagina,$request->mes,$request->anio,1);
                     $i=0;
                 }
-            }        
+            }
             $html =  $html . $row .$pie ;
-        
-        }        
+
+        }
         $pdf = PDF::loadHtml($html);
         $pdf->setPaper('A4', 'landscape');
         //$pdf->render();
@@ -326,7 +317,7 @@ class ImprimirPDF extends Controller
     public function IvaVentas(Request $request) {
         $html = "No hay registros para este período!!!";
         $registros = DB::table('ventas')
-        // ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo'       
+        // ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo'
         ->where('ventas.Anio','=',$request->anio)
         ->where('ventas.PasadoEnMes','=',$request->mes)
         ->where('ventas.empresa_id','=',session('empresa_id'))
@@ -357,14 +348,14 @@ class ImprimirPDF extends Controller
                 <td style="text-align:right; border: 1px solid #ddd; mr-3 pr-3">'. number_format($registro->NetoComp, 2, ',', '.') .'
                 </td>
                 </tr>';
-        
-                $BrutoComp=$BrutoComp + $registro->BrutoComp; 
-                $MontoIva=$MontoIva + $registro->MontoIva; 
-                $ExentoComp=$ExentoComp + $registro->ExentoComp; 
-                $ImpInternoComp=$ImpInternoComp + $registro->ImpInternoComp; 
-                $PercepcionIvaComp=$PercepcionIvaComp + $registro->PercepcionIvaComp; 
-                $RetencionIB=$RetencionIB + $registro->RetencionIB; 
-                $RetencionGan=$RetencionGan + $registro->RetencionGan; 
+
+                $BrutoComp=$BrutoComp + $registro->BrutoComp;
+                $MontoIva=$MontoIva + $registro->MontoIva;
+                $ExentoComp=$ExentoComp + $registro->ExentoComp;
+                $ImpInternoComp=$ImpInternoComp + $registro->ImpInternoComp;
+                $PercepcionIvaComp=$PercepcionIvaComp + $registro->PercepcionIvaComp;
+                $RetencionIB=$RetencionIB + $registro->RetencionIB;
+                $RetencionGan=$RetencionGan + $registro->RetencionGan;
                 $NetoComp=$NetoComp + $registro->NetoComp;
 
                 $pie = '<tr style="background-color:#ddd;">
@@ -382,7 +373,7 @@ class ImprimirPDF extends Controller
                 <td style="text-align:right; border: 1px solid #ddd;">'.  number_format($NetoComp, 2, ',', '.').'</td>
                 </tr>
                 </table>';
-                
+
                 $i++;
                 if($i>35) {
                     $row = $row . $pie;
@@ -391,10 +382,10 @@ class ImprimirPDF extends Controller
                     $row = $row . $this->encabezado($pagina,$request->mes,$request->anio,0); //  0: VENTAS
                     $i=0;
                 }
-            }        
+            }
             $html =  $html . $row .$pie ;
-        
-        }        
+
+        }
         $pdf = PDF::loadHtml($html);
         $pdf->setPaper('A4', 'landscape');
         //$pdf->render();
@@ -405,7 +396,7 @@ class ImprimirPDF extends Controller
         $Haber = new Haber;
         $Haber->empleadoseleccionado = $request->empleadoseleccionado;
         $Haber->CargarDatosRecibo($request->anio . $request->mes, $request->empleadoseleccionado);
-        
+
         $firmaempleador="EMPLEADOR";
 
         $html='<table style="font-size: 5px; line-height: 16px; width:100%; font-family: Arial, Helvetica, sans-serif; border-collapse: collapse;">
@@ -491,7 +482,7 @@ class ImprimirPDF extends Controller
                                 <td align="right"><strong>' . number_format($Haber->AcumDescuento, 2, ',', '.') . '</strong></td>
                             </tr>
                             <tr>
-                                
+
                                 <td colspan="6" align="center" style="border-bottom-width: 2px;border-color: black;"><strong>NETO A COBRAR</strong></td>
                                 <td bgcolor="lightGray" align="center" style="border-bottom-width: 2px;border-color: black; font-weight: bold;">
                                     <b>$ '. number_format($Haber->NetoACobrar, 2, ',', '.') .' </b>
@@ -528,7 +519,7 @@ class ImprimirPDF extends Controller
 
         //$html =  $html . $pieRecibo ;
 
-        
+
         $html =  $html . '<br>---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------<br><br>'.$html;
 
         $pdf = PDF::loadHtml($html);

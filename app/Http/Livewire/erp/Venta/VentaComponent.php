@@ -45,7 +45,7 @@ class VentaComponent extends Component
     public $empresa_id; public $tabActivo=1; public $venta_id;
     private $afip;
     public $certificado_tax_id, $certificado_crt, $certificado_key, $certificado_id, $certificado_alias;
-    
+
     //Comprobantes
     public $iva_value=0;
     public $isModalOpen = false;
@@ -56,10 +56,10 @@ class VentaComponent extends Component
     // public $gventa;
     //Variables del filtro
     public $gfmes, $gfcliente, $gfparticipa, $gfiva, $gfdetalle, $gfarea, $gfcuenta, $gfanio, $fgascendente, $gfsaldo; //Comprobantes
-    
+
     // Deuda Clientes
     public $darea, $ddesde, $dhasta, $danio;
-    public $DeudaClientesFiltro, $MostrarDeudaClientes; 
+    public $DeudaClientesFiltro, $MostrarDeudaClientes;
     public $deudaPDF;
 
     // Crédito Clientes
@@ -68,6 +68,7 @@ class VentaComponent extends Component
 
     // Cuentas Corrientes Clientes
     public $ccClientes, $ccCliente, $ccdesde, $cchasta, $detallesCC, $ccAgrupadoComp=true, $ccAgrupadoDeta=false, $saldo, $CuentasCorrientesHtml;
+    public $font_size=13;
 
     // Libros de Iva
     public $lmes,$lanio;
@@ -80,21 +81,21 @@ class VentaComponent extends Component
     {
         if ( !Auth::check() ) { return view('SinPermiso'); return route('dashboard');return view('welcome');   }
         // $a = new AfipComponent();
-        
+
         // $a->FESolici
         $anio = date("Y");
         if(is_null($this->gfanio)) { $this->gfanio = $anio; }; //La primara vez que inicia revisa si es nulo y en ese caso cambia al año actual, sino no lo toca más
-    
-        if ($this->ddesde==null || $this->dhasta==null || $this->cdesde==null || $this->chasta==null || $this->ccdesde==null || $this->cchasta==null ) { $anio = date("Y"); } 
+
+        if ($this->ddesde==null || $this->dhasta==null || $this->cdesde==null || $this->chasta==null || $this->ccdesde==null || $this->cchasta==null ) { $anio = date("Y"); }
 
         $this->ddesde = $this->ccdesde = $this->cdesde = date($anio.'-01-01');
         $this->dhasta = $this->chasta = $this->cchasta = date($anio.'-12-31');
 
-        if (!is_null(session('empresa_id'))) { $this->empresa_id = session('empresa_id'); } 
-        else { 
+        if (!is_null(session('empresa_id'))) { $this->empresa_id = session('empresa_id'); }
+        else {
             $userid=auth()->user()->id;
             $empresas= EmpresaUsuario::where('user_id',$userid)->get();
-            return view('livewire.empresa.empresa-component')->with('empresas', $empresas); 
+            return view('livewire.empresa.empresa-component')->with('empresas', $empresas);
         }
 
         //enocianina
@@ -145,7 +146,7 @@ class VentaComponent extends Component
     }
 
     public function ListarCuentasCorrientes() {
-        
+
         $saldoFinal = 0;
         if($this->ccCliente==0)  { $cliente = ' ventas.cliente_id >0 and '; }
         else { $cliente = ' ventas.cliente_id = '.$this->ccCliente.' and '; }
@@ -155,7 +156,7 @@ class VentaComponent extends Component
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, ventas.empresa_id, cliente_id, clientes.name FROM ventas join clientes on clientes.id = ventas.cliente_id WHERE ventas.cliente_id = '.$this->ccCliente.' and ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id') .' GROUP BY comprobante, detalle, empresa_id, cliente_id, clientes.namess');
 
             //Genera el encabezado principal de la tabla
-            $html = '<div class="flex justify-center"><table class="table table-stripped" style="width:90%; font-size: 13px;"><thead><tr bgcolor="lightGray"><th align="center">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Comprado</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
+            $html = '<div class="flex justify-center"><table class="table table-stripped" style="width:90%; font-size: '.$this->font_size.'px;"><thead><tr bgcolor="lightGray"><th align="center" width="100px">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Operaciones</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
             // dd($subtotalesGenerales);
 
             $CantGeneral = count($subtotalesGenerales); // Cantidad de registros encontrados a nivel general
@@ -163,21 +164,21 @@ class VentaComponent extends Component
             // Commienza a iterar la cantidad de registros a nivel general que ha encontrado
             for($i=0; $CantGeneral>$i ; $i++) {
             // dd($subtotalesGenerales[$i]->comprobante);
-    
+
                 $comp = is_null($subtotalesGenerales[$i]->comprobante) ? " is null " : '="'.$subtotalesGenerales[$i]->comprobante.'"';
-  
+
                 //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
                 $subParciales = DB::select('SELECT ventas.id, ventas.detalle, ventas.fecha, COALESCE(ventas.comprobante, "-") as comprobante, ventas.NetoComp, ventas.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as cliente_name from ventas inner join areas as a on ventas.area_id=a.id inner join cuentas as c on ventas.cuenta_id=c.id inner join clientes as p on ventas.cliente_id=p.id WHERE '. $cliente.' ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id').' and comprobante'.$comp.' ORDER by ventas.fecha;');
-  
+
                 // Cantidad de registros encontrados a nivel detallado
-                $CantParcial = count($subParciales); 
+                $CantParcial = count($subParciales);
 
                 // Cambia el recordset por un array
                 $Parcial = $subParciales[0];
                 // $Parcial = $subParciales[$i];
 
                 // Imprime el registro inicial con el COMPROBANTE ORIGINARIO
-                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2>COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td colspan=2></td></tr>";
+                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2 style=\"width: 300px;\">COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td colspan=2></td></tr>";
 
                 // Registra el saldoFinal
                 $saldoFinal = $saldoFinal + $subtotalesGenerales[$i]->saldo;
@@ -194,7 +195,7 @@ class VentaComponent extends Component
                     // Registra el saldoFinal
                     $saldoFinal = $saldoFinal - $sub->MontoPagadoComp;
 
-                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->cliente_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->NetoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>"; 
+                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->cliente_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->NetoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
                 }
             }
         } else {
@@ -203,7 +204,7 @@ class VentaComponent extends Component
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, ventas.empresa_id, cliente_id, clientes.name FROM ventas join clientes on clientes.id = ventas.cliente_id WHERE ventas.cliente_id = '.$this->ccCliente.' and ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, cliente_id, clientes.name');
 
             //Genera el encabezado principal de la tabla
-            $html = '<div class="flex justify-center"><table class="table table-stripped w-75" style="font-size: 13px;"><thead><tr bgcolor="lightGray"><th align="center">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Comprado</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
+            $html = '<div class="flex justify-center"><table class="table table-stripped w-75" style="font-size: 13px;"><thead><tr bgcolor="lightGray"><th align="center" width="100px">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Operaciones</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
 
             $CantGeneral = count($subtotalesGenerales); // Cantidad de registros encontrados a nivel general
 
@@ -216,14 +217,14 @@ class VentaComponent extends Component
                 $subParciales = DB::select('SELECT ventas.id, ventas.detalle, ventas.fecha, ventas.comprobante, ventas.NetoComp, ventas.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as cliente_name from ventas inner join areas as a on ventas.area_id=a.id inner join cuentas as c on ventas.cuenta_id=c.id inner join clientes as p on ventas.cliente_id=p.id WHERE '.$cliente.' ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id').' and detalle'.$detall.' ORDER by ventas.fecha;');
 
                 // Cantidad de registros encontrados a nivel detallado
-                $CantParcial = count($subParciales); 
+                $CantParcial = count($subParciales);
 
                 // Cambia el recordset por un array
                 $Parcial = $subParciales[0];
                 // $Parcial = $subParciales[$i];
 
                 // Imprime el registro inicial con el COMPROBANTE ORIGINARIO
-                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2>COMPROBANTE ORIGINARIO</td><td align=\"right\"><b>".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</b></td><td align=\"right\">".number_format($subtotalesGenerales[$i]->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo - $subtotalesGenerales[$i]->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\"></td><td colspan=2></td></tr>";
+                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2 style=\"width: 300px;\">COMPROBANTE ORIGINARIO</td><td align=\"right\"><b>".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</b></td><td align=\"right\">".number_format($subtotalesGenerales[$i]->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo - $subtotalesGenerales[$i]->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\"></td><td colspan=2></td></tr>";
 
                 // Registra el saldoFinal
                 $saldoFinal = $saldoFinal + $subtotalesGenerales[$i]->saldo;
@@ -240,11 +241,11 @@ class VentaComponent extends Component
                     // Registra el saldoFinal
                     $saldoFinal = $saldoFinal - $sub->MontoPagadoComp;
 
-                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\" style=\" height: 10px;\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->cliente_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">0.00</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>"; 
+                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\" style=\" height: 10px;\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->cliente_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">0.00</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
                 }
             }
         }
-        $html = $html . '<tr><td colspan=9></td></tr><tr  bgcolor="lightGray" style="font-size:16px"><td colspan=7></td><td><b>Saldo Final</b></td><td><b>'.number_format($saldoFinal, 2, ',', '.') .'</b></td></tr>';
+        $html = $html . '<tr><td colspan=9></td></tr><tr  bgcolor="lightGray" style="font-size:14px"><td colspan=7></td><td><b>Saldo Final</b></td><td><b>'.number_format($saldoFinal, 2, ',', '.') .'</b></td></tr>';
         $html = $html . ' </tbody></table></div>';
         $this->CuentasCorrientesHtml = $html;
 
@@ -261,12 +262,12 @@ class VentaComponent extends Component
 
     //     $certificados = Certificado::where('empresa_id','=',session('empresa_id'))->get();
     //     // dd($certificados);
-    //     if(count($certificados)) { 
+    //     if(count($certificados)) {
     //         $this->certificado_id = $certificados[0]['id'];
     //         // dd($certificados[0]['id']);
     //         $this->certificado_tax_id = $certificados[0]['tax_id'];
     //         $this->certificado_alias = $certificados[0]['alias'];
-            
+
     //         $path = storage_path('app/' . 'certificados/'.$certificados[0]['tax_id'].'_'.$certificados[0]['alias'].'.crt');
     //         $cert = file_get_contents($path);
     //         $this->certificado_crt = $cert;
@@ -276,13 +277,13 @@ class VentaComponent extends Component
     //         $key = file_get_contents($path);
     //         $this->certificado_key = $key;
     //         // $this->certificado_key = Storage::disk('local')->get('certificados/'.$certificados[0]['tax_id'].'_'.$certificados[0]['alias'].'.key');
-            
+
     //         // Certificado (Puede estar guardado en archivos, DB, etc)
     //         // Key (Puede estar guardado en archivos, DB, etc)
     //         // dd($path);
     //         // $cert = file_get_contents('certificados/certificado.crt');
     //         // $key  = file_get_contents('key.key');
-            
+
     //         // 'https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL',
     //         // 'https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op= FECAESolicitar',
 
@@ -292,7 +293,7 @@ class VentaComponent extends Component
     //             env('AFIP_ACCESS_TOKEN'),
     //             $this->certificado_key
     //         );
-            
+
     //         $a->callSoapFunction('POST',[]);
     //         dd($a);
 
@@ -308,16 +309,16 @@ class VentaComponent extends Component
     //         //     'key' =>  $this->certificado_key,
     //         //     'access_token' => env('AFIP_ACCESS_TOKEN'),
     //         // ));
-            
+
     //         // $this->GenerarFactura();
     //     }
     // }
 
     // public function GenerarFactura() {
-        
-        
-        
-        
+
+
+
+
     //     // Uso del controlador
     //     $wsdl = 'https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL'; // URL del WSDL del web service
     //     $cuit = $this->certificado_tax_id; //'20-12345678-9'; // CUIT del usuario
@@ -327,22 +328,22 @@ class VentaComponent extends Component
     //     $afip = new AfipController($wsdl, $cuit, $token, $sign);
 
     //     // $afip = $this->iniciar($wsdl, $cuit, $token, $sign);
-        
+
     //     // Ejemplo de llamada a un método del web service
     //     $response = $afip->callWebService('ConsultaPuntosVenta', []);
     //     print_r($response);
-        
-    //     dd('termino');
-        
-        
-        
-        
-        
 
-        
-        
-        
-        
+    //     dd('termino');
+
+
+
+
+
+
+
+
+
+
     //     // CUIT del contribuyente
     //     $tax_id = 30712141790;
     //     $afip = new Afip(array(
@@ -354,7 +355,7 @@ class VentaComponent extends Component
 
     //     // dd($afip );
     //     $voucher_types = $afip->ElectronicBilling->GetVoucherTypes();
-        
+
     //     $taxpayer_details = $afip->RegisterInscriptionProof->GetTaxpayerDetails($tax_id);
     //     dd($taxpayer_details);
 
@@ -364,7 +365,7 @@ class VentaComponent extends Component
     // }
 
     public function store() {
-        $this->RellenarCamposVacios();            
+        $this->RellenarCamposVacios();
 
         $this->validate([
             'gfecha'            => 'required|date',
@@ -377,7 +378,7 @@ class VentaComponent extends Component
             'gperib'            => 'numeric',
             'gretgan'           => 'numeric',
             'gneto'             => 'numeric',
-            'gmontopagado'      => 'numeric', 
+            'gmontopagado'      => 'numeric',
             'gcantidad'         => 'numeric',
             'ganio'             => 'required|integer',
             'gmes'              => 'required',
@@ -405,7 +406,7 @@ class VentaComponent extends Component
                 'RetencionIB'       => $this->gperib,
                 'RetencionGan'      => $this->gretgan,
                 'NetoComp'          => $this->gneto,
-                'MontoPagadoComp'   => $this->gmontopagado, 
+                'MontoPagadoComp'   => $this->gmontopagado,
                 'CantidadLitroComp' => $this->gcantidad,
                 'Anio'              => $this->ganio,
                 'PasadoEnMes'       => $this->gmes,
@@ -418,7 +419,7 @@ class VentaComponent extends Component
             ]);
             //updateOrCreate
             $this->gfiltro();
-            session()->flash('message', 'Comprobante Creado.');    
+            session()->flash('message', 'Comprobante Creado.');
         } else {
             session()->flash('message3', 'No se puede agragar un comprobante a un libro ya Cerrado.');
             }
@@ -429,9 +430,9 @@ class VentaComponent extends Component
     public function edit() {
         $this->RellenarCamposVacios();
         $comp = Venta::find($this->venta_id);
-        if ($comp->Cerrado) { 
+        if ($comp->Cerrado) {
             $this->closeModalModify();
-            session()->flash('message3', 'No se puede modificar un comprobante que se encuentra en un libro cerrado.'); 
+            session()->flash('message3', 'No se puede modificar un comprobante que se encuentra en un libro cerrado.');
         } else {
             $this->validate([
                 'gfecha'            => 'required|date',
@@ -444,7 +445,7 @@ class VentaComponent extends Component
                 'gperib'            => 'numeric',
                 'gretgan'           => 'numeric',
                 'gneto'             => 'numeric',
-                'gmontopagado'      => 'numeric', 
+                'gmontopagado'      => 'numeric',
                 'gcantidad'         => 'numeric',
                 'ganio'             => 'required|integer',
                 'gmes'              => 'required',
@@ -466,7 +467,7 @@ class VentaComponent extends Component
                 'RetencionIB'       => $this->gperib,
                 'RetencionGan'      => $this->gretgan,
                 'NetoComp'          => $this->gneto,
-                'MontoPagadoComp'   => $this->gmontopagado, 
+                'MontoPagadoComp'   => $this->gmontopagado,
                 'CantidadLitroComp' => $this->gcantidad,
                 'Anio'              => $this->ganio,
                 'PasadoEnMes'       => $this->gmes,
@@ -486,8 +487,8 @@ class VentaComponent extends Component
 
     public function delete() {
         $a = Venta::find($this->venta_id);
-        if($a->Cerrado==0) { 
-            $a->delete(); 
+        if($a->Cerrado==0) {
+            $a->delete();
             $this->venta_id=null;
             $this->gfiltro();
             session()->flash('message3', 'Comprobante Eliminado.');
@@ -502,13 +503,13 @@ class VentaComponent extends Component
     }
 
     public function gfiltro(){
-        
+
         $sql = $this->ProcesaSQLFiltro('ventas'); // Procesa los campos a mostrar
         $registros = DB::select($sql);       // Busca el recordset
         //Dibuja el filtro
         $Saldo=0;
 
-        
+
         $this->filtro="
         <span wire:loading>
 				<div class=\"inset-0 fixed\">
@@ -577,19 +578,19 @@ class VentaComponent extends Component
                 <td class=\"p-0 text-right\">$Fecha</td>
                 <td class=\"p-0 text-right\">$registro->comprobante</td>
                 <td class=\"p-0 text-right\" style=\"white-space: nowrap;\" class=\" text-left\">$Cliente->name</td>";
-                
+
                 //Comprobante común de color gris
                 if($registro->ParticIva=='No') { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div style=\"background-color: lightslategray;width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"></div></td>"; }
                 // Si va a ser registrado en iva entonces
                 if($registro->ParticIva=='Si') {
                     // Si está cerrado lo coloca de color marrón
-                    if($registro->Cerrado>1) { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div style=\"background-color: brown;width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"></div></td>"; }                
+                    if($registro->Cerrado>1) { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div style=\"background-color: brown;width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"></div></td>"; }
                     // Si Es un comprobante que está preparado para ser enviado a AFIP
                     if($registro->Cerrado==0)  { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div wire:click=\"openModalGenerarFactura();\" style=\"background-color: rgb(238, 238, 79);width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\" value=\" >\"> </div></td>"; }
                     // Si es un comprobante que ha sido enviado a AFIP pero todavía no se encuentra cerrado
                     if($registro->Cerrado==-1) { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div style=\"background-color: rgb(242, 120, 120); width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"><img src=\"images/archivo-pdf.svg\"></div></td>"; }
                 }
-                
+
                 $this->filtro=$this->filtro."
                 <td class=\"p-0  d-none d-sm-table-cell text-left\">$registro->detalle</td>
                 <td class=\"p-0 col text-right\">".number_format($registro->BrutoComp, 2,'.','')."</td>
@@ -631,7 +632,7 @@ class VentaComponent extends Component
         <td class=\"col d-none d-sm-table-cell text-right\"></td>
         <td class=\"col d-none d-sm-table-cell text-right\"></td>
         <td class=\"col d-none d-sm-table-cell text-right\"></td>
-    </tr> 
+    </tr>
     </tbody>
         </table>
         </div>
@@ -749,7 +750,7 @@ class VentaComponent extends Component
             'gperib'            => 'numeric',
             'gretgan'           => 'numeric',
             'gneto'             => 'numeric',
-            'gmontopagado'      => 'numeric', 
+            'gmontopagado'      => 'numeric',
             'gcantidad'         => 'numeric',
             'ganio'             => 'required|integer',
             'gmes'              => 'required',
@@ -896,7 +897,7 @@ class VentaComponent extends Component
     }
 
     public function agregar_detalle() {
-        
+
         $this->validate([
             'venta_id'    => 'required',
             'gselect_productos' => 'required|numeric',
@@ -921,7 +922,7 @@ class VentaComponent extends Component
     }
 
     public function eliminar_detalle($id_detalle) {
-        
+
         //Encuentra el detalle a eliminar pasa buscar la cantidad que tiene que eliminar
         $eliminar = Ventas_Productos::find($id_detalle);
         $cant_a_eliminar = $eliminar->cantidad*-1;
@@ -934,14 +935,14 @@ class VentaComponent extends Component
         $detalle->user_id = $userid=auth()->user()->id;
 
         $detalle->save();
-        
+
         // Incrementa la cantidad de stock del producto
         $producto = Producto::find($eliminar->productos_id);
         $producto->existencia = $producto->existencia + $cant_a_eliminar;
         $producto->save();
         $this->listado_productos();
     }
-    
+
     public function listado_productos() {
         $this->glistado_prod = Ventas_Productos::join('productos','ventas__productos.productos_id','productos.id')
         ->where('ventas_id',$this->venta_id)

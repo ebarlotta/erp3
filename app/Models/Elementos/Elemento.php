@@ -21,6 +21,7 @@ class Elemento extends Model
         'vencimiento',
         'categoria_id',
         'unidad_id',
+        'ruta',
         'empresa_id',
     ];
 

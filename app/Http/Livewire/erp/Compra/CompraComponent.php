@@ -52,6 +52,7 @@ class CompraComponent extends Component
 
     // Cuentas Corrientes
     public $ccProveedores, $ccProveedor, $ccdesde, $cchasta, $detallesCC, $ccAgrupadoComp=true, $ccAgrupadoDeta=false, $saldo, $CuentasCorrientesHtml;
+    public $font_size=13;
 
     // Libros de Iva
     public $lmes,$lanio;
@@ -135,6 +136,7 @@ class CompraComponent extends Component
     public function ListarCuentasCorrientes() {
 
         $saldoFinal = 0;
+
         if($this->ccProveedor==0)  { $proveedor = ' comprobantes.proveedor_id >0 and '; }
         else { $proveedor = ' comprobantes.proveedor_id = '.$this->ccProveedor.' and '; }
         if($this->ccAgrupadoComp) {
@@ -142,9 +144,9 @@ class CompraComponent extends Component
             $subtotalesGenerales = DB::select('select comprobante, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor .' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY comprobante');
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY comprobante, detalle, empresa_id, proveedor_id, proveedors.namess');
 
-
             //Genera el encabezado principal de la tabla
-            $html = '<div class="flex justify-center"><table class="table table-stripped" style="width:90%; font-size: 13px;"><thead><tr bgcolor="lightGray"><th align="center">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Comprado</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
+            $html = '<div class="flex justify-center">
+                <table class="table table-stripped" style="width:90%; font-size: '.$this->font_size.'px;"><thead><tr bgcolor="lightGray"><th align="center" width="100px" >Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Operaciones</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
 
             $CantGeneral = count($subtotalesGenerales); // Cantidad de registros encontrados a nivel general
 
@@ -163,7 +165,7 @@ class CompraComponent extends Component
                 $Parcial = $subParciales[0];
                 // $Parcial = $subParciales[$i];
                 // Imprime el registro inicial con el COMPROBANTE ORIGINARIO
-                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2>COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td colspan=2></td></tr>";
+                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2 style=\"width: 300px;\">COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td colspan=2></td></tr>";
 
                 // Registra el saldoFinal
                 $saldoFinal = $saldoFinal + $subtotalesGenerales[$i]->saldo;
@@ -188,7 +190,7 @@ class CompraComponent extends Component
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, proveedor_id, proveedors.name');
 
             //Genera el encabezado principal de la tabla
-            $html = '<div class="flex justify-center"><table class="table table-stripped w-75" style="font-size: 13px;"><thead><tr bgcolor="lightGray"><th align="center">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Comprado</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
+            $html = '<div class="flex justify-center"><table class="table table-stripped w-75" style="font-size: 13px;"><thead><tr bgcolor="lightGray"><th align="center" width="100px">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Operaciones</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
 
             $CantGeneral = count($subtotalesGenerales); // Cantidad de registros encontrados a nivel general
 
@@ -207,7 +209,7 @@ class CompraComponent extends Component
                 $Parcial = $subParciales[0];
                 // $Parcial = $subParciales[$i];
                 // Imprime el registro inicial con el COMPROBANTE ORIGINARIO
-                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2>COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\"></td><td colspan=2></td></tr>";
+                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2 style=\"width: 300px;\">COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\"></td><td colspan=2></td></tr>";
 
                 // Registra el saldoFinal
                 $saldoFinal = $saldoFinal + $subtotalesGenerales[$i]->saldo;
@@ -228,7 +230,7 @@ class CompraComponent extends Component
                 }
             }
         }
-        $html = $html . '<tr><td colspan=9></td></tr><tr  bgcolor="lightGray" style="font-size:16px"><td colspan=7></td><td><b>Saldo Final</b></td><td><b>'.number_format($saldoFinal, 2, ',', '.') .'</b></td></tr>';
+        $html = $html . '<tr><td colspan=9></td></tr><tr  bgcolor="lightGray" style="font-size:14px"><td colspan=7></td><td><b>Saldo Final</b></td><td><b>'.number_format($saldoFinal, 2, ',', '.') .'</b></td></tr>';
         $html = $html . ' </tbody></table></div>';
         $this->CuentasCorrientesHtml = $html;
 

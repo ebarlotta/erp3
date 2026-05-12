@@ -6,7 +6,8 @@
 
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
         <div class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline" style="max-width: 60%">
-            <form>
+            <form wire:submit.prevent="store" enctype="multipart/form-data">
+                @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="mb-3"><h2><b>Nuevo {{ $seleccionado }}</b></h2></div>
                     <div class="flex flex-wrap">
@@ -65,7 +66,7 @@
                         {{-- Medicamentos --}}
                         {{-- ============ --}}
 
-                        @if($seleccionado=='Medicamento') 
+                        @if($seleccionado=='Medicamento')
                             <div class="mb-4 col-3">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Pedir A:</label>
                                 <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese a quién se pide el medicamento" wire:model="pedira">
@@ -81,7 +82,7 @@
                         {{-- Ingrediente --}}
                         {{-- =========== --}}
 
-                        @if($seleccionado=='Ingrediente') 
+                        @if($seleccionado=='Ingrediente')
                             <div class="mb-4 col-3">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Estado:</label>
                                 <select class="form-control round shadow-md" wire:model= "estado_id" >
@@ -93,9 +94,10 @@
                                 @error('estado_id') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                         @endif
+
                         {{-- Producto --}}
                         {{-- ======== --}}
-                        @if($seleccionado=='Producto') 
+                        @if($seleccionado=='Producto')
                             <div class="mb-4 col-2">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Código de Barra:</label>
                                 <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese código de barra" wire:model="barra">
@@ -162,7 +164,7 @@
                         {{-- Descartable --}}
                         {{-- =========== --}}
 
-                        @if($seleccionado=='Descartable') 
+                        @if($seleccionado=='Descartable')
                             <div class="mb-4 col">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
                                 <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" style="height: 2.4rem; width: 100%">{{ $descripcion }}</textarea>
@@ -173,7 +175,7 @@
                         {{-- Artículo --}}
                         {{-- ======== --}}
 
-                        @if($seleccionado=='Articulo') 
+                        @if($seleccionado=='Articulo')
                             <div class="mb-4 col-2">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Marca</label>
                                 <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese Marca" wire:model="marca">
@@ -195,6 +197,18 @@
                                 @error('lista_id') <span class="text-red-500">{{ $message }}</span>@enderror
                             </div>
                         @endif
+
+                        {{-- General --}}
+                        {{-- ======= --}}
+
+                        <div class="mb-4 col-3">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
+                            {{-- <img src="{{ asset('images/bancos.jpeg') }}" alt="Girl in a jacket" width="500" height="600"> --}}
+                            <img src="{{ asset('storage/'.$this->ruta) }}" alt="Girl in a jacket" width="500" height="600">
+                            <img src="{{ asset('storage/'.$this->rutaTemporal) }}" alt="Girl in a jacket" width="500" height="600">
+                            {{-- <input type="file" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Foto" wire:model="foto"> --}}
+                            @error('ruta') <span class="text-red-500">{{ $message }}</span>@enderror
+                        </div>
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

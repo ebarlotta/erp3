@@ -184,7 +184,7 @@ class CompraComponent extends Component
             }
         } else {
             // Busca todos los registros que cumplen con los criterios de parámetros, de ahí toma los distintos números de comprobantes
-            $subtotalesGenerales = DB::select('select detalle, sum(NetoComp) as saldo FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle');
+            $subtotalesGenerales = DB::select('select detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle');
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, proveedor_id, proveedors.name');
 
             //Genera el encabezado principal de la tabla
@@ -195,8 +195,10 @@ class CompraComponent extends Component
             // Commienza a iterar la cantidad de registros a nivel general que ha encontrado
             for($i=0; $CantGeneral>$i ; $i++) {
 
+                $detall = is_null($subtotalesGenerales[$i]->detalle) ? " is null " : "='".$subtotalesGenerales[$i]->detalle."'";
+
                 //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
-                $subParciales = DB::select('SELECT comprobantes.id, comprobantes.detalle, comprobantes.fecha, comprobantes.comprobante, comprobantes.NetoComp, comprobantes.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as proveedor_name from comprobantes inner join areas as a on comprobantes.area_id=a.id inner join cuentas as c on comprobantes.cuenta_id=c.id inner join proveedors as p on comprobantes.proveedor_id=p.id WHERE '.$proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id').' and detalle="'.$subtotalesGenerales[$i]->detalle.'" ORDER by comprobantes.fecha;');
+                $subParciales = DB::select('SELECT comprobantes.id, comprobantes.detalle, comprobantes.fecha, comprobantes.comprobante, comprobantes.NetoComp, comprobantes.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as proveedor_name from comprobantes inner join areas as a on comprobantes.area_id=a.id inner join cuentas as c on comprobantes.cuenta_id=c.id inner join proveedors as p on comprobantes.proveedor_id=p.id WHERE '.$proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id').' and detalle'.$detall.' ORDER by comprobantes.fecha;');
 
                 // Cantidad de registros encontrados a nivel detallado
                 $CantParcial = count($subParciales);
@@ -204,9 +206,8 @@ class CompraComponent extends Component
                 // Cambia el recordset por un array
                 $Parcial = $subParciales[0];
                 // $Parcial = $subParciales[$i];
-
                 // Imprime el registro inicial con el COMPROBANTE ORIGINARIO
-                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2>COMPROBANTE ORIGINARIO</td><td align=\"right\"><b>".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</b></td><td align=\"right\">".number_format($Parcial->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\">-</td><td align=\"right\"></td><td colspan=2></td></tr>";
+                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2>COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\"></td><td colspan=2></td></tr>";
 
                 // Registra el saldoFinal
                 $saldoFinal = $saldoFinal + $subtotalesGenerales[$i]->saldo;
@@ -222,6 +223,7 @@ class CompraComponent extends Component
                     // Registra el saldoFinal
                     $saldoFinal = $saldoFinal - $sub->MontoPagadoComp;
 
+                //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
                     $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\" style=\" height: 10px;\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">0.00</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
                 }
             }

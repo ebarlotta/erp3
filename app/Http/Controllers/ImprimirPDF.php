@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Livewire\erp\Compra\CompraComponent;
 use App\Models\Empresa;
 use Illuminate\Http\Request;
 // use Barryvdh\DomPDF\Facade as PDF;
@@ -15,33 +16,15 @@ class ImprimirPDF extends Controller
 
     public function ComprasCtaCte( Request $request) {
 
-        // FALTA POR HACER
 
-        $this->operacion = "deuda"; //$request->operacion;
-        $this->registros = DB::table('comprobantes')
-        ->selectRaw('sum(NetoComp-MontoPagadoComp) as Saldo, proveedors.id, proveedors.name')
-        ->join('proveedors', 'comprobantes.proveedor_id', '=', 'proveedors.id')
-        //->whereBetween('comprobantes.fecha',["'".$this->ddesde."'","'".$this->dhasta."'"])
-        // ->whereRaw('(NetoComp-MontoPagadoComp)>1')
-        ->where('comprobantes.fecha','>=',date($request->ddesde))
-        ->where('comprobantes.fecha','<=',date($request->dhasta))
-        ->groupBy('proveedors.id');
+        $Compras = new CompraComponent();
 
-        $sql ="select sum(NetoComp-MontoPagadoComp) as Saldo, proveedors.id, proveedors.name from `comprobantes` inner join `proveedors` on `comprobantes`.`proveedor_id` = `proveedors`.`id` and `comprobantes`.`fecha` >= '$request->ddesde' and `comprobantes`.`fecha` <= '$request->dhasta' and comprobantes.empresa_id=".session('empresa_id')." group by proveedors.id, proveedors.name HAVING Saldo > 1";
-        // dd($sql);
-        // $registros = DB::select(DB::raw($sql));
-        $registros = DB::select($sql);
-        
-        $this->saldo = 0;
-        foreach($registros as $registro) { 
-            if($registro->Saldo>1) { $this->saldo = $this->saldo + $registro->Saldo; }
-            if($registro->Saldo<1) { $this->saldo = $this->saldo + $registro->Saldo * -1; }
-        }
+        $Compras->ListarCuentasCorrientes();
+        $html = $Compras->CuentasCorrientesHtml;
 
-        $saldototal = $this->saldo;
-        $operacion = $this->operacion;
-        $html = $this->PrepararTabla($registros);
-        // dd($sql);
+        $saldototal = 100;
+        $operacion = 1;
+
         $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
         
         // download PDF file with download method

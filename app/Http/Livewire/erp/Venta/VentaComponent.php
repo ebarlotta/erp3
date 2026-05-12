@@ -199,7 +199,7 @@ class VentaComponent extends Component
             }
         } else {
             // Busca todos los registros que cumplen con los criterios de parámetros, de ahí toma los distintos números de ventas
-            $subtotalesGenerales = DB::select('select detalle, sum(NetoComp) as saldo FROM ventas join clientes on clientes.id = ventas.cliente_id WHERE '. $cliente.' ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id') .' GROUP BY detalle');
+            $subtotalesGenerales = DB::select('select detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as MontoPagadoComp FROM ventas join clientes on clientes.id = ventas.cliente_id WHERE '. $cliente.' ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id') .' GROUP BY detalle');
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, ventas.empresa_id, cliente_id, clientes.name FROM ventas join clientes on clientes.id = ventas.cliente_id WHERE ventas.cliente_id = '.$this->ccCliente.' and ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, cliente_id, clientes.name');
 
             //Genera el encabezado principal de la tabla
@@ -210,8 +210,10 @@ class VentaComponent extends Component
             // Commienza a iterar la cantidad de registros a nivel general que ha encontrado
             for($i=0; $CantGeneral>$i ; $i++) {
 
+                $detall = is_null($subtotalesGenerales[$i]->detalle) ? " is null " : "='".$subtotalesGenerales[$i]->detalle."'";
+
                 //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
-                $subParciales = DB::select('SELECT ventas.id, ventas.detalle, ventas.fecha, ventas.comprobante, ventas.NetoComp, ventas.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as cliente_name from ventas inner join areas as a on ventas.area_id=a.id inner join cuentas as c on ventas.cuenta_id=c.id inner join clientes as p on ventas.cliente_id=p.id WHERE '.$cliente.' ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id').' and detalle="'.$subtotalesGenerales[$i]->detalle.'" ORDER by ventas.fecha;');
+                $subParciales = DB::select('SELECT ventas.id, ventas.detalle, ventas.fecha, ventas.comprobante, ventas.NetoComp, ventas.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as cliente_name from ventas inner join areas as a on ventas.area_id=a.id inner join cuentas as c on ventas.cuenta_id=c.id inner join clientes as p on ventas.cliente_id=p.id WHERE '.$cliente.' ventas.fecha >= "'.$this->ccdesde.'" and ventas.fecha <= "'.$this->cchasta.'" and ventas.empresa_id = '. session('empresa_id').' and detalle'.$detall.' ORDER by ventas.fecha;');
 
                 // Cantidad de registros encontrados a nivel detallado
                 $CantParcial = count($subParciales); 
@@ -221,7 +223,7 @@ class VentaComponent extends Component
                 // $Parcial = $subParciales[$i];
 
                 // Imprime el registro inicial con el COMPROBANTE ORIGINARIO
-                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2>COMPROBANTE ORIGINARIO</td><td align=\"right\"><b>".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</b></td><td align=\"right\">".number_format($Parcial->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\">-</td><td align=\"right\"></td><td colspan=2></td></tr>";
+                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2>COMPROBANTE ORIGINARIO</td><td align=\"right\"><b>".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</b></td><td align=\"right\">".number_format($subtotalesGenerales[$i]->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo - $subtotalesGenerales[$i]->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\"></td><td colspan=2></td></tr>";
 
                 // Registra el saldoFinal
                 $saldoFinal = $saldoFinal + $subtotalesGenerales[$i]->saldo;

@@ -805,7 +805,7 @@
 										<input class="ml-2 text-xs rounded-md h-7 btn btn-info px-8 py-1 mx-2 mt-3" type="button" wire:click="ListarCuentasCorrientes" value="Calcular"><br>
 									</div>
 									<a href="{{ URL::to('/pdf/ivaventas'.'/'.$lanio.'/'.$lmes) }}" target="_blank">
-										<button class="rounded-md bg-green-300 px-8 py-1 ml-4 mt-6" style="color: black;">Imprimir Resumen</button>
+										<button class="ml-2 text-xs rounded-md h-7 btn btn-info px-8 py-1 mx-2 mt-3">Imprimir Resumen</button>
 									</a><br>
 								</div>
 								{!! $CuentasCorrientesHtml !!}

@@ -21,43 +21,43 @@
                             Todos
                         </label>
                     </div>
-                    <div class="form-check mx-3" wire:click="Filtrar()"> 
+                    <div class="form-check mx-3" wire:click="Filtrar()">
                         <input class="form-check-input" wire:model="radios" type="radio" value="Agentes" checked>
                         <label class="form-check-label" for="flexRadioDefault2">
                             Agentes
                         </label>
                     </div>
-                    <div class="form-check mx-3" wire:click="Filtrar()"> 
+                    <div class="form-check mx-3" wire:click="Filtrar()">
                         <input class="form-check-input" wire:model="radios"  type="radio" value="Referentes" checked>
                         <label class="form-check-label" for="flexRadioDefault2">
                             Referentes
                         </label>
                     </div>
-                    <div class="form-check mx-3" wire:click="Filtrar()"> 
+                    <div class="form-check mx-3" wire:click="Filtrar()">
                         <input class="form-check-input" wire:model="radios" type="radio" value="Personal" checked>
                         <label class="form-check-label" for="flexRadioDefault2">
                             Personal
                         </label>
                     </div>
-                    <div class="form-check mx-3" wire:click="Filtrar()"> 
+                    <div class="form-check mx-3" wire:click="Filtrar()">
                         <input class="form-check-input" wire:model="radios" type="radio" value="Proveedores" checked>
                         <label class="form-check-label" for="flexRadioDefault2">
                             Proveedores
                         </label>
                     </div>
-                    <div class="form-check mx-3" wire:click="Filtrar()"> 
+                    <div class="form-check mx-3" wire:click="Filtrar()">
                         <input class="form-check-input" wire:model="radios" type="radio" value="Clientes" checked>
                         <label class="form-check-label" for="flexRadioDefault2">
                             Clientes
                         </label>
                     </div>
-                    <div class="form-check mx-3" wire:click="Filtrar()"> 
+                    <div class="form-check mx-3" wire:click="Filtrar()">
                         <input class="form-check-input" wire:model="radios" type="radio" value="Vendedores" checked>
                         <label class="form-check-label" for="flexRadioDefault2">
                             Vendedores
                         </label>
                     </div>
-                    <div class="form-check mx-3" wire:click="Filtrar()"> 
+                    <div class="form-check mx-3" wire:click="Filtrar()">
                         <input class="form-check-input" wire:model="radios" type="radio" value="Empresas" checked>
                         <label class="form-check-label" for="flexRadioDefault2">
                             Empresas
@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="flex d-flex align-middle" style="margin-top: 23px">
-                    <div class="form-check mx-3"> 
+                    <div class="form-check mx-3">
                         <input class="form-input" wire:model="searchActor" wire:keyup="Filtrar()" type="textbox" value="" placeholder="Buscar Nombre/Apellido" style="background-color: darkgray; padding:5px; border-radius:4px;">
                     </div>
                 </div>
@@ -103,9 +103,13 @@
                                             Gestionar
                                         </button> --}}
                                         {{-- </a> --}}
-                                        
+
                                     {{-- </div> --}}
-                                    <x-gestionar id="{{$actor->id}}">Gestionar</x-gestionar>
+                                    <div>
+
+                                    <x-gestionar id="{{$actor->id}}" desactivado="{{ $actor->tipopersona_id==1 ? 'disabled' : 'enabled' }}">Gestionar</x-gestionar>
+
+                                    </div>
                                     <!-- Editar  -->
                                     <x-editar id="{{$actor->id}}"></x-editar>
                                     <!-- Eliminar -->

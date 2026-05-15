@@ -82,7 +82,7 @@
                                                         <!-- Editar  -->
                                                         <x-editar id="{{ $elemento->elemento_id }}"></x-editar>
                                                     @endcan
-                                                    @can('categorias.Eliminar')
+                                                    @can('elementos.Eliminar')
                                                         <!-- Eliminar -->
                                                         <button wire:click="delete({{ $elemento->elemento_id }})" class="lg:hidden bg-red-300 hover:bg-red-400 text-black-900 font-bold py-1 px-1 mt-1 rounded">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

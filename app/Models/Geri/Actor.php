@@ -13,12 +13,12 @@ class Actor extends Model {
 
    protected $fillable = [
       'nombre',
-      'domicilio', 
+      'domicilio',
       'documento',
-      'tipos_documento', 
+      'tipos_documento',
       'nacimiento',
-      'sexo_id', 
-      'email', 
+      'sexo_id',
+      'email',
       'nacionalidad_id',
       'localidad_id',
       'obrasocial_id',
@@ -72,10 +72,11 @@ class Actor extends Model {
    }
 
    public function actor_referente() {
-      $a = ActorAgente::where('id','=',$this->id)->get('actor_referente');
-      if(count($a)) { 
-         $b = Actor::find($a[0]);
-         return $b; 
+      $a = ActorAgente::where('actor_id','=',$this->id)->get('actor_referente');
+      if(count($a)) {
+        $b = Actor::find($a[0]);
+        return $b[0]['nombre'];
+        //  return $b->nombre;
       }
       return null;
       // return dd($this->HasOne(Actor::class,'id','actor_referente')->get());
@@ -113,7 +114,7 @@ class Actor extends Model {
 // 		$this->obrasocial_id=0;  // 0 = sin especificar
 // 		$this->escolaridad_id=0; // 0 = sin especificar
 // 	}
-   
+
 // }
 
 // // class Personas extends Actor { //Aplica para referentes y residentes
@@ -124,7 +125,7 @@ class Actor extends Model {
 // //    public $canthijasmujeres;
 
 // //    public function agregar() {
-   
+
 // //       $a = $this->domicilio;
 // //    }
 // // }

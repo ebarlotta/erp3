@@ -117,13 +117,20 @@ class ElementosComponent extends Component
         $this->reset( 'elemento_id', 'name', 'existencia', 'stock_minimo', 'precio_compra', 'categoria_id', 'unidad_id', 'vencimiento', 'pedira', 'psiquiatrico', 'estados', 'estado_id', 'barra', 'qr', 'descuento', 'descuento_especial', 'descripcion', 'calificacion', 'precio_venta', 'lote', 'ruta', 'proveedores', 'proveedor_id', 'marca', 'listas', 'lista_id');
     }
 
+    public function ActualizarRuta() {
+        // dd($this->ruta);
+        // $rutaPath = $this->ruta->store('photos', 'public');
+        // dd($rutaPath->temporaryUrl());
+    }
+
     public function store(Request $request) {
         $rutaPath = null;
+            // $rutaPath = $this->ruta->store('photos', 'public');
 
         if($this->ruta) {
             $rutaPath = $this->ruta->store('photos', 'public');
-            // $this->ruta = $rutaPath;
-            $this->rutaTemporal = $rutaPath . $rutaPath->temporaryUrl() ;
+            // dd($rutaPath . '  -  ' . $rutaPath->temporaryUrl());
+            // $this->rutaTemporal = $rutaPath->temporaryUrl() ? $rutaPath->temporaryUrl() : null ;
         }
 
         $this->validate([
@@ -136,14 +143,18 @@ class ElementosComponent extends Component
             'vencimiento'=> 'required',
         ]);
 
-        // if($this->ruta=='null' || $this->ruta=='sin_imagen.jpg') {
-        //     $this->ruta = "sin_imagen.jpg";
-        // } else
-        // {
-        //     $nombreCompleto = basename($this->ruta) . time().'.jpg';
-        //     // $url = $nombreCompleto;
-        //     $this->ruta = $nombreCompleto;
-        // }
+        if($this->ruta=='null' || $this->ruta=='sin_imagen.jpg') {
+            $this->ruta = "sin_imagen.jpg";
+        } else
+        {
+            $rutaPath = $this->ruta->store('photos', 'public');
+
+            // $nombreCompleto = basename($this->ruta) . time().'.jpg';
+            // $url = $nombreCompleto;
+            // $this->ruta = $nombreCompleto;
+
+            $this->ruta = $rutaPath;
+        }
 
         // dd($this->ruta);
         switch ($this->seleccionado) {
@@ -188,7 +199,8 @@ class ElementosComponent extends Component
             'vencimiento'=> $this->vencimiento,
             'categoria_id'=> $this->categoria_id,
             'unidad_id'=> $this->unidad_id,
-            'ruta'=> $rutaPath,
+            'ruta'=> $this->ruta,
+            // 'ruta'=> $rutaPath,
             'empresa_id'=> session('empresa_id'),
         ]);
 

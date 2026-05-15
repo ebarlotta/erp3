@@ -575,7 +575,7 @@ class VentaComponent extends Component
 
             $this->filtro=$this->filtro."
             <tr wire:click=\"gCargarRegistro(". $registro->id .")\">
-                <td class=\"p-0 text-right\">$Fecha</td>
+                <td style=\"font-size:12px;\" class=\"p-0 text-right\">$Fecha</td>
                 <td class=\"p-0 text-right\">$registro->comprobante</td>
                 <td class=\"p-0 text-right\" style=\"white-space: nowrap;\" class=\" text-left\">$Cliente->name</td>";
 

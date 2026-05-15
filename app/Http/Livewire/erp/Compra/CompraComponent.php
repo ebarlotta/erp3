@@ -433,10 +433,10 @@ class CompraComponent extends Component
         // <div class=\"table-responsive-sm\">word-wrap: anywhere;
         $this->filtro="
 
-                <table class=\"table table-striped small\" style=\"font-size:12px; padding: 0.2rem .2rem; padding: .2rem;\">
+                <table class=\"table table-striped small\" style=\"font-size:12.5px; padding: 0.2rem .2rem; padding: .2rem;\">
                 <thead>
                   <tr>
-                    <th scope=\"col\">Fecha</th>
+                    <th >Fecha</th>
                     <th scope=\"col\">Comprobante</th>
                     <th class=\"col d-none d-sm-table-cell p-1 my-auto\" scope=\"col\">Proveedor</th>
                     <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Detalle</th>
@@ -483,7 +483,7 @@ class CompraComponent extends Component
             $NetoT = $NetoT + $registro->NetoComp;
             $this->filtro=$this->filtro."
             <tr wire:click=\"gCargarRegistro(". $registro->id .")\">
-                <td class=\"p-0 text-right\">".substr($Fecha,0,6).substr($Fecha,8,2)."</td>
+                <td class=\"p-0 text-center\">".substr($Fecha,0,6).substr($Fecha,8,2)."</td>
                 <td class=\"p-0\">&nbsp;$registro->comprobante</td>
                 <td class=\"p-0 col d-none d-sm-table-cell text-left\">&nbsp; $Proveedor->name</td>
                 <td style=\"max-width:200px; width:200px; overflow: hidden;\" class=\"p-0 col d-none d-sm-table-cell text-left\">$registro->detalle</td>

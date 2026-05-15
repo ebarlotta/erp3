@@ -21,7 +21,7 @@ class Persona extends Model
         'email',
         'cama_id', //no esta
         'nacionalidad_id',
-        'localidad_id', 
+        'localidad_id',
         //Obra social no esta
         'escolaridad_id',
         //telefono no esta
@@ -51,16 +51,16 @@ class Actor extends Model {
 
     public $empresa_id;
     public $activo;
-    
+
     public function nueva() {
         return "entro";
     }
 
-    
+
 }
 
 class Personas extends Actor { //Aplica para referentes y residentes
-    
+
     public $alias;
     public $nacimiento;
     public $estadocivil_id;
@@ -132,7 +132,7 @@ class empresa extends Actor {
     public $titular_id;  //Hace referencia a Persona
     public $fechainicio;
 
-    
+
     function __construct() {
         $this->nacimiento=date('Y-m-d');
         $this->estadocivil_id=0; // 0 = sin especificar

@@ -40,7 +40,7 @@
                                         <option value="">-</option>
                                         @foreach($referentes as $referente)
                                             @if($actor_referente===$referente->id)
-                                                <option value="{{ $referente->id }}" selected>{{ $referente->nombre}}</option>
+                                                <option value="{{ $referente->id }}" selected>{{ $referente->nombre - $referente_id}}</option>
                                             @else
                                                 <option value="{{ $referente->id }}">{{ $referente->nombre}}</option>
                                             @endif
@@ -62,6 +62,22 @@
                                         @endif
                                     </select>
                                     @error('cama_id') <span class="text-red-500">{{ $message }}</span>@enderror
+                                </div>
+                                <div class="mb-2 col-6 col-md-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-1">Sexo</label>
+                                    <select class="col-12 form-control" name="sexo_id" id="" wire:model="sexo_id" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;">
+                                        <option value="">-</option>
+                                        @if($sexos)
+                                            @foreach($sexos as $sexo)
+                                                @if($sexo_id===$sexo->id)
+                                                    <option value="{{ $sexo->id }}" selected>{{ $sexo->nombresexo }}</option>
+                                                @else
+                                                    <option value="{{ $sexo->id }}">{{ $sexo->nombresexo }}</option>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    @error('sexo_id') <span class="text-red-500">{{ $message }}</span>@enderror
                                 </div>
                                 @if (session()->has('message'))
                                     <div class="bg-success px-4 py-3 shadow-md my-3" role="alert">

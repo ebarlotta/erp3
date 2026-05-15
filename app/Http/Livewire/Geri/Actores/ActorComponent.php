@@ -57,7 +57,7 @@ class ActorComponent extends Component
 {
     public $persona_descripcion, $actor_id, $iva_id, $fingreso, $fegreso, $peso, $telefono, $nombreempresa, $motivosegresos, $gradodependencia, $referente_id;
     public $actores, $ivas, $condicioniva_id, $referentes;
-    
+
     public $tipos_documentos, $estados_civiles, $tipos_de_personas, $nacionalidades, $localidades, $beneficios, $grados_dependencias, $escolaridades, $camas, $person_activos, $sexos, $datossociales_id, $historiadevida;
 
     public $camas22;
@@ -98,7 +98,7 @@ class ActorComponent extends Component
                 //Busca el id de la empresa relacionada con el usuario que está logueado
                 $usuario=EmpresaUsuario::where('user_id','=',Auth::id())->get();
                 // session(['empresa_id' => $usuario[0]['empresa_id']]);
-                
+
                 $this->anioNuevo=date("Y");
                 $this->tipos_documentos = TiposDocumentos::all();   //Carga todos los tipos de documentos
                 $this->estados_civiles = EstadosCiviles::all(); // Carga todos los estados civiles
@@ -108,7 +108,7 @@ class ActorComponent extends Component
                 $this->beneficios = Beneficios::all();  // Carga Obras Sociales
                 $this->grados_dependencias = GradoDependencia::all();   // Carga Grados de dependencia
                 $this->escolaridades = Escolaridades::all();    // Carga escolaridades
-                $this->sexos = Sexo::all();     // Carga sexos 
+                $this->sexos = Sexo::all();     // Carga sexos
                 $this->person_activos = PersonActivo::all();    // Carga los distintos estados Alta/Baja/En proceso de baja
                 $this->dias = DiasDeLaSemana::all();
                 $this->momentos = MomentosDelDia::all();
@@ -128,10 +128,10 @@ class ActorComponent extends Component
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
-        }       
-          
+        }
+
     }
-    
+
     // protected $rules = [
     //     'agente_id' => ['required', 'email'],
     //     'informe_id' => ['required'],
@@ -150,7 +150,7 @@ class ActorComponent extends Component
         $a->anio=$this->anioNuevo;
         $a->profesional_id=$this->profesional_id_Nuevo;
         $a->empresa_id=session('empresa_id');
-        $a->save(); 
+        $a->save();
         //Falta validar antes de guardar
         $preguntas = Pregunta::where('informe_id','=',$this->informe_id)->get();
         foreach($preguntas as $pregunta) {
@@ -171,17 +171,16 @@ class ActorComponent extends Component
         $actor = Actor::find($id);
         $this->plan_alimentario_actor_id=null;
         $this->plan_alimentario_elegido=null;
-
         if($actor->tipopersona_id==1) {     // Si es un agente, entonces...
             $this->CargaDatosdelActor($actor);
-            // $agente = ActorAgente::where('id','=',$this->actor_id)->get(); 
-            
+            // $agente = ActorAgente::where('id','=',$this->actor_id)->get();
+
             $this->CargarInforme('PlanAlimentario');    // Carga el plan Alimentario, si es que lo hay
             $a = PlanAlimentarioActor::where('actor_id','=',$this->actor_id)->get();
-            if(count($a)) { 
-                $this->plan_alimentario_actor_id = $a[0]->plan_id; 
+            if(count($a)) {
+                $this->plan_alimentario_actor_id = $a[0]->plan_id;
                 $this->plan_alimentario_elegido=$a[0]->plan_id;
-            } else { 
+            } else {
                 $this->plan_alimentario_elegido = NULL;
                 $this->CargarInforme('PlanAlimentario');
                 // $listado_planes_alimentarios = PlanAlimentario::where('empresa_id','=',session('empresa_id'))->get();
@@ -193,11 +192,11 @@ class ActorComponent extends Component
     }
 
     public function cerrarModal(){ $this->isModalOpenGestionar=false; }
-    
+
     public function CargarInforme($informe) {
         $this->listadoinformes = null;
         switch ($informe) {
-            case 'Sociales':{ 
+            case 'Sociales':{
                 $this->listadoinformes = Area::join('informes','areas.id','informes.area_id')
                 ->where('name','=','Social')
                 ->get();
@@ -208,7 +207,7 @@ class ActorComponent extends Component
                 }
                 break;
             }
-            case 'Medicos':{ 
+            case 'Medicos':{
                 $this->listadoinformes = Area::join('informes','areas.id','informes.area_id')
                 ->where('name','=','Médica')
                 ->get();
@@ -219,19 +218,19 @@ class ActorComponent extends Component
                 }
                 break;
             }
-            case 'Nutricional':{ 
+            case 'Nutricional':{
                 $this->listadoinformes = Area::join('informes','areas.id','informes.area_id')
                 ->where('name','=','Nutricional')
                 ->get();
                 break;
             }
-            case 'HistoriaDeVida':{ 
+            case 'HistoriaDeVida':{
                 $this->listadoinformes = Area::join('informes','areas.id','informes.area_id')
                 ->where('name','=','Historia De Vida')
                 ->get();
                 break;
             }
-            case 'Pagos':{ 
+            case 'Pagos':{
                 $this->listadoinformes = Area::join('informes','areas.id','informes.area_id')
                 ->where('name','=','Administración')
                 ->get();
@@ -244,9 +243,9 @@ class ActorComponent extends Component
                 }
             }
 
-            case 'Medicamentos':{                
+            case 'Medicamentos':{
                 //Busca todos los medicamentos que tiene el actor
-                
+
                 $this->listadomedicamentos = Indicaciones::join('elementos','indicaciones.elemento_id','elementos.id')
                 ->join('momentos_del_dias','momentos_del_dias.id','indicaciones.momento_del_dia_id')
                 ->join('dias_de_la_semanas','dias_de_la_semanas.id','indicaciones.dia_de_la_semana_id')
@@ -260,7 +259,7 @@ class ActorComponent extends Component
 
                 $matriz = '';
                 $i=0;
-                foreach ($cant as $clave => $subArray) { 
+                foreach ($cant as $clave => $subArray) {
                     //Genera el primer encabezado
                     $NombreMedicamento = $subArray[0]['name'];
                     // $NombreMedicamento = $this->listadomedicamentos[$i]->name;
@@ -295,16 +294,16 @@ class ActorComponent extends Component
 
                     for($momentos=1;$momentos<=count($this->momentos);$momentos++) {
                         $registros = $registros . '<tr>';
-                        switch ($momentos) { 
+                        switch ($momentos) {
                             case(1) : $registros = $registros . '<td><b class="ml-2">Mañana</b></td>';break;
                             case(2) : $registros = $registros . '<td><b class="ml-2">Almuerzo</b></td>';break;
                             case(3) : $registros = $registros . '<td><b class="ml-2">Merienda</b></td>';break;
-                            case(4) : $registros = $registros . '<td><b class="ml-2">Cena</b></td>';break;                                                        
+                            case(4) : $registros = $registros . '<td><b class="ml-2">Cena</b></td>';break;
                         }
-                        for($dias=1;$dias<=count($this->dias);$dias++) {                            
+                        for($dias=1;$dias<=count($this->dias);$dias++) {
                             if($momentos==$registro[$indice]->momento_del_dia_id && $dias==$registro[$indice]->dia_de_la_semana_id) {
-                                $registros = $registros . '<td class="text-center" wire:click="ModificarIndicacion('.$momentos.','.$dias.','.$subArray[0]['elemento_id'].')">'. $registro[$indice]->cantidad.'</td>'; 
-                                if($indice<count($registro)-1) { $indice++; } 
+                                $registros = $registros . '<td class="text-center" wire:click="ModificarIndicacion('.$momentos.','.$dias.','.$subArray[0]['elemento_id'].')">'. $registro[$indice]->cantidad.'</td>';
+                                if($indice<count($registro)-1) { $indice++; }
                             }
                             else {
                                 $registros = $registros . '<td class="text-center" wire:click="ModificarIndicacion('.$momentos.','.$dias.','.$subArray[0]['elemento_id'].')">0</td>';
@@ -344,11 +343,11 @@ class ActorComponent extends Component
                             <p>
                         </div>
                     </div>';
-    
+
                 $this->visualizarPlanAlimentario = $matriz;
 
             }
-            
+
             case 'Descartables':{
                 // dd('encontrado');
                 $this->listadoDescartables = Medicamento::all();
@@ -379,7 +378,7 @@ class ActorComponent extends Component
         // } else {
 
         session()->flash('message', 'Plan Actualizado');
-        
+
     }
 
     public function ModificarIndicacion($momento, $dia, $elemento_id) {
@@ -388,13 +387,13 @@ class ActorComponent extends Component
         ->where('elemento_id','=',$elemento_id)
         ->where('actor_id','=',$this->actor_id)
         ->get();
-        if(count($a)) { 
-            $this->CantidadAModificar = $a[0]->cantidad; 
+        if(count($a)) {
+            $this->CantidadAModificar = $a[0]->cantidad;
         } else { $this->CantidadAModificar=0; }
 
-        $this->MomentoAModificar = $momento; 
-        $this->ElementoAModificar = $elemento_id; 
-        $this->DiaAModificar = $dia; 
+        $this->MomentoAModificar = $momento;
+        $this->ElementoAModificar = $elemento_id;
+        $this->DiaAModificar = $dia;
 
         $this->mostrarModificarIndicacion = true;
     }
@@ -411,7 +410,7 @@ class ActorComponent extends Component
                 'cantidad' => $this->CantidadAModificar,
             ]
         );
-        // Indicaciones::updateOrCreate(['dia_de_la_semana_id' => $this->MomentoAModificar,'momento_del_dia_id','=',$this->DiaAModificar,'elemento_id','=',$this->ElementoAModificar,'actor_id','=',$this->actor_id], ['cantidad' => $this->CantidadAModificar,]); 
+        // Indicaciones::updateOrCreate(['dia_de_la_semana_id' => $this->MomentoAModificar,'momento_del_dia_id','=',$this->DiaAModificar,'elemento_id','=',$this->ElementoAModificar,'actor_id','=',$this->actor_id], ['cantidad' => $this->CantidadAModificar,]);
         $this->mostrarModificarIndicacion = false;
         $this->CargarInforme('Medicamentos');
     }
@@ -448,7 +447,7 @@ class ActorComponent extends Component
         $this->informeespecifico = InformeRespuestas::where('agente_informes_sid','=',$informe_id)
         ->join('preguntas','preguntas.id','preguntas_id')
         ->get(['preguntas_id','cantidad','descripcion','agente_informes_id','fotourl','informe_respuestas.id','textopregunta','escala_id']);
-        
+
         $this->agente_informes_id=$informe_id;
         $this->mostrarinformeespecifico = true;
     }
@@ -492,7 +491,7 @@ class ActorComponent extends Component
         switch ($this->radios) {
         // switch ($a) {
             case 'Todos': $this->actores = Actor::orderby('nombre')->where('nombre','like','%'.$this->searchActor.'%')->get(); break;
-            case 'Agentes': 
+            case 'Agentes':
                 $this->actores = Actor::where('tipopersona_id','=',1)->get();
                 // $this->actores = Actor::where('tipopersona_id','=',1)->where('nombre','like','%'.$this->searchActor.'%')->orderby('nombre')->get();
                 // dd($this->actores );
@@ -508,7 +507,7 @@ class ActorComponent extends Component
 
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         $this->tipos_documentos = TiposDocumentos::all();
@@ -528,28 +527,28 @@ class ActorComponent extends Component
         return view('livewire.geri.actores.actor-component')->with('isModalOpen', $this->isModalOpen);
     }
 
-    // Se encarga de los modales 
+    // Se encarga de los modales
     //==========================
     public function openModalPopover() { $this->isModalOpen = true; }
     public function closeModalPopover() { $this->isModalOpen = false; }
     public function closeModalInformeEspecifico() { $this->mostrarinformeespecifico = false; }
     public function openModalPopoverAdicionales() { $this->isModalOpenAdicionales = true; }
     public function closeModalPreguntas() { $this->modalpreguntas = false; }
-    public function closeModalPopoverAdicionales() { 
-        $this->isModalOpenAdicionales = false; 
+    public function closeModalPopoverAdicionales() {
+        $this->isModalOpenAdicionales = false;
         $this->reset('vinculo','ultimaocupacion','viviendapropia','canthijosvarones','canthijasmujeres','activo'); }
 
-    public function abrirModalNuevoInforme($id) { 
-        $this->ModalNuevoInforme=true; 
-        $this->personalmedico = Actor::where('tipopersona_id','=',3)->get(); 
+    public function abrirModalNuevoInforme($id) {
+        $this->ModalNuevoInforme=true;
+        $this->personalmedico = Actor::where('tipopersona_id','=',3)->get();
         $this->nuevo_informe_id = $id; }
     public function cerrarModalNuevoInforme() { $this->ModalNuevoInforme=false; }
     public function cerrarModalModificarIndicacion() { $this->mostrarModificarIndicacion = false; }
     public function cerrarModalNuevaIndicacion() { $this->mostrarNuevaIndicacion = false; }
-    public function openModalNuevaIndicacion($caso) { 
+    public function openModalNuevaIndicacion($caso) {
         // dd('entra');
         switch ($caso) {
-            case 'Medicamentos': 
+            case 'Medicamentos':
                 $this->elementos = Elemento::join('elemento_medicamentos','elemento_medicamentos.elemento_id','elementos.id')
                 ->where('empresa_id','=',session('empresa_id'))->orderby('name')->get();
                 break;
@@ -558,7 +557,7 @@ class ActorComponent extends Component
             //     ->where('empresa_id','=',session('empresa_id'))->orderby('name')->get();
             //     break;
         }
-        $this->mostrarNuevaIndicacion = true; 
+        $this->mostrarNuevaIndicacion = true;
     }
 
     private function resetCreateForm(){
@@ -574,34 +573,34 @@ class ActorComponent extends Component
         $this->personactivo_id = null ;
         $this->condicioniva_id =null;
     }
-    
+
     public function store() {
         if(is_null(session('empresa_id'))) return redirect()->route('login');
         $this->validate([
-            'name' => 'required', 
+            'name' => 'required',
             'documento' => 'required|integer',
-            'tipodocumento_id' => 'required|integer', 
-            'tipopersona_id' => 'required|integer', 
+            'tipodocumento_id' => 'required|integer',
+            'tipopersona_id' => 'required|integer',
             'nacionalidad_id' => 'required|integer',
             'localidad_id' => 'required|integer',
             'beneficio_id' => 'required|integer',
             'personactivo_id' => 'required|integer',
             'condicioniva_id' => 'required',
         ]);
-        
+
         $a = actor::updateOrCreate(['id' => $this->actor_id], [
-            'nombre' => $this->name, 
-            'domicilio' => $this->domicilio, 
+            'nombre' => $this->name,
+            'domicilio' => $this->domicilio,
             'documento' =>  $this->documento,
-            'tipos_documento' => $this->tipodocumento_id, 
+            'tipos_documento' => $this->tipodocumento_id,
             'nacimiento' =>  date(now()), //$this->nacimiento,
-            'sexo_id' =>  1, //$this->sexo_id, 
-            'email' =>  $this->email, 
-            'telefono' => 1111, // $this->telefono, 
+            'sexo_id' =>  1, //$this->sexo_id,
+            'email' =>  $this->email,
+            'telefono' => 1111, // $this->telefono,
             'nacionalidad_id' =>  $this->nacionalidad_id,
             'localidad_id' =>  $this->localidad_id,
             'obrasocial_id' =>  $this->beneficio_id,
-            'escolaridad_id' =>  1, //$this->escolaridad_id, 
+            'escolaridad_id' =>  1, //$this->escolaridad_id,
             'personactivo_id' =>  $this->personactivo_id,
             'tipopersona_id' => $this->tipopersona_id,
             'condicioniva_id' => $this->condicioniva_id,
@@ -623,7 +622,7 @@ class ActorComponent extends Component
                 $agente->iva_id = 1;
                 $agente->save();
                 break;
-    
+
         }
 
         // if($this->tipopersona_id==2) {
@@ -665,7 +664,7 @@ class ActorComponent extends Component
 
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         // fALTA MENSAJE DE CONFIRMACIÓN DE ELIMINACIÓN
@@ -673,7 +672,7 @@ class ActorComponent extends Component
             case 1: ActorAgente::find('actor_id',$id)->delete(); break;
             case 2: ActorReferente::find('actor_id',$id)->delete(); break;
             case 3: ActorPersonal::find('actor_id',$id)->delete(); break;
-            case 4: ActorProveedor::find('actor_id',$id)->delete(); break;    
+            case 4: ActorProveedor::find('actor_id',$id)->delete(); break;
             case 5: ActorCliente::find('actor_id',$id)->delete(); break;
             case 6: ActorVendedor::find('actor_id',$id)->delete(); break;
             case 7: ActorEmpresa::find('actor_id',$id)->delete(); break;
@@ -687,14 +686,16 @@ class ActorComponent extends Component
     public function agregar($id)
     {
         $actor = Actor::findOrFail($id);
-        // $this->id = $id; 
+        // $this->id = $id;
+        // dd($actor);
         switch ($actor->tipopersona_id) {
             case 1: { // Agente
-                $this->referentes = Actor::where('tipopersona_id','=',2)->get(); 
+                $this->referentes = Actor::where('tipopersona_id','=',2)->get();
                 $this->camas22 = Camas::where('EstadoCama','=',1)->orderby('NroHabitacion')->get();
-                $agente = ActorAgente::where('actor_id','=',$actor->id)->get(); 
-                $this->CargaDatosdelAgente($agente[0]->id);  
-                break; 
+                $this->sexos = Sexo::all();     // Carga sexos
+                $agente = ActorAgente::where('actor_id','=',$actor->id)->get();
+                $this->CargaDatosdelAgente($agente[0]->id);
+                break;
             }
             case 2: {
                 // Referentes
@@ -785,13 +786,19 @@ class ActorComponent extends Component
         $this->email_verified_at = $actor->email_verified_at;
         $this->condicioniva_id = $actor->condicioniva_id;
 
-        if(!is_null($actor->actor_referente()) && !empty($actor->actor_referente()) && count($actor->actor_referente())>0) {
-            $this->actor_referente = $actor->actor_referente()[0]->nombre;
-            $this->referente_id = $actor->actor_referente()[0]->id;
-        } else {
-            $this->actor_referente = null; // o un valor por defecto
-            $this->referente_id = null;    // o un valor por defecto
-        }
+        $this->sexo_id = $actor->sexo_id;
+        $this->condicioniva_id = $actor->condicioniva_id;
+
+        $this->actor_referente = $actor->actor_referente();
+
+        // if(!is_null($actor->actor_referente()) && !empty($actor->actor_referente()) && count($actor->actor_referente())>0) {
+        // if(!is_null($this->referente_id)) {
+        //     $this->actor_referente = $actor->actor_referente()[0]->nombre;
+        //     $this->referente_id = $actor->actor_referente()[0]->id;
+        // } else {
+        //     $this->actor_referente = null; // o un valor por defecto
+        //     $this->referente_id = null;    // o un valor por defecto
+        // }
     }
 
     public function CargaDatosdelAgente($agente_id) {
@@ -816,6 +823,7 @@ class ActorComponent extends Component
                     'peso' => 'integer',
                     'referente_id' => 'integer',
                     'cama_id' => 'integer',
+                    'sexo_id' => 'integer',
                 ]);
                 $a = ActorAgente::updateOrCreate(['actor_id' => $this->actor_id], [
                 'fingreso' => $this->fingreso,
@@ -831,53 +839,56 @@ class ActorComponent extends Component
                 'grado_dependencia_id' => null,
                 'historiadevida_id' => null,
                 ]);
+                $a = Actor::updateOrCreate(['id' => $this->actor_id], [
+                    'sexo_id' => $this->sexo_id,
+                ]);
                 session()->flash('message', 'Se guardaron los datos');
                 break;
             case 2: // Referente
-                
+
             $this->validate([
                 'vinculo' => 'required',
-                // 'modalidad' => 'required', 
-                'ultimaocupacion' => 'required', 
-                'viviendapropia' => 'required', 
-                'canthijosvarones' => 'required', 
-                'canthijasmujeres' => 'required', 
-                'activo' => 'required', 
+                // 'modalidad' => 'required',
+                'ultimaocupacion' => 'required',
+                'viviendapropia' => 'required',
+                'canthijosvarones' => 'required',
+                'canthijasmujeres' => 'required',
+                'activo' => 'required',
             ]);
             // dd($this->actor_id);
             $a = ActorReferente::updateOrCreate(['actor_id' => $this->actor_id], [ //Tener en cuenta que está grabando en la tabla de personas, no de agentes
-                'vinculo' => $this->vinculo, 
-                'modalidad' => 1, 
-                'ultimaocupacion' => $this->ultimaocupacion, 
-                'viviendapropia' => $this->viviendapropia, 
-                'canthijosvarones' => $this->canthijosvarones, 
-                'canthijasmujeres' => $this->canthijasmujeres, 
-                'actor_id' => $this->actor_id, 
-                'activo' => $this->activo, 
+                'vinculo' => $this->vinculo,
+                'modalidad' => 1,
+                'ultimaocupacion' => $this->ultimaocupacion,
+                'viviendapropia' => $this->viviendapropia,
+                'canthijosvarones' => $this->canthijosvarones,
+                'canthijasmujeres' => $this->canthijasmujeres,
+                'actor_id' => $this->actor_id,
+                'activo' => $this->activo,
             ]);
             session()->flash('message', 'Se guardaron los datos');
             break;
             case 3: // Personal
                 $this->validate([
                     'modalidad' => 'required',
-                    'fingreso' => 'required|date', 
-                    'iminimo' => 'integer', 
-                    'activo' => 'required', 
+                    'fingreso' => 'required|date',
+                    'iminimo' => 'integer',
+                    'activo' => 'required',
                 ]);
                 // DD($this->actor_id);
                 $a = ActorPersonal::updateOrCreate(['actor_id' => $this->actor_id], [
-                    'modalidad' => $this->modalidad,  
-                    'fingreso' => $this->fingreso, 
-                    'iminimo' => $this->iminimo, 
-                    'cbu' => $this->cbu, 
-                    'nrotramite' => $this->nrotramite, 
-                    'patente' => $this->patente, 
+                    'modalidad' => $this->modalidad,
+                    'fingreso' => $this->fingreso,
+                    'iminimo' => $this->iminimo,
+                    'cbu' => $this->cbu,
+                    'nrotramite' => $this->nrotramite,
+                    'patente' => $this->patente,
                     'nrocta' => $this->nrocta,
-                    'actor_id' => $this->actor_id, 
-                    'activo' => $this->activo, 
+                    'actor_id' => $this->actor_id,
+                    'activo' => $this->activo,
                 ]);
                 session()->flash('message', 'Se guardaron los datos');
-                break; 
+                break;
             case 4:  // Proveedor
                 $this->validate([
                     'iva_id' => 'integer',

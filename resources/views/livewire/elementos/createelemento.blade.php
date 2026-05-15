@@ -58,7 +58,7 @@
                         </div>
                         <div class="mb-4 col-3">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Imágen</label>
-                            <input type="file" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese imágen" wire:model="ruta">
+                            <input type="file" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ingrese imágen" wire:model="ruta" wire:change="ActualizarRuta">
                             @error('ruta') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
                         {{-- Variaciones --}}
@@ -204,8 +204,15 @@
                         <div class="mb-4 col-3">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
                             {{-- <img src="{{ asset('images/bancos.jpeg') }}" alt="Girl in a jacket" width="500" height="600"> --}}
-                            <img src="{{ asset('storage/'.$this->ruta) }}" alt="Girl in a jacket" width="500" height="600">
-                            <img src="{{ asset('storage/'.$this->rutaTemporal) }}" alt="Girl in a jacket" width="500" height="600">
+                            @if(substr($this->ruta,0,4)=='/tmp')
+                                Cargando...
+                            @else
+                                @if($this->ruta)
+                                    <img src="{{ asset('storage/'.$this->ruta) }}" alt="Temporal" width="500" height="600">
+                                @else
+                                    <img src="{{ asset('images/sin_imagen.jpg') }}" alt="Imágen" width="500" height="600">
+                                @endif
+                            @endif
                             {{-- <input type="file" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Foto" wire:model="foto"> --}}
                             @error('ruta') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>

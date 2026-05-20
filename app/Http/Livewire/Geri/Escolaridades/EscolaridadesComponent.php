@@ -13,14 +13,14 @@ class EscolaridadesComponent extends Component
     public $isModalOpen = false;
 
     public function render() {
-        if(auth()->user()->hasPermissionTo('escolaridades.Ver')) {
+        // if(auth()->user()->hasPermissionTo('escolaridades.Ver')) {
             if(session('empresa_id')) {
                 $this->escolaridades = Escolaridades::all();
                 return view('livewire.geri.escolaridades.escolaridades-component',['isModalOpen'=> $this->isModalOpen,'escolaridades'=>$this->escolaridades])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
-        } else {
-            return view('SinPermiso')->extends('layouts.adminlte');
-        }
+        // } else {
+        //     return view('SinPermiso')->extends('layouts.adminlte');
+        // }
     }
 
 

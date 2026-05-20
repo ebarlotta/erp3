@@ -141,10 +141,6 @@ Route::middleware([
 
 
 
-
-
-
-
 Route::get('categorias',CategoriasComponent::class)->name('categorias');
 Route::get('categoriaprofesional',CategoriaprofesionalComponent::class)->name('categoriaprofesional');
 Route::get('categoriaproducto',CategoriaproductoComponent::class)->name('categoriaproducto');

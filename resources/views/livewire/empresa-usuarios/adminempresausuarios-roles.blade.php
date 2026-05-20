@@ -48,7 +48,7 @@
                                         @endif
                                     @endforeach
                                 </select>
-                                <input type="button" class="form-control btn-info" value="Actualizar" wire:click="ActualizarRol()">
+                                <input type="button" class="form-control btn-info" value="Actualizar Rol" wire:click="ActualizarRol()">
                             </div>
                         </div>
                         @if (session()->has('message'))

@@ -11,13 +11,14 @@
 				<div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
 					<div class="">
 						<div class="mb-4">
-							<div style="width: 100%;background-color: bisque;border-radius: 20px;height: 5rem;justify-content: center;display: flex; margin: 4px;	align-items: center; text-align: center; padding-top:1px; font-size: 2rem;">
-								{{ $empresaseleccionada->name }}
-							|</div>
+							<div style="width: 100%;background-color: bisque;border-radius: 20px;height: 5rem;justify-content: center;display: flex; margin: 4px;	align-items: center;
+                            text-align: center; padding-top:1px; font-size: 2rem;">
+                                {{ $empresaseleccionada->name }}
+							</div>
 							<div>
 								<table border="1" class="table table-striped" style="padding: .3rem;">
 									<tr><td>Módulo</td><td>Activo</td><td>Inactivo</td></tr>
-									
+
 									@foreach ($modulosdelaempresa as $modulo)
 										<tr>
 											<td>

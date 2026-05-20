@@ -45,17 +45,17 @@
                                     wire:click="CargarDatosEmpresa({{ $empresa->id }})">
                                     <div class="w-full hover:scale-105 transition-all duration-500" style="hover:background-color=pink">
                                         <div class="rounded overflow-hidden border hover:bg-red-100 d-flex flex col-12">
-                                            @if($empresa->imagen) 
+                                            @if($empresa->imagen)
                                                 <img class="block flex-none bg-cover col-2 p-2" src="{{ asset('/'. $empresa->imagen) }}" style="width: 70px; height: 70px; border-radius: 15px;">
                                             @else
                                                 <img class="block flex-none bg-cover col-2 p-2" src="{{ asset('/images/sin_imagen.jpg') }}" style="width: 70px; height: 70px; border-radius: 15px;">
                                             @endif
-                                            <div class="bg-white rounded-b ml-4 pl-4 justify-between leading-normal bg-transparent col-8" style="margin: auto;hover:background-color=pink; 0pacity: 1;">
+                                            <div class="bg-white rounded-b ml-4 pl-4 justify-between leading-normal bg-transparent col-sm-12 col-md-8" style="margin: auto;hover:background-color=pink; 0pacity: 1;">
                                                 <div class="text-black font-bold text-lg mb-2 leading-tight bg-transparent">
                                                     {{ $empresa->name }}
                                                 </div>
                                             </div>
-                                            <p class="text-grey-darker text-base col-2" style="margin: auto">{{ $empresa->cuit }}</p>
+                                            <p class="text-grey-darker text-base col-sm-12 col-md-2" style="margin: auto">{{ $empresa->cuit }}</p>
                                         </div>
                                     </div>
                                 </li>

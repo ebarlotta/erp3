@@ -45,14 +45,14 @@
 								<ul>
 									<li class="border text-left @if ($seleccionado == $empresa->id) bg-red-100 @endif" wire:click="CargarModulos({{ $empresa->id }})">
 										<div class="w-full p-3 hover:scale-105 transition-all duration-500">
-											<div class="flex rounded overflow-hidden border">
-												@if($empresa->imagen) 
+											<div class="flex rounded overflow-hidden border flex-wrap">
+												@if($empresa->imagen)
 													<img class="block rounded-md flex-none bg-cover" src="{{ asset('/'. $empresa->imagen) }}" style="width: 70px; height: 70px;">
 												@else
 													<img class="block rounded-md flex-none bg-cover" src="{{ asset('images/sin_imagen.jpg') }}"	style="width: 70px; height: 70px;">
 												@endif
-												<div class="bg-white w-full rounded-b pl-4 flex flex-col justify-between leading-normal">
-													<div class="text-black pt-4 font-bold text-lg mb-2 leading-tight mr-2">
+												<div class="col-12 col-md-8 bg-white w-full rounded-b pl-4 ml-2 flex flex-col justify-between leading-normal">
+													<div class="text-black pt-4 font-bold text-lg mb-2 leading-tight ml-2 md:fs-6">
 														{{ $empresa->name }}
 													</div>
 													{{-- <p class="text-grey-darker text-base">Read more</p> --}}
@@ -60,26 +60,26 @@
 											</div>
 										</div>
 									</li>
-								</ul>								
+								</ul>
 							@endforeach
 							<div class="w-full">{{ $datos->links() }}</div>
 						</div>
 
 						<td>
-							<div style="width: 65%">
+							<div style="width: 65%: border: ligthgrey solid 1px;background: aliceblue;">
 								<div class="bg-transparent"><b>Módulos</b></div>
-									@if ($modulosdelaempresa)
-										<div class="flex-wrap flex">											
+									@if($modulosdelaempresa)
+										<div class="flex-wrap flex">
 										@foreach ($modulosdelaempresa as $modulo)
 												@if($modulo['estado_suscripcion']=="SUSCRITO")
-													<div class="w-35 p-2 hover:scale-110 transition-all duration-500 hover:bg-green-300">
+													<div class="w-30 p-2 hover:scale-110 transition-all duration-500 hover:bg-green-300">
 														<div class="flex-wrap d-flex rounded overflow-hidden border">
 															<div class="">
 																<div class="d-flex">
-																	<img class="block flex-none bg-cover" src="{{ asset('images/'. $modulo['imagen']) }}" style="width: 70px; height: 70px;">
-																	<div class="bg-white rounded-b leading-normal" style="left: -30px; float: left;">
+																	<img class="block flex-none bg-cover rounded-md ml-1 mt-1" src="{{ asset('images/'. $modulo['imagen']) }}" style="width: 30px; height: 30px;">
+																	<div class="bg-white rounded-b leading-normal p-1" style="left: -30px; float: left;">
 																		<div class="text-black font-bold text-xl mb-2 leading-tight">
-																			<img class="block w-15 h-15 flex-none bg-cover"	src="{{ asset('images/activo.png') }}" width="40" height="40">
+																			<img class="block flex-none bg-cover"	src="{{ asset('images/activo.png') }}" width="30" height="30">
 																		</div>
 																	</div>
 																</div>

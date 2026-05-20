@@ -33,7 +33,7 @@
 				</div>
 				@if ($isModalOpen)
 					@include('livewire.modulo-usuarios.createmodulousuarios')
-				@endif	
+				@endif
 				@if ($datos)
 				<div class="flex">
 					<div class="h-full w-1/2" >
@@ -41,11 +41,11 @@
 						@foreach ($datos as $modulo)
 							<ul>
 								<li class="border px-4 text-left @if ($seleccionado==$modulo->id) bg-red-100 @endif" wire:click="CargarUsuarios({{ $modulo->id }})">
-									<div class="w-full p-2 hover:scale-110 transition-all duration-500">
-										<div class="flex rounded overflow-hidden border">
+									<div class="w-full p-2 hover:scale-110 transition-all duration-500 flex-wrap">
+										<div class="flex rounded overflow-hidden border ">
 											<img class="block rounded-md flex-none bg-cover" src="{{ asset('images/'. $modulo->imagen) }}" style="width:70px; height: 70x;">
 											<div class="bg-white w-full rounded-b pl-4 flex flex-col justify-between leading-normal">
-												<div class="text-black pt-4 font-bold text-lg mb-2 leading-tight">{{ $modulo->name }}</div>
+												<div class="text-black pt-4 font-bold text-lg mb-2 leading-tight col-12 col-md-8 ">{{ $modulo->name }}</div>
 												{{-- <p class="text-grey-darker text-base">Read more</p> --}}
 											</div>
 										</div>
@@ -63,7 +63,7 @@
 								<li class="border px-4 text-left bg-red-100">
 									<div class="w-full p-2 hover:scale-110 transition-all duration-500">
 										<div class="flex rounded overflow-hidden border">
-											@if($usuario['profile_photo_path']) 
+											@if($usuario['profile_photo_path'])
                                                 <img class="block rounded-md flex-none bg-cover" src="{{ asset($usuario['profile_photo_path']) }}" style="width: 70px; height: 70px;">
 												{{-- <img class="block rounded-md flex-none bg-cover" src="{{ asset('storageimages/'. $usuario['profile_photo_path'] ) }}" style="width: 70px; height: 70px;"> --}}
                                                    {{-- src="{{ asset('images2/'. $usuario['profile_photo_path'] ) }}" style="width: 100px; height: 100px;"> --}}

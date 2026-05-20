@@ -27,9 +27,9 @@ class GestionModuloComponent extends Component
 
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('gestionmodulo.Ver')) {
+        // if(auth()->check() && auth()->user()->hasPermissionTo('gestionmodulo.Ver')) {
             if(session('empresa_id')) {
-        
+
             $this->filtrar();
 
             // if ($this->buscar<>'') {
@@ -43,9 +43,9 @@ class GestionModuloComponent extends Component
                 return view('livewire.modulos.modulo-component',['modulos' => $this->modulos])->extends('layouts.adminlte');
             // }
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
-        } else {
-            return view('SinPermiso')->extends('layouts.adminlte');
-        }
+        // } else {
+            // return view('SinPermiso')->extends('layouts.adminlte');
+        // }
 
     }
 
@@ -65,7 +65,7 @@ class GestionModuloComponent extends Component
         $this->leyenda = $modulos->leyenda;
         $this->habilitado = $modulos->habilitado;
         $this->ShowButtonActualizar = false;
-        
+
         //Cargar todos los permisos desponibles del módulo
         $this->permisos=Permission::where('name', 'LIKE', '%'. $modulos->name . '%')
         ->orwhere('name', 'LIKE', '%'. $modulos->pagina . '%')

@@ -32,7 +32,8 @@
                                 @include('livewire.categorias.createcategoria')
                             @endif
                         @endcan
-                        <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
+                        <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
+                        <div class="w-1/2 justify-end">{{ $categorias->links() }}</div>
                     </div>
                     <div style="display: block">
 
@@ -44,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($datos as $categoria)
+                                @foreach ($categorias as $categoria)
                                     <tr>
                                         <td class="border px-4 py-2">{{ $categoria->nombrecategoria }}</td>
                                         <td class="border px-4 py-2">

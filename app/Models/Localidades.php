@@ -12,5 +12,11 @@ class Localidades extends Model
     protected $fillable=[
         'localidad_descripcion',
         'localidad_cp',
+        'provincia_id',
     ];
+
+    public function provincia()
+    {
+        return $this->hasOne(Provincias::class,'id','provincia_id');
+    }
 }

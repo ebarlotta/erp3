@@ -9,15 +9,19 @@ use Livewire\Component;
 
 class NacionalidadComponent extends Component
 {
-    
+
     public $nacionalidad_descripcion, $nacionalidad_id;
-    public $nacionalidades;
-    public $isModalOpen = false;
+    public $search, $isModalOpen = false;
+
+    protected $nacionalidades;
 
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('modulousuarios.Ver')) {
             if(session('empresa_id')) {
-                $this->nacionalidades = DB::table('nacionalidads')->get();
+                $this->nacionalidades = DB::table('nacionalidads')
+                    ->where('nacionalidad_descripcion', 'like', '%'.$this->search.'%')
+                    ->orderby('nacionalidad_descripcion')
+                    ->paginate(7);
                 return view('livewire.nacionalidad.nacionalidad-component',['isModalOpen'=>$this->isModalOpen,'nacionalidades'=>$this->nacionalidades])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
@@ -25,10 +29,16 @@ class NacionalidadComponent extends Component
         }
     }
 
+    public function Filtrar() {
+        $this->nacionalidades = DB::table('nacionalidads')
+            ->where('nacionalidad_descripcion', 'like', '%'.$this->search.'%')
+            ->orderby('nacionalidad_descripcion')
+            ->paginate(7);
+    }
 
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.nacionalidad.nacionalidad-component',['isModalOpen'=>$this->isModalOpen,'nacionalidad_descripcion'=>$this->nacionalidad_descripcion])->extends('layouts.adminlte');
@@ -48,13 +58,13 @@ class NacionalidadComponent extends Component
         $this->nacionalidad_id = '';
         $this->nacionalidad_descripcion = '';
     }
-    
+
     public function store()
     {
         $this->validate([
             'nacionalidad_descripcion' => 'required',
         ]);
-    
+
         Nacionalidad::updateOrCreate(['id' => $this->nacionalidad_id], [
             'nacionalidad_descripcion' => $this->nacionalidad_descripcion,
         ]);
@@ -71,10 +81,10 @@ class NacionalidadComponent extends Component
         $this->id = $id;
         $this->nacionalidad_id=$id;
         $this->nacionalidad_descripcion = $nacionalidad->nacionalidad_descripcion;
-        
+
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         Nacionalidad::find($id)->delete();

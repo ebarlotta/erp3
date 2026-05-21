@@ -4,28 +4,38 @@ namespace App\Http\Livewire\Estadosciviles;
 
 use App\Models\EstadosCiviles;
 use Livewire\Component;
+use Livewire\WithPagination;
+
 
 class EstadosCivilesComponent extends Component
 {
     public $estadocivil, $estadocivil_id;
-    public $estadosciviles;
+    protected $estadosciviles;
     public $isModalOpen = false;
+    public $search;
+
+    use WithPagination;
 
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('estadosciviles.Ver')) {
-            if(session('empresa_id')) {        
-                $this->estadosciviles = EstadosCiviles::all();
-                return view('livewire.geri.estadosciviles.estados-civiles-component',['isModalOpen'=> $this->isModalOpen,'estadociviles'=>$this->estadosciviles])->extends('layouts.adminlte');
+            if(session('empresa_id')) {
+                $this->estadosciviles = EstadosCiviles::where('id', '>', 1)
+                ->where('estadocivil', 'like', '%'.$this->search.'%')
+                ->paginate(7);
+                return view('livewire.geri.estadosciviles.estados-civiles-component',['isModalOpen'=> $this->isModalOpen,'estadosciviles'=>$this->estadosciviles])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
         }
     }
 
+    public function Filtrar() {
+        $this->estadosciviles = EstadosCiviles::where('id', '>', 1)->where('estadocivil', 'like', '%'.$this->search.'%')->paginate(7);
+    }
 
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.geri.estadosciviles.estados-civiles-component',['isModalOpen'=> $this->isModalOpen,'estadociviles'=>$this->estadosciviles])->extends('layouts.adminlte');
@@ -45,13 +55,13 @@ class EstadosCivilesComponent extends Component
         $this->estadocivil_id = '';
         $this->estadocivil = '';
     }
-    
+
     public function store()
     {
         $this->validate([
             'estadocivil' => 'required',
         ]);
-    
+
         EstadosCiviles::updateOrCreate(['id' => $this->estadocivil_id], [
             'estadocivil' => $this->estadocivil,
         ]);
@@ -68,10 +78,10 @@ class EstadosCivilesComponent extends Component
         $this->id = $id;
         $this->estadocivil_id=$id;
         $this->estadocivil = $estadocivil->estadocivil;
-        
+
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         EstadosCiviles::find($id)->delete();

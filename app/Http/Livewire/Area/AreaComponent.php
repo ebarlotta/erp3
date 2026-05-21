@@ -12,24 +12,23 @@ class AreaComponent extends Component
 
     public $isModalOpen = false;
     public $area, $area_id;
-    public $name;
-    // public $empresa_id;
+    public $name, $search;
+    public $empresa_id;
+
     protected $areas;
 
     use WithPagination;
 
     public function render()
     {
-        // $role = auth()->user();
-        // dd($role->permissions);
         if(auth()->check() && auth()->user()->hasPermissionTo('areas.Ver')) {
             if(session('empresa_id')) {
-                // $this->empresa_id=session('empresa_id');
-                // $this->areas = Area::where('empresa_id', $this->empresa_id)->get();
-                $this->areas = Area::where('empresa_id', '=', session('empresa_id'))->paginate(7);
-
+                $this->empresa_id=session('empresa_id');
+                $this->areas = Area::where('empresa_id', '=', session('empresa_id'))
+                ->where('name', 'like', '%'.$this->search.'%')
+                ->orderby('name')
+                ->paginate(7);
                 return view('livewire.area.area-component',['areas' => $this->areas])->extends('layouts.adminlte');
-                // return view('livewire.area.area-component',['datos'=> Area::where('empresa_id', $this->empresa_id)->paginate(3),])->extends('layouts.adminlte');
             } else {
                 return view('livewire.seleccionarempresa')->extends('layouts.adminlte');
             }
@@ -38,9 +37,16 @@ class AreaComponent extends Component
         }
     }
 
+    public function Filtrar() {
+        $this->areas = Area::where('empresa_id', '=', $this->empresa_id)
+        ->where('name', 'like', '%'.$this->search.'%')
+        ->orderby('name')
+        ->paginate(7);
+    }
+
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.area.createareas')->with('isModalOpen', $this->isModalOpen)->with('name', $this->name);
@@ -60,7 +66,7 @@ class AreaComponent extends Component
         $this->area_id = '';
         $this->name = '';
     }
-    
+
     public function store()
     {
         $this->validate([
@@ -85,7 +91,7 @@ class AreaComponent extends Component
         $this->name = $area->name;
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         Area::find($id)->delete();

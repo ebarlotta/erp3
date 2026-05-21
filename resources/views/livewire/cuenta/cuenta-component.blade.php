@@ -27,14 +27,13 @@
 
                     <div class="flex justify-around">
                         @can('cuentas.Agregar')
-                        {{-- @if(session('Cuentas.Agregar')) --}}
                             <x-crear>Nueva Cuenta</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.cuenta.createcuentas')
                             @endif
-                            <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
-                        {{-- @endif --}}
                         @endcan
+                        <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
+                        <div class="w-1/2 justify-end">{{ $cuentas->links() }}</div>
                     </div>
                     <div style="display: block">
 
@@ -46,8 +45,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($datos)
-                                    @foreach ($datos as $cuenta)
+                                @if ($cuentas)
+                                    @foreach ($cuentas as $cuenta)
                                         <tr>
                                             <td class="border px-4 py-2 text-left">{{ $cuenta->name }}</td>
                                             <td class="border px-4 py-2">
@@ -82,7 +81,7 @@
                                 <div style="width:90%;">
                                     <div style="width:100%; display: flex">
                                         <p class="shadow-md m-1" style="font-size: 18px; background-color: rgb(226, 230, 230); border-radius: 10px; padding: 3px;">{{ $cuenta->name }}</p>
-                                        
+
                                     </div>
                                 </div>
                                 <div style="width:10%;">
@@ -103,7 +102,7 @@
 </div>
 
 
-{{-- 
+{{--
 
                     <table class="table-fixed table-striped w-full">
                         <thead>

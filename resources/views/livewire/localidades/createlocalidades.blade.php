@@ -1,5 +1,5 @@
 <div class="fixed z-10 inset-0 overflow-y-auto ease-out duration-400">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0" style="background-color: beige; ">
+    <div class="flex items-end justify-center mt-24 pt-4 px-4 pb-20 text-center sm:block sm:p-0" style="background-color: beige; ">
         <div class="fixed inset-0 transition-opacity">
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
@@ -16,6 +16,15 @@
                             <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2">Código Postal</label>
                             <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="exampleFormControlInput1" placeholder="Ingrese código postal" wire:model="localidad_cp">
                             @error('localidad_cp') <span class="text-red-500">{{ $message }}</span>@enderror
+                            <label for="exampleFormControlInput1" class="block text-gray-700 text-sm font-bold mb-2">Provincia</label>
+                            <select class="form-control" wire:model="provincia_id">
+                                @foreach($provincias as $provincia )
+                                    <option value="{{ $provincia->id }}">{{ $provincia->provincia_descripcion }}</option>
+
+                                @endforeach
+                            </select
+                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="exampleFormControlInput1" placeholder="Ingrese código postal" wire:model="provincia_id">
+                            @error('provincia_id') <span class="text-red-500">{{ $message }}</span>@enderror
                         </div>
                     </div>
                 </div>

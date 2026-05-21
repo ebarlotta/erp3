@@ -20,12 +20,16 @@
                 </div>
             </div>
             @endif
-            @can('estadosciviles.Agregar')
-                <x-crear>Nuevo Estado Civil</x-crear>
-                @if ($isModalOpen)
-                    @include('livewire.geri.estadosciviles.createestadosciviles')
-                @endif
-            @endcan
+            <div class="flex justify-around">
+                @can('estadosciviles.Agregar')
+                    <x-crear>Nuevo Estado Civil</x-crear>
+                    @if ($isModalOpen)
+                        @include('livewire.geri.estadosciviles.createestadosciviles')
+                    @endif
+                @endcan
+                <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
+                <div class="w-1/2 justify-end">{{ $estadosciviles->links() }}</div>
+            </div>
             <table class="table-fixed w-full">
                 <thead>
                     <tr class="bg-gray-100">

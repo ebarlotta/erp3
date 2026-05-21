@@ -14,7 +14,7 @@
         <div class="bg-white p-2 text-center rounded-lg shadow-lg w-full">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-1">
-                
+
                     @if (session()->has('message'))
                         <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
                             role="alert">
@@ -25,16 +25,15 @@
                             </div>
                         </div>
                     @endif
-                
+
                     <div class="flex justify-around">
-                        {{-- @if(session('listas.Agregar')) --}}
                         @can('listas.Agregar')
                             <x-crear>Nueva Lista</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.listas.createlistas')
                             @endif
                         @endcan
-                        {{-- @endif --}}
+                        <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
                         <div class="w-1/2 justify-end">{{ $listas->links() }}</div>
                     </div>
                     <div style="display: block">
@@ -42,10 +41,11 @@
                             <thead>
                                 <tr class="bg-gray-100">
                                     <th class="px-4 py-2">Nombre del Lista</th>
-                                    <th class="px-4 py-2">Porcentaje</th>
-                                    <th class="px-4 py-2">Activo</th>
-                                    <th class="px-4 py-2">Desde</th>
-                                    <th class="px-4 py-2">Hasta</th>
+                                    <th class="px-4 py-2 w-22">Porcentaje</th>
+                                    <th class="px-4 py-2 w-20">Activo</th>
+
+                                    <th class="d-none d-sm-table-cell p-1 my-auto w-28">Desde</th>
+                                    <th class="d-none d-sm-table-cell p-1 my-auto w-28">Hasta</th>
                                     <th class="px-4 py-2">Opciones</th>
                                 </tr>
                             </thead>
@@ -54,9 +54,9 @@
                                     @foreach ($listas as $lista)
                                         <tr style="height: 0;">
                                             <td class="border px-4 py-2 text-left">{{ $lista->name }}</td>
-                                            <td class="border px-4 py-2 text-left">{{ $lista->porcentaje }} %</td>
-                                            <td class="border px-4 py-2 text-left">
-                                            @if($lista->activo) 
+                                            <td class="border px-4 py-2 text-left w-22">{{ $lista->porcentaje }} %</td>
+                                            <td class="border px-4 py-2 text-left w-20">
+                                            @if($lista->activo)
                                                 <div class="flex justify-center">
                                                     <span class="border rounded-full border-grey bg-green-400 flex items-center cursor-pointer w-12 justify-start" wire:click="habilitar({{ $lista->id}}, {{ $lista->activo }})">
                                                         <span class="rounded-full border w-6 h-6 border-grey shadow-inner bg-white shadow">
@@ -73,8 +73,8 @@
                                             @endif
 
                                             {{-- <td class="border px-4 py-2 text-left">{{ $lista->activo }}</td> --}}
-                                            <td class="border px-4 py-2 text-left">{{ $lista->vigenciahasta }}</td>
-                                            <td class="border px-4 py-2 text-left">{{ $lista->vigenciahasta }}</td>
+                                            <td class="border d-none d-sm-table-cell p-1 my-auto text-center">{{ $lista->vigenciahasta }}</td>
+                                            <td class="border d-none d-sm-table-cell p-1 my-auto text-center">{{ $lista->vigenciahasta }}</td>
                                             <td class="border px-4 py-2">
                                                 <div class="flex justify-center">
                                                     @can('listas.Modificar')

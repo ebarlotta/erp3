@@ -20,17 +20,22 @@
                 </div>
             </div>
             @endif
-            @can('localidades.Agregar')
-                <x-crear>Nueva Localidad</x-crear>
-                @if ($isModalOpen)
-                    @include('livewire.localidades.createlocalidades')
-                @endif
-            @endcan
+            <div class="flex justify-around">
+                @can('localidades.Agregar')
+                    <x-crear>Nueva Localidad</x-crear>
+                    @if ($isModalOpen)
+                        @include('livewire.localidades.createlocalidades')
+                    @endif
+                @endcan
+                <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
+                <div class="w-1/2 justify-end">{{ $localidades->links() }}</div>
+            </div>
             <table class="table-fixed w-full">
                 <thead>
                     <tr class="bg-gray-100">
                         <th class="px-4 py-2">Descripción</th>
                         <th class="px-4 py-2">CP</th>
+                        <th class="px-4 py-2">Provincia</th>
                         <th class="px-4 py-2">Opciones</th>
                     </tr>
                 </thead>
@@ -39,6 +44,7 @@
                     <tr>
                         <td class="border px-4 py-2">{{ $localidad->localidad_descripcion }}</td>
                         <td class="border px-4 py-2">{{ $localidad->localidad_cp }}</td>
+                        <td class="border px-4 py-2">{{ $localidad->provincia->provincia_descripcion }}</td>
                         <td class="border px-4 py-2">
                             <div class="flex justify-center">
                                 @can('localidades.Modificar')

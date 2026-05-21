@@ -20,12 +20,16 @@
                 </div>
             </div>
             @endif
-            @can('escolaridades.Agregar')
-                <x-crear>Nueva Escolaridad</x-crear>
-                @if ($isModalOpen)
-                    @include('livewire.geri.escolaridades.createescolaridades')
-                @endif
-            @endcan
+            <div class="flex justify-around">
+                @can('escolaridades.Agregar')
+                    <x-crear>Nueva Escolaridad</x-crear>
+                    @if ($isModalOpen)
+                        @include('livewire.geri.escolaridades.createescolaridades')
+                    @endif
+                @endcan
+                <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
+                <div class="w-1/2 justify-end">{{ $escolaridades->links() }}</div>
+            </div>
             <table class="table-fixed w-full">
                 <thead>
                     <tr class="bg-gray-100">

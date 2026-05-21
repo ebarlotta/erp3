@@ -21,19 +21,19 @@ use Spatie\Permission\Models\Permission;
 
 class ModuloUsuariosComponent extends Component
 {
-    public $isModalOpen = false;
-
-    public $name;
-
     use WithPagination;
 
+    public $name;
+    public $isModalOpen = false;
     public $usuariosglobales;
     public $usuariosdelmodulo;
-    //public $usuariosdelaemp;
     public $usuariosNOmodulo;
     public $modulos;
     public $moduloseleccionado;
     public $seleccionado=1;
+    public $search;
+
+    protected $datos;
 
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('modulousuarios.Ver')) {
@@ -42,12 +42,22 @@ class ModuloUsuariosComponent extends Component
                 //$modulos = Modulo::get()->sortBy('id')->paginate(4);
                 //$this->modulos = Modulo::all();
                 //$datos = Modulo::paginate(10);
-                return view('livewire.modulo-usuarios.modulo-usuarios-component',['datos'=> Modulo::orderby('name')->paginate(8),])->extends('layouts.adminlte')
-                ->section('content'); //Enzo
+                $this->datos = Modulo::orderby('name')
+                    ->where('name', 'like', '%'.$this->search.'%')
+                    ->paginate(8);
+                return view('livewire.modulo-usuarios.modulo-usuarios-component',['datos'=> $this->datos])->extends('layouts.adminlte')
+                ->section('content');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
         }
+    }
+
+       public function Filtrar() {
+        $this->datos = Modulo::orderby('name')
+        ->where('name', 'like', '%'.$this->search.'%')
+        ->orderby('name')
+        ->paginate(8);
     }
 
     public function mostrarmodal()
@@ -107,11 +117,26 @@ class ModuloUsuariosComponent extends Component
             // $adicionales = Permission::where('name', 'LIKE', $modulo)->get();
             // dd($adicionales);
             foreach ($adicionales as $adic) {
-                DB::table('model_has_permissions')->insert([
-                    'permission_id' => $adic->id,
-                    'model_type' => 'App\Models\User',
-                    'model_id' => Auth::id()
-                ]);
+                // Verificar si ya existe el registro
+                $existe = DB::table('model_has_permissions')
+                    ->where('permission_id', $adic->id)
+                    ->where('model_type', 'App\Models\User')
+                    ->where('model_id', Auth::id())
+                    ->exists();
+
+                if ($existe) {
+                    // Mostrar error
+                    session()->flash('error', 'El permiso ya está asignado a este usuario');
+                    return back();
+                } else {
+                    // Insertar el registro
+                    DB::table('model_has_permissions')->insert([
+                        'permission_id' => $adic->id,
+                        'model_type' => 'App\Models\User',
+                        'model_id' => Auth::id()
+                    ]);
+                    session()->flash('success', 'Permiso asignado correctamente');
+                }
             }
         } else { session()->flash('message', 'Se ha producido un error, revise los datos y vuelva a intentarlo'); }
 

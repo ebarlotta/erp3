@@ -1,7 +1,7 @@
 <div>
     <div class="sm:block md:hidden lg:hidden xl:hidden">
 
-        <?php echo session('nombre_empresa').'<br>'; ?>
+        <?php echo session('nombre_empresa').' - ' . session('cuit') .'<br>'; ?>
 
         <div class="text-left" style="font-size: 15px; margin: 12px;">
             @foreach ($modulos as $modulo)

@@ -5,18 +5,23 @@ namespace App\Http\Livewire\Tiposdedocumentos;
 use App\Models\TiposDocumentos;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class TiposDeDocumentosComponent extends Component
 {
-
     public $tipodocumento, $tipodedocumento_id;
     public $isModalOpen = false;
     protected $tiposdedocumentos;
+    public $search;
+
+    use WithPagination;
 
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('tiposdedocumentos.Ver')) {
             if(session('empresa_id')) {
-                $this->tiposdedocumentos = TiposDocumentos::all();
+                $this->tiposdedocumentos = TiposDocumentos::where('id', '>=', 1)
+                ->where('tipodocumento', 'like', '%'.$this->search.'%')
+                ->paginate(7);
                 return view('livewire.geri.tiposdedocumentos.tipos-de-documentos-component',['isModalOpen' => $this->isModalOpen,'tiposdedocumentos'=> $this->tiposdedocumentos])->extends('layouts.adminlte');
                 // return view('livewire.geri.tiposdedocumentos.tipos-de-documentos-component')->with('isModalOpen', $this->isModalOpen)->with('tiposdedocumentos', $this->tiposdedocumentos)->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
@@ -24,9 +29,14 @@ class TiposDeDocumentosComponent extends Component
             return view('SinPermiso')->extends('layouts.adminlte');
         }
     }
+
+    public function Filtrar() {
+        $this->tiposdedocumentos = TiposDocumentos::where('id', '>=', 1)->where('tipodocumento', 'like', '%'.$this->search.'%')->paginate(7);
+    }
+
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.geri.tiposdedocumentos.tipos-de-documentos-component')->with('isModalOpen', $this->isModalOpen)->with('tiposdedocumentos', $this->tiposdedocumentos)->extends('layouts.adminlte');
@@ -46,13 +56,13 @@ class TiposDeDocumentosComponent extends Component
         $this->tipodedocumento_id = '';
         $this->tipodocumento = '';
     }
-    
+
     public function store()
     {
         $this->validate([
             'tipodocumento' => 'required',
         ]);
-    
+
         TiposDocumentos::updateOrCreate(['id' => $this->tipodedocumento_id], [
             'tipodocumento' => $this->tipodocumento,
         ]);
@@ -70,10 +80,10 @@ class TiposDeDocumentosComponent extends Component
         $this->tipodedocumento_id=$id;
         $this->tipodocumento = $tipodedocumento->tipodocumento;
         //dd($tipodedocumento->tipodocumento);
-        
+
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         TiposDocumentos::find($id)->delete();

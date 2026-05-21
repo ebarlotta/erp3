@@ -49,22 +49,22 @@
                                 <ul>
                                     <li class="border text-left @if ($seleccionado == $empresa->id) bg-red-100 @endif"
                                         wire:click="CargarUsuarios({{ $empresa->id }})">
-                                        <div class="w-full p-3 hover:scale-105 transition-all duration-500">
+                                        <div class="w-full lg:p-3 hover:scale-105 transition-all duration-500">
                                             <div class="flex rounded overflow-hidden border flex-wrap">
                                                 @if($empresa->imagen)
-                                                <img class="block rounded-md flex-none bg-cover"
+                                                <img class="block p-1 text-center justify-center m-auto rounded-md flex-none bg-cover"
                                                     src="{{ asset('/'. $empresa->imagen) }}"
                                                     style="width: 60px; height: 60px;">
                                                 @else
-                                                <img class="block rounded-md flex-none bg-cover"
+                                                <img class="block p-1 text-center justify-center m-auto rounded-md flex-none bg-cover"
                                                     src="{{ asset('images/sin_imagen.jpg') }}"
                                                     style="width: 60px; height: 60px;">
                                                 @endif
-                                                <div class="bg-white w-full rounded-b pl-4 flex flex-col justify-between leading-normal">
-                                                    <div class="text-black  pt-4 font-bold text-lg mb-2 leading-tight col-12 col-md-8 ">
+                                                <div class="bg-white w-full rounded-b flex flex-col justify-between leading-normal">
+                                                    <div class="@if ($seleccionado == $empresa->id) bg-red-100 @endif lg:text-lg md:font-bold md:fs-6 text-center md:text-left md:text-sm text-grey-darker text-base">
                                                         {{ $empresa->name }}
                                                     </div>
-                                                    <p class="text-grey-darker text-base">
+                                                    <p class="@if ($seleccionado == $empresa->id) bg-red-100 @endif lg:text-lg md:font-bold md:fs-6 text-center md:text-left md:text-sm text-grey-darker text-base">
                                                         {{ $empresa->cuit }}
                                                     </p>
                                                 </div>
@@ -84,22 +84,23 @@
                                             <div class="w-full p-2 hover:scale-110 transition-all duration-500">
                                                 <div class="flex rounded overflow-hidden border">
                                                     @if($usuario['profile_photo_path'])
-                                                        <img class="block rounded-md flex-none bg-cover" src="{{ asset($usuario['profile_photo_path'] ) }}" style="width: 100px; height: auto;">
+                                                        <img class="hidden sm:block rounded-md flex-none bg-cover" src="{{ asset($usuario['profile_photo_path'] ) }}" style="width: 100px; height: auto;">
                                                        {{-- src="{{ asset('images2/'. $usuario['profile_photo_path'] ) }}" style="width: 100px; height: 100px;"> --}}
                                                     @else
-                                                        <img class="block rounded-md flex-none bg-cover" src="{{ asset('images/sin_imagen.jpg') }}" style="width: 100px; height: auto;">
+                                                        <img class="hidden sm:block rounded-md flex-none bg-cover" src="{{ asset('images/sin_imagen.jpg') }}" style="width: 85px; height: auto;">
                                                     @endif
                                                     {{-- <img class="block flex-none bg-cover" src="https://picsum.photos/seed/picsum/80/80" style="width: 100px; height: 100px;">                                             --}}
                                                     <div>
                                                         <div class="bg-white rounded-b pl-4 leading-normal" style="min-width: 200px; padding-right: 17px; padding-bottom: 10px;">
-                                                            <div class="text-black font-bold text-lg mb-1 pt-2 flex justify-between leading-tight mx-2">
-                                                                {{ $usuario['name'] }}
+                                                            <div class="d-flex lg:text-lg md:font-bold md:fs-6 text-center md:text-left md:text-sm text-grey-darker text-base  ">
+                                                                 <img class="block flex-none bg-cover" src="{{ asset('images/activo.png') }}" style="width: 20px; height: 20px; margin-top: 5px">
+                                                                 <p class="ml-2 mt-1">{{ $usuario['name'] }}</p>
                                                                 {{-- <p class="text-grey-darker text-base">Read more and more</p> --}}
-                                                                <div class="text-black font-bold text-xl mb-2 leading-tight">
-                                                                    <img class="block flex-none bg-cover" src="{{ asset('images/activo.png') }}" width="25" height="25">
-                                                                </div>
+                                                                {{-- <div class="text-black font-bold text-xl mb-2 leading-tight">
+
+                                                                </div> --}}
                                                             </div>
-                                                            <button class="btn btn-info w-full pr-2" wire:click="CambiarRol({{ $usuario['user_id'] }})">Cambiar Rol</button>
+                                                            <button class="btn btn-info w-full h-5" style="padding: 0px 0px 22px 0px;" wire:click="CambiarRol({{ $usuario['user_id'] }})">Cambiar Rol</button>
                                                         </div>
                                                     </div>
                                                 </div>

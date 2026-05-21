@@ -13,50 +13,23 @@
     <link rel="stylesheet" href="/css/admin_custom.css">
 @stop --}}
 
-<nav class="main-header navbar
-    navbar-expand
-    navbar-white navbar-light">
-
-
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <ul class="navbar-nav">
-
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#">
                 <i class="fas fa-bars"></i>
                 <span class="sr-only">Toggle navigation</span>
             </a>
         </li>
-
-
-
     </ul>
-
-
     <ul class="navbar-nav ml-auto">
-
-
-
-
-
         <li class="nav-item dropdown user-menu">
-
-
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                 <span>
                     enzogb
                 </span>
             </a>
-
-
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-
-
-
-
-
-
-
-
                 <li class="user-footer">
                     <a href="http://localhost:8000/user/profile"
                         class="nav-link btn btn-default btn-flat d-inline-block">
@@ -74,637 +47,340 @@
                             autocomplete="off">
                     </form>
                 </li>
-
             </ul>
-
         </li>
-
-
     </ul>
-
 </nav>
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-
-
     <a href="http://localhost:8000/empresas" class="brand-link ">
-
-
-        <img src="http://localhost:8000/images/BarBer.png" alt="AdminLTE" class="brand-image img-circle elevation-3"
-            style="opacity:.8">
-
-
+        <img src="http://localhost:8000/images/BarBer.png" alt="AdminLTE" class="brand-image img-circle elevation-3" style="opacity:.8">
         <span class="brand-text font-weight-light ">
             <div style="display:inline-block"><b>BarBer</b><br>
                 <p style="font-size: 8px;">DESARROLLOS</p>
             </div>
         </span>
-
     </a>
-
-
     <div class="sidebar">
         <nav class="pt-2">
             <ul class="nav nav-pills nav-sidebar flex-column " data-widget="treeview" role="menu">
-
                 <li class="nav-header ">
-
                     GESTIÓN DE EMPRESAS
-
                 </li>
-
                 <li class="nav-item has-treeview ">
-
-
                     <a class="nav-link  " href="">
-
                         <i class="fas fa-fw fa-building "></i>
-
                         <p>
                             Administración
                             <i class="fas fa-angle-left right"></i>
-
                         </p>
-
                     </a>
-
-
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/empresagestion">
-
                                 <i class="fas fa-fw fa-building "></i>
-
                                 <p>
                                     Gestión de empresas
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/empresamodulos">
-
                                 <i class="fas fa-fw fa-chart-pie "></i>
-
                                 <p>
                                     Módulos x Empresa
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/empresausuarios">
-
                                 <i class="fas fa-fw fa-users "></i>
-
                                 <p>
                                     Usuarios x Empresa
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/modulousuarios">
-
                                 <i class="fas fa-fw fa-user-cog "></i>
-
                                 <p>
                                     Usuarios x Módulo
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/roles">
-
                                 <i class="fa fa-user-circle "></i>
-
                                 <p>
                                     Gestión de Roles
-
                                 </p>
-
                             </a>
-
                         </li>
-
                     </ul>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/actores">
-
                         <i class="fa fa-users "></i>
-
                         <p>
                             Actores
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/areas">
-
                         <i class="fa fa-cube "></i>
-
                         <p>
                             Areas
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/categorias">
-
                         <i class="fa fa-cubes "></i>
-
                         <p>
                             Categorías
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/cuentas">
-
                         <i class="fa fa-crosshairs "></i>
-
                         <p>
                             Cuentas
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/elementos">
-
                         <i class="fa fa-gift "></i>
-
                         <p>
                             Elementos
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/estados">
-
                         <i class="fas fa-fw fa-building "></i>
-
                         <p>
                             Estados
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/estadosciviles">
-
                         <i class="fas fa-fw fa-venus-mars "></i>
-
                         <p>
                             Estados Civiles
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/proveedores">
-
                         <i class="fa fa-truck "></i>
-
                         <p>
                             Proveedores
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/tiposdedocumentos">
-
                         <i class="fa fa-server "></i>
-
                         <p>
                             Tipos de Documentos
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/unidades">
-
                         <i class="fa fa-thermometer-empty "></i>
-
                         <p>
                             Unidades
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item has-treeview ">
-
-
                     <a class="nav-link  " href="">
-
                         <i class="fa fa-map-marker "></i>
-
                         <p>
                             Localización
                             <i class="fas fa-angle-left right"></i>
-
                         </p>
-
                     </a>
-
-
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/localidades">
-
                                 <i class="far fa-fw fa-circle "></i>
-
                                 <p>
                                     Localidades
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/nacionalidad">
-
                                 <i class="far fa-fw fa-circle "></i>
-
                                 <p>
                                     Nacionalidades
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/provincias">
-
                                 <i class="far fa-fw fa-circle "></i>
-
                                 <p>
                                     Provincias
-
                                 </p>
-
                             </a>
-
                         </li>
-
                     </ul>
-
                 </li>
-
                 <li class="nav-header ">
-
                     ERP
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/categoriaproducto">
-
                         <i class="fas fa-fw fa-building "></i>
-
                         <p>
                             Categorías de Productos
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/categoriaprofesional">
-
                         <i class="fas fa-fw fa-building "></i>
-
                         <p>
                             Categorías Profesionales
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/clientes">
-
                         <i class="fas fa-users "></i>
-
                         <p>
                             Clientes
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/compras">
-
                         <i class="fas fa-fw fa-chart-pie "></i>
-
                         <p>
                             Compras
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/VentaSimple?Compras">
-
                         <i class="fas fa-fw fa-chart-pie "></i>
-
                         <p>
                             Compras Simple
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/empleados">
-
                         <i class="fas fa-users "></i>
-
                         <p>
                             Empleados
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/haberes">
-
                         <i class="fa fa-clone "></i>
-
                         <p>
                             Haberes
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/ventas">
-
                         <i class="fas fa-fw fa-chart-pie "></i>
-
                         <p>
                             Ventas
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/VentaSimple?Ventas">
-
                         <i class="fas fa-fw fa-chart-pie "></i>
-
                         <p>
                             Venta Simple
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-item has-treeview ">
-
-
                     <a class="nav-link  " href="">
-
                         <i class="fa fa-shopping-bag "></i>
-
                         <p>
                             Productos
                             <i class="fas fa-angle-left right"></i>
-
                         </p>
-
                     </a>
-
-
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/producto/tag">
-
                                 <i class="far fa-fw fa-circle "></i>
-
                                 <p>
                                     Agregar Etiqueta
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/producto/create">
-
                                 <i class="far fa-fw fa-circle "></i>
-
                                 <p>
                                     Agregar Producto
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/producto">
-
                                 <i class="far fa-fw fa-circle "></i>
-
                                 <p>
                                     Modificar / Eliminar
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/productos">
-
                                 <i class="far fa-fw fa-circle "></i>
-
                                 <p>
                                     Gestión de Producto
-
                                 </p>
-
                             </a>
-
                         </li>
-
                         <li class="nav-item">
-
                             <a class="nav-link  " href="http://localhost:8000/productobajas">
-
                                 <i class="far fa-fw fa-circle "></i>
-
                                 <p>
                                     Registrar Bajas
-
                                 </p>
-
                             </a>
-
                         </li>
-
                     </ul>
-
                 </li>
-
                 <li class="nav-item">
-
                     <a class="nav-link  " href="http://localhost:8000/tags">
-
                         <i class="fa fa-tags "></i>
-
                         <p>
                             Etiquetas
-
                         </p>
-
                     </a>
-
                 </li>
-
                 <li class="nav-header ">
-
                     GERI
-
                 </li>
-
                 <li class="nav-item has-treeview ">
-
-
                     <a class="nav-link  " href="">
-
                         <i class="fas fa-fw fa-cogs "></i>
-
                         <p>
                             Ajustes
                             <i class="fas fa-angle-left right"></i>
-
                         </p>
-
                     </a>
-
-
                     <ul class="nav nav-treeview">
                         <li class="nav-item has-treeview ">
-
-
                             <a class="nav-link  " href="">
-
                                 <i class="fas fa-fw fa-cogs "></i>
 
                                 <p>
@@ -1097,18 +773,12 @@
                 <li class="nav-item">
 
                     <a class="nav-link  " href="http://localhost:8000">
-
                         <i class="fas fa-fw fa-building "></i>
-
                         <p>
                             VOLVER
-
                         </p>
-
                     </a>
-
                 </li>
-
             </ul>
         </nav>
     </div>
@@ -1116,11 +786,6 @@
 </aside>
 
 <div class="content-wrapper" >
-
-
-
-
-
 
     <div class="content">
         <div class="container-fluid">
@@ -1139,7 +804,6 @@
                     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
                 </script>
                 <!-- incorporacion de Letra Jockey One -->
-
 
                 <!-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"

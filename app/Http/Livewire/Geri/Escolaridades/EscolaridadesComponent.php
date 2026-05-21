@@ -8,14 +8,18 @@ use Livewire\Component;
 class EscolaridadesComponent extends Component
 {
 
-    public $escolaridadDescripcion, $escolaridad_id;
-    public $escolaridades;
+    public $escolaridadDescripcion, $escolaridad_id, $search;
     public $isModalOpen = false;
+
+    protected $escolaridades;
 
     public function render() {
         // if(auth()->user()->hasPermissionTo('escolaridades.Ver')) {
             if(session('empresa_id')) {
-                $this->escolaridades = Escolaridades::all();
+                $this->escolaridades = Escolaridades::where('id','>=',1)
+                ->where('escolaridadDescripcion', 'like', '%'.$this->search.'%')
+                ->orderby('escolaridadDescripcion')
+                ->paginate(7);
                 return view('livewire.geri.escolaridades.escolaridades-component',['isModalOpen'=> $this->isModalOpen,'escolaridades'=>$this->escolaridades])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         // } else {
@@ -23,6 +27,12 @@ class EscolaridadesComponent extends Component
         // }
     }
 
+    public function Filtrar() {
+        $this->escolaridades = Escolaridades::where('id','>=',1)
+            ->where('escolaridadDescripcion', 'like', '%'.$this->search.'%')
+            ->orderby('escolaridadDescripcion')
+            ->paginate(7);
+    }
 
     public function create()
     {

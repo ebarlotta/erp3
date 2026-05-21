@@ -12,5 +12,11 @@ class Provincias extends Model
     protected $fillable=[
         'provincia_descripcion',
         'nacionalidads_id',
+        'nacionalidads_id',
     ];
+
+    public function nacionalidad()
+    {
+        return $this->hasOne(Nacionalidad::class,'id','nacionalidads_id');
+    }
 }

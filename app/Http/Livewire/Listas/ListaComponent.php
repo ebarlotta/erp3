@@ -11,7 +11,7 @@ class ListaComponent extends Component
 {
 
     public $isModalOpen = false;
-    public $lista, $porcentaje, $lista_id, $name, $empresa_id, $vigenciadesde, $vigenciahasta, $activo;
+    public $lista, $porcentaje, $lista_id, $name, $empresa_id, $vigenciadesde, $vigenciahasta, $activo, $search;
     protected $listas;
 
     use WithPagination;
@@ -21,8 +21,10 @@ class ListaComponent extends Component
             if(session('empresa_id')) {
 
                 $this->empresa_id=session('empresa_id');
-                // $this->listas = Lista::where('empresa_id', $this->empresa_id)->get();
-                $this->listas = Lista::where('empresa_id', '=', $this->empresa_id)->paginate(7);
+                $this->listas = Lista::where('empresa_id', '=', $this->empresa_id)
+                    ->where('name', 'like', '%'.$this->search.'%')
+                    ->orderby('name')
+                    ->paginate(7);
 
                 return view('livewire.listas.lista-component',['listas' => $this->listas])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
@@ -31,6 +33,12 @@ class ListaComponent extends Component
         }
     }
 
+    public function Filtrar() {
+        $this->listas = Lista::where('empresa_id', '=', $this->empresa_id)
+        ->where('name', 'like', '%'.$this->search.'%')
+        ->orderby('name')
+        ->paginate(7);
+    }
     public function create()
     {
         $this->resetCreateForm();

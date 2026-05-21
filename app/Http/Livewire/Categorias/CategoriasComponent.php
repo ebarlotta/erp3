@@ -9,20 +9,30 @@ class CategoriasComponent extends Component
 {
     public $isModalOpen = false;
     public $categoria, $categoria_id;
-    public $categorias, $nombrecategoria;
-
-    public $empresa_id;
+    public $nombrecategoria;
+    public $empresa_id, $search;
+    protected $categorias;
 
     public function render()
     {
         $this->empresa_id=session('empresa_id');
-        $this->categorias = Categorias::where('empresa_id', $this->empresa_id)->get();
-        return view('livewire.categorias.categoria-component',['datos'=> Categorias::where('empresa_id', $this->empresa_id)->paginate(13),])->extends('layouts.adminlte');
+        $this->categorias = Categorias::where('empresa_id', $this->empresa_id)
+            ->where('nombrecategoria', 'like', '%'.$this->search.'%')
+            ->orderby('nombrecategoria')
+            ->paginate(7);
+        return view('livewire.categorias.categoria-component',['categorias'=> $this->categorias])->extends('layouts.adminlte');
+    }
+
+    public function Filtrar() {
+        $this->categorias = Categorias::where('empresa_id', '=', $this->empresa_id)
+        ->where('nombrecategoria', 'like', '%'.$this->search.'%')
+        ->orderby('nombrecategoria')
+        ->paginate(7);
     }
 
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.categorias.createcategoria')->with('isModalOpen', $this->isModalOpen)->with('nombrecategoria', $this->nombrecategoria);
@@ -43,7 +53,7 @@ class CategoriasComponent extends Component
 
         $this->nombrecategoria = '';
     }
-    
+
     public function store()
     {
         $this->validate([
@@ -66,10 +76,10 @@ class CategoriasComponent extends Component
         $this->id = $id;
         $this->categoria_id=$id;
         $this->nombrecategoria = $categoria->nombrecategoria;
-        
+
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         Categorias::find($id)->delete();

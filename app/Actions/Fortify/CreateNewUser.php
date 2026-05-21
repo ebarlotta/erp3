@@ -64,7 +64,7 @@ class CreateNewUser implements CreatesNewUsers
         // ========
         DB::table('modulo_usuarios')->insert(['modulo_id' => '51', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
         DB::table('modulo_usuarios')->insert(['modulo_id' => '52', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
-        DB::table('modulo_usuarios')->insert(['modulo_id' => '53', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
+        // DB::table('modulo_usuarios')->insert(['modulo_id' => '53', 'user_id' => $uu->user_id,'modificado_user_id'=>$uu->user_id]);
 
         return $user;
         // return User::create([

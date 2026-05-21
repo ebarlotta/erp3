@@ -12,25 +12,34 @@ class CategoriaproductoComponent extends Component
 {
     public $isModalOpen = false;
     public $categoria, $categoria_id, $name;
-    protected $categorias;
+    public $empresa_id, $search;
 
-    public $empresa_id;
+    protected $categorias;
 
     use WithPagination;
 
     public function render()
     {
         $this->empresa_id=session('empresa_id');
-        // $this->categorias = Categoriaproducto::where('empresa_id', $this->empresa_id)->get();
-        $this->categorias = Categoriaproducto::where('empresa_id', '=', $this->empresa_id)->paginate(7);
+        $this->categorias = Categoriaproducto::where('empresa_id', '=', $this->empresa_id)
+            ->where('name', 'like', '%'.$this->search.'%')
+            ->orderby('name')
+            ->paginate(7);
 
         return view('livewire.categoria.categoriaproducto-component',['categorias'=> $this->categorias])->extends('layouts.adminlte');
         // return view('livewire.categoria.categoriaproducto-component',['categorias'=> Categoriaproducto::where('empresa_id', $this->empresa_id)->paginate(2),])->extends('layouts.adminlte');
     }
 
+    public function Filtrar() {
+        $this->categorias = Categoriaproducto::where('empresa_id', '=', $this->empresa_id)
+        ->where('name', 'like', '%'.$this->search.'%')
+        ->orderby('name')
+        ->paginate(7);
+    }
+
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.categoria.createcategoriaproducto')->with('isModalOpen', $this->isModalOpen)->with('name', $this->name);
@@ -51,7 +60,7 @@ class CategoriaproductoComponent extends Component
 
         $this->name = '';
     }
-    
+
     public function store()
     {
         $this->validate([
@@ -73,10 +82,10 @@ class CategoriaproductoComponent extends Component
         $categoria = Categoriaproducto::findOrFail($id);
         $this->categoria_id=$id;
         $this->name = $categoria->name;
-        
+
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         Categoriaproducto::find($id)->delete();

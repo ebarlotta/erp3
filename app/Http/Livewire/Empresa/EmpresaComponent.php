@@ -53,6 +53,7 @@ class EmpresaComponent extends Component
         $a = Empresa::find($id);
         session(['nombre_empresa' => $a->name]);
         session(['url_logo_empresa' => $a->imagen]);
+        session(['cuit' => $a->cuit]);
 
         return redirect('modulos');
     }

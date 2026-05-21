@@ -20,14 +20,17 @@
                 </div>
             </div>
             @endif
-            @can('tiposdedocumentos.Agregar')
-                <x-crear>Nuevos Tipos de Documentos</x-crear>
-                <!-- <button wire:click="create()" class="bg-green-500 text-blue font-bold py-2 px-4 rounded my-3">Crear Tipo de Documento</button> -->
-                @if ($isModalOpen)
-                    @include('livewire.geri.tiposdedocumentos.createtiposdedocumentos')
-                @endif
-            @endcan
-            <table class="table-fixed w-full">
+            <div class="flex justify-around">
+                @can('tiposdedocumentos.Agregar')
+                    <x-crear>Nuevos Tipos de Documentos</x-crear>
+                    @if ($isModalOpen)
+                        @include('livewire.geri.tiposdedocumentos.createtiposdedocumentos')
+                    @endif
+                @endcan
+                <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
+                <div class="w-1/2 justify-end">{{ $tiposdedocumentos->links() }}</div>
+            </div>
+            <table class="table-fixed table-striped w-full">
                 <thead>
                     <tr class="bg-gray-100">
                         <th class="px-4 py-2">Descripción</th>

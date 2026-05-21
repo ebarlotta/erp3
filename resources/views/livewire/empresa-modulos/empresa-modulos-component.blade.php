@@ -44,15 +44,17 @@
 							@foreach ($empresas as $empresa)
 								<ul>
 									<li class="border text-left @if ($seleccionado == $empresa->id) bg-red-100 @endif" wire:click="CargarModulos({{ $empresa->id }})">
-										<div class="w-full p-3 hover:scale-105 transition-all duration-500">
+										<div class="w-full lg:p-3 hover:scale-105 transition-all duration-500">
 											<div class="flex rounded overflow-hidden border flex-wrap">
 												@if($empresa->imagen)
-													<img class="block rounded-md flex-none bg-cover" src="{{ asset('/'. $empresa->imagen) }}" style="width: 70px; height: 70px;">
+													<img class="block p-1 text-center justify-center m-auto rounded-md flex-none bg-cover" src="{{ asset('/'. $empresa->imagen) }}" style="width: 70px; height: 70px;">
 												@else
-													<img class="block rounded-md flex-none bg-cover" src="{{ asset('images/sin_imagen.jpg') }}"	style="width: 70px; height: 70px;">
+													<img class="block p-1 text-center justify-center m-auto rounded-md flex-none bg-cover" src="{{ asset('images/sin_imagen.jpg') }}"	style="width: 70px; height: 70px;">
 												@endif
-												<div class="col-12 col-md-8 bg-white w-full rounded-b pl-4 ml-2 flex flex-col justify-between leading-normal">
-													<div class="text-black pt-4 font-bold text-lg mb-2 leading-tight ml-2 md:fs-6">
+												<div class="col-12 col-md-8 bg-white w-full rounded-b flex flex-col justify-between leading-normal">
+
+													{{-- <div class="text-black pt-4 font-bold text-lg mb-2 leading-tight ml-2 md:fs-6 md:text-sm"> --}}
+													<div class="@if ($seleccionado == $empresa->id) bg-red-100 @endif lg:text-lg md:font-bold md:fs-6 text-center md:text-left md:text-sm text-grey-darker text-base">
 														{{ $empresa->name }}
 													</div>
 													{{-- <p class="text-grey-darker text-base">Read more</p> --}}

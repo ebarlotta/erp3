@@ -24,7 +24,19 @@ class ModSeederNewUser extends Seeder
     public function run()
     {
         // Relaciona al usuario con los módulos de la empresa de Prueba
-        $array = ['compras','ventas','actores','clientes','proveedores','productos','cuentas','areas','imprentapedidos','imprentaenvios','imprentaadmin'];
+        $array = [
+            'compras',
+            'ventas',
+            'actores',
+            'clientes',
+            'proveedores',
+            'productos',
+            'cuentas',
+            'areas',
+            'imprentapedidos',
+            'imprentaenvios',
+            'imprentaadmin'
+        ];
         foreach($array as $m) {
             $modulo = strtolower($m.'%');
             // $modulo = strtolower('compras.%');

@@ -74,9 +74,9 @@ class Actor extends Model {
    public function actor_referente() {
       $a = ActorAgente::where('actor_id','=',$this->id)->get('actor_referente');
       if(count($a)) {
+        if(is_null($a[0]->actor_referente)) return null;
         $b = Actor::find($a[0]);
         return $b[0]['nombre'];
-        //  return $b->nombre;
       }
       return null;
       // return dd($this->HasOne(Actor::class,'id','actor_referente')->get());

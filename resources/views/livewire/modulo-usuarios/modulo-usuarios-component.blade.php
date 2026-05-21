@@ -28,6 +28,7 @@
 						<button wire:click="mostrarmodal()"	class="bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded">
 							Relacionar nuevo Usuario
 						</button>
+                        <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;     width: 6rem;">
 					</div>
 					@endif
 				</div>
@@ -40,12 +41,14 @@
 						Módulos <br>
 						@foreach ($datos as $modulo)
 							<ul>
-								<li class="border px-4 text-left @if ($seleccionado==$modulo->id) bg-red-100 @endif" wire:click="CargarUsuarios({{ $modulo->id }})">
-									<div class="w-full p-2 hover:scale-110 transition-all duration-500 flex-wrap">
-										<div class="flex rounded overflow-hidden border ">
-											<img class="block rounded-md flex-none bg-cover" src="{{ asset('images/'. $modulo->imagen) }}" style="width:70px; height: 70x;">
-											<div class="bg-white w-full rounded-b pl-4 flex flex-col justify-between leading-normal">
-												<div class="text-black pt-4 font-bold text-lg mb-2 leading-tight col-12 col-md-8 ">{{ $modulo->name }}</div>
+								<li class="border text-left @if ($seleccionado==$modulo->id) bg-red-100 @endif" wire:click="CargarUsuarios({{ $modulo->id }})">
+									<div class="w-full lg:p-3 hover:scale-110 transition-all duration-500">
+										<div class="flex rounded overflow-hidden border @if ($seleccionado==$modulo->id) bg-red-100 @endif">
+											<img class="block p-1 text-center justify-center m-auto rounded-md flex-none bg-cover" src="{{ asset('images/'. $modulo->imagen) }}" style="width:70px; height: 70x;">
+											<div class="@if ($seleccionado==$modulo->id) bg-red-100 @endif col-12 col-md-8 w-full rounded-b flex flex-col justify-between leading-normal">
+												<div class="h-full lg:text-lg md:font-bold md:fs-6 text-left md:text-center md:text-sm text-grey-darker text-base">
+                                                    {{ $modulo->name }}
+                                                </div>
 												{{-- <p class="text-grey-darker text-base">Read more</p> --}}
 											</div>
 										</div>
@@ -55,30 +58,28 @@
 						@endforeach
 						<div class="w-full">{{ $datos->links() }}</div>
 					</div>
-					<div style="width: 40%">
-						<div class="bg-transparent">Usuarios</divbg-white>
+					<div style="width: 50%">
+						<div class="bg-transparent"><b>Usuarios</b></div>
 						@if ($usuariosdelmodulo)
-						@foreach ($usuariosdelmodulo as $usuario)
-							<ul>
-								<li class="border px-4 text-left bg-red-100">
+							<div class="flex-wrap flex">
+						    @foreach ($usuariosdelmodulo as $usuario)
+							<ul class="w-full">
+								<li class="border text-left bg-red-100">
 									<div class="w-full p-2 hover:scale-110 transition-all duration-500">
-										<div class="flex rounded overflow-hidden border">
-											@if($usuario['profile_photo_path'])
-                                                <img class="block rounded-md flex-none bg-cover" src="{{ asset($usuario['profile_photo_path']) }}" style="width: 70px; height: 70px;">
-												{{-- <img class="block rounded-md flex-none bg-cover" src="{{ asset('storageimages/'. $usuario['profile_photo_path'] ) }}" style="width: 70px; height: 70px;"> --}}
-                                                   {{-- src="{{ asset('images2/'. $usuario['profile_photo_path'] ) }}" style="width: 100px; height: 100px;"> --}}
+										<div class="d-flex rounded overflow-hidden">
+                                            <div class="d-flex flex">
+                                                @if($usuario['profile_photo_path'])
+                                                    <img class="block flex-none bg-cover rounded-md ml-1 mt-1" src="{{ asset($usuario['profile_photo_path']) }}" style="width: 40px; height: 40px;">
                                                 @else
-                                                <img class="block rounded-md flex-none bg-cover" src="{{ asset('images/sin_imagen.jpg') }}" style="width: 70px; height: 70px;">
+                                                    <img class="block flex-none bg-cover rounded-md ml-1 mt-1" src="{{ asset('images/sin_imagen.jpg') }}" style="width: 40px; height: 40px;">
                                                 @endif
-											<div class="w-full bg-white rounded-b pl-4 pt-4 flex flex-col justify-between leading-normal">
-												<div class="text-black font-bold text-lg mb-2 leading-tight">{{ $usuario['name'] }}</div>
-												{{-- <p class="text-grey-darker text-base">Read more and	more</p> --}}
-											</div>
-											<div class="bg-white rounded-b flex flex-col justify-between leading-normal">
-												<div class="text-black font-bold text-xl mb-2 leading-tight">
-													<img class="block w-15 h-15 flex-none bg-cover"	src="{{  asset('images/activo.png') }}" width="40" height="40">
-												</div>
-											</div>
+                                                <div class="text-black font-bold text-xl mb-2 leading-tight d-flex flex">
+                                                    <img class="block bg-cover mt-2 px-1 py-1 mx-1" src="{{  asset('images/activo.png') }}" style="width: 25px; height: 25px;">
+                                                    <div class="h-full lg:text-lg md:font-bold md:fs-6 text-left md:text-center md:text-sm text-grey-darker text-base">
+                                                        {{ $usuario['name'] }}
+                                                    </div>
+                                                </div>
+                                            </div>
 										</div>
 									</div>
 								</li>

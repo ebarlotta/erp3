@@ -20,16 +20,21 @@
                 </div>
             </div>
             @endif
-            @can('provincias.Agregar')
-                <x-crear>Nueva Provincia</x-crear>
-                @if ($isModalOpen)
-                    @include('livewire.provincias.createprovincias')
-                @endif
-            @endcan
+            <div class="flex justify-around">
+                @can('provincias.Agregar')
+                    <x-crear>Nueva Provincia</x-crear>
+                    @if ($isModalOpen)
+                        @include('livewire.provincias.createprovincias')
+                    @endif
+                @endcan
+                <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
+                <div class="w-1/2 justify-end">{{ $provincias->links() }}</div>
+            </div>
             <table class="table-fixed w-full">
                 <thead>
                     <tr class="bg-gray-100">
                         <th class="px-4 py-2">Descripción</th>
+                        <th class="px-4 py-2">Nacionalidad</th>
                         <th class="px-4 py-2">Opciones</th>
                     </tr>
                 </thead>
@@ -37,6 +42,7 @@
                     @foreach ($provincias as $provincia)
                     <tr>
                         <td class="border px-4 py-2">{{ $provincia->provincia_descripcion }}</td>
+                        <td class="border px-4 py-2">{{ $provincia->nacionalidad->nacionalidad_descripcion }}</td>
                         <td class="border px-4 py-2">
                             <div class="flex justify-center">
                                 @can('provincias.Modificar')

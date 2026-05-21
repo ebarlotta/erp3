@@ -74,6 +74,7 @@ class ActorComponent extends Component
     public $isModalOpen = false;
     public $isModalOpenAdicionales=false;
     public $isModalOpenGestionar=false;
+    public $showDeleteModal=false, $itemToDelete=null;
 
     //Variables de Nuevo informe
     public $ModalNuevoInforme=false;
@@ -586,6 +587,16 @@ class ActorComponent extends Component
             'beneficio_id' => 'required|integer',
             'personactivo_id' => 'required|integer',
             'condicioniva_id' => 'required',
+        ], [
+            'name.required' => 'Debe completar los datos de Apellido y Nombre',
+            'documento.required' => 'Debe completar los datos de documento',
+            'tipodocumento_id.required' => 'Debe seleccionar un Tipo de Documento',
+            'tipopersona_id.required' => 'Debe seleccionar un Tipo de Persona',
+            'nacionalidad_id.required' => 'Debe seleccionar los datos de Nacionalidad',
+            'localidad_id.required' => 'Debe seleccionar los datos de Localidad',
+            'beneficio_id.required' => 'Debe seleccionar los datos de Beneficio',
+            'personactivo_id.required' => 'Debe seleccionar el Estado de la persona',
+            'condicioniva_id.required' => 'Debe seleccionar los datos de Responsable Iva',
         ]);
 
         $a = actor::updateOrCreate(['id' => $this->actor_id], [
@@ -665,22 +676,30 @@ class ActorComponent extends Component
         $this->openModalPopover();
     }
 
-    public function delete($id)
+    public function confirmDelete($id)
     {
-        // fALTA MENSAJE DE CONFIRMACIÓN DE ELIMINACIÓN
         switch($this->tipopersona_id) {
-            case 1: ActorAgente::find('actor_id',$id)->delete(); break;
-            case 2: ActorReferente::find('actor_id',$id)->delete(); break;
-            case 3: ActorPersonal::find('actor_id',$id)->delete(); break;
-            case 4: ActorProveedor::find('actor_id',$id)->delete(); break;
-            case 5: ActorCliente::find('actor_id',$id)->delete(); break;
-            case 6: ActorVendedor::find('actor_id',$id)->delete(); break;
-            case 7: ActorEmpresa::find('actor_id',$id)->delete(); break;
-
+            case 1: ActorAgente::where('actor_id',$id)->delete(); break;
+            case 2: ActorReferente::where('actor_id',$id)->delete(); break;
+            case 3: ActorPersonal::where('actor_id',$id)->delete(); break;
+            case 4: ActorProveedor::where('actor_id',$id)->delete(); break;
+            case 5: ActorCliente::where('actor_id',$id)->delete(); break;
+            case 6: ActorVendedor::where('actor_id',$id)->delete(); break;
+            case 7: ActorEmpresa::where('actor_id',$id)->delete(); break;
         }
         Actor::find($id)->delete();
+        $this->showDeleteModal = false;
+        $this->itemToDelete = null;
         session()->flash('message', 'Actor Eliminado.');
         $this->Filtrar();
+    }
+
+    public function delete($id)
+    {
+        $this->showDeleteModal = true;
+        $this->itemToDelete = $id;
+        $a = Actor::find($id);
+        $this->tipopersona_id = $a->tipopersona_id;
     }
 
     public function agregar($id)
@@ -821,9 +840,15 @@ class ActorComponent extends Component
                 $this->validate([
                     'fingreso' => 'required',
                     'peso' => 'integer',
-                    'referente_id' => 'integer',
+                    // 'referente_id' => 'integer',
                     'cama_id' => 'integer',
                     'sexo_id' => 'integer',
+                ], [
+                    'fingreso.required' => 'Debe completar los datos de Fecha de Ingreso',
+                    'peso.required' => 'Debe completar los datos de Peso',
+                    // 'referente_id.required' => 'Debe seleccionar un Referente',
+                    'cama_id.required' => 'Debe seleccionar una Cama',
+                    'sexo_id.required' => 'Debe seleccionar los datos de Sexo',
                 ]);
                 $a = ActorAgente::updateOrCreate(['actor_id' => $this->actor_id], [
                 'fingreso' => $this->fingreso,
@@ -831,7 +856,7 @@ class ActorComponent extends Component
                 'alias' => $this->alias,
                 'peso_id' => $this->peso,
                 'actor_id' => $this->actor_id,
-                'actor_referente' => $this->referente_id,
+                'actor_referente' => $this->referente_id==0 ? null : $this->referente_id,
                 'cama_id' => $this->cama_id,
                 'datossociales_id' => null,
                 'datosmedicos_id' => null,
@@ -903,10 +928,16 @@ class ActorComponent extends Component
                 $this->validate([
                     'iva_id' => 'integer',
                 ]);
+                // Crea o actualiza los datos del ActorCliente
                 $a = ActorCliente::updateOrCreate(['actor_id' => $this->actor_id], [
                     'iva_id' => $this->iva_id,
                     'condicion_id' => $this->condicioniva_id,
                 ]);
+                //Actualiza la condición de iva del Actor
+                $a = Actor::updateOrCreate(['id' => $this->actor_id], [
+                    'condicioniva_id' => $this->iva_id,
+                ]);
+
                 session()->flash('message', 'Se guardaron los datos');
                 break;
             case 6: // Vendedor

@@ -26,14 +26,12 @@
                     @endif
                     <div class="flex justify-around">
                         @can('estados.Agregar')
-                        {{-- @if(session('Estados.Agregar')) --}}
                             <x-crear>Nuevo Estado</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.estado.createestado')
                             @endif
-                        {{-- @endif --}}
                         @endcan
-                        <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar">
+                        <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
                         <div class="w-1/2 justify-end">{{ $estados->links() }}</div>
                     </div>
                         <table class="table-fixed table-striped w-full">

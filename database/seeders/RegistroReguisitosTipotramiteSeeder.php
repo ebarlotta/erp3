@@ -41,9 +41,5 @@ class RegistroReguisitosTipotramiteSeeder extends Seeder
         DB::table('registro_reguisitos_tipotramites')->insert(['descripcionrequisitotipotramite'=>'Título del automotor o CAT (Constancia de asignación de titulo), cédulas expedidas o sus respectivas denuncias de extravío. En caso de existir prenda deberá presentar la notificación al acreedor prendario.','tipotramite_id'=>5,'precio'=>500,'cantidad'=>1]);
         DB::table('registro_reguisitos_tipotramites')->insert(['descripcionrequisitotipotramite'=>'Certificado de Importacion','tipotramite_id'=>5,'precio'=>500,'cantidad'=>1]);
 
-
-
-
-
     }
 }

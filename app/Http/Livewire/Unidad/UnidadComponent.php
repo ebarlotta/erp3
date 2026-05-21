@@ -10,25 +10,36 @@ class UnidadComponent extends Component
 {
     public $isModalOpen = false;
     public $unidad, $unidad_id;
-    public $unidades, $name;
+    public $name;
+    public $empresa_id, $search;
 
-    public $empresa_id;
+    protected $unidades;
 
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('unidades.Ver')) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
-                $this->unidades = Unidad::where('empresa_id', $this->empresa_id)->get();
-                return view('livewire.unidad.unidad-component',['datos'=> Unidad::where('empresa_id', $this->empresa_id)->paginate(7),])->extends('layouts.adminlte');
+                $this->unidades = Unidad::where('empresa_id', $this->empresa_id)
+                    ->where('name', 'like', '%'.$this->search.'%')
+                    ->orderby('name')
+                    ->paginate(7);
+                return view('livewire.unidad.unidad-component',['unidades'=> $this->unidades])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
         }
     }
 
+    public function Filtrar() {
+        $this->unidades = Unidad::where('empresa_id', '=', $this->empresa_id)
+        ->where('name', 'like', '%'.$this->search.'%')
+        ->orderby('name')
+        ->paginate(7);
+    }
+
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.unidad.createunidad')->with('isModalOpen', $this->isModalOpen)->with('name', $this->name);
@@ -49,7 +60,7 @@ class UnidadComponent extends Component
 
         $this->name = '';
     }
-    
+
     public function store()
     {
         $this->validate([
@@ -72,10 +83,10 @@ class UnidadComponent extends Component
         $this->id = $id;
         $this->unidad_id=$id;
         $this->name = $unidad->name;
-        
+
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         Unidad::find($id)->delete();

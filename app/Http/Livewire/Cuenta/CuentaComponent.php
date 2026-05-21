@@ -9,21 +9,24 @@ use Livewire\WithPagination;
 
 class CuentaComponent extends Component
 {
-
-    use WithPagination;
-
     public $isModalOpen = false;
     public $cuenta, $cuenta_id;
-    public $cuentas;
     public $name;
-    public $empresa_id;
+    public $empresa_id, $search;
+
+    protected $cuentas;
+
+    use WithPagination;
 
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('cuentas.Ver')) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
-                $this->cuentas = Cuenta::where('empresa_id', $this->empresa_id)->orderby('name')->get();
-                return view('livewire.cuenta.cuenta-component',['datos'=> Cuenta::where('empresa_id', $this->empresa_id)->orderby('name')->paginate(7),])->extends('layouts.adminlte');
+                $this->cuentas = Cuenta::where('empresa_id', $this->empresa_id)
+                ->where('name', 'like', '%'.$this->search.'%')
+                ->orderby('name')
+                ->paginate(7);
+                return view('livewire.cuenta.cuenta-component',['cuentas'=> $this->cuentas])->extends('layouts.adminlte');
             } else {
                 return view('livewire.seleccionarempresa')->extends('layouts.adminlte');
             }
@@ -32,9 +35,16 @@ class CuentaComponent extends Component
         }
     }
 
+    public function Filtrar() {
+        $this->cuentas = Cuenta::where('empresa_id', '=', $this->empresa_id)
+        ->where('name', 'like', '%'.$this->search.'%')
+        ->orderby('name')
+        ->paginate(7);
+    }
+
     public function create()
     {
-        $this->resetCreateForm();   
+        $this->resetCreateForm();
         $this->openModalPopover();
         $this->isModalOpen=true;
         return view('livewire.cuenta.createcuentas')->with('isModalOpen', $this->isModalOpen)->with('name', $this->name);
@@ -54,7 +64,7 @@ class CuentaComponent extends Component
         $this->cuenta_id = '';
         $this->name = '';
     }
-    
+
     public function store()
     {
         $this->validate([
@@ -79,7 +89,7 @@ class CuentaComponent extends Component
         $this->name = $cuenta->name;
         $this->openModalPopover();
     }
-    
+
     public function delete($id)
     {
         Cuenta::find($id)->delete();

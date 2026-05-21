@@ -14,7 +14,7 @@
         <div class="bg-white p-2 text-center rounded-lg shadow-lg w-full">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-1">
-                
+
                     @if (session()->has('message'))
                         <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
                             role="alert">
@@ -25,16 +25,15 @@
                             </div>
                         </div>
                     @endif
-                
+
                     <div class="flex justify-around">
-                        {{-- @if(session('areas.Agregar')) --}}
                         @can('areas.Agregar')
                             <x-crear>Nueva Área</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.area.createareas')
                             @endif
                         @endcan
-                        {{-- @endif --}}
+                        <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
                         <div class="w-1/2 justify-end">{{ $areas->links() }}</div>
                     </div>
                     <div style="display: block">
@@ -83,7 +82,7 @@
     <div style="width:90%;">
         <div style="width:100%; display: flex">
             <p class="shadow-md m-1" style="font-size: 18px; background-color: rgb(226, 230, 230); border-radius: 10px; padding: 3px;">{{ $area->name }}</p>
-            
+
         </div>
     </div>
     <div style="width:10%;">

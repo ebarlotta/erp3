@@ -37,7 +37,7 @@
                                 <div class="mb-2 col-6 col-md-4">
                                     <label class="block text-gray-700 text-sm font-bold mb-1">Referente</label>
                                     <select class="col-12 form-control" name="referente_id" id="" wire:model="referente_id" style="box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;">
-                                        <option value="">-</option>
+                                        <option value="0">-</option>
                                         @foreach($referentes as $referente)
                                             @if($actor_referente===$referente->id)
                                                 <option value="{{ $referente->id }}" selected>{{ $referente->nombre - $referente_id}}</option>

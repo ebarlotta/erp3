@@ -27,14 +27,13 @@
 
                     <div class="flex justify-around">
                         @can('unidades.Agregar')
-                        {{-- @if(session('Unidades.Agregar')) --}}
                             <x-crear>Nueva Unidad</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.unidad.createunidad')
                             @endif
-                        {{-- @endif --}}
                         @endcan
-                        <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
+                        <input type="text" wire:model="search" placeholder="Introduzca Filtro" wire:keyup="Filtrar" style="height: 2.5rem; background-color: lightgray;  border-radius: 10px; padding-left: 10px; margin-left: 4px;">
+                        <div class="w-1/2 justify-end">{{ $unidades->links() }}</div>
                     </div>
                     <div style="display: block">
                         <table class="table-fixed table-striped w-full">
@@ -45,8 +44,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($datos)
-                                @foreach ($datos as $unidad)
+                                @if ($unidades)
+                                @foreach ($unidades as $unidad)
                                     <tr>
                                         <td class="border px-4 py-2 text-left">{{ $unidad->name }}</td>
                                         <td class="border px-4 py-2">
@@ -69,7 +68,7 @@
                                 @endforeach
                                 @endif
                             </tbody>
-                        </table>                        
+                        </table>
                     </div>
                 </div>
             </div>

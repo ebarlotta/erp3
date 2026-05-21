@@ -24,9 +24,8 @@ class CompraSimpleComponent extends Component
 
     public $modulo; // Permite hacer elección de módulo a utilizar
 
-    public function render(Request $request)  
-    {        
-        // dd($request);
+    public function render(Request $request)
+    {
         // dd(request()->getRequestUri());
         switch (request()->getRequestUri()) {
             case "/VentaSimple?Compras" : $this->modulo='Compras'; break;
@@ -35,7 +34,6 @@ class CompraSimpleComponent extends Component
             default: ;
         }
 
-        // dd($this->modulo);
         $this->fecha_simple= date('Y-m-d');
         $this->areas = Area::where('empresa_id', session('empresa_id'))->ORDERBY('name')->get();
         $this->cuentas = Cuenta::where('empresa_id', session('empresa_id'))->ORDERBY('name')->get();
@@ -44,15 +42,13 @@ class CompraSimpleComponent extends Component
         $this->ivas = Iva::where('id','>',0)->get();
         // return view('livewire.compra.compra-simple-component')->with(['areas' => $this->areas, 'cuentas' => $this->cuentas,'clientes' => $this->clientes,'ivas' => $this->ivas])->extends('layouts.layoutSilmple');
         return view('livewire.compra.compra-simple-component')->with(['areas' => $this->areas, 'cuentas' => $this->cuentas,'clientes' => $this->clientes,'ivas' => $this->ivas])->extends('layouts.adminlte');
-
-        // return view('livewire.compra.compra-simple-component');
     }
 
     // ==========================================================================================
-    //                      C O M P R A                   S I M P L E 
+    //                      C O M P R A                   S I M P L E
     // ==========================================================================================
 
-    public function ActualizaMonto() { 
+    public function ActualizaMonto() {
         if(substr($this->monto_simple,-1)==',') {
             $this->monto_simple = substr($this->monto_simple,0,strlen($this->monto_simple)-1).'.';
             // dd($this->monto_simple);
@@ -167,6 +163,6 @@ class CompraSimpleComponent extends Component
         session()->flash('message', 'Comprobante Creado en '. $this->modulo);
         $this->ModalGuardado = true;
     }
-    
+
     public function closeModal() { $this->ModalGuardado=false; }
 }

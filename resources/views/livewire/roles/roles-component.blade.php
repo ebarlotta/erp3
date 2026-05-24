@@ -84,7 +84,7 @@
                             @endif
                             <div>
                                 <label for="">Nombre del Rol</label>
-                                @if($name) 
+                                @if($name)
                                     <input type="text" class="form-control" wire:model="name">
                                 @else
                                     <div class="flex">
@@ -100,7 +100,7 @@
                             <div>
                                 <label for="">Módulos del sistema</label>
                                 <div>
-                                    @foreach ($modulos as $modulo)
+                                    @foreach ($moduloshabilitados as $modulo)
                                         @if($modulo_seleccionado == $modulo->id)
                                             <button type="button" class="btn btn-success" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->pagina }}')">
                                                 <i class="fa-solid fa-pen-to-square"></i>{{ $modulo->name }}

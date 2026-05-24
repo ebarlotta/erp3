@@ -73,7 +73,8 @@
 											@can('compras.Eliminar')
 												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" wire:click="openModalDelete"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
 											@endcan
-											@can('compras.ComprasAgregarProductos.Ver')
+                                            Espacio
+											@can('compras.comprasagregarproductos.Ver')
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" wire:click="openModalAgregarDetalle"> <i class="fa fa-cart-plus" aria-hidden="true"></i>Agregar Productos</button>
 											@endcan
 											<div class=" right-0">

@@ -40,9 +40,9 @@ class DatabaseSeeder extends Seeder
         $seeder->empresaId = 4; $seeder->run();
         $seeder->empresaId = 5; $seeder->run();
 
-        DB::table('roles')->insert(['name' => 'Administrador','guard_name' => 'web',]);
-        DB::table('roles')->insert(['name' => 'Usuario','guard_name' => 'web',]);
-        DB::table('roles')->insert(['name' => 'Free','guard_name' => 'web',]);
+        // DB::table('roles')->insert(['name' => 'Administrador','guard_name' => 'web',]);
+        // DB::table('roles')->insert(['name' => 'Usuario','guard_name' => 'web',]);
+        // DB::table('roles')->insert(['name' => 'Free','guard_name' => 'web',]);
 
         $this->call(ModuloSeeder::class);
         $this->call(EmpresaModuloSeeder::class);

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 // use Illuminate\Foundation\Auth\User;
 
+use Database\Seeders\PermissionsSeeder;
+
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Commands\CreatePermission;
 
@@ -22,32 +24,46 @@ class RolesComponent extends Component
 {
     public $name, $roles, $rol_id, $permisos, $permisoshabilitados, $modulo_name, $modulos, $modulo_seleccionado;
     public $buscar;
+    public $moduloshabilitados;
 
     // use HasRoles;
 
     // protected $guard_name = 'web';
 
     // FALTA AGREGAR ROLES Y PERMISOS POR EMPRESA, NO A NIVEL GENERAL, SINO PARTICULAR Enzo
-    
+
     public function render() {
         if(auth()->check() && auth()->user()->hasPermissionTo('roles.Ver')) {
             if(session('empresa_id')) {
                 $this->modulos = Modulo::orderby('name')->get(); ///all();
                 $this->Filtrar();
+                $this->name = "Administrador";
+
+                // $a = new PermissionsSeeder();
+                // $a->AsignarRolesAlaEmpresa(2);
+
+                return view('livewire.roles.roles-component')->extends('layouts.adminlte');
+
+                } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
+            } else {
+                return view('SinPermiso')->extends('layouts.adminlte');
+            }
+
+
+
                 // $user = User::find(Auth::user()->id);   // Asigna el rol al usuario
                 // $user->syncRoles(['Administrador']);
 
-                $this->name = "Administrador";
                 // // // dd($this->name);
 
                 // $permissions = Permission::all();
                 // $user = User::find(1);
                 // $user->syncPermissions($permissions);  // Borra todos los permisos del Rol
-                
+
                 // dd($user);
                 // $permission = Permission::findByName('agregar');
                 // $role->givePermissionTo($permission);
-                
+
                 // $role->givePermissionTo(['guard_name'=>'web','name'=>'agregar']);
 
 
@@ -61,13 +77,13 @@ class RolesComponent extends Component
                 // $permission->assignRole($role);
 
                 // dd($role->getPermissionsViaRoles('Usuario'));
-                
+
                 // $a= $role->getAllPermissions();
                 // $role->syncPermissions($a);
                 // // $a = User::getAllPermissions();
                 // dd($role);
                 // dd($role->permissions);
-                
+
                 // $user->hasRole('Usuario');
 
                 // $user = User::getRole('Administrador');
@@ -75,28 +91,27 @@ class RolesComponent extends Component
                 // $user = Role::all(); // Trae todos los roles
                 // // $user = User::getRole('Administrador');
                 // $user = User::doesntHave('roles')->get();
-                
+
                 // $user = User::role('Administrador')->get();
                 // $user = User::getRole;
                 // $roles = Auth::user()->getRoleNames();
                 // $permissions = $user->permissions;
                 // dd($role->hasPermissionTo('areas.Agregar'));
-                return view('livewire.roles.roles-component')->extends('layouts.adminlte');
-
-                } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
-            } else {
-                return view('SinPermiso')->extends('layouts.adminlte');
-            }
     }
 
     public function Filtrar() {
         if ($this->buscar) {
-            $this->roles = Roles::where('name', 'LIKE', "%" . $this->buscar . "%")->get();
+            $this->roles = Roles::where('name', 'LIKE', "%" . $this->buscar . "%")
+                ->where('empresa_id', '=', session('empresa_id'))
+                ->get();
         } else {
-            $this->roles = Roles::orderBy('name','ASC')->get();
+            $this->roles = Roles::orderBy('name','ASC')
+            ->where('empresa_id', '=', session('empresa_id'))
+            ->get();
+            // dd(session('empresa_id'));
         }
     }
-    
+
     public function showNew() { $this->reset('name'); }
 
     public function showEdit($id)
@@ -105,7 +120,6 @@ class RolesComponent extends Component
         $this->name = $roles->name;
         $this->rol_id = $id; //Establece el rol
         $this->SeleccionarModulo(1, 'Areas');
-        //  dd($this->rol_id);
     }
 
     public function showDelete($id)
@@ -132,7 +146,7 @@ class RolesComponent extends Component
             'name' => $this->name,
             'guard_name' => 'web',
         ]);
-        
+
         $this->rol_id = null;
         session()->flash('mensaje', 'Se guardó el rol.');
     }
@@ -144,7 +158,7 @@ class RolesComponent extends Component
         unset($this->permisos);
         unset($this->permisoshabilitados);
         if($id == 0) { $this->modulo_seleccionado = null; }
-        else { 
+        else {
             $this->modulo_seleccionado = $id;
             $this->modulo_name = $nombreModulo;
 
@@ -157,13 +171,33 @@ class RolesComponent extends Component
             // WHERE NOT EXISTS (
             //     SELECT * FROM permissions WHERE name LIKE '%".$this->modulo_name."%')";
             // dd($sql);
-            
+
             unset($this->permisos);
             $this->permisos = db::select($sql);
             // dd($this->permisos);
             $sql = 'SELECT * FROM role_has_permissions join permissions WHERE role_has_permissions.permission_id = permissions.id and role_has_permissions.role_id='.$this->rol_id." and name like '%". $nombreModulo."%'";
             // dd($sql);
             $this->permisoshabilitados = db::select($sql);
+
+        //    $sql = 'SELECT permissions.*, SUBSTRING_INDEX(permissions.name, ".", 1) as grupo
+        //     FROM role_has_permissions
+        //     JOIN permissions ON role_has_permissions.permission_id = permissions.id
+        //     WHERE role_has_permissions.role_id = ' . $this->rol_id . '
+        //     AND permissions.name LIKE "%' . $nombreModulo . '%"
+        //     GROUP BY grupo, permissions.name';
+        $sql = 'SELECT
+    SUBSTRING_INDEX(p.nameaa, ".", 1) as modulo, m.id, m.name as name, m.pagina, permission_id, role_id
+    FROM role_has_permissions rhp
+    INNER JOIN permissions p ON rhp.permission_id = p.id
+    INNER JOIN modulos m ON m.pagina = SUBSTRING_INDEX(p.name, ".", 1)
+    WHERE rhp.role_id = 1
+    GROUP BY modulo, m.id, m.pagina, name,  permission_id, role_id
+    ORDER BY modulo';
+
+        $this->moduloshabilitados = db::select($sql);
+        // dd($this->moduloshabilitados);
+
+        $this->permisoshabilitados = db::select($sql);
         }
     }
 
@@ -176,27 +210,32 @@ class RolesComponent extends Component
             $aux = 'SELECT * FROM model_has_permissions WHERE permission_id='. $permision_id .' and model_id='.$usuario->user_id;
             // dd($user);
             $bux = db::select($aux); //IMPACTA EN LOS TAGAS QUE APARECEN EN PANTALLA
-            if(count($bux)) { 
-                session()->flash('mensajePermisoRepetido', 'El permiso que intenta agregar ya se encontraba dado de alta.'); 
+            if(count($bux)) {
+                session()->flash('mensajePermisoRepetido', 'El permiso que intenta agregar ya se encontraba dado de alta.');
             } else {
-                // Permission::create(['guard_name' => 'web', 'name' => $permiso_a_agregar[0]->name]);		
+                // $aux = 'INSERT INTO model_has_permissions (permission_id, model_type, model_id) VALUES (' . $permision_id . ', \'App\Models\User\',' . $usuario->user_id . ')';
+                // $bux = db::select($aux);
+
+                //Permission::create(['guard_name' => 'web', 'name' => $permiso_a_agregar[0]->name]);
+                // dd($permision_id.'-'.$permiso_a_agregar[0]);
+
                 $b = $user->givePermissionTo($permiso_a_agregar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
             }
             $aux = 'SELECT * FROM role_has_permissions WHERE permission_id='. $permision_id .' and role_id='.$this->rol_id;
             $bux = db::select($aux); //IMPACTA EN LOS TAGAS QUE APARECEN EN PANTALLA
-            if(count($bux)) { 
-                session()->flash('mensajePermisoRepetido', 'El permiso que intenta agregar ya se encontraba dado de alta.'); 
+            if(count($bux)) {
+                session()->flash('mensajePermisoRepetido', 'El permiso que intenta agregar ya se encontraba dado de alta.');
             } else {
                 $aux = 'INSERT INTO role_has_permissions (permission_id, role_id) VALUES ('.$permision_id.', '.$this->rol_id . ')';
                 $bux = db::select($aux);
             }
             // $role = Role::findByName($this->name);
             // $permission = \Spatie\Permission\Models\Permission::findByName($permiso_a_agregar[0]->name, 'web');
-            // $permission->assignRole($role->name); // Asegúrate de que coincidan con el mismo guard       
+            // $permission->assignRole($role->name); // Asegúrate de que coincidan con el mismo guard
         }
 
         // $role = Role::findByName($this->name);
-        // $role->givePermissionTo('areas.ver');        
+        // $role->givePermissionTo('areas.ver');
         // $role = Role::findByName($this->name);
         // $permissions = Permission::all(); // trae una lista de todos los permisos
         // $permission = Permission::findById($idPermiso);
@@ -214,7 +253,7 @@ class RolesComponent extends Component
             $user = User::find($usuario->user_id);   // Busca a cada usuario y
             // dd($permision_id);
             $b = $user->revokePermissionTo($permiso_a_agregar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
-            
+
             $a = 'DELETE FROM role_has_permissions WHERE permission_id = '. $permision_id .' and role_id = '. $role_id;
             db::select($a); //IMPACTA EN LOS TAGAS QUE APARECEN EN PANTALLA
         }

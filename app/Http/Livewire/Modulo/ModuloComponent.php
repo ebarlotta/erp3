@@ -53,8 +53,8 @@ class ModuloComponent extends Component
                 $this->modulos=Modulo::find($empresa_modulos);
                 // dd($this->modulos);
 
-                $this->compras_areas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp',12,'area_id');
-                $this->compras_cuentas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp',12,'cuenta_id');
+                $this->compras_areas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp', 'area_id', 12);
+                $this->compras_cuentas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp', 'cuenta_id', 12);
 
                 $this->compras = $this->obtenerDatosGrafico('comprobantes', 'NetoComp',12);
                 $this->ventas = $this->obtenerDatosGrafico('ventas', 'NetoComp');
@@ -73,7 +73,7 @@ class ModuloComponent extends Component
         }
     }
 
-    private function obtenerDatosGrafico2(string $tabla, string $campoMonto, int $meses = 6, string $areacuenta): array
+    private function obtenerDatosGrafico2(string $tabla, string $campoMonto, string $areacuenta, int $meses = 6 ): array
     {
         $datos = DB::table($tabla)
             ->selectRaw($areacuenta . ', DATE_FORMAT(fecha, "%Y-%m") as periodo, SUM(' . $campoMonto . ') as total')

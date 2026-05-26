@@ -49,9 +49,9 @@ return new class extends Migration
             $table->index('empresa_id', 'roles_empresas_foreign_key_index');
             $table->foreign('empresa_id')
                   ->references('id')
-                  ->on('empresas')
-                  ->onDelete('cascade')  // Opcional: qué hacer al eliminar la empresa
-                  ->onUpdate('cascade'); // Opcional: qué hacer al actualizar el id
+                  ->on('empresas');
+                  //->onDelete('cascade')  // Opcional: qué hacer al eliminar la empresa
+                  //->onUpdate('cascade'); // Opcional: qué hacer al actualizar el id
 
             $table->timestamps();
             if ($teams || config('permission.testing')) {

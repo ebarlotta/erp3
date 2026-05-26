@@ -107,7 +107,6 @@
 															{{ session('message') }}</p>
 													</div>
 												@endif
-
 												@if (session()->has('message2'))
 													<div class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" role="alert">
 														{{ session('message2') }}

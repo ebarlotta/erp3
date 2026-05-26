@@ -21,6 +21,11 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+
+        //ELIMINAR TODOS LOS DATOS DE LAS TABLAS ANTES DE EJECUTAR LOS SEEDERS PARA EVITAR DUPLICADOS
+        // php artisan db:truncate
+
+
         $this->call(IvaSeeder::class);
         $this->call(CondicionivaSeeder::class);
         $this->call(PermissionsSeeder::class);
@@ -72,27 +77,27 @@ class DatabaseSeeder extends Seeder
         DB::table('person_activos')->insert(['estado'=>'Baja',]);
         DB::table('person_activos')->insert(['estado'=>'En proceso de Baja',]);
         // $this->call(NacionalidadSeeder::class);
-        DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Argentina',]);
-        DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Española',]);
-        DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Italiana',]);
-        DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Otra',]);
+        // DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Argentina',]);
+        // DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Española',]);
+        // DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Italiana',]);
+        // DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Otra',]);
         // $this->call(ProvinciasSeeder::class);
-        DB::table('provincias')->insert(['provincia_descripcion'=>'Mendoza','nacionalidads_id'=>1]);
-        DB::table('provincias')->insert(['provincia_descripcion'=>'San Juan','nacionalidads_id'=>1]);
-        DB::table('provincias')->insert(['provincia_descripcion'=>'San Luis','nacionalidads_id'=>1]);
+        // DB::table('provincias')->insert(['provincia_descripcion'=>'Mendoza','nacionalidads_id'=>1]);
+        // DB::table('provincias')->insert(['provincia_descripcion'=>'San Juan','nacionalidads_id'=>1]);
+        // DB::table('provincias')->insert(['provincia_descripcion'=>'San Luis','nacionalidads_id'=>1]);
         // $this->call(LocalidadesSeeder::class);
-        DB::table('localidades')->insert(['localidad_descripcion'=>'Ciudad','localidad_cp'=>5500,'provincia_id'=>1]);
-        DB::table('localidades')->insert(['localidad_descripcion'=>'San Martín','localidad_cp'=>5570,'provincia_id'=>1]);
-        DB::table('localidades')->insert(['localidad_descripcion'=>'Palmira','localidad_cp'=>5570,'provincia_id'=>1]);
-        DB::table('localidades')->insert(['localidad_descripcion'=>'Rivadavia','localidad_cp'=>5570,'provincia_id'=>1]);
-        DB::table('localidades')->insert(['localidad_descripcion'=>'Junín','localidad_cp'=>5570,'provincia_id'=>1]);
+        // DB::table('localidades')->insert(['localidad_descripcion'=>'Ciudad','localidad_cp'=>5500,'provincia_id'=>1]);
+        // DB::table('localidades')->insert(['localidad_descripcion'=>'San Martín','localidad_cp'=>5570,'provincia_id'=>1]);
+        // DB::table('localidades')->insert(['localidad_descripcion'=>'Palmira','localidad_cp'=>5570,'provincia_id'=>1]);
+        // DB::table('localidades')->insert(['localidad_descripcion'=>'Rivadavia','localidad_cp'=>5570,'provincia_id'=>1]);
+        // DB::table('localidades')->insert(['localidad_descripcion'=>'Junín','localidad_cp'=>5570,'provincia_id'=>1]);
         // $this->call(GradoDependenciaSeeder::class);
-        DB::table('grado_dependencias')->insert(['gradodependenciaDescripcion'=>'Autoválido']);
-        DB::table('grado_dependencias')->insert(['gradodependenciaDescripcion'=>'Severa']);
+        // DB::table('grado_dependencias')->insert(['gradodependenciaDescripcion'=>'Autoválido']);
+        // DB::table('grado_dependencias')->insert(['gradodependenciaDescripcion'=>'Severa']);
         // $this->call(MotivosEgresosSeeder::class);
-        DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Fallecimiento']);
-        DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Traslado a Domicilio']);
-        DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Traslado a II Nivel']);
+        // DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Fallecimiento']);
+        // DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Traslado a Domicilio']);
+        // DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Traslado a II Nivel']);
         // $this->call(CamasSeeder::class);
         DB::table('camas')->insert(['NroHabitacion'=>0,'NroCama'=>0,'EstadoCama'=>0,'SexoCama'=>0,'empresa_id'=>1]);
         DB::table('camas')->insert(['NroHabitacion'=>1,'NroCama'=>1,'EstadoCama'=>1,'SexoCama'=>1,'empresa_id'=>1]);

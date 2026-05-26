@@ -14,7 +14,7 @@ class NacionalidadSeeder extends Seeder
      */
     public function run()
     {
-        //DB::table('nacionalidad')->truncate();
+        DB::table('nacionalidad')->truncate();
         DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Argentina',]);
         DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Española',]);
         DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Italiana',]);

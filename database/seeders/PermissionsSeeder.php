@@ -25,17 +25,13 @@ class PermissionsSeeder extends Seeder
         DB::table('permissions')->insert(['name'=>'ComprasAgregarProductos.Ver','guard_name'=>'web']);
         DB::table('permissions')->insert(['name'=>'ComprasAgregarProductos.Agregar','guard_name'=>'web']);
 
-        DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 1, 'empresa_id' => 1]);  // Solo a la empresa administradora
-
-        $this->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
-
     }
 
     public function AsignarRolesAlaEmpresa($empresa_id) {
-        DB::table('roles')->insert(['name' => 'Administrador','guard_name' => $empresa_id, 'empresa_id' => $empresa_id]);
-        DB::table('roles')->insert(['name' => 'Gestor','guard_name' => $empresa_id, 'empresa_id' => $empresa_id]);
-        DB::table('roles')->insert(['name' => 'Usuario','guard_name' => $empresa_id, 'empresa_id' => $empresa_id]);
-        DB::table('roles')->insert(['name' => 'Free','guard_name' => $empresa_id, 'empresa_id' => $empresa_id]);
+        DB::table('roles')->insert(['name' => $empresa_id . '-Administrador','guard_name' => 'web', 'empresa_id' => $empresa_id]);     // id=2
+        DB::table('roles')->insert(['name' => $empresa_id . '-Gestor','guard_name' => 'web', 'empresa_id' => $empresa_id]);            // id=3
+        DB::table('roles')->insert(['name' => $empresa_id . '-Usuario','guard_name' => 'web', 'empresa_id' => $empresa_id]);           // id=4
+        DB::table('roles')->insert(['name' => $empresa_id . '-Free','guard_name' => 'web', 'empresa_id' => $empresa_id]);              // id=5
     }
 
 }

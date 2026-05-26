@@ -33,19 +33,33 @@ class ModSeederNewUser extends Seeder
             'productos',
             'cuentas',
             'areas',
+            'elementos',
             'imprentapedidos',
             'imprentaenvios',
             'imprentaadmin'
         ];
+
+        // $user = User::find($this->user_id);
+
         foreach($array as $m) {
+            // $user->givePermissionTo($m.'.Agregar'); // Agrega en model_has_permissions
+            // $user->givePermissionTo($m.'.Modificar'); // Agrega en model_has_permissions
+            // $user->givePermissionTo($m.'.Eliminar'); // Agrega en model_has_permissions
+            // $user->givePermissionTo($m.'.Ver'); // Agrega en model_has_permissions
             $modulo = strtolower($m.'%');
+
             // $modulo = strtolower('compras.%');
+
             $adicionales = Permission::whereRaw("name LIKE ?", [$modulo])->get();
             foreach ($adicionales as $adic) {
                 DB::table('model_has_permissions')->insert([
                     'permission_id' => $adic->id,
                     'model_type' => 'App\Models\User',
                     'model_id' => $this->user_id
+                ]);
+                DB::table('role_has_permissions')->insert([
+                    'permission_id' => $adic->id,
+                    'role_id' => 2
                 ]);
             }
         }

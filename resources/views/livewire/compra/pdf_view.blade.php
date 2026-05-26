@@ -25,29 +25,9 @@
                 <td class="border text-center">Crédito</td> }
             @endif
         </tr>
-        {{-- antes --}}
+
         {!! $html !!}
-        {{-- despues --}}
-        {{-- @foreach ($registros as $registro)
-        entró
-            @if ($operacion == 'deuda') {
-                @if ($registro->Saldo > 1) {
-                    <tr>
-                        <td class="border text-end  mr-3 pr-3">{{ $registro->name }}</td>
-                        <td class="border text-end mr-3 pr-3">{{ number_format($registro->Saldo, 2, ',', '.') }}</td> }
-                    </tr>
-                @endif 
-            }
-            @else {
-                @if ($registro->Saldo < 1) {
-                    <tr>
-                        <td class="border text-end mr-3 pr-3">{{ $registro->name }}</td>
-                        <td class="border text-end mr-3 pr-3">{{ number_format($registro->Saldo * -1, 2, ',', '.') }}</td> }
-                    </tr>
-                @endif
-            @endif 
-            }
-        @endforeach --}}
+     
         <tr class="bg-secondary">
             <td class="colspan-2 text-left border pl-3 text-white fw-bold">Total {{ $operacion }} a Vendedores</td>
             <td class="border text-end text-white fw-bold">
@@ -55,8 +35,5 @@
             </td>
         </tr>
     </table>
-    {{-- {{ $html }} --}}
-
 </body>
-
 </html>

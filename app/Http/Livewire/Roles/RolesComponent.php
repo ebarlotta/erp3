@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 
 class RolesComponent extends Component
 {
-    public $name, $roles, $rol_id, $permisos, $permisoshabilitados, $modulo_name, $modulos, $modulo_seleccionado;
+    public $name, $roles, $rol_id, $permisos, $permisoshabilitados, $permisosNoActivadoshabilitados, $modulo_name, $modulos, $modulo_seleccionado;
     public $buscar;
     public $moduloshabilitados;
 
@@ -173,11 +173,11 @@ class RolesComponent extends Component
             // dd($sql);
 
             unset($this->permisos);
-            $this->permisos = db::select($sql);
-            // dd($this->permisos);
-            $sql = 'SELECT * FROM role_has_permissions join permissions WHERE role_has_permissions.permission_id = permissions.id and role_has_permissions.role_id='.$this->rol_id." and name like '%". $nombreModulo."%'";
-            // dd($sql);
-            $this->permisoshabilitados = db::select($sql);
+            // $this->permisos = db::select($sql);
+            // // dd($this->permisos);
+            // $sql = 'SELECT * FROM role_has_permissions join permissions WHERE role_has_permissions.permission_id = permissions.id and role_has_permissions.role_id='.$this->rol_id." and name like '%". $nombreModulo."%'";
+            // // dd($sql);
+            // $this->permisoshabilitados = db::select($sql);
 
         //    $sql = 'SELECT permissions.*, SUBSTRING_INDEX(permissions.name, ".", 1) as grupo
         //     FROM role_has_permissions
@@ -185,19 +185,39 @@ class RolesComponent extends Component
         //     WHERE role_has_permissions.role_id = ' . $this->rol_id . '
         //     AND permissions.name LIKE "%' . $nombreModulo . '%"
         //     GROUP BY grupo, permissions.name';
-        $sql = 'SELECT
-    SUBSTRING_INDEX(p.nameaa, ".", 1) as modulo, m.id, m.name as name, m.pagina, permission_id, role_id
-    FROM role_has_permissions rhp
-    INNER JOIN permissions p ON rhp.permission_id = p.id
-    INNER JOIN modulos m ON m.pagina = SUBSTRING_INDEX(p.name, ".", 1)
-    WHERE rhp.role_id = 1
-    GROUP BY modulo, m.id, m.pagina, name,  permission_id, role_id
-    ORDER BY modulo';
+        // $sql = 'SELECT DISTINCT
+        //     SUBSTRING_INDEX(p.name, ".", 1) as modulo, m.id, m.name as name, m.pagina, role_id, p.id as permission_id 
+        //     FROM role_has_permissions rhp
+        //     INNER JOIN permissions p ON rhp.permission_id = p.id
+        //     INNER JOIN modulos m ON m.pagina = SUBSTRING_INDEX(p.name, ".", 1)
+        //     WHERE rhp.role_id = 1
+        //     GROUP BY modulo         
+        //     ORDER BY modulo';
 
+        // Busca los módulos habilitados para el rol elegido
+        $sql = 'SELECT DISTINCT
+            SUBSTRING_INDEX(p.name, ".", 1) as modulo, m.id, m.pagina, m.name as name, role_id
+            FROM permissions p
+            INNER JOIN role_has_permissions rhp ON rhp.permission_id = p.id
+            inner join modulos m on m.pagina = SUBSTRING_INDEX(p.name, ".", 1)
+            WHERE rhp.role_id = '.$this->rol_id;
         $this->moduloshabilitados = db::select($sql);
-        // dd($this->moduloshabilitados);
 
+        // Busca todos los permisos del módulo seleccionado y cuáles de ellos están habilitados para el rol elegido
+        $sql = 'SELECT SUBSTRING_INDEX(p.name, ".", 1) as modulo, p.name, p.id as permission_id, role_id
+            FROM permissions p
+            LEFT JOIN role_has_permissions rhp ON rhp.permission_id = p.id
+            WHERE rhp.role_id = '.$this->rol_id .' and p.name like "%'.$nombreModulo.'%"';
         $this->permisoshabilitados = db::select($sql);
+
+        // Busca todos los permisos NO HABILITADOS del módulo seleccionado
+        $sql = 'SELECT SUBSTRING_INDEX(p.name, ".", 1) as modulo, p.name, p.id as permission_id, role_id
+            FROM permissions p
+            LEFT JOIN role_has_permissions rhp ON rhp.permission_id = p.id AND rhp.role_id = '.$this->rol_id .'
+            WHERE rhp.permission_id IS NULL AND p.name like "%'.$nombreModulo.'%"';
+            $permisosNoActivadoshabilitados = db::select($sql);
+        $this->permisosNoActivadoshabilitados = db::select($sql);
+
         }
     }
 
@@ -248,11 +268,11 @@ class RolesComponent extends Component
 
     public function EliminarPermiso($permision_id, $role_id) {
         $usuarios = EmpresaUsuario::where('rol_id', $this->rol_id)->get();  //Busca los usuarios que tienen el mismo rol elegido
-        $permiso_a_agregar = Permission::where('id',$permision_id)->get('name'); // Busca los datos del permiso a agregar
+        $permiso_a_eliminar = Permission::where('id',$permision_id)->get('name'); // Busca los datos del permiso a eliminar
         foreach($usuarios as $usuario) {    // Itera los usuarios
             $user = User::find($usuario->user_id);   // Busca a cada usuario y
             // dd($permision_id);
-            $b = $user->revokePermissionTo($permiso_a_agregar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
+            $b = $user->revokePermissionTo($permiso_a_eliminar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
 
             $a = 'DELETE FROM role_has_permissions WHERE permission_id = '. $permision_id .' and role_id = '. $role_id;
             db::select($a); //IMPACTA EN LOS TAGAS QUE APARECEN EN PANTALLA

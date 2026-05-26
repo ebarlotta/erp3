@@ -58,21 +58,21 @@ class ModuloSeeder extends Seeder
         DB::table('modulos')->insert(['name' => 'Estado de Personas', 'pagina' => 'personactivo','imagen'=>'personactivo.jpg','leyenda'=>'Registre los distintos estados de las personas que participan.','habilitado'=>1]);    //erp
 
         // modulos 37-50
-        DB::table('modulos')->insert(['name' => 'Categorias', 'pagina' => 'categorias','imagen'=>'categorias.jpg','leyenda'=>'Configure las distintas categorias de Ingredientes.','habilitado'=>1]);    // Geri
-        DB::table('modulos')->insert(['name' => 'Estado de Cama', 'pagina' => 'estadocama','imagen'=>'estadocama.jpg','leyenda'=>'Estado individual de cada una de las camas en la institución.','habilitado'=>1]);    // Geri
-        DB::table('modulos')->insert(['name' => 'Grado de pendencia', 'pagina' => 'gradodependencia','imagen'=>'dependencia.jpg','leyenda'=>'Resgitre el estado de dependencia de una persona.','habilitado'=>1]);  // Geri
-        DB::table('modulos')->insert(['name' => 'Habitaciones', 'pagina' => 'habitaciones','imagen'=>'habitacion.jpg','leyenda'=>'Cada una de las habitaciones en la institución y si está habilitada o no.','habilitado'=>1]);    // Geri
-        // DB::table('modulos')->insert(['name' => 'Ingredientes', 'pagina' => 'ingredientes','imagen'=>'ingredientes.jpg','leyenda'=>'Calcule las liquidaciones de haberes de su personal. Revise liquidaciones de períodos anteriores.','habilitado'=>1]);    // Geri
-        DB::table('modulos')->insert(['name' => 'Interfaces', 'pagina' => 'interfaces','imagen'=>'interfaces.jpg','leyenda'=>'Generación de interfaces necesarias para la aplicación diseñada.','habilitado'=>1]);    // Geri
-        DB::table('modulos')->insert(['name' => 'Medicamentos', 'pagina' => 'medicamentos','imagen'=>'medicamentos.jpg','leyenda'=>'Administre nombres y tipos de medicamentos.','habilitado'=>1]);  // Geri
-        DB::table('modulos')->insert(['name' => 'Menú', 'pagina' => 'menu','imagen'=>'menu.jpg','leyenda'=>'Gestione los distintos menúes a servir.','habilitado'=>1]);    // Geri
-        DB::table('modulos')->insert(['name' => 'Motivo de Egreso', 'pagina' => 'motivoegreso','imagen'=>'egresos.jpg','leyenda'=>'Diversos motivos por los cuales la persona no continua en el lugar.','habilitado'=>1]);    // Geri
-        DB::table('modulos')->insert(['name' => 'Personas Campos', 'pagina' => 'personascampos','imagen'=>'haberes.jpg','leyenda'=>'Distintintos campos utilizados a una persona.','habilitado'=>1]);   // Geri
-        DB::table('modulos')->insert(['name' => 'otrascosas', 'pagina' => 'otrascosas','imagen'=>'haberes.jpg','leyenda'=>'Otras cosas.','habilitado'=>1]);    // Geri
-        DB::table('modulos')->insert(['name' => 'Perfil', 'pagina' => 'profile','imagen'=>'haberes.jpg','leyenda'=>'Modifique los datos personales.','habilitado'=>1]);   // Geri
-        DB::table('modulos')->insert(['name' => 'Tipos de Personas', 'pagina' => 'tiposdepersonas','imagen'=>'tiposdepersonas.jpg','leyenda'=>'Administra los distintos actores/personas dentro del sistema.','habilitado'=>1]);   // Geri
-        DB::table('modulos')->insert(['name' => 'Planes Alimentarios', 'pagina' => 'planalimentario','imagen'=>'planalimentario.jpg','leyenda'=>'Administra los distintos Planes alimentarios de la institución.','habilitado'=>1]);   // Geri
-        DB::table('modulos')->insert(['name' => 'Expendio', 'pagina' => 'expendio','imagen'=>'expendio.jpg','leyenda'=>'Administra el expendio de los menúes.','habilitado'=>1]);   // Geri
+        DB::table('modulos')->insert(['name' => 'Categorias', 'pagina' => 'categorias','imagen'=>'categorias.jpg','leyenda'=>'Configure las distintas categorias de Ingredientes.','habilitado'=>1]);    // Geri 37
+        DB::table('modulos')->insert(['name' => 'Estado de Cama', 'pagina' => 'estadocama','imagen'=>'estadocama.jpg','leyenda'=>'Estado individual de cada una de las camas en la institución.','habilitado'=>1]);    // Geri 38
+        DB::table('modulos')->insert(['name' => 'Grado de pendencia', 'pagina' => 'gradodependencia','imagen'=>'dependencia.jpg','leyenda'=>'Resgitre el estado de dependencia de una persona.','habilitado'=>1]);  // Geri 39
+        DB::table('modulos')->insert(['name' => 'Habitaciones', 'pagina' => 'habitaciones','imagen'=>'habitacion.jpg','leyenda'=>'Cada una de las habitaciones en la institución y si está habilitada o no.','habilitado'=>1]);    // Geri 40
+        // DB::table('modulos')->insert(['name' => 'Ingredientes', 'pagina' => 'ingredientes','imagen'=>'ingredientes.jpg','leyenda'=>'Calcule las liquidaciones de haberes de su personal. Revise liquidaciones de períodos anteriores.','habilitado'=>1]);    // Geri 40
+        DB::table('modulos')->insert(['name' => 'Interfaces', 'pagina' => 'interfaces','imagen'=>'interfaces.jpg','leyenda'=>'Generación de interfaces necesarias para la aplicación diseñada.','habilitado'=>1]);    // Geri 41
+        DB::table('modulos')->insert(['name' => 'Medicamentos', 'pagina' => 'medicamentos','imagen'=>'medicamentos.jpg','leyenda'=>'Administre nombres y tipos de medicamentos.','habilitado'=>1]);  // Geri 42
+        DB::table('modulos')->insert(['name' => 'Menú', 'pagina' => 'menu','imagen'=>'menu.jpg','leyenda'=>'Gestione los distintos menúes a servir.','habilitado'=>1]);    // Geri 43
+        DB::table('modulos')->insert(['name' => 'Motivo de Egreso', 'pagina' => 'motivoegreso','imagen'=>'egresos.jpg','leyenda'=>'Diversos motivos por los cuales la persona no continua en el lugar.','habilitado'=>1]);    // Geri 44
+        DB::table('modulos')->insert(['name' => 'Personas Campos', 'pagina' => 'personascampos','imagen'=>'haberes.jpg','leyenda'=>'Distintintos campos utilizados a una persona.','habilitado'=>1]);   // Geri 45
+        DB::table('modulos')->insert(['name' => 'otrascosas', 'pagina' => 'otrascosas','imagen'=>'haberes.jpg','leyenda'=>'Otras cosas.','habilitado'=>1]);    // Geri 46
+        DB::table('modulos')->insert(['name' => 'Perfil', 'pagina' => 'profile','imagen'=>'haberes.jpg','leyenda'=>'Modifique los datos personales.','habilitado'=>1]);   // Geri 47
+        DB::table('modulos')->insert(['name' => 'Tipos de Personas', 'pagina' => 'tiposdepersonas','imagen'=>'tiposdepersonas.jpg','leyenda'=>'Administra los distintos actores/personas dentro del sistema.','habilitado'=>1]);   // Geri 48
+        DB::table('modulos')->insert(['name' => 'Planes Alimentarios', 'pagina' => 'planalimentario','imagen'=>'planalimentario.jpg','leyenda'=>'Administra los distintos Planes alimentarios de la institución.','habilitado'=>1]);   // Geri 49
+        DB::table('modulos')->insert(['name' => 'Expendio', 'pagina' => 'expendio','imagen'=>'expendio.jpg','leyenda'=>'Administra el expendio de los menúes.','habilitado'=>1]);   // Geri 50
 
         // Módulos 51-53  --- IMPRENTA
         DB::table('modulos')->insert(['name' => 'Pedidos', 'pagina' => 'imprentapedidos','imagen'=>'pedido.jpg','leyenda'=>'Gestiona los pedidos de clientes','habilitado'=>1]);   // 51

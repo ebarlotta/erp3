@@ -100,33 +100,35 @@
                             <div>
                                 <label for="">Módulos del sistema</label>
                                 <div>
-                                    @foreach ($moduloshabilitados as $modulo)
-                                        @if($modulo_seleccionado == $modulo->id)
-                                            <button type="button" class="btn btn-success" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->pagina }}')">
-                                                <i class="fa-solid fa-pen-to-square"></i>{{ $modulo->name }}
-                                            </button>
-                                        @else
-                                            <button type="button" class="btn btn-outline-success mb-1" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->pagina }}')">
-                                                <i class="fa-solid fa-pen-to-square"></i>{{ $modulo->name }}
-                                            </button>
-                                        @endif
-                                    @endforeach
+                                    @if($moduloshabilitados)
+                                        @foreach ($moduloshabilitados as $modulo)
+                                            @if($modulo_seleccionado == $modulo->id)
+                                                <button type="button" class="btn btn-success" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->pagina }}')">
+                                                    <i class="fa-solid fa-pen-to-square"></i>{{ $modulo->name }}
+                                                </button>
+                                            @else
+                                                <button type="button" class="btn btn-outline-success mb-1" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->pagina }}')">
+                                                    <i class="fa-solid fa-pen-to-square"></i>{{ $modulo->name }}
+                                                </button>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
 
                             <div>
                                 <label for="">Permisos Disponibles</label>
                                 <div>
-                                    @if(!is_null($permisos))
-                                        @foreach ($permisos as $permiso)
+                                    @if(!is_null($permisosNoActivadoshabilitados))
+                                        @foreach ($permisosNoActivadoshabilitados as $permiso)
                                             @if($modulo_seleccionado == $modulo->id)
                                                 <button type="button" class="btn btn-success" wire:click="SeleccionarModulo(0,'a')">
                                                     <i class="fa-solid fa-pen-to-square"></i>{{ $permiso->name }}
                                                 </button>
                                             @else
-                                                <button type="button" class="btn btn-outline-success mb-1">
+                                                <button type="button" class="btn btn-outline-primary bg-blue-400 mb-1" style="color: white;">
                                                     {{ $permiso->name }}
-                                                    <span style="color: white; margin-left: 10px; background-color: rgb(64, 185, 9); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true"  title="Agregar Permiso" tooltips="prueba" wire:click="AgregarPermiso({{$permiso->id}})">&plus;</span>
+                                                    <span style="color: white; margin-left: 10px; background-color: rgb(64, 185, 9); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true"  title="Agregar Permiso" wire:click="AgregarPermiso({{$permiso->permission_id}})">&plus;</span>
                                                 </button>
                                             @endif
                                         @endforeach
@@ -139,11 +141,11 @@
                             <div>
                                 <label for="">Permisos Habilitados</label>
                                 <div>
-                                    @if(!is_null($permisoshabilitados))
+                                    @if(($permisoshabilitados))
                                         @foreach ($permisoshabilitados as $permisohabilitado)
                                             <button type="button" class="btn btn-success mb-1 ml-1">
                                                 {{ $permisohabilitado->name }}
-                                                <span style="margin-left: 10px; background-color: rgb(181, 26, 26); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true"  title="Eliminar Permiso" tooltips="prueba" wire:click="EliminarPermiso({{$permisohabilitado->permission_id}},{{ $permisohabilitado->role_id}})">&times;</span>
+                                                <span style="margin-left: 10px; background-color: rgb(181, 26, 26); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true"  title="Eliminar Permiso" wire:click="EliminarPermiso({{$permisohabilitado->permission_id}},{{ $permisohabilitado->role_id}})">&times;</span>
                                             </button>
                                         @endforeach
                                     @else

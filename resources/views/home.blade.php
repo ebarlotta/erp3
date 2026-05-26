@@ -25,6 +25,7 @@
 							    <a href="{{ route('empresas') }}">Ingresar</a>
                             @else
 							    <a href="{{ route('login') }}">Ingresar</a>
+							    <a href="{{ route('register') }}">Registrarse</a>
 							{{-- <a href="/public/public/login">Ingresar</a> --}}
                             @endif
 							<a href="#menu">Menú</a>

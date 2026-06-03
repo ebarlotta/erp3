@@ -20,18 +20,22 @@ class CategoriaproductoComponent extends Component
 
     public function render()
     {
-        $this->empresa_id=session('empresa_id');
-        $this->categorias = Categoriaproducto::where('empresa_id', '=', $this->empresa_id)
-            ->where('name', 'like', '%'.$this->search.'%')
-            ->orderby('name')
-            ->paginate(7);
-
-        return view('livewire.categoria.categoriaproducto-component',['categorias'=> $this->categorias])->extends('layouts.adminlte');
-        // return view('livewire.categoria.categoriaproducto-component',['categorias'=> Categoriaproducto::where('empresa_id', $this->empresa_id)->paginate(2),])->extends('layouts.adminlte');
+        if(auth()->check() && auth()->user()->hasPermissionTo('categoriaproducto.Ver')) {
+            if(session('empresa_id')) {
+                $this->categorias = Categoriaproducto::where('empresa_id', '=', session('empresa_id'))
+                    ->where('name', 'like', '%'.$this->search.'%')
+                    ->orderby('name')
+                    ->paginate(7);
+                return view('livewire.categoria.categoriaproducto-component',['categorias'=> $this->categorias])->extends('layouts.adminlte');
+            } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
+        } else {
+            return view('SinPermiso')->extends('layouts.adminlte');
+        }
+        // return view('livewire.categoria.categoriaproducto-component',['categorias'=> Categoriaproducto::where('empresa_id', session('empresa_id'))->paginate(2),])->extends('layouts.adminlte');
     }
 
     public function Filtrar() {
-        $this->categorias = Categoriaproducto::where('empresa_id', '=', $this->empresa_id)
+        $this->categorias = Categoriaproducto::where('empresa_id', '=', session('empresa_id'))
         ->where('name', 'like', '%'.$this->search.'%')
         ->orderby('name')
         ->paginate(7);
@@ -68,7 +72,7 @@ class CategoriaproductoComponent extends Component
         ]);
         Categoriaproducto::updateOrCreate(['id' => $this->categoria_id], [
             'name' => $this->name,
-            'empresa_id' => $this->empresa_id,
+            'empresa_id' => session('empresa_id'),
         ]);
 
         session()->flash('message', $this->categoria_id ? 'Categría Actualizada.' : 'Categría Creada.');

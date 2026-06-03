@@ -20,5 +20,6 @@ class PeriodoSeeder extends Seeder
         DB::table('periodos')->insert(['nombreperiodo'=>'Cuatrimestral']);
         DB::table('periodos')->insert(['nombreperiodo'=>'Semestral']);
         DB::table('periodos')->insert(['nombreperiodo'=>'Anual']);
+
     }
 }

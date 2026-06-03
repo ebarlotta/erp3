@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Empresa;
 use App\Models\Modulo;
 
 use Illuminate\Database\Seeder;
@@ -31,6 +32,7 @@ class ModSeederNewUser extends Seeder
             'clientes',
             'proveedores',
             'productos',
+            'categoriaproducto',
             'cuentas',
             'areas',
             'elementos',
@@ -57,7 +59,7 @@ class ModSeederNewUser extends Seeder
                     'model_type' => 'App\Models\User',
                     'model_id' => $this->user_id
                 ]);
-                DB::table('role_has_permissions')->insert([
+                DB::table('role_has_permissions')->insertOrIgnore([
                     'permission_id' => $adic->id,
                     'role_id' => 2
                 ]);

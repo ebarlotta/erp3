@@ -18,5 +18,6 @@ class EstadosCivilesSeeder extends Seeder
         DB::table('estados_civiles')->insert(['estadocivil'=>'Casado/a',]);
         DB::table('estados_civiles')->insert(['estadocivil'=>'Viudo/a',]);
         DB::table('estados_civiles')->insert(['estadocivil'=>'Separado/a',]);
+
     }
 }

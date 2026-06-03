@@ -2,16 +2,20 @@
 
 namespace Database\Seeders;
 
+use App\Models\Unidad;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class UnidadSeeder extends Seeder
 {
 
-    public int $empresa_id = 1; // valor por defecto
+    public int $empresa_id; // valor por defecto
 
     public function run()
     {
+
+        $unidad_id = Unidad::firstOrCreate(['name' => 'Unidades', 'signo' => 'u', 'empresa_id' => $this->empresa_id])->id;
+
         // Puedes adaptar estos valores según tus necesidades
         $unidades = [
             ['name' => 'Gramos', 'signo' => 'g', 'empresa_id' => $this->empresa_id],
@@ -21,7 +25,6 @@ class UnidadSeeder extends Seeder
             ['name' => 'Tazas', 'signo' => 'tza', 'empresa_id' => $this->empresa_id],
             ['name' => 'Cucharadas', 'signo' => 'cda', 'empresa_id' => $this->empresa_id],
             ['name' => 'Cucharaditas', 'signo' => 'cdta', 'empresa_id' => $this->empresa_id],
-            ['name' => 'Unidades', 'signo' => 'u', 'empresa_id' => $this->empresa_id],
         ];
 
         foreach ($unidades as $unidad) {
@@ -33,5 +36,7 @@ class UnidadSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        return $unidad_id;
     }
 }

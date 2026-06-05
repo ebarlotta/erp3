@@ -10,6 +10,9 @@ use Laravel\Jetstream\Jetstream;
 use App\Models\EmpresaUsuario;
 use Database\Seeders\ModSeederNewUser;
 use Illuminate\Support\Facades\DB;
+use Database\Seeders\PermissionsSeeder as PermissionsSeeder;
+use App\Models\Roles;
+;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -34,6 +37,12 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
+
+        if(Roles::all()->count() == 0) {
+             $a = new PermissionsSeeder();
+             $a->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
+        }
+    
 
         //Relaciona el usuario creado con la empresa ERP
         EmpresaUsuario::create(['empresa_id' => 2,'user_id' => $user->id,'rol_id' => 2]);

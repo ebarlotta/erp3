@@ -18,5 +18,9 @@ class RegistroTipotramiteSeeder extends Seeder
         DB::table('registro_tipotramites')->insert(['nombretramite'=>'ACTUALIZACION DE CARROCERIA','descripciontramite'=>'Para actualizar el tipo de automotor cuando el mismo sea verificado con un tipo de carrozado distinto al registrado (consignado en el Título del Automotor y Cédula de Identificación)','modulo'=>'tramites',]);
         DB::table('registro_tipotramites')->insert(['nombretramite'=>'ALTA DE MOTOR USADO, ARMADO FUERA DE FABRICA, GARANTIA DE FABRICACION','descripciontramite'=>'Trámite para incorporar el motor de los dominios inscriptos','modulo'=>'tramites',]);
         DB::table('registro_tipotramites')->insert(['nombretramite'=>'ALTA DE NUEVO MOTOR IMPORTADO','descripciontramite'=>'Trámite para retirar o incorporar el motor de los dominios inscriptos','modulo'=>'tramites',]);
+
+        DB::table('registro_tipotramites')->insert(['nombretramite'=>'INFORME ESTADO DE DOMINIO','descripciontramite'=>'Informe de Estado de dominio','modulo'=>'informes',]);
+        DB::table('registro_tipotramites')->insert(['nombretramite'=>'INFORME HISTORICO DE TITULARIDAD Y DE ESTADO DE DOMINIO','descripciontramite'=>'Informe histórico ','modulo'=>'informes',]);
+
     }
 }

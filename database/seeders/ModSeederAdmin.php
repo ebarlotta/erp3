@@ -23,8 +23,8 @@ class ModSeederAdmin extends Seeder
 
         DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 'web', 'empresa_id' => 1]);  // Solo a la empresa administradora
         
-        $a = new PermissionsSeeder();
-        $a->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
+        // $a = new PermissionsSeeder();
+        // $a->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
 
         //Asigna al Usuario Administrador todos los permisos
         $permisos = Permission::all();

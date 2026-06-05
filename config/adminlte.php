@@ -302,7 +302,7 @@ return [
                     'can' => 'modulousuarios.Ver',
                 ],
                 [
-                    'text' => 'Gestión de Rolesaaaaaaa',
+                    'text' => 'Gestión de Roles',
                     'url'  => 'roles',
                     'icon' => 'fa fa-user-circle',
                     'can' => 'roles.Ver',

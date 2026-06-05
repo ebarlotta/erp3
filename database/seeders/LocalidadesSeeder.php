@@ -20,5 +20,6 @@ class LocalidadesSeeder extends Seeder
         DB::table('localidades')->insert(['localidad_descripcion'=>'Palmira','localidad_cp'=>5570,'provincia_id'=>1]);
         DB::table('localidades')->insert(['localidad_descripcion'=>'Rivadavia','localidad_cp'=>5570,'provincia_id'=>1]);
         DB::table('localidades')->insert(['localidad_descripcion'=>'Junín','localidad_cp'=>5570,'provincia_id'=>1]);
+
     }
 }

@@ -18,5 +18,6 @@ class PersonActivoSeeder extends Seeder
         DB::table('person_activos')->insert(['estado'=>'Alta',]);
         DB::table('person_activos')->insert(['estado'=>'Baja',]);
         DB::table('person_activos')->insert(['estado'=>'En proceso de Baja',]);
+
     }
 }

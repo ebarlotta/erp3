@@ -2,10 +2,22 @@
 
 namespace Database\Seeders;
 
+use App\Models\Elementos\Elemento;
+
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use Illuminate\Database\Seeder;
+
+use Database\Seeders\geri\MotivosEgresosSeeder;
+use Database\Seeders\geri\GradoDependenciaSeeder;
+use Database\Seeders\geri\CamasSeeder;
+use Database\Seeders\geri\PeriodoSeeder;
+use Database\Seeders\geri\EscalaSeeder;
+
+use Database\Seeders\erp\AreaSeeder;
+use Database\Seeders\erp\CuentaSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -38,12 +50,24 @@ class DatabaseSeeder extends Seeder
         DB::table('empresas')->insert(['name' => 'Empresa Gastronómica','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'prueba@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
         DB::table('empresas')->insert(['name' => 'Empresa Inmobiliaria','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'storageimages/BarBer.png','establecimiento' => '0','telefono' => '+5492634635287','actividad' => 'Desarrollo','actividad1' => 'Software','menu' => '2','email'=>'prueba@gmail.com','habilitada'=>true,'nombretitular'=>'Enzo','dnititular'=>'1234',]);
 
-        $seeder = new UnidadSeeder();
-        $seeder->empresaId = 1; $seeder->run();
-        $seeder->empresaId = 2; $seeder->run();
-        $seeder->empresaId = 3; $seeder->run();
-        $seeder->empresaId = 4; $seeder->run();
-        $seeder->empresaId = 5; $seeder->run();
+
+        // Agrega vehículos a todas las empresas porque lo va a utilizar como Elemento
+        $unidad = new UnidadSeeder();
+        $categoria = new CategoriaSeeder();
+        $elemento = new Elemento();
+
+
+        for($i=1;$i<=5;$i++) {
+            //Agrega todas las unidades a una empresa
+            $unidad->empresa_id = $i; $unidad_id = $unidad->run();
+
+            //Agrega la categoría Vehículo a la tabla de categorias sólo de una empresa
+            $categoria->name = "Vehículo"; $categoria->empresa_id = $i; $categoria_id = $categoria->run();
+
+            // Agrega el elemento Vehiculo en la tabla de Elementos de la empresa
+            Elemento::firstOrCreate(['name'=> 'Veíhulo', 'existencia'=>0, 'precio_compra'=>0, 'stock_minimo'=>0, 'vencimiento'=> now(), 'categoria_id' => $categoria_id, 'unidad_id' => $unidad_id, 'ruta' =>'', 'empresa_id' => $i]);
+        }
+
 
         // DB::table('roles')->insert(['name' => 'Administrador','guard_name' => 'web',]);
         // DB::table('roles')->insert(['name' => 'Usuario','guard_name' => 'web',]);
@@ -54,79 +78,34 @@ class DatabaseSeeder extends Seeder
 
         $this->call(EscolaridadesSeeder::class);
 
-        // $this->call(TipoDePersonaSeeder::class);
-        DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Agente',]);
-        DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Referente',]);
-        DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Personal',]);
-        DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Proveedor',]);
-        DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Cliente',]);
-        DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Vendedor',]);
-        DB::table('tipo_de_personas')->insert(['tipodepersona'=>'Empresa',]);
-        // $this->call(EstadosCivilesSeeder::class);
-        DB::table('estados_civiles')->insert(['estadocivil'=>'Casado/a',]);
-        DB::table('estados_civiles')->insert(['estadocivil'=>'Viudo/a',]);
-        DB::table('estados_civiles')->insert(['estadocivil'=>'Separado/a',]);
-        // $this->call(TiposDocumentosSeeder::class);
-        DB::table('tipos_documentos')->insert(['tipodocumento'=>'DNI',]);
-        DB::table('tipos_documentos')->insert(['tipodocumento'=>'LC',]);
-        // $this->call(BeneficiosSeeder::class);
-        DB::table('beneficios')->insert(['descripcionbeneficio'=>'PARTICULAR',]);
-        DB::table('beneficios')->insert(['descripcionbeneficio'=>'PAMI',]);
-        // $this->call(PersonActivoSeeder::class);
-        DB::table('person_activos')->insert(['estado'=>'Alta',]);
-        DB::table('person_activos')->insert(['estado'=>'Baja',]);
-        DB::table('person_activos')->insert(['estado'=>'En proceso de Baja',]);
-        // $this->call(NacionalidadSeeder::class);
-        // DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Argentina',]);
-        // DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Española',]);
-        // DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Italiana',]);
-        // DB::table('nacionalidads')->insert(['nacionalidad_descripcion'=>'Otra',]);
-        // $this->call(ProvinciasSeeder::class);
-        // DB::table('provincias')->insert(['provincia_descripcion'=>'Mendoza','nacionalidads_id'=>1]);
-        // DB::table('provincias')->insert(['provincia_descripcion'=>'San Juan','nacionalidads_id'=>1]);
-        // DB::table('provincias')->insert(['provincia_descripcion'=>'San Luis','nacionalidads_id'=>1]);
-        // $this->call(LocalidadesSeeder::class);
-        // DB::table('localidades')->insert(['localidad_descripcion'=>'Ciudad','localidad_cp'=>5500,'provincia_id'=>1]);
-        // DB::table('localidades')->insert(['localidad_descripcion'=>'San Martín','localidad_cp'=>5570,'provincia_id'=>1]);
-        // DB::table('localidades')->insert(['localidad_descripcion'=>'Palmira','localidad_cp'=>5570,'provincia_id'=>1]);
-        // DB::table('localidades')->insert(['localidad_descripcion'=>'Rivadavia','localidad_cp'=>5570,'provincia_id'=>1]);
-        // DB::table('localidades')->insert(['localidad_descripcion'=>'Junín','localidad_cp'=>5570,'provincia_id'=>1]);
-        // $this->call(GradoDependenciaSeeder::class);
-        // DB::table('grado_dependencias')->insert(['gradodependenciaDescripcion'=>'Autoválido']);
-        // DB::table('grado_dependencias')->insert(['gradodependenciaDescripcion'=>'Severa']);
-        // $this->call(MotivosEgresosSeeder::class);
-        // DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Fallecimiento']);
-        // DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Traslado a Domicilio']);
-        // DB::table('motivos_egresos')->insert(['motivoegresoDescripcion'=>'Traslado a II Nivel']);
-        // $this->call(CamasSeeder::class);
-        DB::table('camas')->insert(['NroHabitacion'=>0,'NroCama'=>0,'EstadoCama'=>0,'SexoCama'=>0,'empresa_id'=>1]);
-        DB::table('camas')->insert(['NroHabitacion'=>1,'NroCama'=>1,'EstadoCama'=>1,'SexoCama'=>1,'empresa_id'=>1]);
-        DB::table('camas')->insert(['NroHabitacion'=>1,'NroCama'=>2,'EstadoCama'=>1,'SexoCama'=>0,'empresa_id'=>1]);
-        DB::table('camas')->insert(['NroHabitacion'=>1,'NroCama'=>3,'EstadoCama'=>0,'SexoCama'=>1,'empresa_id'=>1]);
-        DB::table('camas')->insert(['NroHabitacion'=>2,'NroCama'=>4,'EstadoCama'=>0,'SexoCama'=>0,'empresa_id'=>1]);
-        // $this->call(PeriodoSeeder::class);
-        DB::table('periodos')->insert(['nombreperiodo'=>'Mensual']);
-        DB::table('periodos')->insert(['nombreperiodo'=>'Bimestral']);
-        DB::table('periodos')->insert(['nombreperiodo'=>'Trimestral']);
-        DB::table('periodos')->insert(['nombreperiodo'=>'Cuatrimestral']);
-        DB::table('periodos')->insert(['nombreperiodo'=>'Semestral']);
-        DB::table('periodos')->insert(['nombreperiodo'=>'Anual']);
-        // $this->call(EscalaSeeder::class);
-        DB::table('escalas')->insert(['nombreescala'=>'Lógica','tipodatos'=>'numerico','minimo'=>0,'maximo'=>1,'empresa_id'=>1]);
-        DB::table('escalas')->insert(['nombreescala'=>'Numérica','tipodatos'=>'numerico','minimo'=>0,'maximo'=>1,'empresa_id'=>1]);
-        DB::table('escalas')->insert(['nombreescala'=>'Porcentaje','tipodatos'=>'numerico','minimo'=>0,'maximo'=>100,'empresa_id'=>1]);
-        // $this->call(SexoSeeder::class);
-        // DB::table('sexos')->insert(['nombresexo'=>'Masculino',]);
-        // DB::table('sexos')->insert(['nombresexo'=>'Femenino',]);
-        // DB::table('sexos')->insert(['nombresexo'=>'Prefiero no decirlo',]);
+        $this->call(TipoDePersonaSeeder::class);
 
-        // $this->call(AreasSeeder::class);
-        DB::table('areas')->insert(['name'=>'Administración','empresa_id'=>1,'habilitada'=>2]);
-        DB::table('areas')->insert(['name'=>'Médica','empresa_id'=>1,'habilitada'=>2]);
-        DB::table('areas')->insert(['name'=>'Social','empresa_id'=>1,'habilitada'=>2]);
-        DB::table('areas')->insert(['name'=>'Historia De Vida','empresa_id'=>1,'habilitada'=>2]);
-        DB::table('areas')->insert(['name'=>'Pagos','empresa_id'=>1,'habilitada'=>2]);
-        DB::table('areas')->insert(['name'=>'Nutricional','empresa_id'=>1,'habilitada'=>2]);
+        $this->call(EstadosCivilesSeeder::class);
+
+        $this->call(TiposDocumentosSeeder::class);
+
+        $this->call(BeneficiosSeeder::class);
+
+        $this->call(PersonActivoSeeder::class);
+
+        $this->call(NacionalidadSeeder::class);
+
+        $this->call(ProvinciasSeeder::class);
+
+        $this->call(LocalidadesSeeder::class);
+
+        $this->call(GradoDependenciaSeeder::class);
+
+        $this->call(MotivosEgresosSeeder::class);
+
+        $this->call(CamasSeeder::class);    // Sólo para la empresa 1
+
+        $this->call(PeriodoSeeder::class);
+
+        $this->call(EscalaSeeder::class); // Sólo para la empresa 1
+
+        $this->call(AreaSeeder::class);
+        $this->call(CuentaSeeder::class);
 
         $this->call(ModSeeder::class);
 

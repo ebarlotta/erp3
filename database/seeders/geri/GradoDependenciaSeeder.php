@@ -17,5 +17,6 @@ class GradoDependenciaSeeder extends Seeder
         // DB::table('grado_dependencias')->truncate();
         DB::table('grado_dependencias')->insert(['gradodependenciaDescripcion'=>'Autoválido']);
         DB::table('grado_dependencias')->insert(['gradodependenciaDescripcion'=>'Severa']);
+
     }
 }

@@ -17,5 +17,6 @@ class TiposDocumentosSeeder extends Seeder
         //DB::table('tipos_documentos')->truncate();
         DB::table('tipos_documentos')->insert(['tipodocumento'=>'DNI',]);
         DB::table('tipos_documentos')->insert(['tipodocumento'=>'LC',]);
+
     }
 }

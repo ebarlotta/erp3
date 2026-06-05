@@ -51,7 +51,7 @@
 												@else
 													<img class="block p-1 text-center justify-center m-auto rounded-md flex-none bg-cover" src="{{ asset('images/sin_imagen.jpg') }}"	style="width: 70px; height: 70px;">
 												@endif
-												<div class="col-12 col-md-8 bg-white w-full rounded-b flex flex-col justify-between leading-normal">
+												<div class="col-12 col-md-8 w-full rounded-b flex flex-col justify-between leading-normal">
 
 													{{-- <div class="text-black pt-4 font-bold text-lg mb-2 leading-tight ml-2 md:fs-6 md:text-sm"> --}}
 													<div class="@if ($seleccionado == $empresa->id) bg-red-100 @endif lg:text-lg md:font-bold md:fs-6 text-center md:text-left md:text-sm text-grey-darker text-base">

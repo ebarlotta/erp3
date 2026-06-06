@@ -17,7 +17,7 @@ class ListaComponent extends Component
     use WithPagination;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('listas.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('listas.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
 
                 $this->empresa_id=session('empresa_id');

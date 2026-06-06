@@ -14,7 +14,7 @@ class GradodependenciaComponent extends Component
     public $isModalOpen = false;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('gradodependencia.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('gradodependencia.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->gradodependencias = GradoDependencia::all();
                 return view('livewire.geri.gradodependencia.gradodependencia-component',['isModalOpen'=>$this->isModalOpen, 'gradodependencias'=>$this->gradodependencias])->extends('layouts.adminlte');

@@ -24,6 +24,7 @@ class EmpresaUsuariosComponent extends Component
     public $empresas;
     public $empresaseleccionada;
     public $seleccionado=1;
+    public $user_id;
     public $roles;
     public $usuarioSeleccionado, $id_rolActual;
     public $id_NuevoRol;
@@ -34,7 +35,7 @@ class EmpresaUsuariosComponent extends Component
     {
                 // DB::table('empresas')->insert(['name' => 'Empresa de Pruebas','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'BarBer.png','establecimiento' => '0','telefono' => '12345678','actividad' => 'Desarrollo','actividad1' => 'Software','email' => '','habilitada' => true,'nombretitular' => 'Juan de los Palotes','dnititular' => '1234',]);
 
-        if(auth()->user()->hasPermissionTo('empresausuarios.Ver')) {
+        if(auth()->user()->hasPermissionTo('empresausuarios.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->usuariosglobales= User::all();
                 $this->empresas = Empresa::all()->sortBy('id');
@@ -114,25 +115,21 @@ class EmpresaUsuariosComponent extends Component
     }
 
     public function CambiarRol($id) {
-
         $this->OpenModalRoles();
+        $this->user_id = $id;
         $this->usuarioSeleccionado = EmpresaUsuario::where('empresa_id', "=", $this->empresaseleccionada->id)
         ->join('users','users.id','=','empresa_usuarios.user_id')
         ->where('user_id', "=", $id)->get();
 
         $this->id_rolActual = $this->usuarioSeleccionado[0]['rol_id'];
-        $this->roles = Roles::all();            
+        $this->roles = Roles::where('empresa_id', $this->empresaseleccionada->id)->get();            
     }
-
-    // public function SeleccionarNuevoRol() {
-    //     $this->id_NuevoRol = $id;
-    // }
     
     public function ActualizarRol() {
-        //dd($this->id_NuevoRol);
-        $usuario = EmpresaUsuario::find($this->usuarioSeleccionado[0]->id);
-        $usuario->update(['rol_id'=> (int)$this->id_NuevoRol]);
-        // dd($usuario);
-        session()->flash('message', 'Actualizado');
-    }
+        // dd("Nuevo Rol:" . $this->id_NuevoRol . " - Usuario: " . $this->user_id . " - Empresa: " . $this->empresaseleccionada->name . '-'.$this->empresaseleccionada->id);
+        EmpresaUsuario::where('user_id', $this->usuarioSeleccionado[0]->id)
+            ->where('empresa_id', $this->empresaseleccionada->id)
+            ->update(['rol_id' => (int)$this->id_NuevoRol]);
+            session()->flash('message', 'Actualizado');
+        }
 }

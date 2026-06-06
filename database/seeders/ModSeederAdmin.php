@@ -21,35 +21,28 @@ class ModSeederAdmin extends Seeder
     public function run()
     {
 
-<<<<<<< HEAD
-        DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 'web', 'empresa_id' => 1]);  // Solo a la empresa administradora
+        // DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 'web1', 'empresa_id' => 1]);  // Solo a la empresa administradora
         
         // $a = new PermissionsSeeder();
         // $a->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
-=======
-        DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 'web1', 'empresa_id' => 1]);  // Solo a la empresa administradora
-
-        $a = new PermissionsSeeder();
-        $a->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
->>>>>>> 943f57fd3aa8f0145940a5477668b16591a578e5
 
         //Asigna al Usuario Administrador todos los permisos
         $permisos = Permission::where('guard_name','=','web1')->get();
         $role = Role::find(1); // Rol Administrador
 
-        if ($role) {
-            foreach($permisos as $permiso) {
-                DB::table('role_has_permissions')->insert(['permission_id' => $permiso->id, 'role_id' =>  $role->id]);
-            }
+        // if ($role) {
+            // foreach($permisos as $permiso) {
+                // DB::table('role_has_permissions')->insert(['permission_id' => $permiso->id, 'role_id' =>  $role->id]);
+            // }
             // $role->syncPermissions($permisos,'web1');
-            echo "Permisos sincronizados correctamente";
+            // echo "Permisos sincronizados correctamente";
         ////} else {
 ////            echo "Error: No se encontró el rol con ID 1";
 ////            // Crear el rol si no existe
 ////            $role = Role::create(['name' => 'Administrador', 'guard_name' => 'web']);
 ////            // $role = Role::create(['name' => '1-Administrador', 'guard_name' => 'web']);
 ////            $role->syncPermissions($permisos);
-       }
+    //    }
 
 
 //         // Relaciona la empresa Administración con el usuario Administrador
@@ -101,27 +94,6 @@ class ModSeederAdmin extends Seeder
         DB::table('roles')->insert(['name'=>'Usuario', 'guard_name' => 'web5', 'empresa_id'=>5]);
         DB::table('roles')->insert(['name'=>'Free', 'guard_name' => 'web5', 'empresa_id'=>5]);
 
-
-        /*DB::table('roles')->insert(['name'=>'2-Administrador', 'guard_name' => 'web', 'empresa_id'=>2]);
-        DB::table('roles')->insert(['name'=>'2-Gestor', 'guard_name' => 'web', 'empresa_id'=>2]);
-        DB::table('roles')->insert(['name'=>'2-Usuario', 'guard_name' => 'web', 'empresa_id'=>2]);
-        DB::table('roles')->insert(['name'=>'2-Free', 'guard_name' => 'web', 'empresa_id'=>2]);
-
-        DB::table('roles')->insert(['name'=>'3-Administrador', 'guard_name' => 'web', 'empresa_id'=>3]);
-        DB::table('roles')->insert(['name'=>'3-Gestor', 'guard_name' => 'web', 'empresa_id'=>3]);
-        DB::table('roles')->insert(['name'=>'3-Usuario', 'guard_name' => 'web', 'empresa_id'=>3]);
-        DB::table('roles')->insert(['name'=>'3-Free', 'guard_name' => 'web', 'empresa_id'=>3]);
-
-        DB::table('roles')->insert(['name'=>'4-Administrador', 'guard_name' => 'web', 'empresa_id'=>4]);
-        DB::table('roles')->insert(['name'=>'4-Gestor', 'guard_name' => 'web', 'empresa_id'=>4]);
-        DB::table('roles')->insert(['name'=>'4-Usuario', 'guard_name' => 'web', 'empresa_id'=>4]);
-        DB::table('roles')->insert(['name'=>'4-Free', 'guard_name' => 'web', 'empresa_id'=>4]);
-
-        DB::table('roles')->insert(['name'=>'5-Administrador', 'guard_name' => 'web', 'empresa_id'=>5]);
-        DB::table('roles')->insert(['name'=>'5-Gestor', 'guard_name' => 'web', 'empresa_id'=>5]);
-        DB::table('roles')->insert(['name'=>'5-Usuario', 'guard_name' => 'web', 'empresa_id'=>5]);
-        DB::table('roles')->insert(['name'=>'5-Free', 'guard_name' => 'web', 'empresa_id'=>5]);
-        */
 
         // $uu = new ModSeederNewUser();
         // $uu->user_id = $user->id;

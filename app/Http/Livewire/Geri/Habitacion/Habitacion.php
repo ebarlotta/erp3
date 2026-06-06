@@ -17,7 +17,7 @@ class Habitacion extends Component
     public $sexo;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('habitaciones.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('habitaciones.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->habitaciones = Hab::where('empresa_id',session('empresa_id'))->get();
                 return view('livewire.geri.habitacion.habitacion-component')->extends('layouts.adminlte');

@@ -39,7 +39,7 @@ class ExpendioComponent extends Component
 
         $this->GenerarVistaResumenes();
         $this->CalcularGraficos();
-        // if(auth()->check() && auth()->user()->hasPermissionTo('expendio.Ver')) {
+        // if(auth()->check() && auth()->user()->hasPermissionTo('expendio.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->CargarMenues();
                 return view('livewire.expendio.expendio-component')->extends('layouts.adminlte');

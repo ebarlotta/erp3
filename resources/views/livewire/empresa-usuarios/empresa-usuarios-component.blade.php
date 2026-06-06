@@ -100,6 +100,8 @@
 
                                                                 </div> --}}
                                                             </div>
+                                                                 <p class="ml-2 mt-1 bold">- {{ $usuario['rol_name'] }}</p>
+
                                                             <button class="btn btn-info w-full h-5" style="padding: 0px 0px 22px 0px;" wire:click="CambiarRol({{ $usuario['user_id'] }})">Cambiar Rol</button>
                                                         </div>
                                                     </div>

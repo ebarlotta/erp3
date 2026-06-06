@@ -26,7 +26,7 @@ class PlanAlimentarioComponent extends Component
     // protected $listeners = ['actualizarCantidad'];
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('planalimentario.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('planalimentario.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->planesalimentarios = PlanAlimentario::where('empresa_id', $this->empresa_id)->get();

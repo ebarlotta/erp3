@@ -21,7 +21,7 @@ class AreaComponent extends Component
 
     public function render()
     {
-        if(auth()->check() && auth()->user()->hasPermissionTo('areas.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('areas.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->areas = Area::where('empresa_id', '=', session('empresa_id'))

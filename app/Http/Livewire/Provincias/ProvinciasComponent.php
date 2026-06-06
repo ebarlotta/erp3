@@ -16,7 +16,7 @@ class ProvinciasComponent extends Component
     protected $provincias;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('provincias.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('provincias.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->nacionalidades = Nacionalidad::all();
                 $this->provincias = Provincias::where('id', '>=', 1)

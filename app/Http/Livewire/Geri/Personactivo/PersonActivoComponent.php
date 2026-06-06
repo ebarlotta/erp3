@@ -12,7 +12,7 @@ class PersonActivoComponent extends Component
     public $isModalOpen = false;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('personactivo.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('personactivo.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->estados = PersonActivo::all();
                 return view('livewire.geri.personactivo.person-activo-component',['isModalOpen'=> $this->isModalOpen, 'estados'=> $this->estados])->extends('layouts.adminlte');

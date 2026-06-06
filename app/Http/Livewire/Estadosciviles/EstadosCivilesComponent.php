@@ -17,7 +17,7 @@ class EstadosCivilesComponent extends Component
     use WithPagination;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('estadosciviles.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('estadosciviles.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->estadosciviles = EstadosCiviles::where('id', '>', 1)
                 ->where('estadocivil', 'like', '%'.$this->search.'%')

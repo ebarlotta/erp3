@@ -17,7 +17,7 @@ class TiposDeDocumentosComponent extends Component
     use WithPagination;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('tiposdedocumentos.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('tiposdedocumentos.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->tiposdedocumentos = TiposDocumentos::where('id', '>=', 1)
                 ->where('tipodocumento', 'like', '%'.$this->search.'%')

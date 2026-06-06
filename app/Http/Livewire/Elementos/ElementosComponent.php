@@ -44,7 +44,7 @@ class ElementosComponent extends Component
     use WithFileUploads;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('elementos.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('elementos.Ver','web'.session('empresa_id'))) {
 
             if(session('empresa_id')) {
 

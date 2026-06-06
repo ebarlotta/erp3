@@ -41,7 +41,8 @@
                                                 <tr>
                                                     <td>{{ $rol->name }}</td>
                                                     <td>
-                                                        <button type="button" wire:click="showEdit({{$rol->id}})" class="btn btn-warning" data-toggle="modal" data-target="#ModalEdit">
+                                                        {{-- <button type="button" class="btn btn-warning" wire:click="showEdit({{$rol->id}})" > --}}
+                                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ModalEdit" wire:click="showEdit({{$rol->id}})" >
                                                             Editar
                                                         </button>
                                                         <button type="button" wire:click="showDelete({{$rol->id}})" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
@@ -62,6 +63,7 @@
 
             <!-- Modal Alta/Modificación Rol -->
             <!-- ================================== -->
+            {{-- @if($editModal) --}}
             <div wire:ignore.self class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog " role="document" style="width: 200%; margin-left:30%; width: 55rem">
                     <div class="modal-content" style="width: inherit">
@@ -85,7 +87,7 @@
                             <div>
                                 <label for="">Nombre del Rol</label>
                                 @if($name)
-                                    <input type="text" class="form-control" wire:model="name">
+                                    <input type="text" class="form-control" wire:model="nameRol">
                                 @else
                                     <div class="flex">
                                         <input type="text" class="form-control col-8" wire:model="name">
@@ -121,16 +123,16 @@
                                 <div>
                                     @if(!is_null($permisosNoActivadoshabilitados))
                                         @foreach ($permisosNoActivadoshabilitados as $permiso)
-                                            @if($modulo_seleccionado == $modulo->id)
+                                            {{-- @if($modulo_seleccionado == $modulo->id)
                                                 <button type="button" class="btn btn-success" wire:click="SeleccionarModulo(0,'a')">
                                                     <i class="fa-solid fa-pen-to-square"></i>{{ $permiso->name }}
                                                 </button>
-                                            @else
+                                            @else --}}
                                                 <button type="button" class="btn btn-outline-primary bg-blue-400 mb-1" style="color: white;">
                                                     {{ $permiso->name }}
                                                     <span style="color: white; margin-left: 10px; background-color: rgb(64, 185, 9); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true"  title="Agregar Permiso" wire:click="AgregarPermiso({{$permiso->permission_id}})">&plus;</span>
                                                 </button>
-                                            @endif
+                                            {{-- @endif --}}
                                         @endforeach
                                     @else
                                             Ningún permiso disponible
@@ -176,6 +178,7 @@
                     </div>
                 </div>
             </div>
+            {{-- @endif --}}
 
             <!-- Modal Eliminar Rol -->
             <!-- ====================== -->

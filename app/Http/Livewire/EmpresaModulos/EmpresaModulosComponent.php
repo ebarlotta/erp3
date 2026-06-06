@@ -17,7 +17,7 @@ class EmpresaModulosComponent extends Component {
     public $modulosdelaemp, $modulosdelaempresa, $modulosNOempresa, $empresas, $empresaseleccionada, $seleccionado = 1, $name, $isModalOpen = false, $modulosnuevos;
 
     public function render() {
-        if(auth()->user()->hasPermissionTo('empresamodulos.Ver')) {
+        if(auth()->user()->hasPermissionTo('empresamodulos.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $userid=auth()->user()->id;
                 $this->empresas= EmpresaUsuario::where('user_id',$userid)

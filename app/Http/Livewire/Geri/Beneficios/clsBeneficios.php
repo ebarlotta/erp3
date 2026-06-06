@@ -12,7 +12,7 @@ class clsBeneficios extends Component
     //public $control = 0;
     
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('beneficios.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('beneficios.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->beneficios = Beneficios::all();
                 //return view('liveware.crudbeneficios')->with('isModalOpen', $this->isModalOpen)->with('beneficios', $this->beneficios);

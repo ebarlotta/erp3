@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
             $categoria->name = "Vehículo"; $categoria->empresa_id = $i; $categoria_id = $categoria->run();
 
             // Agrega el elemento Vehiculo en la tabla de Elementos de la empresa
-            Elemento::firstOrCreate(['name'=> 'Veíhulo', 'existencia'=>0, 'precio_compra'=>0, 'stock_minimo'=>0, 'vencimiento'=> now(), 'categoria_id' => $categoria_id, 'unidad_id' => $unidad_id, 'ruta' =>'', 'empresa_id' => $i]);
+            Elemento::firstOrCreate(['name'=> 'Vehículo', 'existencia'=>0, 'precio_compra'=>0, 'stock_minimo'=>0, 'vencimiento'=> now(), 'categoria_id' => $categoria_id, 'unidad_id' => $unidad_id, 'ruta' =>'', 'empresa_id' => $i]);
         }
 
 
@@ -74,6 +74,7 @@ class DatabaseSeeder extends Seeder
         // DB::table('roles')->insert(['name' => 'Free','guard_name' => 'web',]);
 
         $this->call(ModuloSeeder::class);
+
         $this->call(EmpresaModuloSeeder::class);
 
         $this->call(EscolaridadesSeeder::class);
@@ -122,5 +123,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RegistroTipotramiteSeeder::class);
         $this->call(RegistroReguisitosTipotramiteSeeder::class);
 
+        $this->call(PrimerUsuarioSeeder::class);
+        $this->call(ModSeederAdmin::class);
     }
 }

@@ -16,7 +16,7 @@ class NacionalidadComponent extends Component
     protected $nacionalidades;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('modulousuarios.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('modulousuarios.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->nacionalidades = DB::table('nacionalidads')
                     ->where('nacionalidad_descripcion', 'like', '%'.$this->search.'%')

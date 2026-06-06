@@ -27,7 +27,7 @@ class GestionModuloComponent extends Component
 
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('gestionmodulo.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('gestionmodulo.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
 
             $this->filtrar();

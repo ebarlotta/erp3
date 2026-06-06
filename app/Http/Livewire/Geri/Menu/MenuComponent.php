@@ -24,7 +24,7 @@ class MenuComponent extends Component
 
     public function render() {
         if(!isset($this->local)) { $this->local = 0; $this->CambiarLocal(0); }
-        if(auth()->check() && auth()->user()->hasPermissionTo('menu.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('menu.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $empresaId = session('empresa_id');
                 $this->ingredientes = ElementoIngrediente::join('elementos', 'elementos.id','elemento_ingredientes.elemento_id')->orderby('elementos.name')->get();

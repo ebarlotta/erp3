@@ -20,7 +20,7 @@ class CategoriaproductoComponent extends Component
 
     public function render()
     {
-        if(auth()->check() && auth()->user()->hasPermissionTo('categoriaproducto.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('categoriaproducto.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->categorias = Categoriaproducto::where('empresa_id', '=', session('empresa_id'))
                     ->where('name', 'like', '%'.$this->search.'%')

@@ -16,7 +16,7 @@ class LocalidadesComponent extends Component
     protected $localidades;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('localidades.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('localidades.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->provincias = Provincias::all();
                 $this->localidades = Localidades::where('id','>=',1)

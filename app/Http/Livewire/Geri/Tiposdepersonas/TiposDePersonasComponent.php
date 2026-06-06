@@ -16,7 +16,7 @@ class TiposDePersonasComponent extends Component
     //$tiposdepersonas, // Se pasa como array en la vista, por eso no hace falta declararla
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('tiposdepersonas.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('tiposdepersonas.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 ////$this->tiposdepersonas = TipoDePersona::paginate(2);
                 //$coments = TipoDePersona::find(2)->interfaces;

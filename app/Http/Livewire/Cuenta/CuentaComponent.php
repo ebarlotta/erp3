@@ -19,7 +19,7 @@ class CuentaComponent extends Component
     use WithPagination;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('cuentas.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('cuentas.Ver','web1')) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->cuentas = Cuenta::where('empresa_id', $this->empresa_id)

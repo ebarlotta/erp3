@@ -1,5 +1,7 @@
 <?php
 
+$a = 'Pepe';
+
 return [
 
     /*
@@ -261,8 +263,9 @@ return [
         // ],
 
         // ['header' => 'account_settings'],
-        ['header' => 'GESTIÓN DE EMPRESAS',
+        ['header' => 'GESTIÓN DE www',
            'can' => 'administracion.Ver',
+           'guard' => 'web8',
         ],
 
         [
@@ -615,7 +618,7 @@ return [
         ],
 
         ['header' => 'GESTIÓN INFORMES',
-            // 'can' => 'tablasver.Ver',
+            'can' => 'tablasver.Ver',
             'canany' => ['tablasver.Ver','tablas.Ver'],
         ],
 

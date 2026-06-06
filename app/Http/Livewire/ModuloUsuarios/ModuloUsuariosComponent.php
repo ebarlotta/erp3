@@ -36,7 +36,7 @@ class ModuloUsuariosComponent extends Component
     protected $datos;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('modulousuarios.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('modulousuarios.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->usuariosglobales= User::all();
                 //$modulos = Modulo::get()->sortBy('id')->paginate(4);

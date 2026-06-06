@@ -16,7 +16,7 @@ class EstadocamaComponent extends Component
     public $isModalOpen = false;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('estadocama.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('estadocama.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->camas = DB::table('camas')
                     ->orderBy('NroHabitacion', 'asc')

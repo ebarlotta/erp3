@@ -16,7 +16,7 @@ class UnidadComponent extends Component
     protected $unidades;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('unidades.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('unidades.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->unidades = Unidad::where('empresa_id', $this->empresa_id)

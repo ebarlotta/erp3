@@ -14,7 +14,7 @@ class EscolaridadesComponent extends Component
     protected $escolaridades;
 
     public function render() {
-        // if(auth()->user()->hasPermissionTo('escolaridades.Ver')) {
+        // if(auth()->user()->hasPermissionTo('escolaridades.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->escolaridades = Escolaridades::where('id','>=',1)
                 ->where('escolaridadDescripcion', 'like', '%'.$this->search.'%')

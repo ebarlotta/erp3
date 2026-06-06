@@ -25,6 +25,7 @@ class RolesComponent extends Component
     public $name, $roles, $rol_id, $permisos, $permisoshabilitados, $permisosNoActivadoshabilitados, $modulo_name, $modulos, $modulo_seleccionado;
     public $buscar;
     public $moduloshabilitados;
+    public $nameRol;
 
     // use HasRoles;
 
@@ -33,7 +34,7 @@ class RolesComponent extends Component
     // FALTA AGREGAR ROLES Y PERMISOS POR EMPRESA, NO A NIVEL GENERAL, SINO PARTICULAR Enzo
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('roles.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('roles.Ver','web1')) {
             if(session('empresa_id')) {
                 $this->modulos = Modulo::orderby('name')->get(); ///all();
                 $this->Filtrar();
@@ -54,13 +55,10 @@ class RolesComponent extends Component
                 // $user = User::find(Auth::user()->id);   // Asigna el rol al usuario
                 // $user->syncRoles(['Administrador']);
 
-                // // // dd($this->name);
-
                 // $permissions = Permission::all();
                 // $user = User::find(1);
                 // $user->syncPermissions($permissions);  // Borra todos los permisos del Rol
 
-                // dd($user);
                 // $permission = Permission::findByName('agregar');
                 // $role->givePermissionTo($permission);
 
@@ -70,19 +68,12 @@ class RolesComponent extends Component
                 //$user->syncPermissions();  // Borra todos los permisos del Rol
                 //$user->givePermissionTo('agregar');
 
-
-                // dd($user->getPermissionsViaRoles());
                 // $role = Role::findByName($this->name);
-                // // dd($permission);
                 // $permission->assignRole($role);
-
-                // dd($role->getPermissionsViaRoles('Usuario'));
 
                 // $a= $role->getAllPermissions();
                 // $role->syncPermissions($a);
                 // // $a = User::getAllPermissions();
-                // dd($role);
-                // dd($role->permissions);
 
                 // $user->hasRole('Usuario');
 
@@ -96,19 +87,20 @@ class RolesComponent extends Component
                 // $user = User::getRole;
                 // $roles = Auth::user()->getRoleNames();
                 // $permissions = $user->permissions;
-                // dd($role->hasPermissionTo('areas.Agregar'));
     }
 
     public function Filtrar() {
         if ($this->buscar) {
             $this->roles = Roles::where('name', 'LIKE', "%" . $this->buscar . "%")
                 ->where('empresa_id', '=', session('empresa_id'))
+                ->where('guard_name', '=', 'web'.session('empresa_id'))
                 ->get();
         } else {
             $this->roles = Roles::orderBy('name','ASC')
             ->where('empresa_id', '=', session('empresa_id'))
+            ->where('guard_name', '=', 'web'.session('empresa_id'))
             ->get();
-            // dd(session('empresa_id'));
+            
         }
     }
 
@@ -117,7 +109,7 @@ class RolesComponent extends Component
     public function showEdit($id)
     {
         $roles = Roles::find($id);
-        $this->name = $roles->name;
+        $this->nameRol = $roles->name;
         $this->rol_id = $id; //Establece el rol
         $this->SeleccionarModulo(1, 'Areas');
     }
@@ -141,10 +133,9 @@ class RolesComponent extends Component
         $this->validate([
             'name' => 'required|unique:roles|max:255',
         ]);
-        // dd($this->name);
         Roles::updateOrCreate(['id' => $this->rol_id], [
             'name' => $this->name,
-            'guard_name' => 'web',
+            'guard_name' => 'web'.session('empresa_id'),
         ]);
 
         $this->rol_id = null;
@@ -154,7 +145,6 @@ class RolesComponent extends Component
     // public function setname($name) { $this->name = $name; dd($this->name); }
 
     public function SeleccionarModulo($id, $nombreModulo) {
-        // dd($nombreModulo);
         unset($this->permisos);
         unset($this->permisoshabilitados);
         if($id == 0) { $this->modulo_seleccionado = null; }
@@ -170,13 +160,11 @@ class RolesComponent extends Component
             // $sql="SELECT * FROM permissions
             // WHERE NOT EXISTS (
             //     SELECT * FROM permissions WHERE name LIKE '%".$this->modulo_name."%')";
-            // dd($sql);
 
             unset($this->permisos);
             // $this->permisos = db::select($sql);
             // // dd($this->permisos);
             // $sql = 'SELECT * FROM role_has_permissions join permissions WHERE role_has_permissions.permission_id = permissions.id and role_has_permissions.role_id='.$this->rol_id." and name like '%". $nombreModulo."%'";
-            // // dd($sql);
             // $this->permisoshabilitados = db::select($sql);
 
         //    $sql = 'SELECT permissions.*, SUBSTRING_INDEX(permissions.name, ".", 1) as grupo
@@ -202,33 +190,40 @@ class RolesComponent extends Component
             inner join modulos m on m.pagina = SUBSTRING_INDEX(p.name, ".", 1)
             WHERE rhp.role_id = '.$this->rol_id;
         $this->moduloshabilitados = db::select($sql);
-
+// dd($sql);
         // Busca todos los permisos del módulo seleccionado y cuáles de ellos están habilitados para el rol elegido
         $sql = 'SELECT SUBSTRING_INDEX(p.name, ".", 1) as modulo, p.name, p.id as permission_id, role_id
             FROM permissions p
             LEFT JOIN role_has_permissions rhp ON rhp.permission_id = p.id
-            WHERE rhp.role_id = '.$this->rol_id .' and p.name like "%'.$nombreModulo.'%"';
+            WHERE rhp.role_id = '.$this->rol_id .' 
+            AND p.guard_name = "web'. session("empresa_id") . '"
+            AND p.name like "%'.$nombreModulo.'%"';
         $this->permisoshabilitados = db::select($sql);
 
         // Busca todos los permisos NO HABILITADOS del módulo seleccionado
-        $sql = 'SELECT SUBSTRING_INDEX(p.name, ".", 1) as modulo, p.name, p.id as permission_id, role_id
+        $sql = 'SELECT SUBSTRING_INDEX(p.name, ".", 1) as modulo, p.name, p.id as permission_id, role_id, guard_name
             FROM permissions p
-            LEFT JOIN role_has_permissions rhp ON rhp.permission_id = p.id AND rhp.role_id = '.$this->rol_id .'
-            WHERE rhp.permission_id IS NULL AND p.name like "%'.$nombreModulo.'%"';
+            LEFT JOIN role_has_permissions rhp ON rhp.permission_id = p.id 
+            AND rhp.role_id = '.$this->rol_id .'
+            WHERE rhp.permission_id IS NULL 
+            AND p.guard_name = "web'. session("empresa_id") . '"
+            AND p.name like "%'.$nombreModulo.'%"';
             $permisosNoActivadoshabilitados = db::select($sql);
         $this->permisosNoActivadoshabilitados = db::select($sql);
+
 
         }
     }
 
     public function AgregarPermiso($permision_id) {
-        $usuarios = EmpresaUsuario::where('rol_id', $this->rol_id)->get();  //Busca los usuarios que tienen el mismo rol elegido
-        if(!count($usuarios)) { session()->flash('mensajeFaltaRol', 'Asegurese de relacionar el usuario con la empresa en EmpresaUsuarios.'); }
+        $usuarios = EmpresaUsuario::where('rol_id','=', $this->rol_id)->get();  //Busca los usuarios que tienen el mismo rol elegido
+        // dd($usuarios);
+
+        if(!count($usuarios)) { session()->flash('mensajeFaltaRol', 'Asegurese de relacionar el usuario con la empresa en Empresa y Usuarios.'); }
         $permiso_a_agregar = Permission::where('id',$permision_id)->get('name'); // Busca los datos del permiso a agregar
         foreach($usuarios as $usuario) {    // Itera los usuarios
             $user = User::find($usuario->user_id);   // Busca a cada usuario y
             $aux = 'SELECT * FROM model_has_permissions WHERE permission_id='. $permision_id .' and model_id='.$usuario->user_id;
-            // dd($user);
             $bux = db::select($aux); //IMPACTA EN LOS TAGAS QUE APARECEN EN PANTALLA
             if(count($bux)) {
                 session()->flash('mensajePermisoRepetido', 'El permiso que intenta agregar ya se encontraba dado de alta.');
@@ -237,7 +232,6 @@ class RolesComponent extends Component
                 // $bux = db::select($aux);
 
                 //Permission::create(['guard_name' => 'web', 'name' => $permiso_a_agregar[0]->name]);
-                // dd($permision_id.'-'.$permiso_a_agregar[0]);
 
                 $b = $user->givePermissionTo($permiso_a_agregar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
             }
@@ -271,8 +265,9 @@ class RolesComponent extends Component
         $permiso_a_eliminar = Permission::where('id',$permision_id)->get('name'); // Busca los datos del permiso a eliminar
         foreach($usuarios as $usuario) {    // Itera los usuarios
             $user = User::find($usuario->user_id);   // Busca a cada usuario y
-            // dd($permision_id);
-            $b = $user->revokePermissionTo($permiso_a_eliminar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
+            // $b = $user->revokePermissionTo($permiso_a_eliminar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
+            $a = 'DELETE FROM model_has_permissions WHERE permission_id = '. $permision_id .' and model_type=\'App\Models\Role\' and model_id = '. $role_id;
+            db::select($a);
 
             $a = 'DELETE FROM role_has_permissions WHERE permission_id = '. $permision_id .' and role_id = '. $role_id;
             db::select($a); //IMPACTA EN LOS TAGAS QUE APARECEN EN PANTALLA

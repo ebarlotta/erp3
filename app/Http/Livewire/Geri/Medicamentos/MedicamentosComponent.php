@@ -14,7 +14,7 @@ class MedicamentosComponent extends Component
     public $isModalOpen, $buscar;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('medicamentos.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('medicamentos.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 if(is_null($this->buscar)) {
                     $this->medicamentos = Medicamento::orderby('nombremedicamento')

@@ -94,7 +94,7 @@ class ActorComponent extends Component
     public $plan_alimentario_actor_id, $visualizarPlanAlimentario, $plan_alimentario_elegido;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('actores.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('actores.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 //Busca el id de la empresa relacionada con el usuario que está logueado
                 $usuario=EmpresaUsuario::where('user_id','=',Auth::id())->get();

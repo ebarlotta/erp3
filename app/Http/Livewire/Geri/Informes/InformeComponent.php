@@ -24,7 +24,7 @@ class InformeComponent extends Component
 
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('informe.Ver')) {
+        if(auth()->check() && auth()->user()->hasPermissionTo('informe.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->periodos = Periodo::all();
                 $this->escalas = Escala::all();

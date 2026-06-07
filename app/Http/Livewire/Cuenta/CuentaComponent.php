@@ -3,12 +3,10 @@
 namespace App\Http\Livewire\Cuenta;
 
 use App\Models\Cuenta;
-
+use Spatie\Permission\Models\Permission;
 use Livewire\Component;
 use Livewire\WithPagination;
-
-class CuentaComponent extends Component
-{
+class CuentaComponent extends Component {
     public $isModalOpen = false;
     public $cuenta, $cuenta_id;
     public $name;
@@ -19,7 +17,8 @@ class CuentaComponent extends Component
     use WithPagination;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('cuentas.Ver','web1')) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'cuentas.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('cuentas.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->cuentas = Cuenta::where('empresa_id', $this->empresa_id)

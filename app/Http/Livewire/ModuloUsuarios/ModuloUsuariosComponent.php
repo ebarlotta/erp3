@@ -11,14 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 
 use Spatie\Permission\Models\Permission;
-
-// Dispatch::all() => Returns a Collection
-// Dispatch::all()->where() => Returns a Collection
-// Dispatch::where() => Returns a Query
-// Dispatch::where()->get() => Returns a Collection
-// Dispatch::where()->get()->where() => Returns a Collection
-// You can only invoke "paginate" on a Query, not on a Collection.
-
 class ModuloUsuariosComponent extends Component
 {
     use WithPagination;
@@ -36,7 +28,8 @@ class ModuloUsuariosComponent extends Component
     protected $datos;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('modulousuarios.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'modulousuarios.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('modulousuarios.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->usuariosglobales= User::all();
                 //$modulos = Modulo::get()->sortBy('id')->paginate(4);

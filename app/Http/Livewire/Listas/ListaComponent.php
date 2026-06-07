@@ -3,13 +3,11 @@
 namespace App\Http\Livewire\Listas;
 
 use Livewire\Component;
-
+use Spatie\Permission\Models\Permission;
 use App\Models\Lista;
 use Livewire\WithPagination;
 
-class ListaComponent extends Component
-{
-
+class ListaComponent extends Component {
     public $isModalOpen = false;
     public $lista, $porcentaje, $lista_id, $name, $empresa_id, $vigenciadesde, $vigenciahasta, $activo, $search;
     protected $listas;
@@ -17,15 +15,14 @@ class ListaComponent extends Component
     use WithPagination;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('listas.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'listas.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('listas.Ver', $guardName)) {
             if(session('empresa_id')) {
-
                 $this->empresa_id=session('empresa_id');
                 $this->listas = Lista::where('empresa_id', '=', $this->empresa_id)
                     ->where('name', 'like', '%'.$this->search.'%')
                     ->orderby('name')
                     ->paginate(7);
-
                 return view('livewire.listas.lista-component',['listas' => $this->listas])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {

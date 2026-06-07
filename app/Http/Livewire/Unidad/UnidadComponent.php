@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Unidad;
 
 use App\Models\Unidad;
-
+use Spatie\Permission\Models\Permission;
 use Livewire\Component;
 
 class UnidadComponent extends Component
@@ -16,7 +16,8 @@ class UnidadComponent extends Component
     protected $unidades;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('unidades.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'unidades.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('unidades.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->unidades = Unidad::where('empresa_id', $this->empresa_id)

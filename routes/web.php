@@ -290,6 +290,9 @@ Route::get('/imprentapedidos', PedidoComponent::class)->name('pedidos');
 //     return view('registro.index');
 // })->name('registro');
 
+Route::get('/sin-permisos', function () {
+    return view('SinPermiso')->extends('layouts.adminlte');
+})->name('sin-permisos');
 
   }
 );
@@ -372,9 +375,6 @@ Route::get('/projects/focus-widget', FocusWidget::class)->name('projects.focus-w
 | O incluir el componente:
 |
 |   <livewire:focus-widget /> */
-
-
-
 
 
 

@@ -4,19 +4,18 @@ namespace App\Http\Livewire\Localidades;
 
 use App\Models\Localidades;
 use App\Models\Provincias;
-
+use Spatie\Permission\Models\Permission;
 use Livewire\Component;
 
-class LocalidadesComponent extends Component
-{
-
+class LocalidadesComponent extends Component {
     public $localidad_descripcion, $localidad_cp, $localidad_id;
     public $search, $isModalOpen = false;
     public $provincias, $provincia_id;
     protected $localidades;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('localidades.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'localidades.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('localidades.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->provincias = Provincias::all();
                 $this->localidades = Localidades::where('id','>=',1)

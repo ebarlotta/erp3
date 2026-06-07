@@ -25,9 +25,9 @@
                         </div>
                     @endif
                     <div class="text-left">
-                        @can('empresagestion.Ver')
-                        {{-- @if(session('empresas.Agregar')) --}}
+                        @can('empresagestion.Agregar', 'web' . session('empresa_id'))
                             <button wire:click="CrearEmpresa()" class="bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded">
+                        {{-- @if(session('empresas.Agregar')) --}}
                                 Crear empresa
                             </button>
                         {{-- @endif --}}

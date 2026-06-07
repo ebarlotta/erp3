@@ -3,28 +3,25 @@
 namespace App\Http\Livewire\Geri\Menu;
 
 use App\Models\Geri\Menu;
-use App\Models\Geri\Ingredientes;
 use App\Models\Geri\Menuingrediente;
 use App\Models\Elementos\ElementoIngrediente;
 use App\Models\Elementos\Elemento;
-
+use Spatie\Permission\Models\Permission;
 use Livewire\Component;
-
-class MenuComponent extends Component
-{
+class MenuComponent extends Component {
     public $isModalOpen = false;
     public $isModalOpenGestionar = false;
     public $isModalOpenHacerLocal = false;
     public $menu, $menu_id;
     public $menues, $nombremenu, $menuactivo=true, $tiempopreparacion;
     public $ingredientesdelmenu, $ingredientes, $ingredientea, $cantidad, $ingrediente_gestionar_id, $unidad, $publico, $ppersonas;
-
     public $empresa_id, $search, $hacerlocal, $menu_id_temporal;
     public $local;
 
     public function render() {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'menu.Ver')->where('guard_name', $guardName)->exists();
         if(!isset($this->local)) { $this->local = 0; $this->CambiarLocal(0); }
-        if(auth()->check() && auth()->user()->hasPermissionTo('menu.Ver','web'.session('empresa_id'))) {
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('menu.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $empresaId = session('empresa_id');
                 $this->ingredientes = ElementoIngrediente::join('elementos', 'elementos.id','elemento_ingredientes.elemento_id')->orderby('elementos.name')->get();

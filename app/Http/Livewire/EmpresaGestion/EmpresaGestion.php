@@ -3,15 +3,13 @@
 namespace App\Http\Livewire\EmpresaGestion;
 
 use App\Models\Empresa;
-
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-
-class EmpresaGestion extends Component
-
-{
+class EmpresaGestion extends Component {
+    
     use WithFileUploads;
     use WithPagination;
 
@@ -22,7 +20,8 @@ class EmpresaGestion extends Component
     public $empresa_id, $name, $direccion, $cuit, $ib, $imagen, $establecimiento, $telefono, $actividad, $actividad1, $menu, $email, $habilitada=true, $nombretitular, $dnititular;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('empresagestion.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'empresagestion.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('empresagestion.Ver', $guardName)) {
             if(session('empresa_id')) {
                $this->empresas=Empresa::all();
                 return view('livewire.empresa-gestion.empresa-gestion',['datos'=> Empresa::orderby('name')->paginate(7),])->extends('layouts.adminlte');

@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Nacionalidad;
 
 use App\Models\Nacionalidad;
-
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -16,7 +16,8 @@ class NacionalidadComponent extends Component
     protected $nacionalidades;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('modulousuarios.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'nacionalidad.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('nacionalidad.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->nacionalidades = DB::table('nacionalidads')
                     ->where('nacionalidad_descripcion', 'like', '%'.$this->search.'%')

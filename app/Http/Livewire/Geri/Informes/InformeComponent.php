@@ -2,29 +2,25 @@
 
 namespace App\Http\Livewire\Geri\Informes;
 
+use Spatie\Permission\Models\Permission;
 use App\Models\Area as Areas;
-
 use App\Models\Geri\Escala;
 use App\Models\Geri\Informes\Informe;
 use App\Models\Geri\Periodo;
 use App\Models\Geri\Pregunta;
-
 use Livewire\Component;
-
-class InformeComponent extends Component
-{
+class InformeComponent extends Component {
     public $periodosview = false, $escalasview = false, $preguntasview = false, $informesview = false;
     public $pregunta_id=false;
     public $periodos, $escalas, $preguntas, $informes, $areas;
     public $informe_id, $escala_id, $area_id;
     public $editpregunta=false, $editinforme=false;
     public $textopregunta;
-
     public $nombreinforme, $periodo_id, $observaciones;
 
-
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('informe.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'informe.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('informe.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->periodos = Periodo::all();
                 $this->escalas = Escala::all();

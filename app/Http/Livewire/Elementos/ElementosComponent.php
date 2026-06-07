@@ -3,8 +3,6 @@
 namespace App\Http\Livewire\Elementos;
 
 use Illuminate\Http\Request;
-
-use App\Models\Archivos;
 use App\Models\Unidad;
 use App\Models\Categorias;
 use App\Models\Estado;
@@ -22,13 +20,8 @@ use Illuminate\Support\Facades\DB;
 
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-
-use Exception;
-
-class ElementosComponent extends Component
-{
-    // public $Elemento = Elemento::class;
-    // public $ElementoArticulo = ElementoArticulo::class;
+use Spatie\Permission\Models\Permission;
+class ElementosComponent extends Component {
     protected $unidades, $categorias, $datos;
     public $seleccionado='Medicamento',$elemento_id;
     public $name, $existencia, $stock_minimo, $precio_compra, $categoria_id, $unidad_id, $vencimiento, $search; //General
@@ -44,14 +37,13 @@ class ElementosComponent extends Component
     use WithFileUploads;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('elementos.Ver','web'.session('empresa_id'))) {
 
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'elementos.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('elementos.Ver', $guardName)) {
             if(session('empresa_id')) {
-
                 $this->estados = Estado::where('empresa_id','=',session('empresa_id'))->get();
                 $this->proveedores = Proveedor::where('empresa_id','=',session('empresa_id'))->get();
                 $this->listas = Lista::where('empresa_id','=',session('empresa_id'))->get();
-
                 $this->unidades = Unidad::where('empresa_id','=',session('empresa_id'))->get();
                 $this->categorias = Categorias::where('empresa_id','=',session('empresa_id'))->get();
                 $this->resumir();
@@ -59,7 +51,6 @@ class ElementosComponent extends Component
             } else {
                 return view('livewire.seleccionarempresa')->extends('layouts.adminlte');
             }
-
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
         }

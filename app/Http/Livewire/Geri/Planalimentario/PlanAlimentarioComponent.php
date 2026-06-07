@@ -7,7 +7,7 @@ use App\Models\Geri\Menu;
 use App\Models\Geri\MenuPlan;
 use App\Models\Geri\PlanAlimentario;
 use App\Models\MomentosDelDia;
-
+use Spatie\Permission\Models\Permission;
 class PlanAlimentarioComponent extends Component
 {
     public $isModalOpen = false, $isModalOpenGestionar = false;
@@ -18,15 +18,13 @@ class PlanAlimentarioComponent extends Component
     public $descripcion, $desde, $hasta, $activo=true, $cantidad=1, $menu_elegido, $dia;
     public $listadomenues, $listadomenuesenelplan;
     public $momentos, $momento_dia_id;
-
     public $isModalOpenCopiarMenuPlan, $dia_copia, $momento_dia_id_copia, $CopiarMenuPlanDia,$CopiarMenuPlanMomento;
-
     public $empresa_id;
 
-    // protected $listeners = ['actualizarCantidad'];
-
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('planalimentario.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'planalimentario.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('planalimentario.Ver', $guardName)) {   
+        // if(auth()->check() && auth()->user()->hasPermissionTo('planalimentario.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->planesalimentarios = PlanAlimentario::where('empresa_id', $this->empresa_id)->get();

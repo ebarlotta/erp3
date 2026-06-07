@@ -6,7 +6,7 @@ use App\Models\Proveedor;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-
+use Spatie\Permission\Models\Permission;
 class ProveedorComponent extends Component
 {
     use WithPagination;
@@ -26,10 +26,13 @@ class ProveedorComponent extends Component
     public $empresa_id;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('proveedores.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'proveedores.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('proveedores.Ver', $guardName)) {
             if(session('empresa_id')) {
                 return view('livewire.proveedor.proveedor-component',['datos'=> Proveedor::where('empresa_id', session('empresa_id'))->where('name', 'like', '%'.$this->search.'%')->orderby('name')->paginate(7),])->extends('layouts.adminlte');
-            } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
+            } else { 
+                return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); 
+            }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
         }

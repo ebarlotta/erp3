@@ -14,16 +14,22 @@ use Livewire\WithPagination;
 class EmpresaModulosComponent extends Component {
     
     use WithPagination;
-    public $modulosdelaemp, $modulosdelaempresa, $modulosNOempresa, $empresas, $empresaseleccionada, $seleccionado = 1, $name, $isModalOpen = false, $modulosnuevos;
+
+    protected $empresas_paginate;
+    public $empresas;
+    public $modulosdelaemp, $modulosdelaempresa, $modulosNOempresa, $empresaseleccionada, $seleccionado = 1, $name, $isModalOpen = false, $modulosnuevos;
 
     public function render() {
         if(auth()->user()->hasPermissionTo('empresamodulos.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $userid=auth()->user()->id;
-                $this->empresas= EmpresaUsuario::where('user_id',$userid)
-                    ->join('empresas','empresas.id','=','empresa_usuarios.empresa_id')
-                    ->get();
-                return view('livewire.empresa-modulos.empresa-modulos-component',['datos'=>EmpresaUsuario::where('user_id',$userid)->join('empresas','empresas.id','=','empresa_usuarios.empresa_id')->paginate(5)])->extends('layouts.adminlte')
+                $this->empresas_paginate = Empresa::where('id','>=1')->paginate(10);
+                $this->empresas = Empresa::all();
+                    // $this->empresas = EmpresaUsuario::where('user_id',$userid)
+                    // ->leftjoin('empresas','empresas.id','=','empresa_usuarios.empresa_id')
+                    // ->get();
+                    // dd($this->empresas);
+                return view('livewire.empresa-modulos.empresa-modulos-component',['datos'=>$this->empresas_paginate])->extends('layouts.adminlte')
                 ->section('content');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {

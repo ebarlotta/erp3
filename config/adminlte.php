@@ -263,7 +263,7 @@ return [
         // ],
 
         // ['header' => 'account_settings'],
-        ['header' => 'GESTIÓN DE www',
+        ['header' => 'GESTIÓN DE EMPRESAS',
            'can' => 'administracion.Ver',
            'guard' => 'web8',
         ],

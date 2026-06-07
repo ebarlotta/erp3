@@ -4,21 +4,19 @@ namespace App\Http\Livewire\Geri\Medicamentos;
 
 use App\Models\Geri\Medicamento;
 use App\Models\Unidad;
-
+use Spatie\Permission\Models\Permission;
 use Livewire\Component;
-
-class MedicamentosComponent extends Component
-{
+class MedicamentosComponent extends Component {
     public $nombremedicamento, $unidad_id, $medicamento_id, $cantidad, $psiquiatrico;
     public $medicamentos, $unidades;
     public $isModalOpen, $buscar;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('medicamentos.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'medicamentos.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('medicamentos.Ver', $guardName)) {
             if(session('empresa_id')) {
                 if(is_null($this->buscar)) {
-                    $this->medicamentos = Medicamento::orderby('nombremedicamento')
-                    ->get();
+                    $this->medicamentos = Medicamento::orderby('nombremedicamento')->get();
                     $this->buscar = '';
                 }
                 $this->unidades = Unidad::all();

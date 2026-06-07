@@ -3,11 +3,9 @@
 namespace App\Http\Livewire\Geri\Habitacion;
 
 use App\Models\Geri\Habitacion as Hab;
-
+use Spatie\Permission\Models\Permission;
 use Livewire\Component;
-
-class Habitacion extends Component
-{
+class Habitacion extends Component {
     public $isModalOpen=false;
     public $habitaciones;
     public $habitacion_id; 
@@ -17,7 +15,8 @@ class Habitacion extends Component
     public $sexo;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('habitaciones.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'habitaciones.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('habitaciones.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->habitaciones = Hab::where('empresa_id',session('empresa_id'))->get();
                 return view('livewire.geri.habitacion.habitacion-component')->extends('layouts.adminlte');

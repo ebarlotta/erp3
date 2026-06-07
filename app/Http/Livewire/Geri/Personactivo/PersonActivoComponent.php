@@ -3,16 +3,15 @@
 namespace App\Http\Livewire\Geri\Personactivo;
 
 use App\Models\Geri\PersonActivo;
-
+use Spatie\Permission\Models\Permission;
 use Livewire\Component;
-
-class PersonActivoComponent extends Component
-{
+class PersonActivoComponent extends Component {
     public $estado, $estados, $estado_id;
     public $isModalOpen = false;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('personactivo.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'personactivo.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('personactivo.Ver', $guardName)) { 
             if(session('empresa_id')) {
                 $this->estados = PersonActivo::all();
                 return view('livewire.geri.personactivo.person-activo-component',['isModalOpen'=> $this->isModalOpen, 'estados'=> $this->estados])->extends('layouts.adminlte');

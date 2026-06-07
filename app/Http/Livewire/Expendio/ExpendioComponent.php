@@ -4,19 +4,14 @@ namespace App\Http\Livewire\Expendio;
 
 use App\Models\Consumido;
 use App\Models\Geri\Actores\ActorAgente;
-use App\Models\Geri\Actor;
 use App\Models\Geri\MenuPlan;
 use App\Models\Geri\Menuingrediente;
-use App\Models\Geri\PlanAlimentario;
 use App\Models\Elementos\Elemento;
-use App\Models\User;
 use Livewire\Component;
 use DateTime;
 use Illuminate\Support\Facades\DB;
-
-
-class ExpendioComponent extends Component
-{
+use Spatie\Permission\Models\Permission;
+class ExpendioComponent extends Component {
     public $fecha, $confirmacion, $servicioacerrar;
     public $agregar, $servicioaagregar, $agregarActores, $agregarMenu, $actor_id_agregar, $menu_id_agregar, $cantidad_agregar, $menuextra;
     public $registros_desayuno, $registros_almuerzo, $registros_merienda, $registros_cena;
@@ -39,8 +34,10 @@ class ExpendioComponent extends Component
 
         $this->GenerarVistaResumenes();
         $this->CalcularGraficos();
-        // if(auth()->check() && auth()->user()->hasPermissionTo('expendio.Ver','web'.session('empresa_id'))) {
-            if(session('empresa_id')) {
+
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'expendio.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('expendio.Ver', $guardName)) {
+            // if(session('empresa_id')) {
                 $this->CargarMenues();
                 return view('livewire.expendio.expendio-component')->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }

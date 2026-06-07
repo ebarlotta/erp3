@@ -3,32 +3,25 @@
 namespace App\Http\Livewire\Geri\Tiposdepersonas;
 
 use App\Models\Geri\TipoDePersona;
-
 use Livewire\Component;
 use Livewire\WithPagination;
-
-class TiposDePersonasComponent extends Component
-{
-
+use Spatie\Permission\Models\Permission;
+class TiposDePersonasComponent extends Component {
     public $tipodepersona,  $tipo_de_persona_id;
     public $isModalOpen = false;
     use WithPagination;
     //$tiposdepersonas, // Se pasa como array en la vista, por eso no hace falta declararla
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('tiposdepersonas.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'tiposdepersonas.Ver')->where('guard_name', $guardName)->exists();
+        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('tiposdepersonas.Ver', $guardName)) {
             if(session('empresa_id')) {
-                ////$this->tiposdepersonas = TipoDePersona::paginate(2);
-                //$coments = TipoDePersona::find(2)->interfaces;
-                //dd($coments);
-                //return view('livewire.tiposdepersonas.tipos-de-personas-component')->with('isModalOpen', $this->isModalOpen)->with('tiposdepersonas', $this->tiposdepersonas);
                 return view('livewire.geri.tiposdepersonas.tipos-de-personas-component', ['tiposdepersonas' => TipoDePersona::paginate(5),])->extends('layouts.adminlte');
             } else { return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
         }
     }
-
 
     public function create()
     {

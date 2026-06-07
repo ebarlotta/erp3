@@ -3,23 +3,22 @@
 namespace App\Http\Livewire\Estado;
 
 use App\Models\Estado;
-
 use Livewire\Component;
 use Livewire\WithPagination;
-
-class EstadoComponent extends Component
-{
+use Spatie\Permission\Models\Permission;
+class EstadoComponent extends Component {
     public $isModalOpen = false;
     public $estado, $estado_id;
     protected $estados;
     public $name, $search;
-
     public $empresa_id;
 
     use WithPagination;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('estados.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'estados.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('estados.Ver', $guardName)) {
+        // if(auth()->check() && auth()->user()->hasPermissionTo('estados.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->estados = Estado::where('empresa_id', '=', $this->empresa_id)

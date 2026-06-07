@@ -52,9 +52,8 @@ use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Livewire\Component;
-
-class ActorComponent extends Component
-{
+use Spatie\Permission\Models\Permission;
+class ActorComponent extends Component {
     public $persona_descripcion, $actor_id, $iva_id, $fingreso, $fegreso, $peso, $telefono, $nombreempresa, $motivosegresos, $gradodependencia, $referente_id;
     public $actores, $ivas, $condicioniva_id, $referentes;
 
@@ -94,11 +93,11 @@ class ActorComponent extends Component
     public $plan_alimentario_actor_id, $visualizarPlanAlimentario, $plan_alimentario_elegido;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('actores.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'actores.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('actores.Ver', $guardName)) {
             if(session('empresa_id')) {
                 //Busca el id de la empresa relacionada con el usuario que está logueado
                 $usuario=EmpresaUsuario::where('user_id','=',Auth::id())->get();
-                // session(['empresa_id' => $usuario[0]['empresa_id']]);
 
                 $this->anioNuevo=date("Y");
                 $this->tipos_documentos = TiposDocumentos::all();   //Carga todos los tipos de documentos

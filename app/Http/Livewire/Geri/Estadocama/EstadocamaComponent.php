@@ -3,20 +3,17 @@
 namespace App\Http\Livewire\Geri\Estadocama;
 
 use App\Models\Geri\Camas;
-
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-
-
-class EstadocamaComponent extends Component
-{
-    
+use Spatie\Permission\Models\Permission;
+class EstadocamaComponent extends Component {    
     public $NroHabitacion, $NroCama, $SexoCama=0, $EstadoCama=0, $cama_id;
     public $camas;
     public $isModalOpen = false;
 
     public function render() {
-        if(auth()->check() && auth()->user()->hasPermissionTo('estadocama.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'estadocama.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('estadocama.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->camas = DB::table('camas')
                     ->orderBy('NroHabitacion', 'asc')

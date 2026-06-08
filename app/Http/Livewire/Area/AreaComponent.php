@@ -22,7 +22,6 @@ class AreaComponent extends Component
     public function render()
     {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'areas.Ver')->where('guard_name', $guardName)->exists();
-
         if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('areas.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');

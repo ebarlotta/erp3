@@ -26,7 +26,7 @@
                     @endif
 
                     <div class="flex justify-around">
-                        @can('cuentas.Agregar')
+                        @can('cuentas.Agregar','web'.session('empresa_id'))
                             <x-crear>Nueva Cuenta</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.cuenta.createcuentas')
@@ -52,14 +52,14 @@
                                             <td class="border px-4 py-2">
                                                 <div class="flex justify-center">
                                                     <div class="sm:flex justify-center">
-                                                        @can('cuentas.Modificar')
+                                                        @can('cuentas.Modificar','web'.session('empresa_id'))
                                                         {{-- @if(session('cuentas.Modificar')) --}}
                                                             <!-- Editar  -->
                                                             <x-editar id="{{ $cuenta->id }}"></x-editar>
                                                         </div>
                                                         {{-- @endif --}}
                                                         @endcan
-                                                        @can('cuentas.Eliminar')
+                                                        @can('cuentas.Eliminar','web'.session('empresa_id'))
                                                         {{-- @if(session('cuentas.Eliminar')) --}}
                                                             <div class="sm:flex justify-center">
                                                                 <!-- Eliminar -->

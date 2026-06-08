@@ -115,6 +115,15 @@ class EmpresaModulosComponent extends Component {
         $relacion->modulo_id = $modulo_name;
         // $relacion->modulo_id = $a[0]->id;
         $relacion->save();
+
+        $nombre = Modulo::where('id', $modulo_name)->get();
+
+        // Genera los permisos del módulo agregado para el rol de la empresa
+        $permiso = DB::table('permissions')->insertOrIgnore(['name' => strtolower($nombre[0]->name) . '.Ver', 'guard_name' => 'web' . $this->empresaseleccionada->id ]);
+        $permiso = DB::table('permissions')->insertOrIgnore(['name' => strtolower($nombre[0]->name) . '.Agregar', 'guard_name' => 'web' . $this->empresaseleccionada->id ]);
+        $permiso = DB::table('permissions')->insertOrIgnore(['name' => strtolower($nombre[0]->name) . '.Editar', 'guard_name' => 'web' . $this->empresaseleccionada->id ]);
+        $permiso = DB::table('permissions')->insertOrIgnore(['name' => strtolower($nombre[0]->name) . '.Eliminar', 'guard_name' => 'web' . $this->empresaseleccionada->id ]);
+
         $this->closeModalPopover();
         $this->CargarModulos($this->empresaseleccionada->id);
         return view('livewire.empresa-modulos.empresa-modulos-component');

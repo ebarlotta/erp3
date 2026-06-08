@@ -15,9 +15,9 @@ class PrimerUsuarioSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Administrador',
-            'email' => 'admin@ejemplo.com',
-            'password' => Hash::make('password'),
+            'name' => 'SuperAdministrador',
+            'email' => 'superadministrador@ecosystems.ar',
+            'password' => Hash::make('123456789'),
         ]);
     }
 }

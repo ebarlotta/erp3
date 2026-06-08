@@ -39,6 +39,7 @@
                                 @endforeach
                                 {{-- {{ $usuarioSeleccionado }} --}}
                                 <select class="form-control col-12" wire:model="id_NuevoRol" >
+                                    <option value="0" selected>--- Seleccione un rol ---</option>
                                     @foreach ($roles as $rol)
                                         @if($id_rolActual==$rol->id)
                                             <option value="{{ $rol->id }}" selected>{{ $rol->name }}</option>

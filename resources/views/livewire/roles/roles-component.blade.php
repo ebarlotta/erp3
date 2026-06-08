@@ -16,13 +16,23 @@
                                 <div class="media align-items-stretch">
                                     <div class="media-body">
                                         <div class="flex d-flex justify-content-beetwen">
-                                            <div class="flex d-flex col-9">
-                                                <h4>Listado de Roles</h4>
+                                            <div class="flex d-flex col-4">
+                                                <select wire:model="empresaSeleccionada" class="form-control" wire:change="SeleccionarEmpresa()">
+                                                    <option value="">Seleccionar Empresa</option>
+                                                    @if($empresas)
+                                                        @foreach ($empresas as $empresa)
+                                                            <option value="{{ $empresa->id }}">{{ $empresa->name }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
                                                 <button type="button" class="ml-3 mb-1 btn btn-info" wire:click="showNew()" data-toggle="modal" data-target="#ModalNuevoRol">
                                                     Nuevo
                                                 </button>
                                             </div>
-                                            <div class="col-3">
+                                            <div class="col-6">
+                                                <h4>Listado de Roles</h4>
+                                            </div>
+                                            <div class="col-2">
                                                 <input wire:model="buscar" type="text" class="form-control rounded-md" placeholder="Buscar" wire:keyup="Filtrar()">
                                             </div>
                                             @error('name')

@@ -21,7 +21,7 @@ class ModSeederAdmin extends Seeder
     public function run()
     {
 
-        // DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 'web1', 'empresa_id' => 1]);  // Solo a la empresa administradora
+        DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 'web1', 'empresa_id' => 1]);  // Solo a la empresa administradora
         
         // $a = new PermissionsSeeder();
         // $a->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
@@ -59,7 +59,13 @@ class ModSeederAdmin extends Seeder
             DB::table('modulo_usuarios')->insert(['modulo_id'=>7,'user_id'=>1,'modificado_user_id'=>1]);
 
         for($i=1;$i<=34;$i++) {
-            DB::table('model_has_permissions')->insert(['permission_id'=>$i,'model_type'=>'App\Models\User','model_id'=>1]);
+            // DB::table('model_has_permissions')->insert(['permission_id'=>$i,'model_type'=>'App\Models\User','model_id'=>1]);
+
+            DB::table('model_has_permissions')->insertOrIgnore([
+                'permission_id' => $i,
+                'model_type' => 'App\Models\Role',
+                'model_id' => 1
+            ]);
         }
         //  DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 1, 'empresa_id' => 1]);  // Solo a la empresa administradora
         // $this->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
@@ -104,8 +110,15 @@ class ModSeederAdmin extends Seeder
         foreach($permisos as $permiso) {
             // $user->givePermissionTo($permiso->name); // Agrega en model_has_permissions
             // $aux = 'INSERT INTO role_has_permissions (permission_id, role_id) VALUES ('.$permiso->id.', 1)';  // Agrega en role_has_permissions
-            $aux = 'INSERT INTO model_has_permissions (permission_id, model_id, model_type) VALUES ('.$permiso->id.', 1, "App\Models\User")';  // Agrega en model_has_permissions
-            db::select($aux);  // Agrega en model_has_permissions
+
+            DB::table('model_has_permissions')->insertOrIgnore([
+                'permission_id' => $permiso->id,
+                'model_type' => 'App\Models\User',
+                'model_id' => 1
+            ]);
+
+            // $aux = 'INSERT INTO model_has_permissions (permission_id, model_id, model_type) VALUES ('.$permiso->id.', 1, "App\Models\User")';  // Agrega en model_has_permissions
+            // db::select($aux);  // Agrega en model_has_permissions
         }
 
     }

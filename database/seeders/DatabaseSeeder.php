@@ -124,6 +124,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RegistroReguisitosTipotramiteSeeder::class);
 
         $this->call(PrimerUsuarioSeeder::class);
-        $this->call(ModSeederAdmin::class);
+        
+        // $this->call(ModSeederAdmin::class);
     }
 }

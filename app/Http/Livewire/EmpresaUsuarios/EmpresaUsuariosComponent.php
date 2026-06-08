@@ -126,10 +126,16 @@ class EmpresaUsuariosComponent extends Component
     }
     
     public function ActualizarRol() {
+        $this->validate([
+            'id_NuevoRol' => 'required|integer|min:1',
+        ]);
+
         // dd("Nuevo Rol:" . $this->id_NuevoRol . " - Usuario: " . $this->user_id . " - Empresa: " . $this->empresaseleccionada->name . '-'.$this->empresaseleccionada->id);
-        EmpresaUsuario::where('user_id', $this->usuarioSeleccionado[0]->id)
-            ->where('empresa_id', $this->empresaseleccionada->id)
-            ->update(['rol_id' => (int)$this->id_NuevoRol]);
-            session()->flash('message', 'Actualizado');
-        }
+        EmpresaUsuario::updateOrCreate(['user_id' => $this->usuarioSeleccionado[0]->id, 'empresa_id' => $this->empresaseleccionada->id], [
+            'rol_id' => (int) $this->id_NuevoRol
+        ]);
+        session()->flash('message', 'Actualizado');
+        $this->CerrarModalRoles();
+        $this->CargarUsuarios($this->empresaseleccionada->id);  
+    }
 }

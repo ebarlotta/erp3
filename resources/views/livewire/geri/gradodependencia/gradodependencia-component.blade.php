@@ -20,7 +20,7 @@
                 </div>
             </div>
             @endif
-            @can('gradodependencia.Agregar')
+            @can('gradodependencia.Agregar','web'.session('empresa_id'))
                 <x-crear>Nuevo Grado de Dependencia</x-crear>
                 @if ($isModalOpen)
                     @include('livewire.geri.gradodependencia.creategradodependencia')
@@ -39,11 +39,11 @@
                             <td class="border px-4 py-2">{{ $gradodependencia->gradodependenciaDescripcion }}</td>
                             <td class="border px-4 py-2">
                                 <div class="flex justify-center">
-                                    @can('gradodependencia.Modificar')
+                                    @can('gradodependencia.Modificar','web'.session('empresa_id'))
                                         <!-- Editar  -->
                                         <x-editar id="{{$gradodependencia->id}}"></x-editar>
                                     @endcan
-                                    @can('gradodependencia.Eliminar')
+                                    @can('gradodependencia.Eliminar','web'.session('empresa_id'))
                                         <!-- Eliminar -->
                                         <x-eliminar id="{{$gradodependencia->id}}"></x-eliminar>
                                     @endcan

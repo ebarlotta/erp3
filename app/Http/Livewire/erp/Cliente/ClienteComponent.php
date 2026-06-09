@@ -6,6 +6,7 @@ use App\Models\erp\Cliente;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Permission;
 
 class ClienteComponent extends Component
 {
@@ -27,23 +28,22 @@ class ClienteComponent extends Component
 
     public function render()
     {
-        $this->empresa_id = session('empresa_id');
-        if($this->search) {
-            $this->resetPage();
-            $this->clientes = Cliente::where('empresa_id', $this->empresa_id)
-            ->where('cuil', 'like', '%'.$this->search.'%')
-            ->orderBy('name','asc')
-            ->paginate(7);
-            // dd($this->clientes);
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'areas.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('areas.Ver', $guardName)) {
+            $this->empresa_id = session('empresa_id');
+            if(session('empresa_id')) {
+                $this->resetPage();
+                $this->clientes = Cliente::where('empresa_id', $this->empresa_id)
+                ->where('cuil', 'like', '%'.$this->search.'%')
+                ->orderBy('name','asc')
+                ->paginate(7);
+                return view('livewire.cliente.cliente-component',['clientes'=> $this->clientes])->extends('layouts.adminlte');
+            } else {
+                return view('livewire.seleccionarempresa')->extends('layouts.adminlte');
+            }
+        } else {
+            return view('SinPermiso')->extends('layouts.adminlte');
         }
-
-        else {
-            $this->clientes = Cliente::where('empresa_id', $this->empresa_id)
-            ->orderBy('name','asc')
-            ->paginate(7);
-        }
-
-        return view('livewire.cliente.cliente-component',['clientes'=> $this->clientes])->extends('layouts.adminlte');
     }
 
     public function create()

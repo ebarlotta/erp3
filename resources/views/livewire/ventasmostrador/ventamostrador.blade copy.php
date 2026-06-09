@@ -169,7 +169,18 @@
                                                             } else if (cantidad == "") {
                                                                 alert("Debe de llenar la cantidad del producto...");
                                                             } else { //alert("listo para el controlador"); 
-                                                                var url = "../app/controllers/ventas/registrar_carrito.php";                                                        $.get(url, {                                                            nro_venta: nro_venta,                                                            id_producto: id_producto,                                                            cantidad: cantidad                                                        }, function(datos) {                                                            $('#respuesta_carrito').html(datos);                                                        });                                                    }                                                });                                            
+                                                                var url = "../app/controllers/ventas/registrar_carrito.php";
+                                                                $.get(url, { 
+                                                                    nro_venta: nro_venta,
+                                                                    id_producto: id_producto,
+                                                                    cantidad: cantidad
+                                                                }, function(datos) {
+                                                                    $('#respuesta_carrito').html(datos);
+                                                                }
+                                                            );
+                                                        }
+                                                    }
+                                                );
                                             </script> <br><br>
                                         </div>
                                     </div>

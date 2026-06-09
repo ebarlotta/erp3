@@ -21,7 +21,7 @@
             </div>
             @endif
             <div class="flex justify-around">
-                @can('localidades.Agregar')
+                @can('localidades.Agregar','web'.session('empresa_id'))
                     <x-crear>Nueva Localidad</x-crear>
                     @if ($isModalOpen)
                         @include('livewire.localidades.createlocalidades')
@@ -47,11 +47,11 @@
                         <td class="border px-4 py-2">{{ $localidad->provincia->provincia_descripcion }}</td>
                         <td class="border px-4 py-2">
                             <div class="flex justify-center">
-                                @can('localidades.Modificar')
+                                @can('localidades.Modificar','web'.session('empresa_id'))
                                     <!-- Editar  -->
                                     <x-editar id="{{$localidad->id}}"></x-editar>
                                 @endcan
-                                @can('localidades.Eliminar')
+                                @can('localidades.Eliminar','web'.session('empresa_id'))
                                     <!-- Eliminar -->
                                     <x-eliminar id="{{$localidad->id}}"></x-eliminar>
                                 @endcan

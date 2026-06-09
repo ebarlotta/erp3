@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    @can('clientes.Agregar')
+                    @can('clientes.Agregar','web'.session('empresa_id'))
                     {{-- @if(session('Clientes.Editar')) --}}
                         <x-guardar></x-guardar>
                     {{-- @endif --}}

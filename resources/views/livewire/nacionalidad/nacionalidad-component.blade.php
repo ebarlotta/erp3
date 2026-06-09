@@ -21,7 +21,7 @@
             </div>
             @endif
             <div class="flex justify-around">
-                @can('nacionalidad.Agregar')
+                @can('nacionalidad.Agregar','web'.session('empresa_id'))
                     <x-crear>Nueva Nacionalidad</x-crear>
                     @if ($isModalOpen)
                         @include('livewire.nacionalidad.createnacionalidad')
@@ -43,11 +43,11 @@
                         <td class="border px-4 py-2">{{ $nacionalidad->nacionalidad_descripcion }}</td>
                         <td class="border px-4 py-2">
                             <div class="flex justify-center">
-                                @can('nacionalidad.Modificar')
+                                @can('nacionalidad.Modificar','web'.session('empresa_id'))
                                     <!-- Editar  -->
                                     <x-editar id="{{$nacionalidad->id}}"></x-editar>
                                 @endcan
-                                @can('nacionalidad.Eliminar')
+                                @can('nacionalidad.Eliminar','web'.session('empresa_id'))
                                     <!-- Eliminar -->
                                     <x-eliminar id="{{$nacionalidad->id}}"></x-eliminar>
                                 @endcan

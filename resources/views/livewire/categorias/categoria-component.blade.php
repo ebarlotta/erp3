@@ -26,7 +26,7 @@
                     @endif
 
                     <div class="flex justify-around">
-                        @can('categorias.Agregar')
+                        @can('categorias.Agregar','web'.session('empresa_id'))
                             <x-crear>Nueva Categoria</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.categorias.createcategoria')
@@ -50,11 +50,11 @@
                                         <td class="border px-4 py-2">{{ $categoria->nombrecategoria }}</td>
                                         <td class="border px-4 py-2">
                                             <div class="block justify-center flex" style="width: 20%; margin: auto; justify-content: space-around;align-items: center;">
-                                                @can('categorias.Modificar')
+                                                @can('categorias.Modificar','web'.session('empresa_id'))
                                                     <!-- Editar  -->
                                                     <x-editar id="{{ $categoria->id }}"></x-editar>
                                                 @endcan
-                                                @can('categorias.Eliminar')
+                                                @can('categorias.Eliminar','web'.session('empresa_id'))
                                                     <!-- Eliminar -->
                                                     <x-eliminar id="{{ $categoria->id }}"></x-eliminar>
                                                 @endcan

@@ -20,7 +20,6 @@
                             <select class="form-control" wire:model="provincia_id">
                                 @foreach($provincias as $provincia )
                                     <option value="{{ $provincia->id }}">{{ $provincia->provincia_descripcion }}</option>
-
                                 @endforeach
                             </select
                             <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="exampleFormControlInput1" placeholder="Ingrese código postal" wire:model="provincia_id">

@@ -25,7 +25,7 @@
 					@endif
 					{{-- @if ($seleccionado) --}}
 					<div class="text-left flex">
-						@can('productos.Agregar')
+						@can('productos.Agregar','web'.session('empresa_id'))
 							<button wire:click="mostrarmodal()"	class="col-5 col-md-3 bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded">
 								Agregar Producto
 							</button>
@@ -208,10 +208,10 @@
 						<th>Estado</th>
 					</thead>
 					@foreach ($productos as $producto)
-						@can('productos.Modificar')
+						@can('productos.Modificar','web'.session('empresa_id'))
 							<tr wire:click="edit({{ $producto->id }})">
 						@endcan
-						@cannot('productos.Modificar')
+						@cannot('productos.Modificar','web'.session('empresa_id'))
 							<tr>
 						@endcannot
 							<td>

@@ -106,7 +106,6 @@
                                 </div>
                             </div>
 
-
                             <div class="mt-3">
                                 <label for="">
                                     Permisos 
@@ -182,8 +181,6 @@
                 </div>
             </div>
 
-
-
             <!-- Modal Eliminar Permiso -->
             <!-- ====================== -->
             <div wire:ignore.self class="modal fade" id="ModalDeletePermiso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -212,8 +209,6 @@
                 </div>
             </div>
 
-
-
             <!-- Modal Eliminar Módulo -->
             <!-- ====================== -->
             <div wire:ignore.self class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -241,7 +236,6 @@
                     </div>
                 </div>
             </div>
-
         </section>
     </div>
 </div>

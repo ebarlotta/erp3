@@ -24,7 +24,7 @@
                         </div>
                     @endif
                     <div class="flex justify-around">
-                        @can('proveedores.Agregar')
+                        @can('proveedores.Agregar','web'.session('empresa_id'))
                         {{-- @if(session('Proveedores.Agregar')) --}}
                             <x-crear>Nuevo Proveedor</x-crear>
                             @if ($isModalOpen)
@@ -57,7 +57,7 @@
                                         <td class="border px-4 py-2 text-left">{{ $proveedor->email }}</td>
                                         <td class="border px-4 py-2">
                                             <div class="flex justify-center">
-                                                @can('proveedores.Modificar')
+                                                @can('proveedores.Modificar','web'.session('empresa_id'))
                                                 {{-- @if(session('Proveedores.Editar')) --}}
                                                     <div class="sm:flex justify-center">
                                                         <!-- Editar  -->
@@ -65,7 +65,7 @@
                                                     </div>
                                                 {{-- @endif --}}
                                                 @endcan
-                                                @can('proveedores.Eliminar')
+                                                @can('proveedores.Eliminar','web'.session('empresa_id'))
                                                 {{-- @if(session('Proveedores.Eliminar')) --}}
                                                     <div class="sm:flex justify-center">
                                                         <!-- Eliminar -->

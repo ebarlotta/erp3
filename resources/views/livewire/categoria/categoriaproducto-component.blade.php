@@ -19,7 +19,7 @@
                     @endif
 
                     <div class="flex justify-around">
-                        @can('categoriaproducto.Agregar')
+                        @can('categoriaproducto.Agregar','web'.session('empresa_id'))
                             <x-crear>Nueva Categoría Producto</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.categoria.createcategoriaproducto')
@@ -44,13 +44,13 @@
                                             <td class="border px-4 py-2 text-left">{{ $categoria->name }}</td>
                                             <td class="border px-4 py-2">
                                                 <div class="flex justify-center">
-                                                    @can('categoriaproducto.Modificar')
+                                                    @can('categoriaproducto.Modificar','web'.session('empresa_id'))
                                                         {{-- @if(session('categoriasdeproductos.Editar')) --}}
                                                             <!-- Editar  -->
                                                             <x-editar id="{{ $categoria->id }}"></x-editar>
                                                         {{-- @endif --}}
                                                     @endcan
-                                                    @can('categoriaproducto.Eliminar')
+                                                    @can('categoriaproducto.Eliminar','web'.session('empresa_id'))
                                                         {{-- @if(session('categoriasdeproductos.Eliminar')) --}}
                                                             <!-- Eliminar -->
                                                             <x-eliminar id="{{ $categoria->id }}"></x-eliminar>
@@ -64,28 +64,6 @@
                             </tbody>
                         </table>
                     </div>
-{{--
-                    <div style="display: block">
-                        @foreach ($datos as $categoria)
-
-                            <div class="p-2 shadow-lg" style="background:linear-gradient(90deg, lightblue 20%, white 50%); width:93%; height:100px; display: flex; margin: 1.25rem; border-radius: 10px; height: 100%;">
-                                <div style="width:90%;">
-                                    <div style="width:100%; display: flex">
-                                        <p class="shadow-md m-1" style="font-size: 18px; background-color: rgb(226, 230, 230); border-radius: 10px; padding: 3px;">{{ $categoria->name }}</p>
-
-                                    </div>
-                                </div>
-                                <div style="width:10%;">
-                                    <div class="block justify-center" style="width: 20%; margin: auto; justify-content: space-around;align-items: center;">
-                                        <!-- Editar  -->
-                                        <x-editar id="{{ $categoria->id }}"></x-editar>
-                                        <!-- Eliminar -->
-                                        <x-eliminar id="{{ $categoria->id }}"></x-eliminar>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div> --}}
                 </div>
             </div>
         </div>

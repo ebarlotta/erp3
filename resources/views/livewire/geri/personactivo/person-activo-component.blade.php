@@ -20,7 +20,7 @@
                 </div>
             </div>
             @endif
-            @can('personactivo.Agregar')
+            @can('personactivo.Agregar','web'.session('empresa_id'))
                 <x-crear>Nuevos Estados de Personas</x-crear>
                 <!-- <button wire:click="create()" class="bg-green-500 text-blue font-bold py-2 px-4 rounded my-3">Crear Estado de Personas</button> -->
                 @if ($isModalOpen)
@@ -40,11 +40,11 @@
                         <td class="border px-4 py-2">{{ $estado->estado }}</td>
                         <td class="border px-4 py-2">
                             <div class="flex justify-center">
-                                @can('personactivo.Modificar')
+                                @can('personactivo.Modificar','web'.session('empresa_id'))
                                     <!-- Editar  -->
                                     <x-editar id="{{$estado->id}}"></x-editar>
                                 @endcan
-                                @can('personactivo.Eliminar')
+                                @can('personactivo.Eliminar','web'.session('empresa_id'))
                                     <!-- Eliminar -->
                                     <x-eliminar id="{{$estado->id}}"></x-eliminar>
                                 @endcan

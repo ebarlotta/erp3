@@ -42,13 +42,11 @@
                             <td style="background-color: aliceblue; width:30%">
                                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-1 px-4 rounded-full" wire:click="AgregarCategoria();">Modificar</button>
                                 @if($categoria->menu_habilitada)
-                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold my-1 px-4 rounded-full" wire:click="HabilitarCategoria({{ $categoria->id }});">Desabilitar</button>
+                                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold my-1 px-4 rounded-full" wire:click="HabilitarCategoria({{ $categoria->id }});">Desabilitar</button>
                                 @else
-                                <button class="bg-green-500 hover:bg-green-700 text-white font-bold my-1 px-4 rounded-full" wire:click="HabilitarCategoria({{ $categoria->id }});">Habilitar</button>
+                                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold my-1 px-4 rounded-full" wire:click="HabilitarCategoria({{ $categoria->id }});">Habilitar</button>
                                 @endif
                                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold my-1 px-4 rounded-full" wire:click="EliminarCategoria({{ $categoria->id }});">Eliminar</button>
-                                {{-- <input type="btn btn-success" value="Guardar">
-                                <input type="btn btn-danger" value="Eliminar"> --}}
                             </td>
                         </tr>
                     @endforeach
@@ -56,9 +54,7 @@
             </div>
         </div>
     </div>
-    {{-- <button type="submit" id="btn_submit" onclick="clicks++;if(clicks>1){return false};" class="btn btn-success" style="display: block; position: fixed; bottom: 20px; right: 20px; z-index: 1;"><i class="fas fa-save"></i> Guardar</button> --}}
-    <button class="bg-gray-500 hover:bg-gray-700 font-bold my-1 px-6 rounded-full" onclick="history.back()" style="display: block; position: fixed; bottom: 20px; right: 20px; z-index: 1;">Volver</button>
-
-    {{-- <a href="/home" class="btn btn-secondary"><i class="fa fa-undo-alt"></i> Volver</a> --}}
-
+    <button class="bg-gray-500 hover:bg-gray-700 font-bold my-1 px-6 rounded-full" onclick="history.back()" style="display: block; position: fixed; bottom: 20px; right: 20px; z-index: 1;">
+        Volver
+    </button>
 </div>

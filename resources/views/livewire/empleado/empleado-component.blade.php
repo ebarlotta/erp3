@@ -25,7 +25,7 @@
                         </div>
                     @endif
                     <div class="flex justify-around">
-                        @can('empleados.Agregar')
+                        @can('empleados.Agregar','web'.session('empresa_id'))
                         {{-- @if(session('Empleados.Agregar')) --}}
                             <x-crear>Nuevo Empleado</x-crear>
                             @if ($isModalOpen)
@@ -60,21 +60,15 @@
                                             <td class="border px-4 py-2 text-left">{{ $empleado->dni }}</td>
                                             <td class="border px-4 py-2">
                                                 <div class="flex justify-center">
-											        @can('empleados.Modificar')
-                                                    {{-- @if(session('Empleados.Editar')) --}}
+											        @can('empleados.Modificar','web'.session('empresa_id'))
                                                         <div class="sm:flex justify-center">
-                                                            <!-- Editar  -->
                                                             <x-editar id="{{ $empleado->id }}"></x-editar>
                                                         </div>
                                                     @endcan
-											        @can('empleados.Eliminar')
-                                                    {{-- @if(session('Empleados.Eliminar')) --}}
-                                                    {{-- @endif --}}
+											        @can('empleados.Eliminar','web'.session('empresa_id'))
                                                         <div class="sm:flex justify-center">
-                                                            <!-- Eliminar -->
                                                             <x-eliminar id="{{ $empleado->id }}"></x-eliminar>
                                                         </div>
-                                                    {{-- @endif --}}
         											@endcan
                                                 </div>
                                             </td>

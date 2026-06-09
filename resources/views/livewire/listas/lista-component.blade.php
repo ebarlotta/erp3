@@ -27,7 +27,7 @@
                     @endif
 
                     <div class="flex justify-around">
-                        @can('listas.Agregar')
+                        @can('listas.Agregar','web'.session('empresa_id'))
                             <x-crear>Nueva Lista</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.listas.createlistas')
@@ -77,17 +77,11 @@
                                             <td class="border d-none d-sm-table-cell p-1 my-auto text-center">{{ $lista->vigenciahasta }}</td>
                                             <td class="border px-4 py-2">
                                                 <div class="flex justify-center">
-                                                    @can('listas.Modificar')
-                                                        {{-- @if(session('listas.Modificar')) --}}
-                                                            <!-- Editar  -->
-                                                            <x-editar id="{{ $lista->id }}"></x-editar>
-                                                        {{-- @endif --}}
+                                                    @can('listas.Modificar','web'.session('empresa_id'))
+                                                        <x-editar id="{{ $lista->id }}"></x-editar>
                                                     @endcan
-                                                    @can('listas.Eliminar')
-                                                    {{-- @if(session('listas.Eliminar')) --}}
-                                                        <!-- Eliminar -->
+                                                    @can('listas.Eliminar','web'.session('empresa_id'))
                                                         <x-eliminar id="{{ $lista->id }}"></x-eliminar>
-                                                    {{-- @endif --}}
                                                     @endcan
                                                 </div>
                                             </td>

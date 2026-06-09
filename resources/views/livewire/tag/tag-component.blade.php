@@ -25,7 +25,7 @@
                         </div>
                     @endif
                     <div class="flex justify-around">
-                        @can('tags.Agregar')
+                        @can('tags.Agregar','web'.session('empresa_id'))
                         {{-- @if(session('Etiquetas.Agregar')) --}}
                             <x-crear>Nueva Etiqueta</x-crear>
                             @if ($isModalOpen)
@@ -52,17 +52,11 @@
                                         <td class="border px-4 py-2 text-left">{{ $tag->valor }}</td>
                                         <td class="border px-4 py-2">
                                             <div class="flex justify-center">
-                                                @can('tags.Modificar')
-                                                {{-- @if(session('Etiquetas.Editar')) --}}
-                                                    <!-- Editar  -->
+                                                @can('tags.Modificar','web'.session('empresa_id'))
                                                     <x-editar id="{{ $tag->id }}"></x-editar>
-                                                {{-- @endif --}}
                                                 @endcan
-                                                @can('tags.Eliminar')
-                                                {{-- @if(session('Etiquetas.Eliminar')) --}}
-                                                    <!-- Eliminar -->
+                                                @can('tags.Eliminar','web'.session('empresa_id'))
                                                     <x-eliminar id="{{ $tag->id }}"></x-eliminar>
-                                                {{-- @endif --}}
                                                 @endcan
                                             </div>
                                         </td>

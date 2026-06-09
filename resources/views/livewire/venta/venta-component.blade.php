@@ -85,20 +85,20 @@
 									<!-- Botones -->
 									<div class="flex justify-center">
 										<div class="flex flex-wrap justify-center">
-											@can('ventas.Agregar')
+											@can('ventas.Agregar','web'.session('empresa_id'))
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="store">Agregar</button>
 											@endcan
-											@can('ventas.Modificar')
+											@can('ventas.Modificar','web'.session('empresa_id'))
 												<button class="rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalModify">Modificar</button>
 											@endcan
-											@can('ventas.Eliminar')
+											@can('ventas.Eliminar','web'.session('empresa_id'))
 												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalDelete">Eliminar</button>
 											@endcan
 											{{-- <button class="rounded-md bg-blue-300 px-6 py-1 mx-2 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="Facturar();">Facturar</button> --}}
-											@can('ventas.VentasAgregarProductos.Ver')
+											@can('ventas.VentasAgregarProductos.Ver','web'.session('empresa_id'))
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="openModalAgregarDetalle">Agregar Productos</button>
 											@endcan
-											@can('ventas.VentasGenerarFactura.Ver')
+											@can('ventas.VentasGenerarFactura.Ver','web'.session('empresa_id'))
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999;" wire:click="GenerarFactura">Generar Factura</button>
 											@endcan
 											<div class=" right-0">

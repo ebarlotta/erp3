@@ -20,7 +20,7 @@
                 </div>
             </div>
             @endif
-            @can('estadocama.Agregar')
+            @can('estadocama.Agregar','web'.session('empresa_id'))
                 <x-crear>Nueva Cama</x-crear>
                 @if ($isModalOpen)
                     @include('livewire.geri.estadocama.createcama')
@@ -87,11 +87,11 @@
                             </td>
                             <td class="border px-1 py-2">
                                 <div class="flex justify-center">
-                                    @can('estadocama.Modificar')
+                                    @can('estadocama.Modificar','web'.session('empresa_id'))
                                         <!-- Editar  -->
                                         <x-editar id="{{$cama->id}}" class="w-8/12"></x-editar>
                                     @endcan
-                                    @can('estadocama.Eliminar')
+                                    @can('estadocama.Eliminar','web'.session('empresa_id'))
                                         <!-- Eliminar -->
                                         <x-eliminar id="{{$cama->id}}" class="w-8/12"></x-eliminar>
                                     @endcan

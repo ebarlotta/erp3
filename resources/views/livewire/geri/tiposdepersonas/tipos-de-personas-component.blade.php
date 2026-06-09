@@ -21,7 +21,7 @@
                 </div>
             </div>
             @endif
-            @can('tiposdepersonas.Agregar')
+            @can('tiposdepersonas.Agregar','web'.session('empresa_id'))
                 <x-crear>Nuevos Tipos de Personas</x-crear>
                 <!-- <button wire:click="create()" class="bg-green-500 hover:bg-green-400 text-blue font-bold py-2 px-4 rounded my-3">Crear Tipos de Personas</button> -->
                 @if ($isModalOpen)
@@ -41,11 +41,11 @@
                         <td class="border px-4 py-2">{{ $tipodepersona->tipodepersona }}</td>
                         <td class="border px-4 py-2">
                             <div class="flex justify-center">
-                                @can('tiposdepersonas.Agregar')
+                                @can('tiposdepersonas.Modificar','web'.session('empresa_id'))
                                     <!-- Editar  -->
                                     <x-editar id="{{$tipodepersona->id}}"></x-editar>
                                 @endcan
-                                @can('tiposdepersonas.Agregar')
+                                @can('tiposdepersonas.Eliminar','web'.session('empresa_id'))
                                     <!-- Eliminar -->
                                     <x-eliminar id="{{$tipodepersona->id}}"></x-eliminar>
                                 @endcan

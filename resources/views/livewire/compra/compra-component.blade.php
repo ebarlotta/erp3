@@ -64,17 +64,17 @@
 									<!-- Botones -->
 									<div class="flex justify-center">
 										<div class="flex flex-wrap justify-center fse-1">
-											@can('compras.Agregar')
+											@can('compras.Agregar','web'.session('empresa_id'))
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" wire:click="store"><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
 											@endcan
-											@can('compras.Modificar')
+											@can('compras.Modificar','web'.session('empresa_id'))
 												<button class="flex rounded-md bg-yellow-300 px-6 py-1 mx-2 mt-3" wire:click="openModalModify"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 28 28" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>Modificar</button>
 											@endcan
-											@can('compras.Eliminar')
+											@can('compras.Eliminar','web'.session('empresa_id'))
 												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" wire:click="openModalDelete"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
 											@endcan
                                             Espacio
-											@can('compras.comprasagregarproductos.Ver')
+											@can('compras.comprasagregarproductos.Ver','web'.session('empresa_id'))
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" wire:click="openModalAgregarDetalle"> <i class="fa fa-cart-plus" aria-hidden="true"></i>Agregar Productos</button>
 											@endcan
 											<div class=" right-0">

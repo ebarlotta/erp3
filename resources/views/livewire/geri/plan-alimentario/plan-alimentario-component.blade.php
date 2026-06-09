@@ -28,7 +28,7 @@
                     @endif
 
                     <div class="flex justify-around">
-                        {{-- @can('plans.Agregar') --}}
+                        @can('plans.Agregar','web'.session('empresa_id'))
                             <x-crear>Nuevo Plan Alimentario</x-crear>
                             <a href="menu">
                                 <button class="bg-green-300 hover:bg-green-400 text-white-900 font-bold py-2 px-4 rounded flex items-center gap-2">
@@ -40,7 +40,7 @@
                             @if ($isModalOpenGestionar) @include('livewire.geri.plan-alimentario.gestionarplanalimentario') @endif
                             @if ($isModalOpenCopiarMenuPlan) @include('livewire.geri.plan-alimentario.copiarmenuplan') @endif
 
-                        {{-- @endcan --}}
+                        @endcan
                         <div class="w-1/2 justify-end">{{ $datos->links() }}</div>
                     </div>
                     <div style="display: block">
@@ -77,18 +77,18 @@
                                             </td>
                                             <td style="width: 20%;">
                                                 <div style="display: flex">
-                                                    {{-- @can('plans.Gestionar') --}}
+                                                    @can('plans.Gestionar','web'.session('empresa_id'))
                                                         <!-- Gestionar  -->
                                                         <x-gestionar id="{{ $plan->id }}"></x-gestionar>
-                                                    {{-- @endcan --}}
-                                                    {{-- @can('plans.Modificar') --}}
+                                                    @endcan
+                                                    @can('plans.Modificar','web'.session('empresa_id'))
                                                         <!-- Editar  -->
                                                         <x-editar id="{{ $plan->id }}"></x-editar>
-                                                    {{-- @endcan --}}
-                                                    {{-- @can('plans.Eliminar') --}}
+                                                    @endcan
+                                                    @can('plans.Eliminar','web'.session('empresa_id'))
                                                         <!-- Eliminar -->
                                                         <x-eliminar id="{{ $plan->id }}"></x-eliminar>
-                                                    {{-- @endcan --}}
+                                                    @endcan
                                                 </div>
                                             </td>
                                         </tr>

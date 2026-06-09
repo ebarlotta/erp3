@@ -21,7 +21,7 @@
             </div>
             @endif
             <div class="flex justify-around">
-                @can('tiposdedocumentos.Agregar')
+                @can('tiposdedocumentos.Agregar','web'.session('empresa_id'))
                     <x-crear>Nuevos Tipos de Documentos</x-crear>
                     @if ($isModalOpen)
                         @include('livewire.geri.tiposdedocumentos.createtiposdedocumentos')
@@ -43,11 +43,11 @@
                         <td class="border px-4 py-2">{{ $tipodedocumento->tipodocumento }}</td>
                         <td class="border px-4 py-2">
                             <div class="flex justify-center">
-                                @can('tiposdedocumentos.Modificar')
+                                @can('tiposdedocumentos.Modificar','web'.session('empresa_id'))
                                     <!-- Editar  -->
                                     <x-editar id="{{$tipodedocumento->id}}"></x-editar>
                                 @endcan
-                                @can('tiposdedocumentos.Eliminar')
+                                @can('tiposdedocumentos.Eliminar','web'.session('empresa_id'))
                                     <!-- Eliminar -->
                                     <x-eliminar id="{{$tipodedocumento->id}}"></x-eliminar>
                                 @endcan

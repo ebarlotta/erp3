@@ -17,7 +17,7 @@
                         @include('livewire.geri.menu.gestionarmenu')
                     @else
                         <div class="flex justify-around">
-                            @can('menu.Agregar')
+                            @can('menu.Agregar','web'.session('empresa_id'))
                                 <x-crear>Nuevo Menú</x-crear>
                                 @if ($isModalOpen)
                                     @include('livewire.geri.menu.createmenu')
@@ -100,11 +100,11 @@
                                                     <!-- Gestionar  -->
                                                     <x-gestionar id="{{ $menu->id }}"></x-gestionar>
 
-                                                    @can('menu.Modificar')
+                                                    @can('menu.Modificar','web'.session('empresa_id'))
                                                         <!-- Editar  -->
                                                         <x-editar id="{{ $menu->id }}"></x-editar>
                                                     @endcan
-                                                    @can('menu.Eliminar')
+                                                    @can('menu.Eliminar','web'.session('empresa_id'))
                                                         <!-- Eliminar -->
                                                         <x-eliminar id="{{ $menu->id }}"></x-eliminar>
                                                     @endcan

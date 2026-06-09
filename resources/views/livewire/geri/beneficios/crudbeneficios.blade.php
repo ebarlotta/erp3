@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 @endif
-                @can('beneficios.Agregar')
+                @can('beneficios.Agregar','web'.session('empresa_id'))
                     <x-crear>Nuevo Beneficio</x-crear>
                     @if ($isModalOpen)
                         @include('livewire.geri.beneficios.createbeneficios')
@@ -41,11 +41,11 @@
                                 <td class="border px-4 py-2">{{ $beneficio->descripcionbeneficio }}</td>
                                 <td class="border px-4 py-2">
                                     <div class="flex justify-center">
-                                        @can('beneficios.Modificar')
+                                        @can('beneficios.Modificar','web'.session('empresa_id'))
                                             <!-- Editar  -->
                                             <x-editar id="{{$beneficio->id}}"></x-editar>
                                         @endcan
-                                        @can('beneficios.Eliminar')
+                                        @can('beneficios.Eliminar','web'.session('empresa_id'))
                                             <!-- Eliminar -->
                                             <x-eliminar id="{{$beneficio->id}}"></x-eliminar>
                                         @endcan

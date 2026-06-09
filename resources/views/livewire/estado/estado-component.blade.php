@@ -25,7 +25,7 @@
                         </div>
                     @endif
                     <div class="flex justify-around">
-                        @can('estados.Agregar')
+                        @can('estados.Agregar','web'.session('empresa_id'))
                             <x-crear>Nuevo Estado</x-crear>
                             @if ($isModalOpen)
                                 @include('livewire.estado.createestado')
@@ -48,13 +48,13 @@
                                             <td class="border px-4 py-2 text-left">{{ $estado->name }}</td>
                                             <td class="border px-4 py-2">
                                                 <div class="flex justify-center">
-                                                    @can('estados.Modificar')
+                                                    @can('estados.Modificar','web'.session('empresa_id'))
                                                     {{-- @if(session('Estados.Editar')) --}}
                                                         <!-- Editar  -->
                                                         <x-editar id="{{ $estado->id }}"></x-editar>
                                                     {{-- @endif --}}
                                                     @endcan
-                                                    @can('estados.Eliminar')
+                                                    @can('estados.Eliminar','web'.session('empresa_id'))
                                                     {{-- @if(session('Estados.Eliminar')) --}}
                                                         <!-- Eliminar -->
                                                         <x-eliminar id="{{ $estado->id }}"></x-eliminar>

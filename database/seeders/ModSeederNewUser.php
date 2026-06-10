@@ -50,16 +50,9 @@ class ModSeederNewUser extends Seeder
             'imprentaadmin'
         ];
 
-        // $user = User::find($this->user_id);
-
         foreach($array as $m) {
-            // $user->givePermissionTo($m.'.Agregar'); // Agrega en model_has_permissions
-            // $user->givePermissionTo($m.'.Modificar'); // Agrega en model_has_permissions
-            // $user->givePermissionTo($m.'.Eliminar'); // Agrega en model_has_permissions
-            // $user->givePermissionTo($m.'.Ver'); // Agrega en model_has_permissions
-            $modulo = strtolower($m.'%');
 
-            // $modulo = strtolower('compras.%');
+            $modulo = strtolower($m.'%');
 
             $adicionales = Permission::whereRaw("name LIKE ?", [$modulo])->get();
             foreach ($adicionales as $adic) {
@@ -72,7 +65,7 @@ class ModSeederNewUser extends Seeder
                         'model_id' => $this->user_id
                     ]);
                 }
-                
+
                 $sql = 'SELECT * FROM role_has_permissions WHERE permission_id = '. $adic->id .' and role_id = '. $this->user_id;
                 $existe = db::select($sql);
                 if (!$existe) {

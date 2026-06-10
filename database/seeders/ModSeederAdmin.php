@@ -22,7 +22,7 @@ class ModSeederAdmin extends Seeder
     {
 
         DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 'web1', 'empresa_id' => 1]);  // Solo a la empresa administradora
-        
+
         // $a = new PermissionsSeeder();
         // $a->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
 
@@ -63,7 +63,8 @@ class ModSeederAdmin extends Seeder
 
             DB::table('model_has_permissions')->insertOrIgnore([
                 'permission_id' => $i,
-                'model_type' => 'App\Models\Role',
+                'model_type' => 'App\Models\User',
+                // 'model_type' => 'App\Models\Role',
                 'model_id' => 1
             ]);
         }
@@ -121,5 +122,14 @@ class ModSeederAdmin extends Seeder
             // db::select($aux);  // Agrega en model_has_permissions
         }
 
+        //Agrega todos los permisos para que aparezcan en el menú de la izquierda
+        $permisos = Permission::where('guard_name','=','web')->get();
+        foreach($permisos as $permiso) {
+            DB::table('model_has_permissions')->insertOrIgnore([
+                'permission_id' => $permiso->id,
+                'model_type' => 'App\Models\User',
+                'model_id' => 1
+            ]);
+        }
     }
 }

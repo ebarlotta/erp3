@@ -657,6 +657,13 @@ return [
 //            'can' => 'generales.Ver',
                 'submenu' => [
                     [
+                'text' => 'Areas',
+                'url'  => 'areas',
+                'icon' => 'fa fa-cube',
+                'can' => 'areas.Ver',
+                'guard_name' => 'web6',
+            ],
+                    [
                         'text' => 'Otras Cosas',
                         'url'  => 'otrascosas',
                     ],

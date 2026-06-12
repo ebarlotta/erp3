@@ -135,6 +135,7 @@ class EmpresaUsuariosComponent extends Component
             'rol_id' => (int) $this->id_NuevoRol
         ]);
 
+        role_has_permissions
         // model_has_permissions
 
 

@@ -9,7 +9,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 class EmpresaGestion extends Component {
-    
+
     use WithFileUploads;
     use WithPagination;
 
@@ -126,14 +126,48 @@ class EmpresaGestion extends Component {
         //dd($this->imagen);
 
         if (!$existe) {     //Si no existe la empresa, inicializa los módulos básicos correspondientes
-            DB::table('empresa_modulos')->insert(['modulo_id' => '2','empresa_id' => $this->empresa_id->id,]);
-            DB::table('empresa_modulos')->insert(['modulo_id' => '3','empresa_id' => $this->empresa_id->id,]);
-            DB::table('empresa_modulos')->insert(['modulo_id' => '4','empresa_id' => $this->empresa_id->id,]);
-            DB::table('empresa_modulos')->insert(['modulo_id' => '5','empresa_id' => $this->empresa_id->id,]);
-            DB::table('empresa_modulos')->insert(['modulo_id' => '6','empresa_id' => $this->empresa_id->id,]);
+            // DB::table('empresa_modulos')->insert(['modulo_id' => '2','empresa_id' => $this->empresa_id->id,]);
+            // DB::table('empresa_modulos')->insert(['modulo_id' => '3','empresa_id' => $this->empresa_id->id,]);
+            // DB::table('empresa_modulos')->insert(['modulo_id' => '4','empresa_id' => $this->empresa_id->id,]);
+            // DB::table('empresa_modulos')->insert(['modulo_id' => '5','empresa_id' => $this->empresa_id->id,]);
+            // DB::table('empresa_modulos')->insert(['modulo_id' => '6','empresa_id' => $this->empresa_id->id,]);
+            // DB::table('empresa_modulos')->insert(['modulo_id' => '8','empresa_id' => $this->empresa_id->id,]);
+            // DB::table('empresa_modulos')->insert(['modulo_id' => '9','empresa_id' => $this->empresa_id->id,]);
+            // DB::table('empresa_modulos')->insert(['modulo_id' => '11','empresa_id' => $this->empresa_id->id,]);
+
+            // Módulos de prueba para la empresa de ERP
             DB::table('empresa_modulos')->insert(['modulo_id' => '8','empresa_id' => $this->empresa_id->id,]);
             DB::table('empresa_modulos')->insert(['modulo_id' => '9','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '10','empresa_id' => $this->empresa_id->id,]);
             DB::table('empresa_modulos')->insert(['modulo_id' => '11','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '17','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '18','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '19','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '23','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '24','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '25','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '27','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '28','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '29','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '31','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '32','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '33','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '35','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '36','empresa_id' => $this->empresa_id->id,]);
+            DB::table('empresa_modulos')->insert(['modulo_id' => '38','empresa_id' => $this->empresa_id->id,]);
+
+            $modulos = array ( 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'categoriaproducto', 'categoriaprofesional', 'Compras', 'Empleados', 'Haberes', 'Ventas', 'compras-mini', 'ventasimple', 'ventasmostrador', 'Cart', 'Informes', 'Payments', 'Tags', 'producto/tag','producto/create','producto','productoscarts','productobajas');
+            $i = $this->empresa_id->id;
+
+            foreach($modulos as $modulo) {
+                DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Agregar','guard_name' => 'web'.$i]);
+                DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Eliminar','guard_name' => 'web'.$i]);
+                DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Modificar','guard_name' => 'web'.$i]);
+                DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web'.$i]);
+
+                // Agregar los permisos para el menú de la izquierda
+                DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web']);
+            }
 
             DB::table('clientes')->insert(['name' => "CONSUMIDOR_FINAL",'cuil'=>"20-000000".$this->empresa_id->id."-0",'direccion'=>'-','email'=>'empresa'.$this->empresa_id->id.'@barber.com','telefono'=>'0','empresa_id' => $this->empresa_id->id,]);  // Inserta al CONSUMIDOR FINAL como cliente
 
@@ -169,6 +203,11 @@ class EmpresaGestion extends Component {
             // DB::table('role_has_permissions')->insert(['permission_id' => 42, 'role_id'=> 1,]);
             // DB::table('role_has_permissions')->insert(['permission_id' => 43, 'role_id'=> 1,]);
             // DB::table('role_has_permissions')->insert(['permission_id' => 44, 'role_id'=> 1,]);
+
+            DB::table('roles')->insert(['name' => 'Administrador','guard_name' => 'web'.$this->empresa_id->id, 'empresa_id' => $this->empresa_id->id,]);
+            DB::table('roles')->insert(['name' => 'Usuario','guard_name' => 'web'.$this->empresa_id->id, 'empresa_id' => $this->empresa_id->id,]);
+            DB::table('roles')->insert(['name' => 'Free','guard_name' => 'web'.$this->empresa_id->id, 'empresa_id' => $this->empresa_id->id,]);
+
 
         }
 

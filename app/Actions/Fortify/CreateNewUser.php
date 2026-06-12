@@ -18,11 +18,6 @@ class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
-    /**
-     * Validate and create a newly registered user.
-     *
-     * @param  array<string, string>  $input
-     */
     public function create(array $input): User
     {
         Validator::make($input, [
@@ -42,7 +37,6 @@ class CreateNewUser implements CreatesNewUsers
              $a = new PermissionsSeeder();
              $a->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
         }
-    
 
         //Relaciona el usuario creado con la empresa ERP
         EmpresaUsuario::create(['empresa_id' => 2,'user_id' => $user->id,'rol_id' => 2]);

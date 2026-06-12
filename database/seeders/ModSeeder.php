@@ -19,6 +19,7 @@ class ModSeeder extends Seeder
      */
     public function run()
     {
+        // DB::table('permissions')->truncate();
 
         // Permisos de Módulos administrativos Generales
         // acá van todos los sistemas o subsistemas para que puedan ser visibles en el menú de cada empresa, pero no necesariamente con permisos para verlos o modificarlos
@@ -32,76 +33,85 @@ class ModSeeder extends Seeder
 
 
         $i = 1; // Empresa Administrativa
-        $modulos = Modulo::whereIn('name', [ 'Dashboard', 'Administracion', 'Estados Civiles', 'TiposDeDocumentos', 'Localizacion', 'Tablas', 'Escolaridades', 'tablas-edit', 'tablasver'
-        ])->get();
+        // $modulos = Modulo::whereIn('name', [ 'Dashboard', 'Administracion', 'estadosciviles', 'tiposdedocumentos', 'localidades', 'Tablas', 'Escolaridades', 'tablas-edit', 'tablasver','roles','empresas','empresagestion','empresamodulos','empresausuarios','modulos','modulousuarios','gestionmodulos','nacionalidad','provincias', 'empresagestion', 'empresamodulos', 'gestionmodulos', 'empresausuarios', 'modulousuarios', 'roles', 'certificados',
+        // ])->get();
+
+        $modulos = array ('Dashboard', 'Administracion', 'estadosciviles', 'tiposdedocumentos', 'localidades', 'Tablas', 'Escolaridades', 'tablas-edit', 'tablasver','roles','empresas','empresagestion','empresamodulos','empresausuarios','modulos','modulousuarios','gestionmodulos','nacionalidad','provincias', 'certificados',
+        );
 
         foreach($modulos as $modulo) {
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Agregar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Eliminar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Modificar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Agregar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Eliminar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Modificar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insert(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web'.$i]);
 
             // Agregar los permisos para el menú de la izquierda
-            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web']);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web']);
         }
 
         $i = 2; // ERP
-        $modulos = Modulo::whereIn('name', [ 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'Categoria de Productos', 'Categoria Profesional', 'Compras', 'Compra Simple', 'Empleados', 'Haberes', 'Ventas', 'Venta Simple', 'Ventas Mostrador', 'Cart', 'Informes', 'Payments', 'Tags',
-        ])->get();
+        // $modulos = Modulo::whereIn('name', [ 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'categoriaproducto', 'categoriaprofesional', 'Compras', 'Empleados', 'Haberes', 'Ventas', 'compras-mini', 'ventasimple', 'ventasmostrador', 'Cart', 'Informes', 'Payments', 'Tags', 'producto/tag','producto/create','producto','productoscarts','productobajas'
+        // ])->get();
+
+        $modulos = array ( 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'categoriaproducto', 'categoriaprofesional', 'Compras', 'Empleados', 'Haberes', 'Ventas', 'compras-mini', 'ventasimple', 'ventasmostrador', 'Cart', 'Informes', 'Payments', 'Tags', 'producto/tag','producto/create','producto','productoscarts','productobajas');
 
         foreach($modulos as $modulo) {
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Agregar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Eliminar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Modificar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Agregar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Eliminar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Modificar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web'.$i]);
 
             // Agregar los permisos para el menú de la izquierda
-            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web']);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web']);
         }
-
 
         $i = 3; // Imprenta
-        $modulos = Modulo::whereIn( 'name', [ 'Dashboard','areas','Categorias','Cuentas','Elementos','Estados','Listas','Proveedores','Unidades','Producto','Clientes','Productos','Administracion','Enviar','Pedidos',
-        ])->get();
+        // $modulos = Modulo::whereIn( 'name', [ 'Dashboard','areas','Categorias','Cuentas','Elementos','Estados','Listas','Proveedores','Unidades','Producto','Clientes','Productos','Administracion','Enviar','Pedidos',
+        // ])->get();
+
+        $modulos = array ('Dashboard','areas','Categorias','Cuentas','Elementos','Estados','Listas','Proveedores','Unidades','Producto','Clientes','Productos','Administracion','Enviar','Pedidos',);
 
         foreach($modulos as $modulo) {
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Agregar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Eliminar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Modificar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Agregar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Eliminar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Modificar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web'.$i]);
 
             // Agregar los permisos para el menú de la izquierda
-            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web']);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web']);
         }
 
-
         $i = 4; // Gastronomica
-        $modulos = Modulo::whereIn( 'name', [ 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'menu',
-        ])->get();
+        // $modulos = Modulo::whereIn( 'name', [ 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'menu', 'planalimentario', 'expendio'
+        // ])->get();
+
+        $modulos = array ('Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'menu', 'planalimentario', 'expendio');
 
         foreach($modulos as $modulo) {
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Agregar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Eliminar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Modificar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Agregar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Eliminar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Modificar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web'.$i]);
 
             // Agregar los permisos para el menú de la izquierda
-            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web']);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web']);
         }
 
 
         $i = 5; // Inmobiliaria
-        $modulos = Modulo::whereIn( 'name', [ 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'Configuraciones', 'Tasaciones', 'Coeficientes', 'Alta Propiedades', 'Archivos', 'Listado Propiedades', 'Tipos Inmuebles', 'Zonas', 'Bienes', 'Garantes', 'Propietarios', 'Contratos', 'Ajustes',
-        ])->get();
+        // $modulos = Modulo::whereIn( 'name', [ 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'Configuraciones', 'Tasaciones', 'Coeficientes', 'Alta Propiedades', 'Archivos', 'ListadoPropiedades', 'Tipos Inmuebles', 'Zonas', 'Bienes', 'Garantes', 'Propietarios', 'Contratos', 'Ajustes',
+        // ])->get();
+
+        $modulos = array ( 'Dashboard', 'Administracion', 'areas', 'Categorias', 'Cuentas', 'Elementos', 'Estados', 'Listas', 'Proveedores', 'Unidades', 'Producto', 'Clientes', 'Productos', 'Configuraciones', 'Tasaciones', 'Coeficientes', 'Alta Propiedades', 'Archivos', 'ListadoPropiedades', 'Tipos Inmuebles', 'Zonas', 'Bienes', 'Garantes', 'Propietarios', 'Contratos', 'Ajustes',);
 
         foreach($modulos as $modulo) {
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Agregar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Eliminar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Modificar','guard_name' => 'web'.$i]);
-            DB::table('permissions')->insert(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Agregar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Eliminar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Modificar','guard_name' => 'web'.$i]);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web'.$i]);
 
             // Agregar los permisos para el menú de la izquierda
-            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo->pagina) . '.Ver','guard_name' => 'web']);
+            DB::table('permissions')->insertOrIgnore(['name'=>strtolower($modulo) . '.Ver','guard_name' => 'web']);
         }
 
 

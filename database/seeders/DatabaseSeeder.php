@@ -68,7 +68,6 @@ class DatabaseSeeder extends Seeder
             Elemento::firstOrCreate(['name'=> 'Vehículo', 'existencia'=>0, 'precio_compra'=>0, 'stock_minimo'=>0, 'vencimiento'=> now(), 'categoria_id' => $categoria_id, 'unidad_id' => $unidad_id, 'ruta' =>'', 'empresa_id' => $i]);
         }
 
-
         // DB::table('roles')->insert(['name' => 'Administrador','guard_name' => 'web',]);
         // DB::table('roles')->insert(['name' => 'Usuario','guard_name' => 'web',]);
         // DB::table('roles')->insert(['name' => 'Free','guard_name' => 'web',]);

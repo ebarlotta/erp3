@@ -33,8 +33,8 @@ class RolesComponent extends Component {
                 // $a->AsignarRolesAlaEmpresa(2);
 
                 return view('livewire.roles.roles-component')->extends('layouts.adminlte');
-            } else { 
-                return view('livewire.seleccionarempresa')->extends('layouts.adminlte'); 
+            } else {
+                return view('livewire.seleccionarempresa')->extends('layouts.adminlte');
             }
         } else {
             return view('SinPermiso')->extends('layouts.adminlte');
@@ -102,8 +102,8 @@ class RolesComponent extends Component {
     public function SeleccionarModulo($id, $nombreModulo) {
         unset($this->permisos);
         unset($this->permisoshabilitados);
-        if($id == 0) { 
-            $this->modulo_seleccionado = null; 
+        if($id == 0) {
+            $this->modulo_seleccionado = null;
         } else {
             $this->modulo_seleccionado = $id;
             $this->modulo_name = $nombreModulo;
@@ -124,23 +124,26 @@ class RolesComponent extends Component {
                 ->join('modulos', 'modulos.id', '=', 'empresa_modulos.modulo_id')
                 ->select('modulos.name as name', 'modulos.pagina as pagina', 'modulos.id as id')
                 ->get();
+        // dd($this->moduloshabilitados);
 
             // Busca todos los permisos del módulo seleccionado y cuáles de ellos están habilitados para el rol elegido
             $sql = 'SELECT SUBSTRING_INDEX(p.name, ".", 1) as modulo, p.name, p.id as permission_id, role_id
                 FROM permissions p
                 LEFT JOIN role_has_permissions rhp ON rhp.permission_id = p.id
-                WHERE rhp.role_id = '.$this->rol_id .' 
-                AND p.guard_name = "web'. session("empresa_id") . '"
+                WHERE rhp.role_id = '.$this->rol_id .'
+                AND p.guard_name = "web'. $this->empresaSeleccionada . '"
                 AND p.name like "%'.$nombreModulo.'%"';
+        // dd( $sql);
+
             $this->permisoshabilitados = db::select($sql);
 
             // Busca todos los permisos NO HABILITADOS del módulo seleccionado
             $sql = 'SELECT SUBSTRING_INDEX(p.name, ".", 1) as modulo, p.name, p.id as permission_id, role_id, guard_name
                 FROM permissions p
-                LEFT JOIN role_has_permissions rhp ON rhp.permission_id = p.id 
+                LEFT JOIN role_has_permissions rhp ON rhp.permission_id = p.id
                 AND rhp.role_id = '.$this->rol_id .'
-                WHERE rhp.permission_id IS NULL 
-                AND p.guard_name = "web'. session("empresa_id") . '"
+                WHERE rhp.permission_id IS NULL
+                AND p.guard_name = "web'. $this->empresaSeleccionada . '"
                 AND p.name like "%'.$nombreModulo.'%"';
                 $permisosNoActivadoshabilitados = db::select($sql);
             $this->permisosNoActivadoshabilitados = db::select($sql);
@@ -177,7 +180,7 @@ class RolesComponent extends Component {
                 $aux = 'INSERT INTO role_has_permissions (permission_id, role_id) VALUES ('.$permision_id.', '.$this->rol_id . ')';
                 $bux = db::select($aux);
             }
-            
+
             DB::table('model_has_roles')->insertOrIgnore([
                 'role_id' => $permision_id,
                 'model_type' => 'App\Models\Role',
@@ -193,14 +196,21 @@ class RolesComponent extends Component {
     public function EliminarPermiso($permision_id, $role_id) {
         $usuarios = EmpresaUsuario::where('rol_id', $this->rol_id)->get();  //Busca los usuarios que tienen el mismo rol elegido
         $permiso_a_eliminar = Permission::where('id',$permision_id)->get('name'); // Busca los datos del permiso a eliminar
+
         foreach($usuarios as $usuario) {    // Itera los usuarios
             $user = User::find($usuario->user_id);   // Busca a cada usuario y
             // $b = $user->revokePermissionTo($permiso_a_eliminar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
-            $a = 'DELETE FROM model_has_permissions WHERE permission_id = '. $permision_id .' and model_type=\'App\Models\Role\' and model_id = '. $role_id;
-            db::select($a);
+            DB::table('model_has_permissions')
+                ->where('permission_id', $permision_id)
+                ->where('model_type', 'App\Models\User')
+                ->where('model_id', $usuario->user_id)
+                ->delete();
+            // $a = 'DELETE FROM model_has_permissions WHERE permission_id = '. $permision_id .' and model_type=\'App\Models\User\' and model_id = '. $usuario->user_id;
 
             $a = 'DELETE FROM role_has_permissions WHERE permission_id = '. $permision_id .' and role_id = '. $role_id;
             db::select($a); //IMPACTA EN LOS TAGAS QUE APARECEN EN PANTALLA
+            // dd($a);
+
         }
         //Recarga la información
         $this->SeleccionarModulo($this->modulo_seleccionado,$this->modulo_name);

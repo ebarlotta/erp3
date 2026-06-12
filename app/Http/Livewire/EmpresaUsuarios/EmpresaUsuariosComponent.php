@@ -58,7 +58,7 @@ class EmpresaUsuariosComponent extends Component
     public function closeModalPopover()
     {
         $this->isModalOpen = false;
-    }   
+    }
     public function OpenModalRoles() {
         $this->isModalRoles = true;
     }
@@ -122,9 +122,9 @@ class EmpresaUsuariosComponent extends Component
         ->where('user_id', "=", $id)->get();
 
         $this->id_rolActual = $this->usuarioSeleccionado[0]['rol_id'];
-        $this->roles = Roles::where('empresa_id', $this->empresaseleccionada->id)->get();            
+        $this->roles = Roles::where('empresa_id', $this->empresaseleccionada->id)->get();
     }
-    
+
     public function ActualizarRol() {
         $this->validate([
             'id_NuevoRol' => 'required|integer|min:1',
@@ -134,8 +134,12 @@ class EmpresaUsuariosComponent extends Component
         EmpresaUsuario::updateOrCreate(['user_id' => $this->usuarioSeleccionado[0]->id, 'empresa_id' => $this->empresaseleccionada->id], [
             'rol_id' => (int) $this->id_NuevoRol
         ]);
+
+        // model_has_permissions
+
+
         session()->flash('message', 'Actualizado');
         $this->CerrarModalRoles();
-        $this->CargarUsuarios($this->empresaseleccionada->id);  
+        $this->CargarUsuarios($this->empresaseleccionada->id);
     }
 }

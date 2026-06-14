@@ -57,6 +57,56 @@
         }
     </style>
 
+    <style>
+        /* Transición suave para el menú lateral */
+        .sidebar-mobile {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100%;
+            z-index: 40;
+        }
+        .sidebar-mobile.open {
+            transform: translateX(0);
+        }
+        /* Overlay oscuro cuando el menú está abierto */
+        .overlay {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 35;
+        }
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* Sidebar normal para escritorio */
+        @media (min-width: 768px) {
+            .sidebar-desktop {
+                display: block !important;
+            }
+            .sidebar-mobile {
+                display: none !important;
+            }
+            .mobile-header {
+                display: none !important;
+            }
+        }
+        @media (max-width: 767px) {
+            .sidebar-desktop {
+                display: none !important;
+            }
+            .desktop-header {
+                display: none !important;
+            }
+        }
+    </style>
     @livewireStyles
     @stack('styles')
 </head>
@@ -74,6 +124,75 @@
     <!-- Alpine.js (opcional pero recomendado para Livewire) -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
+        <script>
+            // Menú hamburguesa
+            function toggleMenu() {
+                const sidebar = document.getElementById('sidebarMobile');
+                const overlay = document.getElementById('overlay');
+                if (sidebar) sidebar.classList.toggle('open');
+                if (overlay) overlay.classList.toggle('active');
+            }
+
+            // Cerrar menú al hacer clic en un enlace (móvil)
+            document.querySelectorAll('#sidebarMobile a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 768) {
+                        toggleMenu();
+                    }
+                });
+            });
+
+            // Temporizador Focus Mode (sincronizado entre ambos)
+            let timerInterval = null;
+            let timerSeconds = 0;
+
+            function updateAllTimers() {
+                const hours = Math.floor(timerSeconds / 3600);
+                const minutes = Math.floor((timerSeconds % 3600) / 60);
+                const seconds = timerSeconds % 60;
+                const display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                const mobileTimer = document.getElementById('mobileTimer');
+                const desktopTimer = document.getElementById('desktopTimer');
+                if (mobileTimer) mobileTimer.innerText = display;
+                if (desktopTimer) desktopTimer.innerText = display;
+            }
+
+            function startTimer() {
+                if (timerInterval) return;
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    updateAllTimers();
+                }, 1000);
+            }
+
+            function stopTimer() {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+            }
+
+            function resetTimer() {
+                stopTimer();
+                timerSeconds = 0;
+                updateAllTimers();
+            }
+
+            // Botones de parar (ambos)
+            const mobileStopBtn = document.getElementById('mobileStopBtn');
+            const desktopStopBtn = document.getElementById('desktopStopBtn');
+            
+            if (mobileStopBtn) {
+                mobileStopBtn.addEventListener('click', stopTimer);
+            }
+            if (desktopStopBtn) {
+                desktopStopBtn.addEventListener('click', stopTimer);
+            }
+
+            // Inicializar
+            updateAllTimers();
+        </script>
     @stack('scripts')
 </body>
 </html>

@@ -61,9 +61,13 @@ class ProductBacklog extends Component
             ->paginate(10);
             
         $users = User::all();
+
+        $stats = Project::getStatusClass();
     
         return view('livewire.proyectos.product-backlog', [
             'pbis' => $pbis,
+            'stats' => $stats,
+            'statuses' => Project::statuses(),
             'users' => $users
         ])->extends('layouts.proyectos');
     }

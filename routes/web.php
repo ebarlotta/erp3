@@ -355,6 +355,8 @@ Route::prefix('projects')->name('projects.')->group(function () {
     Route::get('/time', TimeTracker::class)->name('time');
 
     //Product Backlog
+    // En web.php
+    // Route::get('/product-backlog/{project}', ProductBacklog::class)->name('projects.product-backlog');
     Route::get('/product-backlog/{project}',ProductBacklog::class)->name('product-backlog');
 });
 

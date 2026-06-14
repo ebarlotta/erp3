@@ -70,4 +70,33 @@ class Project extends Model
     {
         return ['active', 'paused', 'completed', 'planning'];
     }
+
+    protected function getStatusClass() {
+        $stats = [
+            'activeProjects' => Project::where('status', 'active')->count(),
+            'pendingTasks' => Task::where('status', '!=', 'completed')->count(),
+            'hoursThisWeek' => $this->getHoursThisWeek(),
+            'completionRate' => $this->getCompletionRate(),
+        ];
+        return $stats;
+    }
+    
+    protected function getHoursThisWeek(): float {
+        $startOfWeek = now()->startOfWeek();
+        return \DB::table('pm_time_entries')
+            ->whereNotNull('ended_at')
+            ->where('started_at', '>=', $startOfWeek)
+            ->selectRaw('SUM(TIMESTAMPDIFF(SECOND, started_at, ended_at)) as total')
+            ->value('total') / 3600;
+    }
+
+    protected function getCompletionRate(): int
+    {
+        $total = Task::count();
+        if ($total === 0) return 0;
+
+        $completed = Task::where('status', 'completed')->count();
+        return round(($completed / $total) * 100);
+    }
+    
 }

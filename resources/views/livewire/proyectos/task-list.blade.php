@@ -101,24 +101,25 @@
             </header>
 
         <!-- Stats -->
-        <div class="grid grid-cols-4 gap-6 mb-8">
+        <x-project-stats :stats="$stats" />
+        {{-- <div class="grid grid-cols-4 gap-6 mb-8">
             <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
                 <div class="text-slate-400 text-sm mb-1">Proyectos Activos</div>
-                {{-- <div class="text-3xl font-bold text-white">{{ $stats['activeProjects'] }}</div> --}}
+                <div class="text-3xl font-bold text-white">{{ $stats['activeProjects'] }}</div>
             </div>
             <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
                 <div class="text-slate-400 text-sm mb-1">Tareas Pendientes</div>
-                {{-- <div class="text-3xl font-bold text-white">{{ $stats['pendingTasks'] }}</div> --}}
+                <div class="text-3xl font-bold text-white">{{ $stats['pendingTasks'] }}</div>
             </div>
             <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
                 <div class="text-slate-400 text-sm mb-1">Horas Esta Semana</div>
-                {{-- <div class="text-3xl font-bold text-blue-400">{{ number_format($stats['hoursThisWeek'], 1) }}h</div> --}}
+                <div class="text-3xl font-bold text-blue-400">{{ number_format($stats['hoursThisWeek'], 1) }}h</div>
             </div>
             <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
                 <div class="text-slate-400 text-sm mb-1">Completado</div>
-                {{-- <div class="text-3xl font-bold text-green-400">{{ $stats['completionRate'] }}%</div> --}}
+                <div class="text-3xl font-bold text-green-400">{{ $stats['completionRate'] }}%</div>
             </div>
-        </div>
+        </div> --}}
     <div class="container mx-auto p-6">
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
@@ -130,10 +131,8 @@
                     <option value="{{ $status }}">{{ ucfirst($status) }}</option>
                 @endforeach
             </select>
-            <a href="{{ route('projects.product-backlog', $project_id) }}">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                    Volver
-                </button>
+                <a href="{{ route('projects.product-backlog', $project_id) }}">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Volver</button>
                 </a>
             </div>
         </div>

@@ -32,6 +32,15 @@ class TaskList extends Component
         // $this->pbi = Pbi::find($b);
         // $query = Project::query();
 
+        $stats = Project::getStatusClass();
+        // dd($a);
+        // $stats = [
+        //     'activeProjects' => Project::where('status', 'active')->count(),
+        //     'pendingTasks' => Task::where('status', '!=', 'completed')->count(),
+        //     'hoursThisWeek' => $this->getHoursThisWeek(),
+        //     'completionRate' => $this->getCompletionRate(),
+        // ];
+
         if(is_null($this->pbi)) {
             $this->pbi = new Pbi();
         } 
@@ -46,13 +55,14 @@ class TaskList extends Component
             $query->where('status', $this->filterStatus);
         }
 
-        // $tasks = $query->orderBy($this->sortBy, $this->sortDirection,'asc')->get();
+        //$tasks = $query->orderBy($this->sortBy, $this->sortDirection,'asc')->get();
 
         return view('livewire.proyectos.task-list', [
-            'tasks' => Task::where('pbi_id', 3)->orderBy('order')->get(),
-            // 'tasks' => $query,
+            'tasks' => Task::where('pbi_id', $this->pbi->id)->orderBy('order')->get(),
+            //'tasks' => $query,
             'statuses' => Task::statuses(),
             'priorities' => Task::priorities(),
+            'stats' => $stats,
         ])->extends('layouts.proyectos');
     }
 

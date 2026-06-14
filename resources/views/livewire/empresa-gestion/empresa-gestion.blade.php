@@ -16,7 +16,21 @@
                 <div class=\" bg-gray-400 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-2 shadow-lg my-2\"
                     role=\"dialog\">
                     <div class=\" bg-gray-400 px-4 pt-5 pb-4 sm:p-6 sm:pb-4\">
-                        Espere unos segundos mientras se procesa la información ingresada...
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Procesando...</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Espere unos segundos mientras se procesa la información ingresada...
+                            </div>
+                            <div class="modal-footer">
+                                {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
+                                {{-- <button type="button" class="btn btn-primary">Understood</button> --}}
+                            </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

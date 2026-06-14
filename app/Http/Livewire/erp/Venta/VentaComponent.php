@@ -18,6 +18,7 @@ use App\Models\erp\Certificado;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
 
 use App\Http\Livewire\erp\Venta\AfipComponent;
 
@@ -79,6 +80,39 @@ class VentaComponent extends Component
 
     public function render()
     {
+
+
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'ventas.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('ventas.Ver', $guardName)) {
+            if(session('empresa_id')) {
+                $this->empresa_id=session('empresa_id');
+                
+                 $anio = date("Y");
+                if(is_null($this->gfanio)) { $this->gfanio = $anio; }; //La primara vez que inicia revisa si es nulo y en ese caso cambia al año actual, sino no lo toca más
+
+                if ($this->ddesde==null || $this->dhasta==null || $this->cdesde==null || $this->chasta==null || $this->ccdesde==null || $this->cchasta==null ) { $anio = date("Y"); }
+
+                $this->ddesde = $this->ccdesde = $this->cdesde = date($anio.'-01-01');
+                $this->dhasta = $this->chasta = $this->cchasta = date($anio.'-12-31');
+
+                $this->areas = Area::where('empresa_id', $this->empresa_id)->ORDERBy('name','asc')->get();
+                $this->cuentas = Cuenta::where('empresa_id', $this->empresa_id)->ORDERBy('name','asc')->get();
+                $this->clientes = Cliente::where('empresa_id', $this->empresa_id)->ORDERBy('name','asc')->get();
+                $this->ccClientes = $this->clientes;
+                $this->ivas = Iva::where('id','>',0)->get();
+                $this->productos = Producto::where('empresa_id', $this->empresa_id)->orderBy('name','asc')->get();
+        
+                return view('livewire.venta.venta-component')->extends('layouts.adminlte');
+
+            } else {
+                return view('livewire.seleccionarempresa')->extends('layouts.adminlte');
+            }
+        } else {
+            return view('SinPermiso')->extends('layouts.adminlte');
+        }
+
+
+
         if ( !Auth::check() ) { return view('SinPermiso'); return route('dashboard');return view('welcome');   }
         // $a = new AfipComponent();
 
@@ -523,19 +557,19 @@ class VentaComponent extends Component
             </div>
         </span>
 
-            <div class=\"table-responsive-sm\">
+            <div class=\"table-responsive-sm  overflow-x-auto\">
                 <table class=\"table table-striped\" style=\"font-size:13px; padding: 0rem 0rem;\">
                 <thead>
                   <tr>
-                    <th scope=\"col\">Fecha</th>
-                    <th scope=\"col\">Comprobante</th>
-                    <th scope=\"col\">Cliente</th>
-                    <th scope=\"col\"></th>
-                    <th class=\"col d-none d-sm-table-cell\" scope=\"col\">Detalle</th>
-                    <th scope=\"col\">Bruto</th>
-                    <th scope=\"col\">Iva</th>
-                    <th scope=\"col\">Exento</th>
-                    <th class=\"col d-none d-sm-table-cell\" scope=\"col\">Imp.Interno</th>
+                    <th class=\"p-1\" scope=\"col\">Fecha</th>
+                    <th class=\"flex-1 d-none d-sm-table-cell\" scope=\"col\">Comprobante</th>
+                    <th class=\"flex-1 d-none d-sm-table-cell\" scope=\"col\">Cliente</th>
+                    <th class=\"flex-1\" scope=\"col\"></th>
+                    <th class=\"flex-1  d-none d-sm-table-cell\" scope=\"col\">Detalle</th>
+                    <th class=\"flex-1\" scope=\"col\">Bruto</th>
+                    <th class=\"flex-1\" scope=\"col\">Iva</th>
+                    <th class=\"flex-1\" scope=\"col\">Exento</th>
+                    <th class=\"col flex-1 d-none d-sm-table-cell\" scope=\"col\">Imp.Interno</th>
                     <th class=\"col d-none d-sm-table-cell\" scope=\"col\">Percec.Iva</th>
                     <th class=\"col d-none d-sm-table-cell\" scope=\"col\">Retenc.IB</th>
                     <th class=\"col d-none d-sm-table-cell\" scope=\"col\">Retenc.Gan</th>
@@ -575,9 +609,9 @@ class VentaComponent extends Component
 
             $this->filtro=$this->filtro."
             <tr wire:click=\"gCargarRegistro(". $registro->id .")\">
-                <td style=\"font-size:12px;\" class=\"p-0 text-right\">$Fecha</td>
-                <td class=\"p-0 text-right\">$registro->comprobante</td>
-                <td class=\"p-0 text-right\" style=\"white-space: nowrap;\" class=\" text-left\">$Cliente->name</td>";
+                <td style=\"font-size:12px;white-space: nowrap\" class=\"p-1 col-1 text-right\">$Fecha</td>
+                <td class=\"p-1 text-right flex-1 d-none d-sm-table-cell\">$registro->comprobante</td>
+                <td class=\"p-1 flex-1 d-none d-sm-table-cell text-left\" style=\"white-space: nowrap;\">$Cliente->name</td>";
 
                 //Comprobante común de color gris
                 if($registro->ParticIva=='No') { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div style=\"background-color: lightslategray;width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"></div></td>"; }
@@ -586,52 +620,53 @@ class VentaComponent extends Component
                     // Si está cerrado lo coloca de color marrón
                     if($registro->Cerrado>1) { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div style=\"background-color: brown;width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"></div></td>"; }
                     // Si Es un comprobante que está preparado para ser enviado a AFIP
-                    if($registro->Cerrado==0)  { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div wire:click=\"openModalGenerarFactura();\" style=\"background-color: rgb(238, 238, 79);width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\" value=\" >\"> </div></td>"; }
+                    if($registro->Cerrado==0)  { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div wire:click=\"openModalGenerarFactura();\" style=\"background-color: rgb(238, 238, 79);width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"></div></td>"; }
                     // Si es un comprobante que ha sido enviado a AFIP pero todavía no se encuentra cerrado
                     if($registro->Cerrado==-1) { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div style=\"background-color: rgb(242, 120, 120); width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"><img src=\"images/archivo-pdf.svg\"></div></td>"; }
                 }
-
+// dd($this->filtro);
                 $this->filtro=$this->filtro."
-                <td class=\"p-0  d-none d-sm-table-cell text-left\">$registro->detalle</td>
-                <td class=\"p-0 col text-right\">".number_format($registro->BrutoComp, 2,'.','')."</td>
-                <td class=\"p-0 col text-right\">".number_format($MontoIva, 2,'.','')."</td>
-                <td class=\"p-0 col text-right\">".number_format($registro->ExentoComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->ImpInternoComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->PercepcionIvaComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionIB, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionGan, 2,'.','')."</td>
-                <td class=\"p-0 col text-right\">".number_format($registro->NetoComp, 2,'.','')."</td>
-                <td class=\"p-0 col text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell\">$registro->ParticIva</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Area->name</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Cuenta->name</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-left flex-1\">$registro->detalle</td>
+                <td class=\"p-1 col text-right flex-1\">".number_format($registro->BrutoComp, 2,'.','')."</td>
+                <td class=\"p-1 col text-right flex-1\">".number_format($MontoIva, 2,'.','')."</td>
+                <td class=\"p-1 col text-right flex-1\">".number_format($registro->ExentoComp, 2,'.','')."</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right flex-1\">".number_format($registro->ImpInternoComp, 2,'.','')."</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($registro->PercepcionIvaComp, 2,'.','')."</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionIB, 2,'.','')."</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionGan, 2,'.','')."</td>
+                <td class=\"p-1 col text-right\">".number_format($registro->NetoComp, 2,'.','')."</td>
+                <td class=\"p-1 col text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
+                <td class=\"p-1 col d-none d-sm-table-cell\">$registro->ParticIva</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right\">$Area->name</td>
+                <td class=\"p-1 col d-none d-sm-table-cell text-right\">$Cuenta->name</td>
             </tr>";
         }
 
-        $this->filtro=$this->filtro."<tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>Totales</td>
-        <td class=\"col text-right\">".number_format($Bruto, 2,'.','')."</td>
-        <td class=\"col text-right\">".number_format($MontoIvaT, 2,'.','')."</td>
-        <td class=\"col text-right\">".number_format($Exento, 2,'.','')."</td>
-        <td class=\"col d-none d-sm-table-cell text-right\">".number_format($ImpInterno, 2,'.','')."</td>
-        <td class=\"col d-none d-sm-table-cell text-right\">".number_format($PerIva, 2,'.','')."</td>
-        <td class=\"col d-none d-sm-table-cell text-right\">".number_format($RetIB, 2,'.','')."</td>
-        <td class=\"col d-none d-sm-table-cell text-right\">".number_format($RetGan, 2,'.','')."</td>
-        <td class=\"col text-right\">".number_format($NetoT, 2,'.','')."</td>
-        <td class=\"col text-right\">".number_format($MontoPagado, 2,'.','')."</td>
-        <td class=\"col d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
-        <td class=\"col d-none d-sm-table-cell text-right\">".number_format($Cantidad, 2,'.','')."</td>
-        <td class=\"col d-none d-sm-table-cell text-right\"></td>
-        <td class=\"col d-none d-sm-table-cell text-right\"></td>
-        <td class=\"col d-none d-sm-table-cell text-right\"></td>
-        <td class=\"col d-none d-sm-table-cell text-right\"></td>
+        $this->filtro=$this->filtro."<tr style=\"border-top: 1px solid;\">
+        <td class=\"p-1 d-none d-sm-table-cell\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell\"></td>
+        <td class=\"p-1\"></td>
+        <td class=\"p-1\">Totales</td>
+        <td class=\"p-1 text-right\">".number_format($Bruto, 2,'.','')."</td>
+        <td class=\"p-1 text-right\">".number_format($MontoIvaT, 2,'.','')."</td>
+        <td class=\"p-1 text-right\">".number_format($Exento, 2,'.','')."</td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($ImpInterno, 2,'.','')."</td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($PerIva, 2,'.','')."</td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($RetIB, 2,'.','')."</td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($RetGan, 2,'.','')."</td>
+        <td class=\"p-1 text-right\">".number_format($NetoT, 2,'.','')."</td>
+        <td class=\"p-1 text-right\">".number_format($MontoPagado, 2,'.','')."</td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($Cantidad, 2,'.','')."</td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right\"></td>
     </tr>
     </tbody>
         </table>

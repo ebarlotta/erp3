@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\EmpresaGestion;
 
 use App\Models\Empresa;
+use Database\Seeders\erp\CuentaSeeder;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -170,6 +171,10 @@ class EmpresaGestion extends Component {
             }
 
             DB::table('clientes')->insert(['name' => "CONSUMIDOR_FINAL",'cuil'=>"20-000000".$this->empresa_id->id."-0",'direccion'=>'-','email'=>'empresa'.$this->empresa_id->id.'@barber.com','telefono'=>'0','empresa_id' => $this->empresa_id->id,]);  // Inserta al CONSUMIDOR FINAL como cliente
+
+            $cuenta = new CuentaSeeder();  // Crea una instancia del seeder
+            $cuenta->empresa_id = $this->empresa_id->id;  // Asigna el ID de la empresa al seeder
+            $cuenta->runForEmpresa();  // Llama al método para insertar las cuentas básicas para la empresa
 
             // DB::table('role_has_permissions')->insert(['permission_id' => 5, 'role_id'=> 1,]);
             // DB::table('role_has_permissions')->insert(['permission_id' => 6, 'role_id'=> 1,]);

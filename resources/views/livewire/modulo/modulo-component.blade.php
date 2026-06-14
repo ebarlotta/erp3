@@ -58,9 +58,11 @@
             @endforeach
         </div>
 
+
+
                 <!-- Contenedor de gráficos (DESPUÉS del foreach de empresas) -->
         <div class="chart-container mt-8" style="position: relative;">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
 
                 <!-- Gráfico de Compras -->
                 <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
@@ -76,13 +78,13 @@
 
                 <!-- Gráfico de Ventas -->
                 <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
-                    <h3 class="text-lg font-semibold mb-2">Ventas</h3>
+                    <h3 class="text-lg font-semibold mb-2">Compras x Áreas</h3>
                     <canvas id="compras_areas" width="400" height="200"></canvas>
                 </div>
 
                 <!-- Gráfico de Ventas -->
                 <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
-                    <h3 class="text-lg font-semibold mb-2">Ventas</h3>
+                    <h3 class="text-lg font-semibold mb-2">Compras x Cuentas</h3>
                     <canvas id="compras_cuentas" width="400" height="200"></canvas>
                 </div>
 

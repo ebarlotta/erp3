@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Permission;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use App\Models\EmpresaUsuario;
+use Database\Seeders\erp\CuentaSeeder;
 
 class ModSeederAdmin extends Seeder
 {
@@ -71,6 +72,9 @@ class ModSeederAdmin extends Seeder
         //  DB::table('roles')->insert(['name' => 'SuperAdministrador','guard_name' => 1, 'empresa_id' => 1]);  // Solo a la empresa administradora
         // $this->AsignarRolesAlaEmpresa(1);   // Empresa de Administración
 
+        $cuenta = new CuentaSeeder();  // Crea una instancia del seeder
+        $cuenta->runForEmpresa(1);  // Llama al método para insertar las cuentas básicas para la empresa
+
         $user = User::find(1);   // Busca al usuario Administrador y le asigna el rol de SuperAdministrador
         // $user->assignRole('SuperAdministrador'); // Agrega en model_has_roles
         EmpresaUsuario::create(['empresa_id' => 2,'user_id' => $user->id,'rol_id' => 1]);
@@ -85,21 +89,27 @@ class ModSeederAdmin extends Seeder
         DB::table('roles')->insert(['name'=>'Gestor', 'guard_name' => 'web2', 'empresa_id'=>2]);
         DB::table('roles')->insert(['name'=>'Usuario', 'guard_name' => 'web2', 'empresa_id'=>2]);
         DB::table('roles')->insert(['name'=>'Free', 'guard_name' => 'web2', 'empresa_id'=>2]);
+        $cuenta->runForEmpresa(2);  // Llama al método para insertar las cuentas básicas para la empresa
+
 
         DB::table('roles')->insert(['name'=>'Administrador', 'guard_name' => 'web3', 'empresa_id'=>3]);
         DB::table('roles')->insert(['name'=>'Gestor', 'guard_name' => 'web3', 'empresa_id'=>3]);
         DB::table('roles')->insert(['name'=>'Usuario', 'guard_name' => 'web3', 'empresa_id'=>3]);
         DB::table('roles')->insert(['name'=>'Free', 'guard_name' => 'web3', 'empresa_id'=>3]);
+        $cuenta->runForEmpresa(3);  // Llama al método para insertar las cuentas básicas para la empresa
+
 
         DB::table('roles')->insert(['name'=>'Administrador', 'guard_name' => 'web4', 'empresa_id'=>4]);
         DB::table('roles')->insert(['name'=>'Gestor', 'guard_name' => 'web4', 'empresa_id'=>4]);
         DB::table('roles')->insert(['name'=>'Usuario', 'guard_name' => 'web4', 'empresa_id'=>4]);
         DB::table('roles')->insert(['name'=>'Free', 'guard_name' => 'web4', 'empresa_id'=>4]);
+        $cuenta->runForEmpresa(4);  // Llama al método para insertar las cuentas básicas para la empresa
 
         DB::table('roles')->insert(['name'=>'Administrador', 'guard_name' => 'web5', 'empresa_id'=>5]);
         DB::table('roles')->insert(['name'=>'Gestor', 'guard_name' => 'web5', 'empresa_id'=>5]);
         DB::table('roles')->insert(['name'=>'Usuario', 'guard_name' => 'web5', 'empresa_id'=>5]);
         DB::table('roles')->insert(['name'=>'Free', 'guard_name' => 'web5', 'empresa_id'=>5]);
+        $cuenta->runForEmpresa(5);  // Llama al método para insertar las cuentas básicas para la empresa
 
 
         // $uu = new ModSeederNewUser();

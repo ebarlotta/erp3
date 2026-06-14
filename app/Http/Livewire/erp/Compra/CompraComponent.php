@@ -432,29 +432,41 @@ class CompraComponent extends Component
 
         // <div class=\"table-responsive-sm\">word-wrap: anywhere;
         $this->filtro="
-
-                <table class=\"table table-striped small\" style=\"font-size:12.5px; padding: 0.2rem .2rem; padding: .2rem;\">
+        <span wire:loading>
+            <div class=\"inset-0 fixed\">
+                <div class=\"absolute flex justify-center w-full mt-6 p-18\">
+                    <div class=\" bg-gray-400 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-2 shadow-lg my-2\" role=\"dialog\">
+                        <div class=\" bg-gray-400 px-4 pt-5 pb-4 sm:p-6 sm:pb-4\">
+                            Espere unos segundos mientras se procesa la información ingresada...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+            <div class=\"table-responsive-sm  overflow-x-auto w-full\">
+                <table class=\"table table-striped\" style=\"font-size:13px; padding: 0rem 0rem;\">
                 <thead>
                   <tr>
-                    <th >Fecha</th>
-                    <th scope=\"col\">Comprobante</th>
-                    <th class=\"col d-none d-sm-table-cell p-1 my-auto\" scope=\"col\">Proveedor</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Detalle</th>
-                    <th class=\"p-1 scope=\"col\">Bruto</th>
-                    <th class=\"p-1 scope=\"col\">Iva</th>
-                    <th class=\"p-1 scope=\"col\">Exento</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Imp<br>Interno</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Percec<br>Iva</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Retenc<br>IB</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Retenc<br>Gan</th>
-                    <th class=\"p-1 scope=\"col\">Neto</th>
-                    <th class=\"p-1 scope=\"col\">Pagado</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Saldo</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Cant<br>Litros</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Part<br>Iva</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Mes</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Area</th>
-                    <th class=\"col d-none d-sm-table-cell p-1\" scope=\"col\">Cuenta</th>
+                    <th class=\"p-1\" scope=\"col\">Fecha</th>
+                    <th class=\"flex-1 d-none d-sm-table-cell\" scope=\"col\">Comprobante</th>
+                    <th class=\"flex-1 d-none d-sm-table-cell\" scope=\"col\">Proveedor</th>
+                    
+                    <th class=\"d-none d-sm-table-cell p-1\" scope=\"col\">Detalle</th>
+                    <th class=\"flex-1 scope=\"col\">Bruto</th>
+                    <th class=\"flex-1 scope=\"col\">Iva</th>
+                    <th class=\"flex-1 scope=\"col\">Exento</th>
+                    <th class=\"flex-1 d-none d-sm-table-cell\" scope=\"col\">Imp<br>Interno</th>
+                    <th class=\"d-none d-sm-table-cell\" scope=\"col\">Percec<br>Iva</th>
+                    <th class=\"d-none d-sm-table-cell\" scope=\"col\">Retenc<br>IB</th>
+                    <th class=\"d-none d-sm-table-cell\" scope=\"col\">Retenc<br>Gan</th>
+                    <th>Neto</th>
+                    <th>Pagado</th>
+                    <th class=\" d-none d-sm-table-cell\" scope=\"col\">Saldo</th>
+                    <th class=\" d-none d-sm-table-cell\" scope=\"col\">Cant<br>Litros</th>
+                    <th class=\" d-none d-sm-table-cell\" scope=\"col\">Part<br>Iva</th>
+                    <th class=\" d-none d-sm-table-cell\" scope=\"col\">Mes</th>
+                    <th class=\" d-none d-sm-table-cell\" scope=\"col\">Area</th>
+                    <th class=\" d-none d-sm-table-cell\" scope=\"col\">Cuenta</th>
                   </tr>
                 </thead>";
 
@@ -483,51 +495,52 @@ class CompraComponent extends Component
             $NetoT = $NetoT + $registro->NetoComp;
             $this->filtro=$this->filtro."
             <tr wire:click=\"gCargarRegistro(". $registro->id .")\">
-                <td class=\"p-0 text-center\">".substr($Fecha,0,6).substr($Fecha,8,2)."</td>
-                <td class=\"p-0\">&nbsp;$registro->comprobante</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-left\">&nbsp; $Proveedor->name</td>
-                <td style=\"max-width:200px; width:200px; overflow: hidden;\" class=\"p-0 col d-none d-sm-table-cell text-left\">$registro->detalle</td>
-                <td class=\"p-0 text-right\">".number_format($registro->BrutoComp, 2,'.','')."</td>
-                <td class=\"p-0 text-right\">".number_format($MontoIva, 2,'.','')."</td>
-                <td class=\"p-0 text-right\">".number_format($registro->ExentoComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->ImpInternoComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->PercepcionIvaComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionIB, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionGan, 2,'.','')."</td>
-                <td class=\"p-0 text-right\">".number_format($registro->NetoComp, 2,'.','')."</td>
-                <td class=\"p-0 text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-center\">&nbsp;$registro->ParticIva</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-center\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">&nbsp;$Area->name&nbsp;</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Cuenta->name</td>
+                <td style=\"font-size:12px;white-space: nowrap\" class=\"p-1 text-right\">$Fecha</td>
+                <td class=\"p-1 text-right flex-1 d-none d-sm-table-cell\">&nbsp;$registro->comprobante</td>
+                <td class=\"p-1 flex-1 d-none d-sm-table-cell text-left\" style=\"white-space: nowrap;\">&nbsp; $Proveedor->name</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-left\">$registro->detalle</td>
+                <td class=\"p-1 text-right flex-1\">".number_format($registro->BrutoComp, 2,'.','')."</td>
+                <td class=\"p-1 text-right flex-1\">".number_format($MontoIva, 2,'.','')."</td>
+                <td class=\"p-1 text-right flex-1\">".number_format($registro->ExentoComp, 2,'.','')."</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-right flex-1\">".number_format($registro->ImpInternoComp, 2,'.','')."</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($registro->PercepcionIvaComp, 2,'.','')."</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($registro->RetencionIB, 2,'.','')."</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($registro->RetencionGan, 2,'.','')."</td>
+                <td class=\"p-1 text-right\">".number_format($registro->NetoComp, 2,'.','')."</td>
+                <td class=\"p-1 text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-center\">&nbsp;$registro->ParticIva</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-center\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-right\">&nbsp;$Area->name&nbsp;</td>
+                <td class=\"p-1 d-none d-sm-table-cell text-right\">$Cuenta->name</td>
                 </tr>";
         }
 
-        $this->filtro=$this->filtro."<style> table td { padding: .2rem; }</style><tr>
-        <td class=\"col d-none d-sm-table-cell p-1\"></td>
-        <td class=\"col d-none d-sm-table-cell p-1\"></td>
-        <td style=\"padding: .2rem;\"></td>
-        <td class=\" p-1\"><b>Totales</b></td>
-        <td class=\"px-1 text-right p-1\"><b>".number_format($Bruto, 2,'.','')."</b></td>
-        <td class=\"px-1 text-right p-1\"><b>".number_format($MontoIvaT, 2,'.','')."</b></td>
-        <td class=\"px-1 text-right p-1\"><b>".number_format($Exento, 2,'.','')."</b></td>
-        <td class=\"px-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($ImpInterno, 2,'.','')."</b></td>
-        <td class=\"px-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($PerIva, 2,'.','')."</b></td>
-        <td class=\"px-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($RetIB, 2,'.','')."</b></td>
-        <td class=\"px-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($RetGan, 2,'.','')."</b></td>
-        <td class=\"px-1 text-right p-1\"><b>".number_format($NetoT, 2,'.','')."</b></td>
-        <td class=\"px-1 text-right p-1\"><b>".number_format($MontoPagado, 2,'.','')."</b></td>
-        <td class=\"px-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($Saldo, 2,'.','')."</b></td>
-        <td class=\"px-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($Cantidad, 2,'.','')."</b></td>
-        <td class=\"px-1 d-none d-sm-table-cell p-1\"></td>
-        <td class=\"px-1 d-none d-sm-table-cell p-1\"></td>
-        <td class=\"px-1 d-none d-sm-table-cell p-1\"></td>
-        <td class=\"px-1 d-none d-sm-table-cell p-1\"></td>
+        $this->filtro=$this->filtro."<tr style=\"border-top: 1px solid;\">
+        <td class=\"p-1 d-none d-sm-table-cell\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell\"></td>
+        <td class=\"p-1\"><b>Totales</b></td>
+        <td class=\"p-1 text-right p-1\"><b>".number_format($Bruto, 2,'.','')."</b></td>
+        <td class=\"p-1 text-right p-1\"><b>".number_format($MontoIvaT, 2,'.','')."</b></td>
+        <td class=\"p-1 text-right p-1\"><b>".number_format($Exento, 2,'.','')."</b></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($ImpInterno, 2,'.','')."</b></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($PerIva, 2,'.','')."</b></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($RetIB, 2,'.','')."</b></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($RetGan, 2,'.','')."</b></td>
+        <td class=\"p-1 text-right p-1\"><b>".number_format($NetoT, 2,'.','')."</b></td>
+        <td class=\"p-1 text-right p-1\"><b>".number_format($MontoPagado, 2,'.','')."</b></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($Saldo, 2,'.','')."</b></td>
+        <td class=\"p-1 d-none d-sm-table-cell text-right p-1\"><b>".number_format($Cantidad, 2,'.','')."</b></td>
+        <td class=\"p-1 d-none d-sm-table-cell p-1\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell p-1\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell p-1\"></td>
+        <td class=\"p-1 d-none d-sm-table-cell p-1\"></td>
         </tr>
         </tbody>
         </table>
+        </div>
         </div>";
     }
 

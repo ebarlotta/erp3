@@ -73,7 +73,6 @@
 											@can('compras.Eliminar','web'.session('empresa_id'))
 												<button class="rounded-md bg-red-300 px-6 py-1 mx-2 mt-3" wire:click="openModalDelete"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
 											@endcan
-                                            Espacio
 											@can('compras.comprasagregarproductos.Ver','web'.session('empresa_id'))
 												<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" wire:click="openModalAgregarDetalle"> <i class="fa fa-cart-plus" aria-hidden="true"></i>Agregar Productos</button>
 											@endcan
@@ -497,7 +496,7 @@
 												</div>
 											</div>
 										</div>
-                                        <div class="flex flex-wrap fse-1 justify-content-between" style="background-color: rgb(199, 233, 233); font-size: 14px;padding-bottom: 10px;">
+                                        <div class="flex flex-wrap justify-between pb-2 fondogris" style="background-color: rgb(199, 233, 233); font-size: 14px;padding-bottom: 10px;">
     										{!! $filtro !!}
                                         </div>
 									{{-- </div> --}}

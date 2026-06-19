@@ -98,7 +98,7 @@ class EmpresaGestion extends Component {
             'email' => 'required',
             'habilitada' => 'required',
             'nombretitular' => 'required',
-            'dnititular' => 'required',
+            'dnititular' => 'required|integer',
         ]);
 
         $existe=false;  //Consulta si existe la empresa
@@ -174,7 +174,7 @@ class EmpresaGestion extends Component {
 
             $cuenta = new CuentaSeeder();  // Crea una instancia del seeder
             $cuenta->empresa_id = $this->empresa_id->id;  // Asigna el ID de la empresa al seeder
-            $cuenta->runForEmpresa();  // Llama al método para insertar las cuentas básicas para la empresa
+            $cuenta->runForEmpresa($this->empresa_id->id);  // Llama al método para insertar las cuentas básicas para la empresa
 
             // DB::table('role_has_permissions')->insert(['permission_id' => 5, 'role_id'=> 1,]);
             // DB::table('role_has_permissions')->insert(['permission_id' => 6, 'role_id'=> 1,]);

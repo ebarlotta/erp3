@@ -5,11 +5,14 @@ namespace App\Http\Livewire\EmpresaUsuarios;
 use App\Models\EmpresaUsuario;
 use App\Models\Empresa;
 use App\Models\Roles;
+use Spatie\Permission\Models\Role;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\User;
 use Livewire\WithPagination;
+use App\Models\User as Usuarios;
+use Spatie\Permission\PermissionRegistrar;
 
 class EmpresaUsuariosComponent extends Component
 {
@@ -135,12 +138,34 @@ class EmpresaUsuariosComponent extends Component
             'rol_id' => (int) $this->id_NuevoRol
         ]);
 
+        $user = Usuarios::find($this->usuarioSeleccionado[0]->id);
+        $nuevo_rol = Role::find($this->id_NuevoRol);
+        $guardName = 'web'.$this->empresaseleccionada->id;
+        // dd($this->empresaseleccionada->id);
+        // dd($user->hasRole($nuevo_rol->name, $guardName));
+
+        // Cambiar el guard por defecto temporalmente
+        app(PermissionRegistrar::class)->setPermissionsTeamId(null);
+        app(PermissionRegistrar::class)->setDefaultGuard($guardName);
+
+        // Ahora asignar el rol
+        $user->assignRole($nuevo_rol->name);
+
+        // Restaurar el guard por defecto (opcional)
+        app(PermissionRegistrar::class)->setDefaultGuard('web');
+
+        // $user->assignRole($nuevo_rol->name, $guardName);
+        // $user->syncRoles($nuevo_rol->name, $guardName );
         // role_has_permissions
+
+        //Buscar los permisos por Rol
+
         // model_has_permissions
 
 
         session()->flash('message', 'Actualizado');
         $this->CerrarModalRoles();
-        $this->CargarUsuarios($this->empresaseleccionada->id);
+        $this->CargarUsuarios($this->empresaseleccionada->id);git status
+
     }
 }

@@ -31,6 +31,8 @@ class EmpresaUsuariosComponent extends Component
     public $roles;
     public $usuarioSeleccionado, $id_rolActual;
     public $id_NuevoRol;
+    public $rol_nuevo_usuario=null;
+
 
     use WithPagination;
 
@@ -52,6 +54,7 @@ class EmpresaUsuariosComponent extends Component
     public function mostrarmodal()
     {
         $this->isModalOpen = true;
+        $this->roles = Roles::where('empresa_id', $this->empresaseleccionada->id)->get();
     }
     public function openModalPopover()
     {
@@ -98,12 +101,17 @@ class EmpresaUsuariosComponent extends Component
 
     public function AgregarUsuario($user_id)
     {
+        dd($user_id);
+        if(is_null($this->rol_nuevo_usuario)) {
+            session()->flash('messageerrormodal', 'Debe seleccionar un rol');
+        } else {
+            EmpresaUsuario::create(['empresa_id' => $this->empresaseleccionada->id, 'user_id' => $user_id,'rol_id'=>$this->rol_nuevo_usuario]);
+            $this->closeModalPopover();
+            // $this->usuarios = User::all();
+            $this->CargarUsuarios($this->empresaseleccionada->id);
+            return view('livewire.empresa-usuarios.empresa-usuarios-component');
 
-        EmpresaUsuario::create(['empresa_id' => $this->empresaseleccionada->id, 'user_id' => $user_id,'rol_id'=>1]); // Enzo Arreglar agregar distintos roles
-        $this->closeModalPopover();
-        // $this->usuarios = User::all();
-        $this->CargarUsuarios($this->empresaseleccionada->id);
-        return view('livewire.empresa-usuarios.empresa-usuarios-component');
+        }
     }
 
     public function EliminarUsuario($user_id)
@@ -128,44 +136,90 @@ class EmpresaUsuariosComponent extends Component
         $this->roles = Roles::where('empresa_id', $this->empresaseleccionada->id)->get();
     }
 
+    public function CapturarIdUsuario($id) {
+        $this->user_id = $id;
+    }
+
     public function ActualizarRol() {
         $this->validate([
             'id_NuevoRol' => 'required|integer|min:1',
         ]);
 
-        // dd("Nuevo Rol:" . $this->id_NuevoRol . " - Usuario: " . $this->user_id . " - Empresa: " . $this->empresaseleccionada->name . '-'.$this->empresaseleccionada->id);
-        EmpresaUsuario::updateOrCreate(['user_id' => $this->usuarioSeleccionado[0]->id, 'empresa_id' => $this->empresaseleccionada->id], [
-            'rol_id' => (int) $this->id_NuevoRol
-        ]);
+        $user = Usuarios::find($this->usuarioSeleccionado[0]->id);      // Es el usuario de la lista de ususarios de la base de datos, no sólo el de la empresa. Por eso hay que buscarlo en la tabla users
+        $nuevo_rol = Role::find($this->id_NuevoRol);                    // Es el rol que se le asignará al usuario en la empresa seleccionada. Ej. Administrador de esta empresa, no en general
+        $guardName = 'web'.$this->empresaseleccionada->id;              // Es el guard name que se utiliza para diferenciar los roles y permisos de cada empresa. Ej. web1, web2, web3, etc.
+        
+        $rol_Existe = Role::where('id', $this->id_NuevoRol)           // Revisa si el rol que se le quiere asignar al usuario existe en la empresa seleccionada. Si no existe, no se le puede asignar.
+            ->where('guard_name', $guardName)
+            ->where('empresa_id', $this->empresaseleccionada->id)
+            ->exists();
+        
+        if (!$rol_Existe) {                                                                                         
+           session()->flash('messageerror', 'El Rol seleccionado no existe en la empresa que está gestionando');   
+           return;                                                                                                 
+        } 
+       
+       // 1. Obtener los permisos del nuevo rol ANTES de borrar nada                                               
+       $permisosDelRol = DB::table('role_has_permissions' )                                                        
+           ->where('role_id', $nuevo_rol->id)                                                                      
+           ->pluck('permission_id');                                                                               
+                                                                                                                   
+       // Iniciar transacción para consistencia de datos                                                           
+       DB::beginTransaction();                                                                                     
+                                                                                                                   
+        try {                                                                                                       
+            // 2. Actualizar el rol en empresa_usuarios                                                             
+            EmpresaUsuario::updateOrCreate(                                                                         
+                [                                                                                                   
+                    'user_id'    => $this->usuarioSeleccionado[0]->id,                                              
+                    'empresa_id' => $this->empresaseleccionada->id                                                  
+                ],                                                                                                  
+                [                                                                                                   
+                    'rol_id' => (int) $this->id_NuevoRol                                                            
+                ]                                                                                                   
+            );                                                                                                      
+                                                                                                                    
+            // 3. Limpiar permisos anteriores del usuario                                                           
+            DB::table('model_has_permissions')                                                                     
+                ->where('model_id', $user->id)                                                                      
+                ->where('model_type', 'App\Models\User')                                                            
+                ->delete();                                                                                         
+                                                                                                                    
+            // 4. Limpiar roles anteriores del usuario                                                              
+            DB::table('model_has_roles')                                                                            
+                ->where('model_id', $user->id)                                                                      
+                ->where('model_type', 'App\Models\User')                                                            
+                ->delete();                                                                                         
+                                                                                                                    
+            // 5. Asignar los nuevos permisos al usuario                                                            
+            foreach ($permisosDelRol as $permisoId) {                                                               
+                DB::table('model_has_permissions')->insert([                                                       
+                    'permission_id' => $permisoId,                                                                  
+                    'model_type'    => 'App\Models\User',                                                           
+                    'model_id'      => $user->id,                                                                   
+                ]);                                                                                                 
+            }                                                                                                       
+                                                                                                                    
+            // 6. Asignar el nuevo rol al usuario                                                                   
+            DB::table('model_has_roles')->insert([                                                                 
+                'role_id'    => $nuevo_rol->id,                                                                     
+                'model_type' => 'App\Models\User',                                                                  
+                'model_id'   => $user->id,                                                                          
+            ]);                                                                                                     
+                                                                                                                    
+            DB::commit();                                                                                           
+                                                                                                                    
+            session()->flash('message', 'Rol y permisos actualizados correctamente');                               
+            $this->CerrarModalRoles();                                                                              
+            $this->CargarUsuarios($this->empresaseleccionada->id);                                                 
+                                                                                                                    
+        } catch (\Exception $e) {                                                                                   
+            DB::rollBack();                                                                                         
+            session()->flash('messageerror', 'Error al actualizar: ' . $e->getMessage());                           
+        }
 
-        $user = Usuarios::find($this->usuarioSeleccionado[0]->id);
-        $nuevo_rol = Role::find($this->id_NuevoRol);
-        $guardName = 'web'.$this->empresaseleccionada->id;
-        // dd($this->empresaseleccionada->id);
-        // dd($user->hasRole($nuevo_rol->name, $guardName));
-
-        // Cambiar el guard por defecto temporalmente
-        app(PermissionRegistrar::class)->setPermissionsTeamId(null);
-        app(PermissionRegistrar::class)->setDefaultGuard($guardName);
-
-        // Ahora asignar el rol
-        $user->assignRole($nuevo_rol->name);
-
-        // Restaurar el guard por defecto (opcional)
-        app(PermissionRegistrar::class)->setDefaultGuard('web');
-
-        // $user->assignRole($nuevo_rol->name, $guardName);
-        // $user->syncRoles($nuevo_rol->name, $guardName );
-        // role_has_permissions
-
-        //Buscar los permisos por Rol
-
-        // model_has_permissions
-
-
-        session()->flash('message', 'Actualizado');
         $this->CerrarModalRoles();
-        $this->CargarUsuarios($this->empresaseleccionada->id);git status
+        $this->CargarUsuarios($this->empresaseleccionada->id);
 
     }
 }

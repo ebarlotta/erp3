@@ -24,7 +24,7 @@ class ModSeederNewUser extends Seeder
 
     public function run()
     {
-        // Relaciona al usuario con los módulos de la empresas de Prueba
+        // Relaciona al usuario con los módulos de la empresas de ERP
         $array = [
             'areas',
             'unidades',
@@ -66,12 +66,14 @@ class ModSeederNewUser extends Seeder
                     ]);
                 }
 
-                $sql = 'SELECT * FROM role_has_permissions WHERE permission_id = '. $adic->id .' and role_id = '. $this->user_id;
+                // $sql = 'SELECT * FROM role_has_permissions WHERE permission_id = '. $adic->id .' and role_id = '. $this->user_id;
+                $sql = 'SELECT * FROM role_has_permissions WHERE permission_id = '. $adic->id .' and role_id = 2';
                 $existe = db::select($sql);
                 if (!$existe) {
                     DB::table('role_has_permissions')->insert([
                         'permission_id' => $adic->id,
-                        'role_id' => $this->user_id
+                        'role_id' => 2
+                        // 'role_id' => $this->user_id
                     ]);
                 }
             }

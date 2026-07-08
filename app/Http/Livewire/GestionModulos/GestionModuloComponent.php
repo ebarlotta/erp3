@@ -6,6 +6,9 @@ use App\Models\Modulo as Modulos;
 use Spatie\Permission\Models\Permission;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Empresa;
+use Illuminate\Support\Facades\DB;
+
 class GestionModuloComponent extends Component {
     public $name,$pagina,$imagen,$leyenda, $habilitado;
     protected $modulos;
@@ -15,12 +18,17 @@ class GestionModuloComponent extends Component {
     public $ShowButtonActualizar=false;
     public $buscar;
     public $modulo_id;
+    public $empresas;
+    public $empresa_id=0;
 
     use WithPagination;
 
     public function render() {
-        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'gestionmodulo.Ver')->where('guard_name', $guardName)->exists();        
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('gestionmodulo.Ver', $guardName)) {
+        // $guardName = 'web' . session('empresa_id');
+        $guardName = 'web';
+        $permisoExiste = Permission::where('name', 'gestionmodulos.Ver')->where('guard_name', $guardName)->exists();
+        $this->empresas = Empresa::all();
+        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('gestionmodulos.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->filtrar();
                 return view('livewire.modulos.modulo-component',['modulos' => $this->modulos])->extends('layouts.adminlte');
@@ -36,11 +44,11 @@ class GestionModuloComponent extends Component {
 
     public function filtrar() { $this->modulos = Modulos::where('name', 'LIKE', "%" . $this->buscar . "%")->orderby('name')->paginate(7); }
 
-    public function showEdit($id)
-    {
-        $modulos = Modulos::find($id);
-        $this->name = $modulos->name;
+    public function showEdit($id) {
         $this->modulo_id = $id;
+        $modulos = Modulos::find($this->modulo_id);
+        $this->name = $modulos->name;
+        // $this->modulo_id = $id;
         $this->pagina = $modulos->pagina;
         $this->imagen = $modulos->imagen;
         $this->leyenda = $modulos->leyenda;
@@ -48,9 +56,17 @@ class GestionModuloComponent extends Component {
         $this->ShowButtonActualizar = false;
 
         //Cargar todos los permisos desponibles del módulo
-        $this->permisos=Permission::where('name', 'LIKE', '%'. $modulos->name . '%')
-        ->orwhere('name', 'LIKE', '%'. $modulos->pagina . '%')
+        $this->permisos=DB::table('permissions')
+        ->where('guard_name', '=' ,'web' . $this->empresa_id)
+        ->where('name', 'LIKE', '%'. $this->name . '%')
         ->get();
+    }
+
+    public function combo_empresa() {
+        $this->permisos=DB::table('permissions')
+        ->where('guard_name', '=' ,'web' . $this->empresa_id)
+        ->where('name', 'LIKE', '%'. $this->name . '%')
+        ->get();        
     }
 
     public function showDelete($id)
@@ -98,13 +114,17 @@ class GestionModuloComponent extends Component {
     public function storePermiso() {
         $this->validate([
             'nombre_permiso' => 'required|max:255',
+            'empresa_id' => 'required',
+        ],[
+            'empresa_id.required' => 'Debe seleccionar una empresa para crear el permiso.',
         ]);
 
         $this->name = $this->reemplazaEspaciosAcentos($this->name);
         $name = $this->name.'.'.$this->nombre_permiso;
-        $permission = Permission::create(['name' => $name]);
+        $permission = Permission::updateOrCreate(['name' => $name, 'guard_name' => 'web' . $this->empresa_id]);
 
         $this->nombre_permiso = null;
+        $this->empresa_id = null;
         session()->flash('mensaje', 'Se guardó el Permiso.');
         $this->showEdit( $this->modulo_id);
     }
@@ -125,9 +145,10 @@ class GestionModuloComponent extends Component {
         $this->nombre_permiso = $nombre_permiso;
     }
 
-    public function destroyPermiso($id)
-    {
-        Permission::destroy($id);
+    public function destroyPermiso($id) {
+        $destroyPermiso = DB::table('permissions' )                                                        
+           ->where('id', $id)                                                                      
+           ->delete();     
         $this->reset('name');
         session()->flash('mensaje', 'Se eliminó el permiso.');
         $this->showEdit( $this->modulo_id);

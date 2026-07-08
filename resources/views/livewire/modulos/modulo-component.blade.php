@@ -34,7 +34,6 @@
                                                 @foreach ($modulos as $modulo)
                                                 <tr>
                                                     <td class="d-flex" style="margin: auto"><img class="mr-3 rounded-md" src="images/{{$modulo->imagen}}" alt="" width="50px"> {{ $modulo->name }}</td>
-                                                    
                                                     <td>
                                                         <button type="button" wire:click="showEdit({{$modulo->id}})" class="btn btn-warning" data-toggle="modal" data-target="#ModalEdit">
                                                             Editar
@@ -98,38 +97,53 @@
                                 </div>
                                 <div class="col-12">
                                     <label for="">Leyenda</label>
-                                    <textarea wire:model="leyenda" rows="2" class="col-12" wire:keyup="ShowActualizar()">{{ old('leyenda') }}</textarea>
+                                    <textarea wire:model="leyenda" rows="2" class="col-12" wire:keyup="ShowActualizar()" style="box-shadow: 6px 6px 17px lightblue; border-radius: 10px; background-color: lightgray;">{{ old('leyenda') }}</textarea>
                                     {{-- <input type="text" class="form-control" value="{{ old('leyenda') }}" wire:model="leyenda"> --}}
                                     @error('leyenda')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="mt-3">
-                                <label for="">
-                                    Permisos 
+                                <select class="form-control" wire:model="empresa_id" wire:change="combo_empresa()">
+                                    <option value="0">--- Seleccione una empresa ---</option>
+                                    @foreach ($empresas as $empresa)
+                                        <option value="{{ $empresa->id }}" {{ $empresa_id == $empresa->id ? 'selected' : '' }}>{{ $empresa->name }}</option>
+                                    @endforeach 
+                                    @error('empresa_id')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </select>
+                            </div>
+                            @if($empresa_id<>0)
+                                <div class="mt-3">
+                                    <label for="">
+                                    Permisos
                                     <button type="button" class="btn btn-success mb-1 ml-2">Agregar
                                         <span class="col-1 fs-3 ml-1" aria-hidden="true" style="lightcoral;border-radius: 5px; text-align: center;vertical-align: middle;background-color: lightgreen;" wire:click="showNewPermiso()" data-toggle="modal" data-target="#ModalAddPermission">&plus;</span>
                                     </button>
-                                </label><br>
-                                @if($permisos)
-                                    @foreach ($permisos as $permiso)
-                                    {{-- <div class="d-flex"> --}}
-                                        <button type="button" class="btn btn-outline-success mb-1">
-                                            {{ $permiso->name }}
-                                        {{-- <input type="text" class="form-control col-11 pt-2" value="{{ $permiso->name }}"> --}}
-                                        {{-- <span style="color: white; margin-left: 10px; background-color: rgb(64, 185, 9); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true"  title="Agregar Permiso" tooltips="prueba" wire:click="AgregarPermiso({{$permiso->id}})">&plus;</span> --}}
-                                        <span style="color:white; margin-left: 10px; background-color: rgb(189, 129, 129); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true" title="Eliminar Permiso" wire:click="getPermisoaEliminar({{$permiso->id}}, '{{ $permiso->name }}')" data-toggle="modal" data-target="#ModalDeletePermiso" >&times;</span>
-                                        {{-- <span class="col-1 fs-3" aria-hidden="true" style="lightcoral;border-radius: 10px; text-align: center;vertical-align: middle;background-color: lightcoral;">&times;</span> --}}
-                                        </button>
-                                    {{-- </div> --}}
-                                    @endforeach
-                                @endif
-                                @error('name')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+                                    </label><br>
+                                    @if(count($permisos))
+                                        @foreach ($permisos as $permiso)
+                                            {{-- <div class="d-flex"> --}}
+                                            <button type="button" class="btn btn-outline-success mb-1">
+                                                {{ $permiso->name . ' - ' . $permiso->guard_name }}
+                                            {{-- <input type="text" class="form-control col-11 pt-2" value="{{ $permiso->name }}"> --}}
+                                            {{-- <span style="color: white; margin-left: 10px; background-color: rgb(64, 185, 9); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true"  title="Agregar Permiso" tooltips="prueba" wire:click="AgregarPermiso({{$permiso->id}})">&plus;</span> --}}
+                                            <span style="color:white; margin-left: 10px; background-color: rgb(189, 129, 129); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true" title="Eliminar Permiso" wire:click="getPermisoaEliminar({{$permiso->id}}, '{{ $permiso->name }}')" data-toggle="modal" data-target="#ModalDeletePermiso" >&times;</span>
+                                            {{-- <span class="col-1 fs-3" aria-hidden="true" style="lightcoral;border-radius: 10px; text-align: center;vertical-align: middle;background-color: lightcoral;">&times;</span> --}}
+                                            </button>
+                                        {{-- </div> --}}
+                                        @endforeach
+                                    @endif
+                                    @error('name')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @else
+                                Empresa: {{ $empresa_id }}
+                            @endif
+
                             <div class="pt-3">
                                 {{-- <button type="button" class="btn btn-success"  data-dismiss="modal" wire:click="store()">
                                     <i class="fa-solid fa-pen-to-square"></i>Guardar

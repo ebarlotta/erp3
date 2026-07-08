@@ -134,7 +134,7 @@ class ElementosComponent extends Component {
             'vencimiento'=> 'required',
         ]);
 
-        if($this->ruta=='null' || $this->ruta=='sin_imagen.jpg') {
+        if($this->ruta=='null' || $this->ruta=='sin_imagen.jpg' || is_null($this->ruta)) {
             $this->ruta = "sin_imagen.jpg";
         } else
         {

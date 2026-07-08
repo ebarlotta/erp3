@@ -25,6 +25,16 @@
                             </div>
                         </div>
                     @endif
+                    @if (session()->has('messageerror'))
+                        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                            role="alert">
+                            <div class="flex">
+                                <div>
+                                    <p class="text-xm bg-lightgreen">{{ session('messageerror') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     @if ($seleccionado)
                         <div class="text-left">
                             <button wire:click="mostrarmodal()"

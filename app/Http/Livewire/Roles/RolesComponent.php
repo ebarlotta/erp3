@@ -167,7 +167,6 @@ class RolesComponent extends Component {
                 'model_type' => 'App\Models\User',
                 'model_id' => $usuario->user_id
             ]);
-
                 // $aux = 'INSERT INTO model_has_permissions (permission_id, model_type, model_id) VALUES ('.$permision_id . ', \'App\\Models\\User\', ' . $this->rol_id . ')';
                 // $bux = db::select($aux);
                 // $b = $user->givePermissionTo($permiso_a_agregar[0]->name);  // Asigna el permiso en la tabla model_has_permissions IMPACTA EN EL MENU IZQUIERDO
@@ -186,9 +185,7 @@ class RolesComponent extends Component {
                 'model_type' => 'App\Models\Role',
                 'model_id' => $usuario->user_id
             ]);
-
         }
-
         //Recarga la información
         $this->SeleccionarModulo($this->modulo_seleccionado,$this->modulo_name);
     }

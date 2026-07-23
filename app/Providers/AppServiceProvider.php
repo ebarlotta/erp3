@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
     // public function handle(Login|Failed $event) {
     public function boot(): void
     {
-                Event::listen([Login::class, Failed::class], function ($event) {
+        Event::listen([Login::class, Failed::class], function ($event) {
             $ip = request()->ip();
             $userAgent = request()->userAgent();
 // dd($event->user['email']);

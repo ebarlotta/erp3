@@ -101,7 +101,7 @@ class EmpresaUsuariosComponent extends Component
 
     public function AgregarUsuario($user_id)
     {
-        dd($user_id);
+        // dd($this->rol_nuevo_usuario);
         if(is_null($this->rol_nuevo_usuario)) {
             session()->flash('messageerrormodal', 'Debe seleccionar un rol');
         } else {

@@ -434,6 +434,17 @@ return [
             'icon' => 'fas fa-users',
             'can' => 'clientes.Ver',
         ],
+
+
+        [
+            'text' => 'Beneficios',
+            'url'  => 'beneficios',
+            'icon' => 'fa fa-plus-square',
+            // 'can' => 'beneficios.Ver',
+            'can' => 'browse-teacher',
+        ],
+
+
         [
             'text' => 'Compras',
             'url'  => 'compras',

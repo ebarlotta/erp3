@@ -120,6 +120,7 @@ class InformesonlineComponent extends Component
             $this->datos_solicitante_validados = 1;
             $partes = explode(',', $this->solicitante->name);
             $this->apellido = trim($partes[0]);
+
             $this->nombre = isset($partes[1]) ? trim($partes[1]) : '';
             $this->necesita_agregar_solicitante = 0;
         }
@@ -192,9 +193,9 @@ class InformesonlineComponent extends Component
         $preference = $client->create([
             "items"=> array(
                 array(
-                "title" => "Servicios Administrativos",
+                "title" => "Tram. Serv. Administrativos",
                 "quantity" => 1,
-                "unit_price" => 10000,
+                "unit_price" => 10,
                 // "unit_price" => $this->total,
                 )
             ),

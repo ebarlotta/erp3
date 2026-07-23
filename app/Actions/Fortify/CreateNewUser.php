@@ -50,6 +50,12 @@ class CreateNewUser implements CreatesNewUsers
         $uu = new ModSeederNewUser();
         $uu->user_id = $user->id;
         $uu->run();
+
+        $uu->CreateArea(2); // Empresa de ERP
+        $uu->CreateArea(3); // Empresa de Imprenta
+        $uu->CreateArea(4); // Empresa de Gastronómica
+        $uu->CreateArea(5); // Empresa de Inmobiliaria
+        
         // $this->call(ModSeederNewUser::class);
         //Relaciona al usuario creado con los módulos de la empresa de prueba
 

@@ -20,11 +20,7 @@
                                 @foreach ($usuariosNOempresa as $user)
                                     <div style="width: max-content;background-color: bisque;border-radius: 20px;height: 4rem;justify-content: center;display: block; margin: 4px; align-items: center; text-align: center; padding-top:1px; padding-left:2rem; padding-right:2rem;" wire:click="CapturarIdUsuario({{ $user->id }})">
                                         <div style="position: inherit; justify-content: end; display: flex; margin-right: -21px; margin-top: 5px;" placeholder="Agregar">
-                                            @if($usuario['user_id']==$user->id)
-                                                <img src="{{ asset('images/activo.png') }}" width="30" height="30">
-                                            @else
-                                                <img src="{{ asset('images/activo.png') }}" width="20" height="20">
-                                            @endif
+                                            <img src="{{ asset('images/pasivo.jpg') }}" width="20" height="20">
                                         </div>
                                         <p style="margin-top: -10px;">{{ $user->name }}</p>
                                         <p style="margin-top: -14px;">{{ $user->email }}</p>

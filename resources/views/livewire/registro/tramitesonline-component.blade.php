@@ -182,7 +182,7 @@
 
                     <div class="form-group col-12 col-md-6">
 
-                        <button type="submit" class="btn btn-info boton" style="background-color: #0072bc !important; color:#F9F9F9" wire:click="BuscarPatente();">Validar&nbsp;
+                        <button type="submit" class="btn btn-info boton" style="background-color: #0072bc !important; color:#F9F9F9" wire:click="BuscarPatente();">Validar Vehículo&nbsp;
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
                         </button>
                         <div class="flex d-flex">
@@ -316,11 +316,12 @@
                             <div class="calendar text-center">
 
                                 <x-registro.calendario-component />
-
-                                <input class="form-control texto" type="text" tooltip="CUIL / CUIT" wire:model="diaSeleccionado">
+                                <div style="justify-content: center; display:flex; margin-top: 15px">
+                                    <input class="form-control texto" type="text" tooltip="CUIL / CUIT" wire:model="diaSeleccionado">
+                                </div>
                                 <p class="text-muted">Elegí un día disponible (En Verde).</p>
 
-                                <div class="flex d-flex">
+                                <div style="justify-content: center; display:flex; margin-bottom: 15px">
                                     <button type="submit" class="btn boton-warning mr-3" wire:click="Mostrar('datos_solicitante')">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
@@ -376,7 +377,7 @@
                             </button>
                             
                             <a href="/registro">
-                                <button type="submit" class="btn btn-success boton" wire:click="Mostrar('datos_final')" @if(!$datos_turno_validados) disabled @endif>Salir&nbsp; &nbsp;
+                                <button type="submit" class="btn btn-success boton" style="text-decoration: none;" wire:click="Mostrar('datos_final')" @if(!$datos_turno_validados) disabled @endif>Salir&nbsp; &nbsp;
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg>
                                 </button>
                             </a>

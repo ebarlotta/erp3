@@ -97,7 +97,7 @@ class ModuloUsuariosComponent extends Component
     public function AgregarUsuario($user_id)
     {
         if(isset($this->moduloseleccionado->id) && isset( $user_id) && isset(Auth()->user()->id)) {
-            ModuloUsuario::create([
+            ModuloUsuario::updateOrCreate([
                 'modulo_id' => $this->moduloseleccionado->id,
                 'user_id' => $user_id,
                 'modificado_user_id'=>Auth()->user()->id]
@@ -105,16 +105,18 @@ class ModuloUsuariosComponent extends Component
 
             // $modulo = "'" . strtolower($this->moduloseleccionado->pagina.'.%') . "'";
             $modulo = strtolower($this->moduloseleccionado->pagina.'.%');
-
             $adicionales = Permission::whereRaw("name LIKE ?", [$modulo])->get();
+            // dd($adicionales);
             // $adicionales = Permission::where('name', 'LIKE', $modulo)->get();
             // dd($adicionales);
             foreach ($adicionales as $adic) {
+                
                 // Verificar si ya existe el registro
+                // Asigna los permisos al usuario creado
                 $existe = DB::table('model_has_permissions')
                     ->where('permission_id', $adic->id)
                     ->where('model_type', 'App\Models\User')
-                    ->where('model_id', Auth::id())
+                    ->where('model_id', $user_id)
                     ->exists();
 
                 if ($existe) {
@@ -126,11 +128,34 @@ class ModuloUsuariosComponent extends Component
                     DB::table('model_has_permissions')->insert([
                         'permission_id' => $adic->id,
                         'model_type' => 'App\Models\User',
-                        'model_id' => Auth::id()
+                        'model_id' => $user_id
                     ]);
                     session()->flash('success', 'Permiso asignado correctamente');
                 }
+
+              
             }
+
+            // $adicionales = Permission::whereRaw("name LIKE ?", [$modulo])->get();
+            // foreach ($adicionales as $adic) {
+
+
+                //Asigna los permisos al rol del usuario creado
+                // $existe = DB::table('role_has_permissions')
+                //     ->where('permission_id', $adic->id)
+                //     ->where('role_id', 2) // Cambia 2 por el ID del rol que deseas verificar
+                //     ->exists();
+                // if(!$existe) {
+                //     DB::table('role_has_permissions')->insert([
+                //         'permission_id' => $adic->id,
+                //         'role_id' => 2 // Cambia 2 por el ID del rol que deseas asignar
+                //     ]);
+                // } else {
+                //     session()->flash('error', 'El permiso ya está asignado a este rol');
+                // }
+
+
+
         } else { session()->flash('message', 'Se ha producido un error, revise los datos y vuelva a intentarlo'); }
 
         $this->closeModalPopover();

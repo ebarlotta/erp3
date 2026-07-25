@@ -24,8 +24,6 @@
                             </div>
                         </div>
                     @endif
-
-                    <div class="flex justify-around">
                         @can('cuentas.Agregar','web'.session('empresa_id'))
                             <x-crear>Nueva Cuenta</x-crear>
                             @if ($isModalOpen)

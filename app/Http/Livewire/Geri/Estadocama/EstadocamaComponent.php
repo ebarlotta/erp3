@@ -6,6 +6,8 @@ use App\Models\Geri\Camas;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class EstadocamaComponent extends Component {    
     public $NroHabitacion, $NroCama, $SexoCama=0, $EstadoCama=0, $cama_id;
     public $camas;
@@ -13,7 +15,7 @@ class EstadocamaComponent extends Component {
 
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'estadocama.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('estadocama.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('estadocama.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->camas = DB::table('camas')
                     ->orderBy('NroHabitacion', 'asc')

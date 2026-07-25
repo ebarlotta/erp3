@@ -4,8 +4,8 @@ namespace App\Http\Livewire\Geri\Beneficios;
 use Livewire\Component;
 use App\Models\Geri\Beneficios;
 use Spatie\Permission\Models\Permission;
-
 use App\Models\EmpresaUsuario;
+
 class clsBeneficios extends Component {
     public $descripcionbeneficio, $beneficio_id;
     public $beneficios;
@@ -14,7 +14,6 @@ class clsBeneficios extends Component {
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'beneficios.Ver')->where('guard_name', $guardName)->exists();
         if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('beneficios.Ver', $guardName)) {
-        // if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('beneficios.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->beneficios = Beneficios::all();
                 //return view('liveware.crudbeneficios')->with('isModalOpen', $this->isModalOpen)->with('beneficios', $this->beneficios);

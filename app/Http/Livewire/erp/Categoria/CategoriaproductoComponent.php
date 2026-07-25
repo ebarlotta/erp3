@@ -6,6 +6,8 @@ use App\Models\erp\Categoriaproducto;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class CategoriaproductoComponent extends Component {
     public $isModalOpen = false;
     public $categoria, $categoria_id, $name;
@@ -17,7 +19,7 @@ class CategoriaproductoComponent extends Component {
 
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'categoriaproducto.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('categoriaproducto.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('categoriaproducto.Ver', $guardName)) {
         // if(auth()->check() && auth()->user()->hasPermissionTo('categoriaproducto.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->categorias = Categoriaproducto::where('empresa_id', '=', session('empresa_id'))

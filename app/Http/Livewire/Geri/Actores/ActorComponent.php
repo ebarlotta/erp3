@@ -9,7 +9,6 @@ use App\Models\Condicioniva;
 use App\Models\DiasDeLaSemana;
 use App\Models\Elementos\Elemento;
 use App\Models\Elementos\ElementoMedicamento;
-use App\Models\EmpresaUsuario;
 use App\Models\Iva;
 use App\Models\TiposDocumentos;
 use App\Models\EstadosCiviles;
@@ -53,6 +52,8 @@ use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class ActorComponent extends Component {
     public $persona_descripcion, $actor_id, $iva_id, $fingreso, $fegreso, $peso, $telefono, $nombreempresa, $motivosegresos, $gradodependencia, $referente_id;
     public $actores, $ivas, $condicioniva_id, $referentes;
@@ -94,7 +95,7 @@ class ActorComponent extends Component {
 
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'actores.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('actores.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('actores.Ver', $guardName)) {
             if(session('empresa_id')) {
                 //Busca el id de la empresa relacionada con el usuario que está logueado
                 $usuario=EmpresaUsuario::where('user_id','=',Auth::id())->get();

@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class ElementosComponent extends Component {
     protected $unidades, $categorias, $datos;
     public $seleccionado='Medicamento',$elemento_id;
@@ -39,7 +41,7 @@ class ElementosComponent extends Component {
     public function render() {
 
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'elementos.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('elementos.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('elementos.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->estados = Estado::where('empresa_id','=',session('empresa_id'))->get();
                 $this->proveedores = Proveedor::where('empresa_id','=',session('empresa_id'))->get();

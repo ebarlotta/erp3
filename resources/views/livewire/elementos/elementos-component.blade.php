@@ -22,11 +22,11 @@
                                 <x-crear>Nuevo Elemento</x-crear>
                             @endcan
 
-                            <input type="text" class="bg-blue-200 mx-2 mb-2 rounded pl-2" placeholder="Buscar" wire:model="search" wire:keyup="resumir($event.target.value)" style="height: 2rem;">
+                            <input type="text" class="bg-blue-200 mx-2 mb-2 rounded pl-2" placeholder="Buscar" wire:model="search" wire:keyup="resumir($event.target.value)" style="height: 2.5rem;">
                         </div>
 
-                        <div style="background-color: lightgray; display: flex; justify-content: space-between; border-radius:4px; height: 2rem;" class="w-full">
-                            <div class="my-auto mx-auto rounded-md p-2 @if($seleccionado=='Medicamento') bg-red-400 @endif" wire:click="cambiarSeleccion('Medicamento')" style="height: 2rem;">
+                        <div style="background-color: lightgray; display: flex; justify-content: space-between; border-radius:4px; height: 2.5rem;" class="w-full">
+                            <div class="my-auto mx-auto rounded-md p-2 @if($seleccionado=='Medicamento') bg-red-400 @endif" wire:click="cambiarSeleccion('Medicamento')" style="height: 2.5rem;">
                                 <input class="mr-2" type="radio" name="elements" value="Medicamento" checked>
                                 <label class="mr-4" for="huey">Medicamento</label>
                             </div>

@@ -6,6 +6,8 @@ use App\Models\EstadosCiviles;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class EstadosCivilesComponent extends Component {
     public $estadocivil, $estadocivil_id;
     protected $estadosciviles;
@@ -16,7 +18,7 @@ class EstadosCivilesComponent extends Component {
 
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'estadosciviles.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('estadosciviles.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('estadosciviles.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->estadosciviles = EstadosCiviles::where('id', '>', 1)
                 ->where('estadocivil', 'like', '%'.$this->search.'%')

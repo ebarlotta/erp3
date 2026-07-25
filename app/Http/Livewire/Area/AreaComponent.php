@@ -7,6 +7,8 @@ use App\Models\Area;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class AreaComponent extends Component
 {
 
@@ -22,7 +24,7 @@ class AreaComponent extends Component
     public function render()
     {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'areas.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('areas.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('areas.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 $this->areas = Area::where('empresa_id', '=', session('empresa_id'))

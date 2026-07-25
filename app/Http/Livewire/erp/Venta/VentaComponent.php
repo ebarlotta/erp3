@@ -5,7 +5,6 @@ namespace App\Http\Livewire\erp\Venta;
 use AfipController;
 use App\Models\Area;
 use App\Models\Cuenta;
-use App\Models\EmpresaUsuario;
 use App\Models\Iva;
 
 use App\Models\erp\Cliente;
@@ -19,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 
 use App\Http\Livewire\erp\Venta\AfipComponent;
 
@@ -83,7 +84,7 @@ class VentaComponent extends Component
 
 
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'ventas.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('ventas.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('ventas.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');
                 

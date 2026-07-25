@@ -11,6 +11,8 @@ use Livewire\Component;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class ExpendioComponent extends Component {
     public $fecha, $confirmacion, $servicioacerrar;
     public $agregar, $servicioaagregar, $agregarActores, $agregarMenu, $actor_id_agregar, $menu_id_agregar, $cantidad_agregar, $menuextra;
@@ -36,7 +38,7 @@ class ExpendioComponent extends Component {
         $this->CalcularGraficos();
 
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'expendio.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('expendio.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('expendio.Ver', $guardName)) {
             // if(session('empresa_id')) {
                 $this->CargarMenues();
                 return view('livewire.expendio.expendio-component')->extends('layouts.adminlte');

@@ -3,8 +3,10 @@
 namespace App\Http\Livewire\Geri\Gradodependencia;
 
 use App\Models\Geri\GradoDependencia;
-use Spatie\Permission\Models\Permission;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class GradodependenciaComponent extends Component {
     public $gradodependenciaDescripcion, $gradodependencia_id;
     public $gradodependencias;
@@ -12,7 +14,7 @@ class GradodependenciaComponent extends Component {
 
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'gradodependencia.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('gradodependencia.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('gradodependencia.Ver', $guardName)) {
         // if(auth()->check() && auth()->user()->hasPermissionTo('gradodependencia.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->gradodependencias = GradoDependencia::all();

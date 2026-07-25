@@ -6,6 +6,8 @@ use App\Models\Estado;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 class EstadoComponent extends Component {
     public $isModalOpen = false;
     public $estado, $estado_id;
@@ -17,7 +19,7 @@ class EstadoComponent extends Component {
 
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'estados.Ver')->where('guard_name', $guardName)->exists();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('estados.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('estados.Ver', $guardName)) {
         // if(auth()->check() && auth()->user()->hasPermissionTo('estados.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->empresa_id=session('empresa_id');

@@ -3,11 +3,13 @@
 namespace App\Http\Livewire\GestionModulos;
 
 use App\Models\Modulo as Modulos;
-use Spatie\Permission\Models\Permission;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Empresa;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use App\Models\EmpresaUsuario;
+
 
 class GestionModuloComponent extends Component {
     public $name,$pagina,$imagen,$leyenda, $habilitado;
@@ -28,7 +30,7 @@ class GestionModuloComponent extends Component {
         $guardName = 'web';
         $permisoExiste = Permission::where('name', 'gestionmodulos.Ver')->where('guard_name', $guardName)->exists();
         $this->empresas = Empresa::all();
-        if (auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('gestionmodulos.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('gestionmodulos.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->filtrar();
                 return view('livewire.modulos.modulo-component',['modulos' => $this->modulos])->extends('layouts.adminlte');

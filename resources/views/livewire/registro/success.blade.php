@@ -158,7 +158,7 @@
             </div>
             <div class="detail-item">
                 <span>Total:</span>
-                <strong>${{ number_format(rand(50, 500), 2) }}</strong>
+                <strong>${{ number_format(session('mp_total'), 2) }}</strong>
             </div>
             <div class="detail-item">
                 <span>Estado:</span>

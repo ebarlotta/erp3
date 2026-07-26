@@ -488,7 +488,7 @@
                             <td>Descripción</td>
                             <td class="text-right col-3">Precio Unitario</td>
                             <td class="text-center" style="width: 14rem">Cant.</td>
-                            <td class="text-center col-3">Total</td>
+                            <td class="text-center col-3">Detalle Parcial</td>
                         </tr>
                         @if ($detalles)
                             {{-- @foreach ($detalles as $detalle) --}}
@@ -496,19 +496,22 @@
                                 {{-- <td class="text-center">1</td> --}}
 
                                 <td>{{ $tramite_descripcion }}</td>
-                                <td>{{ $total }}</td>
-                                <td>{{ 1 }}</td>
-                                <td>{{ $total }}</td>
+                                <td class="text-right col-3">{{ number_format($total, 2) }}</td>
+                                <td class="text-center" style="width: 14rem">{{ number_format(1, 2) }}</td>
+                                <td class="text-center col-3">{{ number_format($total, 2) }}</td>
                                 {{-- <td>{{ $detalle->descripcionrequisitotipotramite }}</td> --}}
                                 {{-- <td class="text-right pr-2 col-3">$ {{ $detalle['precio'] }}</td>
                                     <td class="text-center col-2">{{ $detalle['cantidad'] }}</td>
                                     <td class="text-right pr-2 col-3">$ {{ $detalle['precio'] * $detalle['cantidad'] }} --}}
-                                </td>
+                                {{-- </td> --}}
                             </tr>
                             {{-- @endforeach --}}
                             <tr>
                             <tr style="background-color: lightblue; height: 30px;">
-                                <td colspan=5 class="text-right pr-2">$ {{ $total }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td colspan=5 class="text-center pr-2"><b>Total $ </b> {{ number_format($total, 2) }}</td>
                             </tr>
                         @else
                             <tr>

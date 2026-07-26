@@ -214,26 +214,25 @@ class InformesonlineComponent extends Component
                     // "success" => "https://ecosystems.ar/registro/success",
                     // "success" => "https://localhost:8000/informes-online/",
                     // "success" => "http://localhost:8000/registro/success/",
-                    "success" => "https://sistema.ecosystems.ar/registro/success/",
-                    "failure" => "http://localhost:8000/registro/failure/",
-                    "pending" => "https://localhost:8000/pending"
+                    "success" => url("/registro/success/"),
+                    "failure" => url("/registro/failure/"),
+                    "pending" => url("/registro/pending/")
 
                     // "failure" => "http://localhost:8000/informes-online",
                 ),
-                // "auto_return" => "approved",
+                "auto_return" => "approved",
                 "external_reference" => $this->cuil .'-' . $this->patente .'-' . $this->tramite_descripcion.'Venta Online',
-                "notification_url" => "http://localhost:8000/webhook/mercadopago", // Para notificaciones IPN
+
+                "notification_url" => url("webhook/mercadopago"), // Para notificaciones IPN
+                
                 "statement_descriptor" => "INF.DOMIN", // Aparece en el resumen de la tarjeta
             ]);
 
             $this->preferenceId = $preference->id;
 
-            // dd($this->preferenceId);
             // Guardar el ID de la preferencia en sesión para tracking
             session(['mp_preference_id' => $preference->id]);
-
-            // Guardar datos del pago en tu base de datos (opcional)
-            // $this->guardarDatosPago($preference->id);
+            session(['mp_total' => $this->total]);
 
             // return $this->redirect($preference->init_point);
             return redirect()->away($preference->init_point);
@@ -251,19 +250,6 @@ class InformesonlineComponent extends Component
 
     }
 
-    private function guardarDatosPago($preferenceId) {
-        // Ejemplo: guardar en tabla "pagos" o "transacciones"
-        Pago::create([
-            'user_id' => auth()->id(),
-            'preference_id' => $preferenceId,
-            'cuil' => $this->cuil,
-            'patente' => $this->patente,
-            'monto' => $this->total,
-            'estado' => 'pending',
-            'external_reference' => $this->generarExternalReference(),
-        ]);
-        }
-
     public function success(Request $request) {
      // Acceder a los parámetros via $request
         $collectionId = $request->input('collection_id');
@@ -273,21 +259,12 @@ class InformesonlineComponent extends Component
         $externalReference = $request->input('external_reference');
         $preferenceId = $request->input('preference_id');
 
-    // $paymentType = $request->input('payment_type');
-    // $merchantOrderId = $request->input('merchant_order_id');
-    // $siteId = $request->input('site_id');
-    // $processingMode = $request->input('processing_mode');
-    // $merchantAccountId = $request->input('merchant_account_id');
     if($collectionStatus=="approved" && $status=="approved") {
-    // if ($request->has('collection_id')) {
-        // dd($request);
-        // dd('pepepepe');
         // Guardar los datos de la transacción
-        // $paymentData = $request->all();
+    
+        $this->total = session('mp_total');
 
-        // Procesar el pago (guardar en BD, etc.)
-
-        $this->processPayment($collectionId,$collectionStatus,$paymentId,$status,$externalReference,$preferenceId );
+        $this->processPayment($collectionId,$collectionStatus,$paymentId,$status,$externalReference,$preferenceId , $this->total);
 
         return view('livewire.registro.success', compact('paymentId', 'status','preferenceId'));
 
@@ -295,21 +272,11 @@ class InformesonlineComponent extends Component
         return view('livewire.registro.failure', compact('paymentId', 'status','preferenceId'));
     }
 
-    // dd($_POST);
-    // $payment_id = $request->get('payment_id');
-    // $status = $request->get('status');
-    // $external_reference = $request->get('external_reference');
-    // $otro = $this->preferenceId;
-    // dd($this->preferenceId);
-    // return view('livewire.registro.success', compact('payment_id', 'status','preferenceId'));
-
-
-
     // Actualizar tu orden como aprobada
     // return view('livewire.registro.success', compact('payment_id', 'status'));
 }
 
-public function processPayment($collectionId,$collectionStatus,$paymentId,$status,$externalReference,$preferenceId ) {
+public function processPayment($collectionId,$collectionStatus,$paymentId,$status,$externalReference,$preferenceId , $total) {
     registroPagos::firstOrCreate([
             'collectionId' => $collectionId,
             'collectionStatus'=> $collectionStatus,
@@ -317,10 +284,9 @@ public function processPayment($collectionId,$collectionStatus,$paymentId,$statu
             'status'=> $status,
             'externalReference'=> $externalReference,
             'preferenceId'=> $preferenceId,
-            'total'=> $this->total,
+            'total'=> $total,
             // 'empresa_id'=> session('empresa_id'),
         ]);
-        dd($collectionId . ' - ' . $collectionStatus . ' - ' . $paymentId . ' - ' . $status . ' - ' . $externalReference . ' - ' . $preferenceId . ' - ' . $this->total);
 }
 
 public function failure(Request $request)

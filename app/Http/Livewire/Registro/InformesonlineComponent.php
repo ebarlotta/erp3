@@ -27,13 +27,13 @@ class InformesonlineComponent extends Component
     public $cuil, $tramiteid, $detalles, $total, $estado_inicial=1, $ivas;
     public $datos_solicitante_validados, $solicitante, $necesita_agregar_solicitante, $agregar_apellido, $agregar_nombre, $agregar_email, $agregar_celular, $agregar_direccion, $agregarivaid, $apellido, $nombre;
     public $patente, $vehiculo, $datos_vehiculo_validados, $necesita_agregar_vehiculo, $marca, $modelo, $ano, $agregar_modelo, $agregar_marca ,$agregar_ano;
-    public $resumen, $datos_solicitante, $datos_vehiculo, $seleccion_tramite, $forma_pago, $pago; 
+    public $resumen, $datos_solicitante, $datos_vehiculo, $seleccion_tramite, $forma_pago, $pago;
     public $datos_tramite_validados, $tramite_descripcion, $informes;
 
     public $OpenModal=false, $preference, $preferenceId;
     public $loading,$error,$publicKey;
 
-    public function render() {        
+    public function render() {
         $this->ivas = Condicioniva::where('activo','=',1)->get();
         $this->informes = registroTipotramite::where('modulo','=','informes')->get();
         return view('livewire.registro.informesonline-component')->extends('layouts.sinadminlte');
@@ -45,7 +45,7 @@ class InformesonlineComponent extends Component
             MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN'));
             $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY');
     }
-    
+
     public function OpenModalQR() {
         $this->OpenModal = !$this->OpenModal;
     }
@@ -63,10 +63,10 @@ class InformesonlineComponent extends Component
     public function ElegirTramite() {
         $this->informes = registroTipotramite::find($this->tramiteid);
 
-        if($this->tramiteid == 0 ) { 
-            $this->datos_tramite_validados=0; $this->tramite_descripcion = ""; 
+        if($this->tramiteid == 0 ) {
+            $this->datos_tramite_validados=0; $this->tramite_descripcion = "";
         } else {
-            $this->datos_tramite_validados=1; 
+            $this->datos_tramite_validados=1;
             $this->tramite_descripcion = $this->informes->nombretramite;
             $this->detalles = registroReguisitosTipotramite::where('tipotramite_id','=',$this->tramiteid)->get();
             $this->total = registroReguisitosTipotramite::where('tipotramite_id', $this->tramiteid)
@@ -104,7 +104,7 @@ class InformesonlineComponent extends Component
         ]);
 
         $this->BuscarSolicitante();
-        
+
         session()->flash('message', 'Solicitante Agregado!.');
         $this->necesita_agregar_solicitante = 0;
     }
@@ -150,7 +150,7 @@ class InformesonlineComponent extends Component
         $this->vehiculo = ElementoVehiculo::where('patente','like','%'.$this->patente.'%')->first();
         if($this->vehiculo) {
             $this->datos_vehiculo_validados = 1;
-            
+
             $this->marca = $this->vehiculo->marca;
             $this->modelo = $this->vehiculo->modelo;
             $this->ano = $this->vehiculo->ano;
@@ -189,36 +189,80 @@ class InformesonlineComponent extends Component
     }
 
     public function Pagar() {
-        $client = new PreferenceClient();
-        $preference = $client->create([
-            "items"=> array(
-                array(
-                "title" => "Tram. Serv. Administrativos",
-                "quantity" => 1,
-                "unit_price" => 10,
-                // "unit_price" => $this->total,
-                )
-            ),
-            "back_urls"=> array(
-                // "success" => "https://ecosystems.ar/registro/success",
-                // "success" => "https://localhost:8000/informes-online/",
-                "success" => "http://localhost:8000/registro/success/",
-                "failure" => "http://localhost:8000/informes-online",
-                "pending" => "https://localhost:8000/pending"
-            ),
-            // "auto_return" => "approved",
-            "external_reference" => $this->cuil .'-' . $this->patente .'-' . $this->tramite_descripcion.'Venta Online'
+        try {
+            // Validar que el usuario esté autenticado y tenga los datos necesarios
+            if (!$this->cuil || !$this->patente || !$this->tramite_descripcion) {
+                session()->flash('error', 'Faltan datos para procesar el pago');
+                return redirect()->back();
+            }
+
+            // Calcular el total si es necesario
+            $total = $this->total ?? 10; // Valor por defecto si no está definido
+
+            $client = new PreferenceClient();
+            $preference = $client->create([
+                "items"=> array(
+                    array(
+                    "title" => "Tram. Serv. Administrativos",
+                    "quantity" => 1,
+                    "unit_price" => (float) $total,
+                    "currency_id" => "ARS", // Especificar moneda
+                    // "unit_price" => $this->total,
+                    )
+                ),
+                "back_urls"=> array(
+                    // "success" => "https://ecosystems.ar/registro/success",
+                    // "success" => "https://localhost:8000/informes-online/",
+                    "success" => "http://localhost:8000/registro/success/",
+                    "failure" => "http://localhost:8000/registro/failure/",
+                    "pending" => "https://localhost:8000/pending"
+
+                    // "failure" => "http://localhost:8000/informes-online",
+                ),
+                // "auto_return" => "approved",
+                "external_reference" => $this->cuil .'-' . $this->patente .'-' . $this->tramite_descripcion.'Venta Online',
+                "notification_url" => "http://localhost:8000/webhook/mercadopago", // Para notificaciones IPN
+                "statement_descriptor" => "INF.DOMIN", // Aparece en el resumen de la tarjeta
+            ]);
+
+            $this->preferenceId = $preference->id;
+
+            // Guardar el ID de la preferencia en sesión para tracking
+            session(['mp_preference_id' => $preference->id]);
+
+            // Guardar datos del pago en tu base de datos (opcional)
+            // $this->guardarDatosPago($preference->id);
+
+            // return $this->redirect($preference->init_point);
+            return redirect()->away($preference->init_point);
+
+
+        } catch (\Exception $e) {
+            // Log del error para debugging
+            \Log::error('Error en MercadoPago: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+
+            // Mostrar mensaje amigable al usuario
+            session()->flash('error', 'Hubo un error al procesar el pago. Por favor, intenta nuevamente.');
+            return redirect()->back();
+        }
+
+    }
+
+    private function guardarDatosPago($preferenceId) {
+        // Ejemplo: guardar en tabla "pagos" o "transacciones"
+        Pago::create([
+            'user_id' => auth()->id(),
+            'preference_id' => $preferenceId,
+            'cuil' => $this->cuil,
+            'patente' => $this->patente,
+            'monto' => $this->total,
+            'estado' => 'pending',
+            'external_reference' => $this->generarExternalReference(),
         ]);
+        }
 
-    $this->preferenceId = $preference->id;
-
-    return $this->redirect($preference->init_point);
-
-}
-
-public function success(Request $request)
-{
-
+    public function success(Request $request) {
      // Acceder a los parámetros via $request
         $collectionId = $request->input('collection_id');
         $collectionStatus = $request->input('collection_status');
@@ -226,7 +270,7 @@ public function success(Request $request)
         $status = $request->input('status');
         $externalReference = $request->input('external_reference');
         $preferenceId = $request->input('preference_id');
-    
+
     // $paymentType = $request->input('payment_type');
     // $merchantOrderId = $request->input('merchant_order_id');
     // $siteId = $request->input('site_id');
@@ -238,17 +282,17 @@ public function success(Request $request)
         // dd('pepepepe');
         // Guardar los datos de la transacción
         // $paymentData = $request->all();
-        
+
         // Procesar el pago (guardar en BD, etc.)
-        
+
         $this->processPayment($collectionId,$collectionStatus,$paymentId,$status,$externalReference,$preferenceId );
 
         return view('livewire.registro.success', compact('paymentId', 'status','preferenceId'));
-        
+
     } else {
-        return view('livewire.registro.error', compact('paymentId', 'status','preferenceId'));
+        return view('livewire.registro.failure', compact('paymentId', 'status','preferenceId'));
     }
-    
+
     // dd($_POST);
     // $payment_id = $request->get('payment_id');
     // $status = $request->get('status');
@@ -258,7 +302,7 @@ public function success(Request $request)
     // return view('livewire.registro.success', compact('payment_id', 'status','preferenceId'));
 
 
-    
+
     // Actualizar tu orden como aprobada
     // return view('livewire.registro.success', compact('payment_id', 'status'));
 }
@@ -274,30 +318,32 @@ public function processPayment($collectionId,$collectionStatus,$paymentId,$statu
             'total'=> $this->total,
             // 'empresa_id'=> session('empresa_id'),
         ]);
+        dd($collectionId . ' - ' . $collectionStatus . ' - ' . $paymentId . ' - ' . $status . ' - ' . $externalReference . ' - ' . $preferenceId . ' - ' . $this->total);
 }
 
 public function failure(Request $request)
 {
-    return view('payment.failure');
+
+    return view('livewire.registro.failure', compact('paymentId', 'status','preferenceId'));
 }
 
 public function pending(Request $request)
 {
-    return view('payment.pending');
+    return view('livewire.registro.pending');
 }
 
 public function webhook(Request $request)
 {
     // MercadoPago envía notificaciones POST aquí
     $data = $request->all();
-    
+
     if ($data['type'] === 'payment') {
         $payment = MercadoPago\Payment::find_by_id($data['data']['id']);
-        
+
         // Actualizar el estado del pago en tu base de datos
         $this->updateOrderStatus($payment->external_reference, $payment->status);
     }
-    
+
     return response()->json(['status' => 'ok']);
 }
 
@@ -309,17 +355,17 @@ public function webhook(Request $request)
 
     function ValidateCUITCUIL($cuit) {
 		if (strlen($cuit) != 13) return false;
-		
+
 		$rv = false;
 		$resultado = 0;
 		$cuit_nro = str_replace("-", "", $cuit);
-		
+
 		$codes = "6789456789";
 		$cuit_long = intVal($cuit_nro);
 		$verificador = intVal($cuit_nro[strlen($cuit_nro)-1]);
-        
+
 		$x = 0;
-		
+
 		while ($x < 10)
 		{
 			$digitoValidador = intVal(substr($codes, $x, 1));

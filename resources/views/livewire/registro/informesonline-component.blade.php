@@ -413,7 +413,8 @@
                 <label class="text-muted mb-3">Elegí qué trámite querés iniciar.</label>
                 <h2 class="titulo1">Selección de Trámite</h2>
                 <label class="titulo_card">Tipo de Trámite</label>
-                <select class="form-control" wire:model="tramiteid" wire:change="ElegirTramite" style="font-size:1.2rem; height: 3.2rem;">
+                <select class="form-control" wire:model="tramiteid" wire:change="ElegirTramite"
+                    style="font-size:1.2rem; height: 3.2rem;">
                     {{-- wire:change="ElegirTramite({{ $tramite_id }});" --}}
                     <option value="0">--- Seleccione alguna opción ---</option>
                     @foreach ($informes as $informe)
@@ -491,19 +492,19 @@
                         </tr>
                         @if ($detalles)
                             {{-- @foreach ($detalles as $detalle) --}}
-                                <tr style="height: 30px;">
-                                    {{-- <td class="text-center">1</td> --}}
-                                    
-                                    <td>{{ $tramite_descripcion }}</td>
-                                    <td>{{ $total }}</td>
-                                    <td>{{ 1 }}</td>
-                                    <td>{{ $total }}</td>
-                                    {{-- <td>{{ $detalle->descripcionrequisitotipotramite }}</td> --}}
-                                    {{-- <td class="text-right pr-2 col-3">$ {{ $detalle['precio'] }}</td>
+                            <tr style="height: 30px;">
+                                {{-- <td class="text-center">1</td> --}}
+
+                                <td>{{ $tramite_descripcion }}</td>
+                                <td>{{ $total }}</td>
+                                <td>{{ 1 }}</td>
+                                <td>{{ $total }}</td>
+                                {{-- <td>{{ $detalle->descripcionrequisitotipotramite }}</td> --}}
+                                {{-- <td class="text-right pr-2 col-3">$ {{ $detalle['precio'] }}</td>
                                     <td class="text-center col-2">{{ $detalle['cantidad'] }}</td>
                                     <td class="text-right pr-2 col-3">$ {{ $detalle['precio'] * $detalle['cantidad'] }} --}}
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                             {{-- @endforeach --}}
                             <tr>
                             <tr style="background-color: lightblue; height: 30px;">
@@ -525,7 +526,7 @@
             </button>
 
             <img src="/images/qr.jpg" alt="" class="mt-2" width="20%">
-            <a href="https://mpago.la/1MuPrz5" target="_blank"><button class="btn btn-info mt-2">Botón de
+            <a href="https://mpago.la/1MuPrz5"><button class="btn btn-info mt-2">Botón de
                     Pago</button></a>
             <input type="button" class="btn btn-info mt-2" name="" id=""
                 value="Tarjeta Crédito/Débito" wire:click="Pagar();">
@@ -599,7 +600,7 @@
                         <button>Billetera</button>
                     </a>
                     {{-- <div class="block mx-3">
-                        <label for="">Precio</label><br><input type="text" class="text-right" id="precio_modificar" wire:model="precio_agregar" wire:change="Calcular('agregar');">        
+                        <label for="">Precio</label><br><input type="text" class="text-right" id="precio_modificar" wire:model="precio_agregar" wire:change="Calcular('agregar');">
                     </div>
 
                     <div class="block ml-3 mr-3">

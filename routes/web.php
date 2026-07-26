@@ -312,6 +312,7 @@ Route::get('/configurartramites-registro', ConfigurarRegistroTramitesComponent::
 Route::get('/estimador-registro', EstimadorComponent::class)->name('registro.estimador');
 
 Route::get('/registro/success', [InformesonlineComponent::class, 'success'])->name('mercadopago.success');
+Route::get('/registro/failure', [InformesonlineComponent::class, 'failure'])->name('mercadopago.failure');
 // Route::get('/registro/webhooks', [InformesonlineComponent::class, 'webhooks'])->name('mercadopago.webhooks');
 
 // Route::post('/create-payment', [PaymentController::class, 'createPayment'])->name('payment.create');

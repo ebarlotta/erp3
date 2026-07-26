@@ -40,10 +40,10 @@ class InformesonlineComponent extends Component
     }
 
     public function __construct() {
-        // MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN_TEST'));
-        // $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY_TEST');
-            MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN'));
-            $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY');
+        MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN_TEST'));
+        $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY_TEST');
+        //    MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN'));
+        //    $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY');
     }
 
     public function OpenModalQR() {
@@ -213,7 +213,8 @@ class InformesonlineComponent extends Component
                 "back_urls"=> array(
                     // "success" => "https://ecosystems.ar/registro/success",
                     // "success" => "https://localhost:8000/informes-online/",
-                    "success" => "http://localhost:8000/registro/success/",
+                    // "success" => "http://localhost:8000/registro/success/",
+                    "success" => "https://sistema.ecosystems.ar/registro/success/",
                     "failure" => "http://localhost:8000/registro/failure/",
                     "pending" => "https://localhost:8000/pending"
 
@@ -227,6 +228,7 @@ class InformesonlineComponent extends Component
 
             $this->preferenceId = $preference->id;
 
+            // dd($this->preferenceId);
             // Guardar el ID de la preferencia en sesión para tracking
             session(['mp_preference_id' => $preference->id]);
 

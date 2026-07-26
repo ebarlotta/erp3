@@ -9,4 +9,14 @@ class registroPagos extends Model
 {
     /** @use HasFactory<\Database\Factories\RegistroPagosFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'collectionId' ,
+        'collectionStatus',
+        'paymentId',
+        'status',
+        'externalReference',
+        'preferenceId',
+        'total'
+        ];
 }

@@ -299,6 +299,7 @@ Route::get('/sin-permisos', function () {
 
 
 Route::view('/registro', 'registro.principal')->name('registro');
+Route::view('/prestamos', 'prestamos.principal')->name('prestamos');
 Route::view('/registro/transferenciadigital/first', 'registro.transferenciadigital.first')->name('transferenciadigital.first');
 Route::view('/registro/tramite_online/first', 'registro.tramite_online.first')->name('tramite_online.first');
 Route::view('/registro/tramite_online/second', 'registro.tramite_online.deepseek_html_20250809_cf6807')->name('tramite_online.second');

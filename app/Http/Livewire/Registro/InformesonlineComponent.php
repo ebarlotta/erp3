@@ -224,7 +224,7 @@ class InformesonlineComponent extends Component
                 "external_reference" => $this->cuil .'-' . $this->patente .'-' . $this->tramite_descripcion.'Venta Online',
 
                 "notification_url" => url("webhook/mercadopago"), // Para notificaciones IPN
-                
+
                 "statement_descriptor" => "INF.DOMIN", // Aparece en el resumen de la tarjeta
             ]);
 
@@ -236,7 +236,8 @@ class InformesonlineComponent extends Component
 
             // return $this->redirect($preference->init_point);
             return redirect()->away($preference->init_point);
-
+//webhost para enviar el mail con la operación
+//arreglar barra de titulo
 
         } catch (\Exception $e) {
             // Log del error para debugging

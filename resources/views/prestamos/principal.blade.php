@@ -36,13 +36,18 @@
         .columna {
             flex: 1;
         }
+        .columna-con-select {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
         label {
             display: block;
             margin-bottom: 5px;
             color: #555;
             font-weight: 600;
         }
-        input[type="number"], input[type="date"] {
+        input[type="number"], input[type="date"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -50,6 +55,24 @@
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 14px;
+        }
+        select {
+            width: 100%;
+            cursor: pointer;
+        }
+        .btn-mini {
+            width: 100%;
+            padding: 10px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .btn-mini:hover {
+            background-color: #777;
         }
         button {
             width: 100%;
@@ -147,25 +170,35 @@
         <div class="fila">
             <div class="columna">
                 <label for="capital">Capital ($)</label>
-                <input type="number" id="capital" placeholder="Ej: 500000" value="500000">
+                <input type="number" id="capital" placeholder="Ej: 106500" value="106500">
             </div>
-            <div class="columna">
-                <label for="tna">TNA (%)</label>
-                <input type="number" id="tna" placeholder="Ej: 69" value="69">
+            <div class="columna-con-select">
+                <div style="flex: 1;">
+                    <label for="tna">TNA (%)</label>
+                    <input type="number" id="tna" placeholder="Ej: 69" value="69">
+                </div>
+                <div style="flex: 1;">
+                    <label for="metodo">Método de cálculo</label>
+                    <select id="metodo" onchange="calcular()">
+                        <option value="frances">Sistema Francés (Cuota fija)</option>
+                        <option value="simple">Interés Simple Diario (Mercado Pago)</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <div class="fila">
             <div class="columna">
                 <label for="cuotas">Número de Cuotas</label>
-                <input type="number" id="cuotas" placeholder="Ej: 6" value="6">
+                <input type="number" id="cuotas" placeholder="Ej: 1" value="1">
             </div>
             <div class="columna">
                 <label for="fecha">Fecha vencimiento 1ra cuota</label>
-                <input type="date" id="fecha" value="2026-09-10">
+                <input type="date" id="fecha" value="2026-10-16">
             </div>
         </div>
 
+        <!-- El botón se reemplaza por una pequeña zona de texto que se actualiza automáticamente -->
         <button onclick="calcular()">Calculate</button>
 
         <div class="resultado" id="resultado">
@@ -223,14 +256,12 @@
             var tna = parseFloat(document.getElementById('tna').value);
             var cuotas = parseInt(document.getElementById('cuotas').value);
             var fecha = document.getElementById('fecha').value;
+            var metodo = document.getElementById('metodo').value;
 
             if (!capital || !tna || !cuotas || !fecha) {
                 alert("Please fill all fields");
                 return;
             }
-
-            // Convertir TNA a tasa mensual (proporcional simple)
-            var i = (tna / 100) / 12;
 
             // Fecha de hoy
             var hoy = new Date();
@@ -253,12 +284,46 @@
                 diasPrimeraCuota = 1;
             }
 
-            // Convertir días a fracción de mes (30 días = 1 mes)
-            var fraccionPrimerMes = diasPrimeraCuota / 30;
+            // Convertir TNA a tasa mensual (proporcional simple)
+            var i = (tna / 100) / 12;
 
-            // Cuota fija mensual (sistema francés con interés compuesto mensual)
-            // Nota: La cuota se calcula con una tasa mensual y un plazo de n meses (asumiendo que la primera cuota es a 1 mes)
-            // Para simplificar, mantenemos la cuota calculada con la tasa mensual y el plazo n, pero el interés se ajusta con el período real.
+            // Si el método es "simple" (Mercado Pago), se calcula el interés con días exactos
+            if (metodo === 'simple') {
+                // Interés Simple Diario
+                var interesTotal = capital * (tna / 100 / 365) * diasPrimeraCuota;
+
+                // Total a pagar (redondeado al alza)
+                var total = Math.ceil(capital + interesTotal);
+
+                // Mostrar resultados
+                document.getElementById('cuotaValor').textContent = '$' + formatoArg(total);
+                document.getElementById('totalPagado').textContent = 'Total a pagar: $' + formatoArg(total);
+                document.getElementById('resultado').style.display = 'block';
+
+                // Tabla de cuotas para un solo pago (simple)
+                var tablaHTML = '<tr>'
+                    + '<td>1</td>'
+                    + '<td>' + fechaPrimeraCuota.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'}) + '</td>'
+                    + '<td>$' + formatoArg(capital) + '</td>'
+                    + '<td>$' + formatoArg(interesTotal) + '</td>'
+                    + '<td>$' + formatoArg(0) + '</td>'
+                    + '<td class="total-cuota">$' + formatoArg(total) + '</td>'
+                    + '<td><input type="checkbox" class="chkCuota" value="' + total.toFixed(2) + '" onchange="sumarSeleccionadas()"></td>'
+                    + '</tr>';
+
+                document.getElementById('tbodyCuotas').innerHTML = tablaHTML;
+                document.getElementById('totalMonto').textContent = '$' + formatoArg(capital);
+                document.getElementById('totalInteres').textContent = '$' + formatoArg(interesTotal);
+                document.getElementById('totalIva').textContent = '$' + formatoArg(0);
+                document.getElementById('totalTodo').textContent = '$' + formatoArg(total);
+                document.getElementById('tablaCuotas').style.display = 'block';
+                document.getElementById('seccionCheckbox').style.display = 'block';
+                document.getElementById('totalPagoAdelantado').textContent = '';
+                return;
+            }
+
+            // Si el método es "frances", continúa con el sistema francés (interés compuesto mensual)
+            // Cuota fija mensual (sistema francés)
             var cuota = capital * (i / (1 - Math.pow(1 + i, -cuotas)));
 
             // Total pagado
@@ -296,7 +361,7 @@
                 // Para las siguientes, interés = saldo * i (porque ya pasó un mes completo)
                 var interes;
                 if (n === 1) {
-                    interes = saldo * i * fraccionPrimerMes;
+                    interes = saldo * i * (diasPrimeraCuota / 30);
                 } else {
                     interes = saldo * i;
                 }
@@ -372,42 +437,6 @@
             } else {
                 document.getElementById('totalPagoAdelantado').textContent = '';
             }
-        }
-
-        // Esta función ya no es necesaria porque le total dinámico se calcula con sumarSeleccionadas()
-        // pero la dejamos por si quieres usarla como respaldo.
-        function calcularTotalAdelantado() {
-            var cuotas = parseInt(document.getElementById('cuotas').value);
-            var tna = parseFloat(document.getElementById('tna').value);
-            var capital = parseFloat(document.getElementById('capital').value);
-
-            if (!capital || !tna || !cuotas) {
-                alert("Please fill all fields");
-                return;
-            }
-
-            // Convertir TNA a tasa mensual
-            var i = (tna / 100) / 12;
-
-            // Cuota francesa
-            var cuota = capital * (i / (1 - Math.pow(1 + i, -cuotas)));
-
-            var totalAdelantado = 0;
-            var saldo = capital;
-
-            // Se calcula la cuota y el IVA para todas las cuotas que el usuario quiera pagar
-            var n = 0;
-            while (n < cuotas) {
-                n++;
-                var interes = saldo * i;
-                var iva = interes * 0.21;
-                var totalCuota = cuota + iva;
-                totalAdelantado = totalAdelantado + totalCuota;
-                var amortizacion = cuota - interes;
-                saldo = saldo - amortizacion;
-            }
-
-            document.getElementById('totalPagoAdelantado').textContent = 'Si pagás todas las cuotas, el total a pagar es: $' + formatoArg(totalAdelantado);
         }
     </script>
 </body>

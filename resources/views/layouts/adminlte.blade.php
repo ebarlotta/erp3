@@ -8,6 +8,44 @@
         <script src="cart/js/taildwind.js"></script>
         {{-- <link href="/src/style.css" rel="stylesheet"> --}}
     @laravelPWA
+
+    <style>
+        body { font-family: 'Source Sans Pro', sans-serif; margin: 0; }
+        #banner { background: #1a1a2e; color: white; padding: 2rem; }
+    
+        /* barlow-300 - latin_latin-ext_vietnamese */
+        @font-face {
+        font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+        font-family: 'Barlow';
+        font-style: normal;
+        font-weight: 300;
+        src: url('fonts/barlow-v13-latin_latin-ext_vietnamese-300.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+        }
+        /* barlow-300italic - latin_latin-ext_vietnamese */
+        @font-face {
+        font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+        font-family: 'Barlow';
+        font-style: italic;
+        font-weight: 300;
+        src: url('fonts/barlow-v13-latin_latin-ext_vietnamese-300italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+        }
+        /* barlow-regular - latin_latin-ext_vietnamese */
+        @font-face {
+        font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+        font-family: 'Barlow';
+        font-style: normal;
+        font-weight: 400;
+        src: url('fonts/barlow-v13-latin_latin-ext_vietnamese-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+        }
+        /* barlow-italic - latin_latin-ext_vietnamese */
+        @font-face {
+        font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+        font-family: 'Barlow';
+        font-style: italic;
+        font-weight: 400;
+        src: url('fonts/barlow-v13-latin_latin-ext_vietnamese-italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+        }
+    </style>
 </head>
 
 @section('title', session('nombre_empresa'))
@@ -24,6 +62,8 @@
     <p>Welcome to this beautiful admin panel.</p>
 @stop --}}
 
-{{-- @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-@stop --}}
+@section('css')
+    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    {{-- <link rel="preload" href="css/app.css" as="style" onload="this.onload=null;this.rel='stylesheet'"> --}}
+    {{-- <noscript><link rel="stylesheet" href="css/app.css"></noscript> --}}
+@stop

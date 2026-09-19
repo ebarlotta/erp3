@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'name' => 'Ecosystems.ar',
+    'name' => 'EcoSystems.ar',
     'manifest' => [
-        'name' => env('APP_NAME', 'Ecosystems App'),
-        'short_name' => 'Eocsystems',
+        'name' => env('APP_NAME', 'EcoSystems App'),
+        'short_name' => 'EcoSystems',
         'start_url' => '/',
         'background_color' => '#ffffff',
         'theme_color' => '#000000',

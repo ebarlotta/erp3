@@ -6,6 +6,7 @@ use App\Models\EmpresaUsuario;
 use App\Models\Empresa;
 use App\Models\Roles;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -39,8 +40,9 @@ class EmpresaUsuariosComponent extends Component
     public function render()
     {
                 // DB::table('empresas')->insert(['name' => 'Empresa de Pruebas','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'BarBer.png','establecimiento' => '0','telefono' => '12345678','actividad' => 'Desarrollo','actividad1' => 'Software','email' => '','habilitada' => true,'nombretitular' => 'Juan de los Palotes','dnititular' => '1234',]);
-
-        if(auth()->user()->hasPermissionTo('empresausuarios.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'empresausuarios.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('empresausuarios.Ver', $guardName)) {
+        // if(auth()->user()->hasPermissionTo('empresausuarios.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->usuariosglobales= User::all();
                 $this->empresas = Empresa::all()->sortBy('id');

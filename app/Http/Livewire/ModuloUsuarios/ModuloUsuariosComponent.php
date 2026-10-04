@@ -28,8 +28,10 @@ class ModuloUsuariosComponent extends Component
     protected $datos;
 
     public function render() {
-        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'modulousuarios.Ver')->where('guard_name', $guardName)->exists();
-        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('modulousuarios.Ver', $guardName)) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'modulousuarios.Verr')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('modulousuarios.Ver', $guardName)) {
+        // $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'modulousuarios.Ver')->where('guard_name', $guardName)->exists();
+        // if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('modulousuarios.Ver', $guardName)) {
             if(session('empresa_id')) {
                 $this->usuariosglobales= User::all();
                 //$modulos = Modulo::get()->sortBy('id')->paginate(4);

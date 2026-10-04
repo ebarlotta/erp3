@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use App\Models\Modulo;
 use App\Models\EmpresaModulo;
 use App\Models\EmpresaUsuario;
+use Spatie\Permission\Models\Permission;
 
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -20,7 +21,10 @@ class EmpresaModulosComponent extends Component {
     public $modulosdelaemp, $modulosdelaempresa, $modulosNOempresa, $empresaseleccionada, $seleccionado = 1, $name, $isModalOpen = false, $modulosnuevos;
 
     public function render() {
-        if(auth()->user()->hasPermissionTo('empresamodulos.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'empresamodulos.Ver')->where('guard_name', $guardName)->exists();
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('empresamodulos.Ver', $guardName)) {
+
+        // if(auth()->user()->hasPermissionTo('empresamodulos.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $userid=auth()->user()->id;
                 $this->empresas_paginate = Empresa::where('id','>=1')->paginate(10);

@@ -23,6 +23,11 @@ class GestionModuloComponent extends Component {
     public $empresas;
     public $empresa_id=0;
 
+    public $permiso_ver;
+    public $permiso_agregar;
+    public $permiso_eliminar;
+    public $permiso_modificar;
+
     use WithPagination;
 
     public function render() {
@@ -114,6 +119,14 @@ class GestionModuloComponent extends Component {
     }
 
     public function storePermiso() {
+        $this->name = $this->reemplazaEspaciosAcentos($this->name);
+        if($this->permiso_ver) $permission = Permission::updateOrCreate(['name' => $this->name.'.Ver', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_agregar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Agregar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_eliminar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Eliminar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_modificar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Modificar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        
+        $this->showEdit( $this->modulo_id);
+
         $this->validate([
             'nombre_permiso' => 'required|max:255',
             'empresa_id' => 'required',
@@ -121,9 +134,9 @@ class GestionModuloComponent extends Component {
             'empresa_id.required' => 'Debe seleccionar una empresa para crear el permiso.',
         ]);
 
-        $this->name = $this->reemplazaEspaciosAcentos($this->name);
         $name = $this->name.'.'.$this->nombre_permiso;
         $permission = Permission::updateOrCreate(['name' => $name, 'guard_name' => 'web' . $this->empresa_id]);
+
 
         $this->nombre_permiso = null;
         $this->empresa_id = null;

@@ -181,6 +181,33 @@
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <label for="">Permisos standarts</label>
+                            <div class="flex justify-content-between mx-6">
+                                <div>
+                                    <input type="checkbox" wire:model="permiso_ver" id="Ver" checked>
+                                    <label for="Ver">
+                                        Ver
+                                    </label>
+                                </div>
+                                <div><input type="checkbox" wire:model="permiso_agregar" id="Agregar" checked>
+                                    <label for="Agregar">
+                                        Agregar
+                                    </label>
+                                </div>
+                                <div><input type="checkbox" wire:model="permiso_eliminar" id="Eliminar" checked>
+                                    <label for="Eliminar">
+                                        Eliminar
+                                    </label>
+                                </div>
+                                <div><input type="checkbox" wire:model="permiso_modificar" id="Modificar" checked>
+                                    <label for="Modificar">
+                                        Modificar
+                                    </label>
+                                </div>
+                                @error('nombre_permiso')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
 
                             <div class="pt-3">
                                 <button type="button" class="btn btn-success"  data-dismiss="modal" wire:click="storePermiso()">

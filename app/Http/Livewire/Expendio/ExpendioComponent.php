@@ -50,10 +50,10 @@ class ExpendioComponent extends Component {
     //SELECT consumidos.fecha, menus.nombremenu, sum(menuingredientes.cantidad*elementos.precio_compra) as Costo FROM `consumidos` inner join menus on menus.id = consumidos.menu_id INNER join menuingredientes on menuingredientes.menu_id = menus.id INNER join elementos on elementos.id = menuingredientes.elemento_id WHERE consumidos.cerrado=1 and consumidos.empresa_id=1 GROUP by menus.nombremenu;
 
     public function GenerarVistaResumenes() {
-
+        // SUM(menu_plans.cantidad / menus.ppersonas * menuingredientes.cantidad * precio_compra) AS costomenu,
         $this->Resumen['costomenues1'] = DB::select("SELECT
             menus.nombremenu,
-            SUM(menu_plans.cantidad / menus.ppersonas * menuingredientes.cantidad * precio_compra) AS costomenu,
+            SUM(menu_plans.cantidad /  menuingredientes.cantidad * precio_compra) AS costomenu,
             SUM(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) AS costototal,
             SUM(menus.tiempopreparacion * menu_plans.cantidad) AS tiempototal
             FROM actors
@@ -68,7 +68,7 @@ class ExpendioComponent extends Component {
             ORDER BY menus.nombremenu;");
 
         $this->Resumen['costomenues'] = DB::select("SELECT menus.nombremenu, elementos.name, unidads.name as unidad,
-            sum(menu_plans.cantidad / menus.ppersonas * menuingredientes.cantidad * precio_compra) as costomenu,
+            sum(menu_plans.cantidad /  menuingredientes.cantidad * precio_compra) as costomenu,
             SUM(menu_plans.cantidad * menuingredientes.cantidad * precio_compra) AS costototal,
             sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal,
             sum(menu_plans.cantidad * menuingredientes.cantidad) as cantidadelementos
@@ -84,7 +84,7 @@ class ExpendioComponent extends Component {
             ORDER BY menus.nombremenu;");
 
         $this->Resumen['costoingredientes'] = DB::select("SELECT elementos.name, unidads.name as unidad,
-            sum(menu_plans.cantidad / menus.ppersonas * menuingredientes.cantidad * precio_compra) as costototal,
+            sum(menu_plans.cantidad /  menuingredientes.cantidad * precio_compra) as costototal,
             sum(menus.tiempopreparacion * menu_plans.cantidad) as tiempototal,
             sum(menu_plans.cantidad * menuingredientes.cantidad) as cantidadelementos
             FROM actors

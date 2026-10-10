@@ -29,9 +29,6 @@
                                                     Nuevo
                                                 </button>
                                             </div>
-                                            <div class="col-6">
-                                                <h4>Listado de Roles</h4>
-                                            </div>
                                             <div class="col-2">
                                                 <input wire:model="buscar" type="text" class="form-control rounded-md" placeholder="Buscar" wire:keyup="Filtrar()">
                                             </div>
@@ -43,7 +40,7 @@
                                         </div>
                                         <table class="table table-hover text-nowrap table-rounded">
                                             <tr>
-                                                <td style="background-color: rgb(164, 157, 157);"><b>Rol</b></td>
+                                                <td style="background-color: rgb(164, 157, 157);"><b>Listado de Roles</b></td>
                                                 <td style="background-color: rgb(164, 157, 157);"><b>Opciones</b></td>
                                             </tr>
                                             @if($roles)

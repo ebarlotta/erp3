@@ -20,11 +20,14 @@ class RolesComponent extends Component {
 
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'roles.Ver')->where('guard_name', $guardName)->exists();
-        if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('roles.Ver', $guardName)) {
+        // dd($permisoExiste);
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('roles.Ver', $guardName)) {
+        // if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('roles.Ver', $guardName)) {
         // if(auth()->check() && auth()->user()->hasPermissionTo('roles.Ver','web1')) {
             if(session('empresa_id')) {
                 $this->empresas = Empresa::orderby('name')->get();
                 $this->modulos = Modulo::orderby('name')->get();
+
                 if(!isset($this->empresaSeleccionada)) { $this->empresaSeleccionada = session('empresa_id'); }
                 $this->Filtrar();
                 $this->name = "Administrador";
@@ -42,6 +45,8 @@ class RolesComponent extends Component {
     }
 
     public function Filtrar() {
+        // dd($this->buscar);
+        // dd('entro'); 
         if ($this->buscar) {
             $this->roles = Roles::where('name', 'LIKE', "%" . $this->buscar . "%")
                 ->where('empresa_id', '=', session('empresa_id'))
@@ -49,7 +54,7 @@ class RolesComponent extends Component {
                 ->get();
         } else {
             $this->roles = Roles::orderBy('name','ASC')
-            ->where('empresa_id', '=', $this->empresaSeleccionada)
+            // ->where('empresa_id', '=', $this->empresaSeleccionada)
             ->where('guard_name', '=', 'web'.$this->empresaSeleccionada)
             ->get();
         }
@@ -64,6 +69,7 @@ class RolesComponent extends Component {
         $roles = Roles::find($id);
         $this->nameRol = $roles->name;
         $this->rol_id = $id; //Establece el rol
+        // dd($this->rol_id);
         $this->SeleccionarModulo(1, 'Areas');
     }
 
@@ -146,6 +152,8 @@ class RolesComponent extends Component {
                 AND p.guard_name = "web'. $this->empresaSeleccionada . '"
                 AND p.name like "%'.$nombreModulo.'%"';
                 $permisosNoActivadoshabilitados = db::select($sql);
+        // dd( $permisosNoActivadoshabilitados);
+
             $this->permisosNoActivadoshabilitados = db::select($sql);
         }
     }

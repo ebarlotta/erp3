@@ -36,13 +36,15 @@ class EmpresaUsuario extends Model
 
         // $guardName = 'web' . session('empresa_id');
         $permisoExiste = DB::table('permissions')->where('name', $PermissionName)->where('guard_name', $GuardName)->first();
-
+// dd($permisoExiste);
         $a = DB::table('model_has_permissions')
             ->where('permission_id', $permisoExiste->id)
             ->where('model_type', 'App\Models\User')
             ->where('model_id', auth()->user()->id)
             ->get();
-
+            
+// dd( $permisoExiste);
+// dd($a);
         $usuario = EmpresaUsuario::where('user_id', auth()->user()->id)
             ->where('empresa_id', session('empresa_id'))
             ->first();
@@ -51,6 +53,8 @@ class EmpresaUsuario extends Model
             ->where('permission_id', $permisoExiste->id)
             ->where('role_id', $usuario->rol_id)
             ->get();
+// dd($b);
+            
         if($a->count() > 0 || $b->count() > 0) {
             return true;
         } else {

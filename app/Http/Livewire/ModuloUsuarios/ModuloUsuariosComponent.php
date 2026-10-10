@@ -31,7 +31,6 @@ class ModuloUsuariosComponent extends Component
 
     public function render() {
         $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'modulousuarios.Ver')->where('guard_name', $guardName)->exists();
-        dd( EmpresaUsuario::PermisoHabilitado('modulousuarios.Ver', $guardName));
         if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('modulousuarios.Ver', $guardName)) {
         // $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'modulousuarios.Ver')->where('guard_name', $guardName)->exists();
         // if(auth()->check() && $permisoExiste && auth()->user()->hasPermissionTo('modulousuarios.Ver', $guardName)) {

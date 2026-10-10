@@ -15,9 +15,9 @@
                             <div class="card-body cleartfix">
                                 <div class="media align-items-stretch">
                                     <div class="media-body">
-                                        <div class="flex d-flex justify-content-beetwen">
-                                            <div class="flex d-flex col-4">
-                                                <select wire:model="empresaSeleccionada" class="form-control" wire:change="SeleccionarEmpresa()">
+                                        <div class="flex d-flex flex-wrap justify-content-beetwen">
+                                            <div class="d-flex flex-wrap col-12 justify-content-center col-md-6">
+                                                <select wire:model="empresaSeleccionada" class="form-control col-12 col-md-5 mt-1" wire:change="SeleccionarEmpresa()">
                                                     <option value="">Seleccionar Empresa</option>
                                                     @if($empresas)
                                                         @foreach ($empresas as $empresa)
@@ -25,12 +25,12 @@
                                                         @endforeach
                                                     @endif
                                                 </select>
-                                                <button type="button" class="ml-3 mb-1 btn btn-info" wire:click="showNew()" data-toggle="modal" data-target="#ModalNuevoRol">
-                                                    Nuevo
+                                                <button type="button" class="mb-1 ml-1 mt-1 md:mt-1 md-mb-1 btn btn-info col-12 col-md-6" wire:click="showNew()" data-toggle="modal" data-target="#ModalNuevoRol">
+                                                    Nuevo Rol
                                                 </button>
                                             </div>
-                                            <div class="col-2">
-                                                <input wire:model="buscar" type="text" class="form-control rounded-md" placeholder="Buscar" wire:keyup="Filtrar()">
+                                            <div class="col-12 col-md-5 md:mt-1">
+                                                <input wire:model="buscar" type="text" class="form-control rounded-md col-12 md:col-6 mb-1" placeholder="Buscar" wire:keyup="Filtrar()">
                                             </div>
                                             @error('name')
                                                 <span class="invalid-feedback" role="alert">
@@ -72,7 +72,8 @@
             <!-- ================================== -->
             {{-- @if($editModal) --}}
             <div wire:ignore.self class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog " role="document" style="width: 200%; margin-left:30%; width: 55rem">
+                <div class="modal-dialog " role="document">
+                    {{-- <div class="modal-dialog " role="document" style="width: 200%; margin-left:30%; width: 55rem"> --}}
                     <div class="modal-content" style="width: inherit">
                         <div class="modal-header">
                             <h5 class="modal-title">Alta/Modificación Roles</h5>

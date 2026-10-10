@@ -1,282 +1,243 @@
 <div>
-    <div class="grey-bg container-fluid">
-        <section id="stats-subtitle">
-        @if(session("mensaje"))
-            <div class="bg-green round-md alert alert-success">
-                {{ session('mensaje') }}
-            </div>
-        @endif
-            <div class="row">
-                <div class="col-xl-12 col-md-12 mt-3">
-                    <div class="card overflow-hidden">
-                        <div class="card-content">
-                            <div class="card-body cleartfix">
-                                <div class="media align-items-stretch">
-                                    <div class="media-body">
-                                        <div class="flex d-flex justify-content-beetwen">
-                                            <div class="flex d-flex col-9">
-                                                <h4>Listado de Módulos</h4>
-                                                <button type="button" class="ml-3 mb-1 btn btn-info" wire:click="showNew()" data-toggle="modal" data-target="#ModalEdit">
-                                                    Nuevo
-                                                </button>
-                                                <div class="w-1/2 justify-end">{{ $modulos->links() }}</div>
-                                            </div>
-                                            <div class="col-3">
-                                                <input wire:model="buscar" wire:keyup="filtrar()" type="text" class="form-control rounded-md" placeholder="Buscar">
-                                            </div>
-                                        </div>
-                                        <table class="table table-hover text-nowrap table-rounded">
-                                            <tr>
-                                                <td style="background-color: rgb(164, 157, 157);"><b>Módulo</b></td>
-                                                <td style="background-color: rgb(164, 157, 157);"><b>Opciones</b></td>
-                                            </tr>
-                                            @if($modulos)
-                                                @foreach ($modulos as $modulo)
-                                                <tr>
-                                                    <td class="d-flex" style="margin: auto"><img class="mr-3 rounded-md" src="images/{{$modulo->imagen}}" alt="" width="50px"> {{ $modulo->name }}</td>
-                                                    <td>
-                                                        <button type="button" wire:click="showEdit({{$modulo->id}})" class="btn btn-warning" data-toggle="modal" data-target="#ModalEdit">
-                                                            Editar
-                                                        </button>
-                                                        <button type="button" wire:click="showDelete({{$modulo->id}})" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete">
-                                                            Eliminar
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            @endif
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="sm:block md:hidden lg:hidden xl:hidden">
+
+        <?php echo session('nombre_empresa').' - ' . session('cuit') .'<br>'; ?>
+
+        <div class="text-left" style="font-size: 15px; margin: 12px;">
+            @foreach ($modulos as $modulo)
+                @if($modulo->name === "Compras-Ventas-Mini")
+                    <a wire:click="AsignarModulo('{{ $modulo->name }}')" href="{{ route('VentaSimple','Compras') }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow "><p class="text-center">M<br>i<br>n<br>i</p>
+                {{-- @else
+                    @if($modulo->name === "Ventas")
+                    <a wire:click="AsignarModulo('{{ $modulo->name }}')" href="{{ route('VentaSimple','Ventas') }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow "><p class="text-center">M<br>i<br>n<br>i</p>
+                    @else --}}
+                        {{-- <a wire:click="AsignarModulo('{{ $modulo->name }}')" href="{{ route($modulo->pagina) }}" class="flex mb-2 transform transition duration-500 hover:scale-105 shadow "> --}}
+                    {{-- @endif --}}
+                @endif
+                <div class="flex d-flex m-1" wire:click="EnrutarModulo('{{ $modulo->pagina }}')">
+                    <div class="w-20" style="width:28%">
+                        <img class="rounded-l-md w-36 h-36" src="{{ asset('images/'. $modulo->imagen) }}" style="width:100%; height:{{ 100*$porc }}px;" >
+                    </div>
+                    <div class="rounded-r-md w-80" style="background:linear-gradient(90deg, lightblue 20%, white 50%); width:{{ 100*$porc }}%;">
+                        <p class="ml-3">
+                            {{ $modulo->name }}
+                        </p>
+                        <p class="ml-3 mr-1 text-xs" style="font-size: {{ 12*$porc }}px">
+                            {{ $modulo->leyenda }}
+                        </p>
                     </div>
                 </div>
-            </div>
-
-            <!-- Modal Alta/Modificación Módulo -->
-            <!-- ================================== -->
-            <div wire:ignore.self class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog  col-6" role="document" style="max-width: 80%;">
-                    <div class="modal-content" style="width: inherit">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Alta/Modificación Módulos</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="px-3 py-3">
-                            <div class="flex col-12 flex-wrap">
-                                <div class="col-3">
-                                    <label for="">Nombre del Módulo</label>
-                                    <input type="text" class="form-control" value="{{ old('name') }}" wire:model="name" wire:keyup="ShowActualizar()">
-                                    @error('name')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-3">
-                                    <label for="">Página URL</label>
-                                    <input type="text" class="form-control" value="{{ old('pagina') }}" wire:model="pagina" wire:keyup="ShowActualizar()">
-                                    @error('pagina')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-3">
-                                    <label for="">Imágen</label>
-                                    <input type="text" class="form-control" value="{{ old('imagen') }}" wire:model="imagen" wire:keyup="ShowActualizar()">
-                                    @error('imagen')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-3">
-                                    <label for="">Habilitado</label>
-                                    <input type="checkbox" class="form-control" value="{{ old('habilitado') }}" wire:model="habilitado" wire:keyup="ShowActualizar()">
-                                    @error('habilitado')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-12">
-                                    <label for="">Leyenda</label>
-                                    <textarea wire:model="leyenda" rows="2" class="col-12" wire:keyup="ShowActualizar()" style="box-shadow: 6px 6px 17px lightblue; border-radius: 10px; background-color: lightgray;">{{ old('leyenda') }}</textarea>
-                                    {{-- <input type="text" class="form-control" value="{{ old('leyenda') }}" wire:model="leyenda"> --}}
-                                    @error('leyenda')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="mt-3">
-                                <select class="form-control" wire:model="empresa_id" wire:change="combo_empresa()">
-                                    <option value="0">--- Seleccione una empresa ---</option>
-                                    @foreach ($empresas as $empresa)
-                                        <option value="{{ $empresa->id }}" {{ $empresa_id == $empresa->id ? 'selected' : '' }}>{{ $empresa->name }}</option>
-                                    @endforeach 
-                                    @error('empresa_id')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </select>
-                            </div>
-                            @if($empresa_id<>0)
-                                <div class="mt-3">
-                                    <label for="">
-                                    Permisos
-                                    <button type="button" class="btn btn-success mb-1 ml-2">Agregar
-                                        <span class="col-1 fs-3 ml-1" aria-hidden="true" style="lightcoral;border-radius: 5px; text-align: center;vertical-align: middle;background-color: lightgreen;" wire:click="showNewPermiso()" data-toggle="modal" data-target="#ModalAddPermission">&plus;</span>
-                                    </button>
-                                    </label><br>
-                                    @if(count($permisos))
-                                        @foreach ($permisos as $permiso)
-                                            {{-- <div class="d-flex"> --}}
-                                            <button type="button" class="btn btn-outline-success mb-1">
-                                                {{ $permiso->name . ' - ' . $permiso->guard_name }}
-                                            {{-- <input type="text" class="form-control col-11 pt-2" value="{{ $permiso->name }}"> --}}
-                                            {{-- <span style="color: white; margin-left: 10px; background-color: rgb(64, 185, 9); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true"  title="Agregar Permiso" tooltips="prueba" wire:click="AgregarPermiso({{$permiso->id}})">&plus;</span> --}}
-                                            <span style="color:white; margin-left: 10px; background-color: rgb(189, 129, 129); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true" title="Eliminar Permiso" wire:click="getPermisoaEliminar({{$permiso->id}}, '{{ $permiso->name }}')" data-toggle="modal" data-target="#ModalDeletePermiso" >&times;</span>
-                                            {{-- <span class="col-1 fs-3" aria-hidden="true" style="lightcoral;border-radius: 10px; text-align: center;vertical-align: middle;background-color: lightcoral;">&times;</span> --}}
-                                            </button>
-                                        {{-- </div> --}}
-                                        @endforeach
-                                    @endif
-                                    @error('name')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            @else
-                                Empresa: {{ $empresa_id }}
-                            @endif
-
-                            <div class="pt-3">
-                                {{-- <button type="button" class="btn btn-success"  data-dismiss="modal" wire:click="store()">
-                                    <i class="fa-solid fa-pen-to-square"></i>Guardar
-                                </button> --}}
-                                @if($ShowButtonActualizar)
-                                    <button type="button" class="btn btn-warning" wire:click="store()">
-                                        <i class="fa-solid fa-pen-to-square"></i>Actualizar
-                                    </button>
-                                @endif
-                                <button type="button" class="btn btn-info" data-dismiss="modal" aria-label="Close">
-                                    <i class="fa-solid fa-pen-to-square"></i>Cerrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Agregar nuevo Permiso -->
-            <!-- =========================== -->
-            <div wire:ignore.self class="modal fade" id="ModalAddPermission" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog " role="document">
-                    <div class="modal-content" style="width: inherit">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Agregar Permiso</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="px-3 py-3">
-                            <div>
-                                <label for="">Nombre del Permiso</label>
-                                <input type="text" class="form-control" value="{{ old('name') }}" wire:model="nombre_permiso">
-                                @error('nombre_permiso')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <label for="">Permisos standarts</label>
-                            <div class="flex justify-content-between mx-6">
-                                <div>
-                                    <input type="checkbox" wire:model="permiso_ver" id="Ver" checked>
-                                    <label for="Ver">
-                                        Ver
-                                    </label>
-                                </div>
-                                <div><input type="checkbox" wire:model="permiso_agregar" id="Agregar" checked>
-                                    <label for="Agregar">
-                                        Agregar
-                                    </label>
-                                </div>
-                                <div><input type="checkbox" wire:model="permiso_eliminar" id="Eliminar" checked>
-                                    <label for="Eliminar">
-                                        Eliminar
-                                    </label>
-                                </div>
-                                <div><input type="checkbox" wire:model="permiso_modificar" id="Modificar" checked>
-                                    <label for="Modificar">
-                                        Modificar
-                                    </label>
-                                </div>
-                                @error('nombre_permiso')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="pt-3">
-                                <button type="button" class="btn btn-success"  data-dismiss="modal" wire:click="storePermiso()">
-                                    <i class="fa-solid fa-pen-to-square"></i>Guardar
-                                </button>
-                                <button type="button" class="btn btn-info" data-dismiss="modal" aria-label="Close">
-                                    <i class="fa-solid fa-pen-to-square"></i>Cerrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Eliminar Permiso -->
-            <!-- ====================== -->
-            <div wire:ignore.self class="modal fade" id="ModalDeletePermiso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog " role="document">
-                    <div class="modal-content" style="width: inherit">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Eliminar Permiso del Módulo</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="px-3 py-3">
-                            <div>
-                                Está seguro de que quiere eliminar el permiso del módulo: <b>{{ $nombre_permiso }}</b>?
-                            </div>
-                            <div class="pt-3">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal" wire:click="destroyPermiso({{ $idpermisoaeliminar }})">
-                                    <i class="fa-solid fa-pen-to-square"></i>Eliminar
-                                </button>
-                                <button type="button" class="btn btn-info" data-dismiss="modal" aria-label="Close">
-                                    <i class="fa-solid fa-pen-to-square"></i>Cerrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Eliminar Módulo -->
-            <!-- ====================== -->
-            <div wire:ignore.self class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog " role="document" style="max-width: 80%;">
-                    <div class="modal-content" style="width: inherit">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Eliminar Módulo</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="px-3 py-3">
-                            <div>
-                                Está seguro de que quiere eliminar el rol: <b>{{ $name }}</b>?
-                            </div>
-                            <div class="pt-3">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal" wire:click="destroy({{ $modulo_id }})">
-                                    <i class="fa-solid fa-pen-to-square"></i>Eliminar
-                                </button>
-                                <button type="button" class="btn btn-info" data-dismiss="modal" aria-label="Close">
-                                    <i class="fa-solid fa-pen-to-square"></i>Cerrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                </a>
+            @endforeach
+        </div>
     </div>
+    {{-- Modo Escritorio --}}
+    <div class="hidden sm:hidden md:block lg:block xl:block">
+        <?php echo session('nombre_empresa').'<br>'; ?>
+        <div class="hidden sm:hidden md:block lg:block xl:block  mb-4 mr-2 text-left mt-6" style=" display: flex; flex-wrap: wrap; width: 100%; justify-content: center; overflow-y: scroll; height: fit-content;">
+            @foreach ($modulos as $modulo)
+            <a wire:click="EnrutarModulo('{{ $modulo->pagina }}')" class="rounded-l-md flex mb-2 mt-2 transform transition duration-500 hover:scale-105" style="width:{{ 55*$porc }}%; margin-right: 5px; margin-left: 5px;height: fit-content;">
+       {{-- <a href="{{ route($modulo->pagina) }}" class="rounded-l-md flex mb-2 mt-2 transform transition duration-500 hover:scale-105" style="width:45%; margin-right: 5px; margin-left: 5px;"> --}}
+                <div style="display:flex; box-shadow: 10px 5px 5px gray; width: 100%; height: fit-content;">
+                {{-- <div class="flex mb-2 mt-2 transform transition duration-500 hover:scale-105 shadow  " style="width:40%; margin-right: 5px; margin-left: 5px"> --}}
+                    <div style="width:{{ 33*$porc }}%">
+                        <img class="rounded-l-md w-36 h-36" src="{{ asset('images/'. $modulo->imagen) }}" style="width:{{ 100*$porc }}%; height:fit-content; min-height: {{ 110*$porc*$porc }}px;" >
+                    </div>
+                    <div class="rounded-r-md" style="background:linear-gradient(90deg, lightblue 20%, white 50%); width:66%; height:fit-content; min-height: {{ 110*$porc*$porc }}px;">   <!-- background:linear-gradient(90deg, lightblue 40%, white 60%); background:linear-gradient(d贸nde empieza, color1, 40%, color2, 60%); -->
+                        {{-- <p class="ml-3" style="font-size: 1rem"> --}}
+                            <p class="ml-3" style="font-size: {{ 22*$porc }}px;">
+                            {{ $modulo->name }}
+                        </p>
+                        <p class="ml-3 mr-1" style="font-size: {{ 0.9*$porc }}em;">
+                            {{ $modulo->leyenda }}
+                        </p>
+                    </div>
+                {{-- </div><br> --}}
+                </div>
+            </a>
+            @endforeach
+        </div>
+
+
+
+                <!-- Contenedor de gráficos (DESPUÉS del foreach de empresas) -->
+        <div class="chart-container mt-8" style="position: relative;">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Gráfico de Compras -->
+                <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
+                    <h3 class="text-lg font-semibold mb-2">Compras</h3>
+                    <canvas id="compras" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Gráfico de Ventas -->
+                <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
+                    <h3 class="text-lg font-semibold mb-2">Ventas</h3>
+                    <canvas id="ventas" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Gráfico de Ventas -->
+                <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
+                    <h3 class="text-lg font-semibold mb-2">Compras x Áreas</h3>
+                    <canvas id="compras_areas" width="400" height="200"></canvas>
+                </div>
+
+                <!-- Gráfico de Ventas -->
+                <div class="bg-white p-4 rounded-lg shadow" wire:ignore>
+                    <h3 class="text-lg font-semibold mb-2">Compras x Cuentas</h3>
+                    <canvas id="compras_cuentas" width="400" height="200"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+        <script>
+        // Inicializar gráficos con los datos de Laravel
+        const comprasData = @json($compras);
+        const ventasData = @json($ventas);
+        console.log(comprasData);
+            var ctx = document.getElementById('compras').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($compras_areas['labels']),
+                    datasets: [{
+                            label: 'Monto total comprado',
+                            data: @json($compras_areas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2
+                        },
+/*                        {
+                            label: 'Data',
+                            data: @json($ventas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: {
+                                target: 'origin',
+                                above: 'rgb(255, 0, 0)', // Area will be red above the origin
+                                below: 'rgb(0, 0, 255)' // And blue below the origin
+                            }
+                        }*/
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('compras_areas').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($compras_areas['labels']),
+                    datasets: [{
+                            label: 'Data',
+                            data: @json($compras_areas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2
+                        },
+/*                        {
+                            label: 'Data',
+                            data: @json($ventas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: {
+                                target: 'origin',
+                                above: 'rgb(255, 0, 0)', // Area will be red above the origin
+                                below: 'rgb(0, 0, 255)' // And blue below the origin
+                            }
+                        }*/
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('compras_cuentas').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($compras_cuentas['labels']),
+                    datasets: [{
+                            label: 'Data',
+                            data: @json($compras_cuentas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2
+                        },
+/*                        {
+                            label: 'Data',
+                            data: @json($ventas['data']),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: {
+                                target: 'origin',
+                                above: 'rgb(255, 0, 0)', // Area will be red above the origin
+                                below: 'rgb(0, 0, 255)' // And blue below the origin
+                            }
+                        }*/
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var ctx = document.getElementById('ventas').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($ventas['labels']),
+                    datasets: [{
+                        label: 'Total Ventas Mensuales',
+                        data: @json($ventas['data']),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+/*                        fill: {
+                            target: 'origin',
+                            above: 'rgb(255, 0, 0)', // Area will be red above the origin
+                            below: 'rgb(0, 0, 255)' // And blue below the origin
+                        }*/
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        filler: {
+                            propagate: true
+                        }
+                    }
+                }
+            });
+        </script>
+
+    </div>
+
 </div>

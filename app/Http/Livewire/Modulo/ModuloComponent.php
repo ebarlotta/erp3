@@ -53,11 +53,12 @@ class ModuloComponent extends Component
                 $this->modulos=Modulo::find($empresa_modulos);
                 // dd($this->modulos);
 
-                $this->compras_areas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp', 'area_id', 12);
-                $this->compras_cuentas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp', 'cuenta_id', 12);
+                $this->compras_areas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp', 'area_id', 'areas', 12);
+                $this->compras_cuentas = $this->obtenerDatosGrafico2('comprobantes', 'NetoComp', 'cuenta_id', 'cuentas', 12);
 
                 $this->compras = $this->obtenerDatosGrafico('comprobantes', 'NetoComp',12);
-                $this->ventas = $this->obtenerDatosGrafico('ventas', 'NetoComp');
+                $this->ventas = $this->obtenerDatosGrafico('ventas', 'NetoComp',12);
+                
 
                 return view('livewire.modulo.modulo-component')->extends('layouts.adminlte')->section('content');
                 // return view('livewire.modulo.modulo-component',$this->modulos)->extends('layouts.adminlte')->section('content');
@@ -73,21 +74,21 @@ class ModuloComponent extends Component
         }
     }
 
-    private function obtenerDatosGrafico2(string $tabla, string $campoMonto, string $areacuenta, int $meses = 6 ): array
+    private function obtenerDatosGrafico2(string $tabla, string $campoMonto, string $campo, $tablajoin, int $meses = 6 ): array
     {
         $datos = DB::table($tabla)
-            ->selectRaw($areacuenta . ', DATE_FORMAT(fecha, "%Y-%m") as periodo, SUM(' . $campoMonto . ') as total')
+            ->selectRaw($tablajoin.'.name, '.$campo.', SUM(' . $campoMonto . ') as total')
+            ->join($tablajoin, $tablajoin.'.id',$tabla.'.'.$campo)
             ->whereBetween('fecha', [
                 now()->subMonths($meses)->startOfMonth(),
                 now()->endOfMonth()
             ])
-            ->groupBy($areacuenta)
-            ->groupBy('periodo')
-            ->orderBy('periodo')
+            ->where($tabla.'.empresa_id',session('empresa_id'))
+            ->groupBy($campo)
             ->get();
-
+            
         return [
-            'labels' => $datos->map(fn($r) => $this->formatearMes($r->periodo))->toArray(),
+            'labels' => $datos->map(fn($r) => ($r->name))->toArray(),
             'data' => $datos->map(fn($r) => round(floatval($r->total), 2))->toArray(),
         ];
     }
@@ -100,6 +101,7 @@ class ModuloComponent extends Component
                 now()->subMonths($meses)->startOfMonth(),
                 now()->endOfMonth()
             ])
+            ->where('empresa_id',session('empresa_id'))
             ->groupBy('periodo')
             ->orderBy('periodo')
             ->get();

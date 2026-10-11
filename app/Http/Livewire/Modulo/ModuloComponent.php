@@ -85,6 +85,7 @@ class ModuloComponent extends Component
             ])
             ->where($tabla.'.empresa_id',session('empresa_id'))
             ->groupBy($campo)
+            ->groupBy($tablajoin.'.name')
             ->get();
             
         return [

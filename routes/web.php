@@ -120,9 +120,24 @@ use App\Http\Controllers\ContactController;
 Route::get('/', function () {
     // return redirect()->route('login');
     // return view('dashboard');
-    return view('home');
+    return view('welcome.home');
     //return view('welcome');
 });
+
+use App\Http\Controllers\Welcome;
+
+// Ruta dinámica para los productos
+Route::get('/producto/{slug}', [ProductController::class, 'show'])->name('product.show');
+
+// Opcional: Rutas específicas si prefieres URLs más limpias (redireccionan a la dinámica)
+Route::get('/erp' , function () { return view('welcome.erp' ); });
+Route::get('/geri', function () { return view('welcome.geri'); });
+Route::get('/conv', function () { return view('welcome.conv'); });
+Route::get('/tasa', function () { return view('welcome.tasa'); });
+Route::get('/shop', function () { return view('welcome.shop'); });
+Route::get('/pres', function () { return view('welcome.pres'); });
+Route::get('/alma', function () { return view('welcome.alma'); });
+Route::get('/terr', function () { return view('welcome.terr'); });
 
 Route::get('/portfolio', function () { return view('portfolio'); });
 Route::get('/nosotros', function () { return view('nosotros'); });

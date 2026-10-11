@@ -5,74 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Préstamo</title>
     <style>
+        * { box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f9;
+            margin: 0;
+            padding: 15px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
         .container {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 700px;
-            max-width: 100%;
+            width: 100%;
+            max-width: 900px;
         }
         h2 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px;
+            margin: 0 0 20px 0;
+            font-size: 22px;
         }
         .fila {
             display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 5px;
         }
         .columna {
-            flex: 1;
+            flex: 1 1 45%;
+            min-width: 0;
         }
         .columna-con-select {
+            flex: 1 1 45%;
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            align-items: flex-end;
+            min-width: 0;
+        }
+        .columna-con-select > div {
+            flex: 1 1 45%;
+            min-width: 0;
+        }
+        .fila-tres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+        .fila-tres .columna {
+            flex: 1 1 30%;
         }
         label {
             display: block;
             margin-bottom: 5px;
             color: #555;
             font-weight: 600;
+            font-size: 13px;
         }
-        input[type="number"], input[type="date"], select {
+        input[type="number"],
+        input[type="date"],
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            box-sizing: border-box;
             font-size: 14px;
+            background-color: #fff;
+            min-width: 0;
         }
-        select {
-            width: 100%;
-            cursor: pointer;
-        }
-        .btn-mini {
-            width: 100%;
-            padding: 10px;
-            background-color: #555;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-        .btn-mini:hover {
-            background-color: #777;
+        input:focus, select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.15);
         }
         button {
             width: 100%;
@@ -85,81 +95,69 @@
             cursor: pointer;
             margin-bottom: 20px;
         }
-        button:hover {
-            background-color: #555;
-        }
+        button:hover { background-color: #555; }
         .resultado {
-            margin-top: 20px;
+            margin-top: 15px;
             padding: 15px;
             background-color: #e8f4fd;
             border-radius: 8px;
             text-align: center;
             display: none;
         }
-        .resultado p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #333;
-        }
-        .resultado .cuota {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
-        }
+        .resultado p { margin: 5px 0; font-size: 14px; color: #333; }
+        .resultado .cuota { font-size: 22px; font-weight: bold; color: #007bff; }
         .tabla-cuotas {
             margin-top: 20px;
             display: none;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .tabla-cuotas table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 12px;
+            min-width: 650px;
         }
         .tabla-cuotas th, .tabla-cuotas td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 6px 4px;
             text-align: center;
+            white-space: nowrap;
         }
         .tabla-cuotas th {
             background-color: #f2f2f2;
             color: #333;
             font-weight: bold;
+            font-size: 11px;
         }
-        .tabla-cuotas td:first-child {
-            font-weight: bold;
+        .tabla-cuotas td:first-child { font-weight: bold; }
+        .tabla-cuotas .total-cuota { font-weight: bold; color: #007bff; }
+        .tabla-cuotas input[type="checkbox"] {
+            width: auto; margin: 0; padding: 0;
+            transform: scale(1.2); cursor: pointer;
         }
-        .tabla-cuotas .total-cuota {
-            font-weight: bold;
-            color: #007bff;
-        }
-        .seccion-checkbox {
-            margin-top: 20px;
-            display: none;
-        }
-        .seccion-checkbox label {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: normal;
-            color: #333;
-        }
-        .seccion-checkbox input[type="checkbox"] {
-            width: auto;
-            margin-bottom: 0;
-        }
+        .seccion-checkbox { margin-top: 20px; display: none; }
         .seccion-checkbox .total-pago {
-            font-size: 20px;
-            font-weight: bold;
-            color: #d9534f;
-            margin-top: 10px;
-            text-align: center;
+            font-size: 18px; font-weight: bold;
+            color: #d9534f; margin-top: 10px; text-align: center;
         }
-        .total-tabla {
-            font-size: 14px;
-            font-weight: bold;
-            color: #d9534f;
-            margin-top: 10px;
-            text-align: center;
+        @media (max-width: 700px) {
+            body { padding: 10px; }
+            .container { padding: 15px; border-radius: 8px; }
+            h2 { font-size: 18px; }
+            .fila, .fila-tres { flex-direction: column; gap: 0; }
+            .columna, .columna-con-select, .columna-con-select > div, .fila-tres .columna {
+                flex: 1 1 100%; width: 100%;
+            }
+            .columna-con-select { flex-direction: column; }
+            label { font-size: 12px; }
+            input[type="number"], input[type="date"], select {
+                padding: 9px; font-size: 13px; margin-bottom: 12px;
+            }
+            button { padding: 11px; font-size: 15px; }
+            .resultado .cuota { font-size: 20px; }
+            .tabla-cuotas table { font-size: 11px; min-width: 550px; }
+            .tabla-cuotas th, .tabla-cuotas td { padding: 5px 3px; }
         }
     </style>
 </head>
@@ -167,46 +165,53 @@
     <div class="container">
         <h2>Calculadora de Préstamo</h2>
 
+        <!-- Fila 1: Capital + TNA + Método -->
         <div class="fila">
             <div class="columna">
                 <label for="capital">Capital ($)</label>
                 <input type="number" id="capital" placeholder="Ej: 106500" value="106500">
             </div>
             <div class="columna-con-select">
-                <div style="flex: 1;">
+                <div>
                     <label for="tna">TNA (%)</label>
                     <input type="number" id="tna" placeholder="Ej: 69" value="69">
                 </div>
-                <div style="flex: 1;">
-                    <label for="metodo">Método de cálculo</label>
-                    <select id="metodo" onchange="calcular()">
+                <div>
+                    <label for="metodo">Método</label>
+                    <select id="metodo">
                         <option value="frances">Sistema Francés (Cuota fija)</option>
-                        <option value="simple">Interés Simple Diario (Mercado Pago)</option>
+                        <option value="simple">Interés Simple Diario</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <div class="fila">
+        <!-- Fila 2: Cuotas + Fecha Inicio + Fecha 1ra Cuota (en la misma fila) -->
+        <div class="fila-tres">
             <div class="columna">
                 <label for="cuotas">Número de Cuotas</label>
-                <input type="number" id="cuotas" placeholder="Ej: 1" value="1">
+                <input type="number" id="cuotas" placeholder="Ej: 6" value="6">
+            </div>
+            <div class="columna">
+                <label for="fechaInicio">Fecha de inicio</label>
+                <input type="date" id="fechaInicio">
             </div>
             <div class="columna">
                 <label for="fecha">Fecha vencimiento 1ra cuota</label>
-                <input type="date" id="fecha" value="2026-10-16">
+                <input type="date" id="fecha" value="2026-08-16">
             </div>
         </div>
 
-        <!-- El botón se reemplaza por una pequeña zona de texto que se actualiza automáticamente -->
-        <button onclick="calcular()">Calculate</button>
+        <button onclick="calcular()">Calcular</button>
 
+        <!-- Resultado -->
         <div class="resultado" id="resultado">
-            <p>Cuota mensual fija:</p>
+            <p id="tituloCuota">Cuota mensual fija:</p>
             <p class="cuota" id="cuotaValor"></p>
             <p id="totalPagado"></p>
         </div>
 
+        <!-- Tabla de cuotas -->
         <div class="tabla-cuotas" id="tablaCuotas">
             <table>
                 <thead>
@@ -240,104 +245,129 @@
     </div>
 
     <script>
-        // Función para convertir a formato argentino: 123.456.789,12
+        // Formato argentino: 123.456.789,12
         function formatoArg(numero) {
             return numero.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         }
 
-        // Función para calcular el número de días entre dos fechas
+        // Días entre dos fechas
         function diasEntre(fecha1, fecha2) {
             var unDia = 24 * 60 * 60 * 1000;
             return Math.round((fecha2 - fecha1) / unDia);
         }
 
+        // Inicializar fecha de inicio con la fecha actual
+        window.addEventListener('DOMContentLoaded', function() {
+            var hoy = new Date();
+            var yyyy = hoy.getFullYear();
+            var mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            var dd = String(hoy.getDate()).padStart(2, '0');
+            document.getElementById('fechaInicio').value = yyyy + '-' + mm + '-' + dd;
+
+            document.getElementById('metodo').addEventListener('change', calcular);
+        });
+
         function calcular() {
             var capital = parseFloat(document.getElementById('capital').value);
             var tna = parseFloat(document.getElementById('tna').value);
             var cuotas = parseInt(document.getElementById('cuotas').value);
-            var fecha = document.getElementById('fecha').value;
+            var fechaInicioStr = document.getElementById('fechaInicio').value;
+            var fechaStr = document.getElementById('fecha').value;
             var metodo = document.getElementById('metodo').value;
 
-            if (!capital || !tna || !cuotas || !fecha) {
-                alert("Please fill all fields");
+            if (!capital || !tna || !cuotas || !fechaInicioStr || !fechaStr) {
+                alert("Por favor completá todos los campos");
                 return;
             }
 
-            // Fecha de hoy
-            var hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
+            var fechaInicio = new Date(fechaInicioStr);
+            fechaInicio.setHours(0, 0, 0, 0);
 
-            // Fecha de la primera cuota
-            var fechaPrimeraCuota = new Date(fecha);
+            var fechaPrimeraCuota = new Date(fechaStr);
             fechaPrimeraCuota.setHours(0, 0, 0, 0);
 
-            // Si la fecha de la primera cuota ya pasó, usar la fecha de hoy
-            if (fechaPrimeraCuota < hoy) {
-                fechaPrimeraCuota = hoy;
-            }
-
-            // Calcular el número de días entre hoy y la primera cuota
-            var diasPrimeraCuota = diasEntre(hoy, fechaPrimeraCuota);
-
-            // Si son menos de 1 día, usar 1 día como mínimo
-            if (diasPrimeraCuota < 1) {
-                diasPrimeraCuota = 1;
-            }
-
-            // Convertir TNA a tasa mensual (proporcional simple)
-            var i = (tna / 100) / 12;
-
-            // Si el método es "simple" (Mercado Pago), se calcula el interés con días exactos
+            // ===== MÉTODO SIMPLE DIARIO (por cuota) =====
             if (metodo === 'simple') {
-                // Interés Simple Diario
-                var interesTotal = capital * (tna / 100 / 365) * diasPrimeraCuota;
+                var saldo = capital;
+                var tablaHTML = '';
+                var totalMonto = 0;
+                var totalInteres = 0;
+                var totalIva = 0;
+                var totalTodo = 0;
 
-                // Total a pagar (redondeado al alza)
-                var total = Math.ceil(capital + interesTotal);
+                for (var n = 1; n <= cuotas; n++) {
+                    // Fecha de vencimiento de la cuota n
+                    var fechaCuota;
+                    if (n === 1) {
+                        fechaCuota = new Date(fechaPrimeraCuota);
+                    } else {
+                        fechaCuota = new Date(fechaPrimeraCuota);
+                        fechaCuota.setMonth(fechaCuota.getMonth() + (n - 1));
+                    }
 
-                // Mostrar resultados
-                document.getElementById('cuotaValor').textContent = '$' + formatoArg(total);
-                document.getElementById('totalPagado').textContent = 'Total a pagar: $' + formatoArg(total);
+                    // Días entre la fecha de inicio y el vencimiento de esta cuota
+                    var dias = diasEntre(fechaInicio, fechaCuota);
+                    if (dias < 1) dias = 1;
+
+                    // Interés simple diario sobre el capital original (interés corrido)
+                    // Nota: Si querés interés sobre saldo, avisame y lo cambio.
+                    var interes = capital * (tna / 100 / 365) * dias;
+
+                    // IVA 21% sobre el interés (opcional, lo dejo en 0 para Mercado Pago)
+                    var iva = 0;
+
+                    // Monto de la cuota = Capital / cuotas + interés de esa cuota
+                    // En interés simple diario, el capital se divide en partes iguales y el interés es corrido.
+                    var montoCuota = capital / cuotas;
+                    var totalCuota = montoCuota + interes + iva;
+
+                    totalMonto += montoCuota;
+                    totalInteres += interes;
+                    totalIva += iva;
+                    totalTodo += totalCuota;
+
+                    var fechaTexto = fechaCuota.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'});
+
+                    tablaHTML += '<tr>'
+                        + '<td>' + n + '</td>'
+                        + '<td>' + fechaTexto + '</td>'
+                        + '<td>$' + formatoArg(montoCuota) + '</td>'
+                        + '<td>$' + formatoArg(interes) + '</td>'
+                        + '<td>$' + formatoArg(iva) + '</td>'
+                        + '<td class="total-cuota">$' + formatoArg(totalCuota) + '</td>'
+                        + '<td><input type="checkbox" class="chkCuota" value="' + totalCuota.toFixed(2) + '" onchange="sumarSeleccionadas()"></td>'
+                        + '</tr>';
+                }
+
+                document.getElementById('tituloCuota').textContent = 'Resumen del préstamo:';
+                document.getElementById('cuotaValor').textContent = 'Total: $' + formatoArg(totalTodo);
+                document.getElementById('totalPagado').textContent = 'Interés total: $' + formatoArg(totalInteres);
                 document.getElementById('resultado').style.display = 'block';
 
-                // Tabla de cuotas para un solo pago (simple)
-                var tablaHTML = '<tr>'
-                    + '<td>1</td>'
-                    + '<td>' + fechaPrimeraCuota.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'}) + '</td>'
-                    + '<td>$' + formatoArg(capital) + '</td>'
-                    + '<td>$' + formatoArg(interesTotal) + '</td>'
-                    + '<td>$' + formatoArg(0) + '</td>'
-                    + '<td class="total-cuota">$' + formatoArg(total) + '</td>'
-                    + '<td><input type="checkbox" class="chkCuota" value="' + total.toFixed(2) + '" onchange="sumarSeleccionadas()"></td>'
-                    + '</tr>';
-
                 document.getElementById('tbodyCuotas').innerHTML = tablaHTML;
-                document.getElementById('totalMonto').textContent = '$' + formatoArg(capital);
-                document.getElementById('totalInteres').textContent = '$' + formatoArg(interesTotal);
-                document.getElementById('totalIva').textContent = '$' + formatoArg(0);
-                document.getElementById('totalTodo').textContent = '$' + formatoArg(total);
+                document.getElementById('totalMonto').textContent = '$' + formatoArg(totalMonto);
+                document.getElementById('totalInteres').textContent = '$' + formatoArg(totalInteres);
+                document.getElementById('totalIva').textContent = '$' + formatoArg(totalIva);
+                document.getElementById('totalTodo').textContent = '$' + formatoArg(totalTodo);
                 document.getElementById('tablaCuotas').style.display = 'block';
                 document.getElementById('seccionCheckbox').style.display = 'block';
                 document.getElementById('totalPagoAdelantado').textContent = '';
                 return;
             }
 
-            // Si el método es "frances", continúa con el sistema francés (interés compuesto mensual)
-            // Cuota fija mensual (sistema francés)
+            // ===== MÉTODO FRANCÉS =====
+            var i = (tna / 100) / 12;
             var cuota = capital * (i / (1 - Math.pow(1 + i, -cuotas)));
-
-            // Total pagado
             var total = cuota * cuotas;
 
-            // Anexar resultados
+            document.getElementById('tituloCuota').textContent = 'Cuota mensual fija:';
             document.getElementById('cuotaValor').textContent = '$' + formatoArg(cuota);
             document.getElementById('totalPagado').textContent = 'Total pagado: $' + formatoArg(total);
             document.getElementById('resultado').style.display = 'block';
 
-            // Calculamos cada cuota con su interés e IVA
             var saldo = capital;
             var tablaHTML = '';
-            var fechaActual = hoy;
+            var fechaActual = fechaInicio;
 
             var totalMonto = 0;
             var totalInteres = 0;
@@ -345,53 +375,35 @@
             var totalTodo = 0;
 
             for (var n = 1; n <= cuotas; n++) {
-                // Fecha de vencimiento de la cuota n
-                // Para la primera cuota, usamos la fecha exacta
-                // Para las siguientes, sumamos 1 mes a la fecha anterior
                 var fechaCuota;
                 if (n === 1) {
-                    fechaCuota = fechaPrimeraCuota;
+                    fechaCuota = new Date(fechaPrimeraCuota);
                 } else {
-                    fechaCuota = new Date(fechaActual);
-                    fechaCuota.setMonth(fechaCuota.getMonth() + 1);
+                    fechaCuota = new Date(fechaPrimeraCuota);
+                    fechaCuota.setMonth(fechaCuota.getMonth() + (n - 1));
                 }
 
-                // Interés del período
-                // Para la primera cuota, interés = saldo * i * fraccionPrimerMes
-                // Para las siguientes, interés = saldo * i (porque ya pasó un mes completo)
+                var dias = diasEntre(fechaInicio, fechaCuota);
+                if (dias < 1) dias = 1;
+
                 var interes;
                 if (n === 1) {
-                    interes = saldo * i * (diasPrimeraCuota / 30);
+                    interes = saldo * i * (dias / 30);
                 } else {
                     interes = saldo * i;
                 }
 
-                // IVA 21% sobre el interés
                 var iva = interes * 0.21;
-
-                // Cuota sin IVA
                 var montoCuota = cuota;
-
-                // Total cuota con IVA
                 var totalCuota = montoCuota + iva;
-
-                // Amortización de capital
-                // Para la primera cuota, la amortización se ajusta por la fracción del mes
-                var amortizacion;
-                if (n === 1) {
-                    amortizacion = cuota - interes;
-                } else {
-                    amortizacion = cuota - interes;
-                }
-
+                var amortizacion = cuota - interes;
                 saldo = saldo - amortizacion;
 
-                totalMonto = totalMonto + montoCuota;
-                totalInteres = totalInteres + interes;
-                totalIva = totalIva + iva;
-                totalTodo = totalTodo + totalCuota;
+                totalMonto += montoCuota;
+                totalInteres += interes;
+                totalIva += iva;
+                totalTodo += totalCuota;
 
-                // Fecha de vencimiento en formato argentino
                 var fechaTexto = fechaCuota.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'});
 
                 tablaHTML += '<tr>'
@@ -404,7 +416,6 @@
                     + '<td><input type="checkbox" class="chkCuota" value="' + totalCuota.toFixed(2) + '" onchange="sumarSeleccionadas()"></td>'
                     + '</tr>';
 
-                // Actualizar fecha actual para la siguiente cuota
                 fechaActual = fechaCuota;
             }
 
@@ -414,8 +425,6 @@
             document.getElementById('totalIva').textContent = '$' + formatoArg(totalIva);
             document.getElementById('totalTodo').textContent = '$' + formatoArg(totalTodo);
             document.getElementById('tablaCuotas').style.display = 'block';
-
-            // Mostrar sección de checkbox
             document.getElementById('seccionCheckbox').style.display = 'block';
             document.getElementById('totalPagoAdelantado').textContent = '';
         }
@@ -433,7 +442,8 @@
             }
 
             if (cuotasSeleccionadas > 0) {
-                document.getElementById('totalPagoAdelantado').textContent = 'Total a pagar por ' + cuotasSeleccionadas + ' cuotas: $' + formatoArg(total);
+                document.getElementById('totalPagoAdelantado').textContent =
+                    'Total a pagar por ' + cuotasSeleccionadas + ' cuota(s): $' + formatoArg(total);
             } else {
                 document.getElementById('totalPagoAdelantado').textContent = '';
             }

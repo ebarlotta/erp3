@@ -357,7 +357,7 @@ use App\Models\Proyectos\Project;
 |--------------------------------------------------------------------------
 | Agregar estas rutas en routes/web.php de tu aplicación Laravel  */
 
-Route::prefix('projects')->name('projects.')->group(function () {
+Route::prefix('proyectos')->name('proyectos.')->group(function () {
     // Dashboard
     Route::get('/', Dashboard::class)->name('index');
 

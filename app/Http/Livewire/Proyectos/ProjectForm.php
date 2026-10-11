@@ -72,7 +72,7 @@ class ProjectForm extends Component
         }
 
         session()->flash('message', $message);
-        return redirect()->route('projects.index');
+        return redirect()->route('proyectos.index');
     }
 
     public function render()

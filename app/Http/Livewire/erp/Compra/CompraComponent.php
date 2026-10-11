@@ -145,8 +145,8 @@ class CompraComponent extends Component
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY comprobante, detalle, empresa_id, proveedor_id, proveedors.namess');
 
             //Genera el encabezado principal de la tabla
-            $html = '<div class="flex justify-center">
-                <table class="table table-stripped" style="width:90%; font-size: '.$this->font_size.'px;"><thead><tr bgcolor="lightGray"><th align="center" width="100px" >Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Operaciones</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
+            $html = '<div class="flex justify-center w-full">
+                <table class="table table-stripped" style="width:100%; font-size: '.$this->font_size.'px;"><thead><tr bgcolor="lightGray"><th align="center" width="100px" >Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Operaciones</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
 
             $CantGeneral = count($subtotalesGenerales); // Cantidad de registros encontrados a nivel general
 
@@ -234,7 +234,6 @@ class CompraComponent extends Component
         $html = $html . '<tr><td colspan=9></td></tr><tr  bgcolor="lightGray" style="font-size:14px"><td colspan=7></td><td><b>Saldo Final</b></td><td><b>'.number_format($saldoFinal, 2, ',', '.') .'</b></td></tr>';
         $html = $html . ' </tbody></table></div>';
         $this->CuentasCorrientesHtml = $html;
-
     }
 
     public function ActualizarProveedores() {

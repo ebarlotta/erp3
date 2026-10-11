@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20d0651844e0b1da1f2e52a18c8c9b2e",
+    "content-hash": "15002f86a8d1f43d70050fb65a82e20a",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -8776,16 +8776,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "15.26.2",
+            "version": "15.37.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "4f49e4a77ced9ace7955db2159234e4a9c0b22a3"
+                "reference": "a3a9ef9b039d10db442bfb3bed0a97c9b50f30a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/4f49e4a77ced9ace7955db2159234e4a9c0b22a3",
-                "reference": "4f49e4a77ced9ace7955db2159234e4a9c0b22a3",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/a3a9ef9b039d10db442bfb3bed0a97c9b50f30a7",
+                "reference": "a3a9ef9b039d10db442bfb3bed0a97c9b50f30a7",
                 "shasum": ""
             },
             "require": {
@@ -8836,7 +8836,17 @@
                 "issues": "https://github.com/Laravel-Lang/lang/issues",
                 "source": "https://github.com/Laravel-Lang/lang"
             },
-            "time": "2025-10-29T12:19:07+00:00"
+            "funding": [
+                {
+                    "url": "https://boosty.to/dragon-code",
+                    "type": "boosty"
+                },
+                {
+                    "url": "https://yoomoney.ru/to/410012608840929",
+                    "type": "yoomoney"
+                }
+            ],
+            "time": "2026-10-09T09:55:05+00:00"
         },
         {
             "name": "laravel-lang/locale-list",

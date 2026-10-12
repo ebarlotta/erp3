@@ -10,7 +10,7 @@
                         {{-- <x-application-mark class="block h-9 w-auto" /> --}}
                         @if( isset(Auth::user()->name))
 
-                        <img class="h-8 w-8 rounded-full object-cover" src="http://localhost:8000/storageimages/BarBer.png" alt="{{ Auth::user()->name }}" />
+                        <img class="h-8 w-8 rounded-full object-cover" src="http://localhost:8000/storageimages/EcoSystems.jpg" alt="{{ Auth::user()->name }}" />
                         @endif
                     </a>
                     {{ session('nombre_empresa'); }}

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', '<?php session('nombre_empresa') ? echo session('nombre_empresa') : echo "BarBer"; ?>')
+@section('title', '<?php session('nombre_empresa') ? echo session('nombre_empresa') : echo "BarBer Desarrollos"; ?>')
 
 {{-- @section('content_header')
     <h1>Dashboard</h1>

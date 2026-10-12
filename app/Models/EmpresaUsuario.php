@@ -44,7 +44,7 @@ class EmpresaUsuario extends Model
             ->get();
             
 // dd( $permisoExiste);
-// dd($a);
+        if(is_null(session('empresa_id'))) return false;
         $usuario = EmpresaUsuario::where('user_id', auth()->user()->id)
             ->where('empresa_id', session('empresa_id'))
             ->first();

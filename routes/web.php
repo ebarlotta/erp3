@@ -314,7 +314,7 @@ Route::get('/sin-permisos', function () {
 
 Route::view('/prestamos', 'prestamos.principal')->name('prestamos');
 
-Route::view('/bioritmos', 'bioritmos.principal')->name('bioritmos');
+Route::view('/biorritmos', 'biorritmos.principal')->name('biorritmos');
 
 Route::view('/registro', 'registro.principal')->name('registro');
 Route::view('/registro/transferenciadigital/first', 'registro.transferenciadigital.first')->name('transferenciadigital.first');

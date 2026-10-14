@@ -499,4 +499,4 @@ function obtenerEstado($valor) {
         return "⚡ Muy bajo - Descansa y recarga";
     }
 }
-?><?php /**PATH /home/casa-pc/Proyectos/erp3/resources/views/bioritmos/principal.blade.php ENDPATH**/ ?>
+?><?php /**PATH /home/casa-pc/Proyectos/erp3/resources/views/biorritmos/principal.blade.php ENDPATH**/ ?>

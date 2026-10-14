@@ -2,7 +2,7 @@
     <div style="display:inline-block; text-align:center">
         <b>EcoSystems</b>
         
-        <img src="<?php echo e(asset('images/EcoSystems.jpg')); ?>" alt="" width="80px">
+        
     </div>
 
     

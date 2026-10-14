@@ -2,7 +2,7 @@
     <div style="display:inline-block; text-align:center">
         <b>EcoSystems</b>
         {{-- <p style="font-size: 8px;">DESARROLLOS</p> --}}
-        <img src="{{ asset('images/EcoSystems.jpg')}}" alt="" width="80px">
+        {{-- <img src="{{ asset('images/EcoSystems.jpg')}}" alt="" width="80px"> --}}
     </div>
 
     {{-- <svg class="w-16 h-16" viewbox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -15,14 +15,16 @@
     @if ($operacion == 'deuda') <div class="text-center mb-2"><label>Resúmen de Deudas</label></div>
     @else <div class="text-center mb-2"><label>Resúmen de Créditos</label></div>
     @endif
-    <div class="text-center mb-2"><label style="font-size: 9px;">Fecha de Consulta: {{ date("d-m-Y")}}</label></div>
-    <table class="container col-10" style="font-size: 11px">
+    <div class="text-center mb-2"><label style="font-size: 9px;">Fecha de Consulta: {{ date("d-m-Y")}}</label><br></div>
+    <br>
+    <table border="1" style="font-size: 11px" cellpadding="8" cellspacing="0" style="border-collapse: collapse; font-family: sans-serif;">
+    {{-- <table class="container col-10" style="font-size: 11px"> --}}
         <tr class="bg-secondary text-white fw-bold border">
-            <td class="border" style="text-align: left">Nombre</td>
+            <td class="border" style="text-align: left"><b>Nombre</b></td>
             @if ($operacion == 'deuda') {
-                <td class="border text-center">Deuda</td> }
+                <td class="border text-center"><b>Deuda</b></td> }
             @else {
-                <td class="border text-center">Crédito</td> }
+                <td class="border text-center"><b>Crédito</b></td> }
             @endif
         </tr>
 

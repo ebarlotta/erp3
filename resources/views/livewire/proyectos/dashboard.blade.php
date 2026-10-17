@@ -39,13 +39,13 @@
                                 <option value="{{ $status }}">{{ ucfirst($status) }}</option>
                             @endforeach
                         </select>
-                        <a href="{{ route('projects.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+                        <a href="{{ route('proyectos.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
                             Nuevo Proyecto
                         </a>
-                        <a href="{{ route('projects.time') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+                        <a href="{{ route('proyectos.time') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
@@ -96,7 +96,7 @@
                     @empty
                         <div class="col-span-full text-center py-12">
                             <p class="text-slate-400">No hay proyectos todavía.</p>
-                            <a href="{{ route('projects.create') }}" class="text-blue-400 hover:underline">Crear el primero</a>
+                            <a href="{{ route('proyectos.create') }}" class="text-blue-400 hover:underline">Crear el primero</a>
                         </div>
                     @endforelse
                 </div>

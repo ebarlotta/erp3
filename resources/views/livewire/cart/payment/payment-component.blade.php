@@ -9,7 +9,7 @@
                 <div class="header-bot_inner_wthreeinfo_header_mid">
                     <!-- header-bot-->
                     <div class="col-md-4 logo_agile">
-                        <img class="col-md-4" src="http://127.0.0.1:8000/images/BarBer.png" alt=" "
+                        <img class="col-md-4" src="http://127.0.0.1:8000/images/EcoSystems.jpg" alt=" "
                             style="width: 100px;height: 70px;">
                         <h3 class="col-md-8">
                             Empresa de Pruebas

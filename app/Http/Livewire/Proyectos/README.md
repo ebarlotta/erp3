@@ -61,11 +61,11 @@ project-manager-module/
 ## Rutas
 
 ```php
-Route::prefix('projects')->group(function () {
-    Route::get('/', \App\Http\Livewire\Dashboard::class)->name('projects.index');
-    Route::get('/create', \App\Http\Livewire\ProjectForm::class)->name('projects.create');
-    Route::get('/{project}/edit', \App\Http\Livewire\ProjectForm::class)->name('projects.edit');
-    Route::get('/{project}/tasks', \App\Http\Livewire\TaskList::class)->name('projects.tasks');
-    Route::get('/time', \App\Http\Livewire\TimeTracker::class)->name('projects.time');
+Route::prefix('proyectos')->group(function () {
+    Route::get('/', \App\Http\Livewire\Dashboard::class)->name('proyectos.index');
+    Route::get('/create', \App\Http\Livewire\ProjectForm::class)->name('proyectos.create');
+    Route::get('/{project}/edit', \App\Http\Livewire\ProjectForm::class)->name('proyectos.edit');
+    Route::get('/{project}/tasks', \App\Http\Livewire\TaskList::class)->name('proyectos.tasks');
+    Route::get('/time', \App\Http\Livewire\TimeTracker::class)->name('proyectos.time');
 });
 ```

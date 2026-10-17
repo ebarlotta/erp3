@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'title' => 'BarBer',
+    'title' => 'EcoSystems.ar',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -47,10 +47,10 @@ return [
     |
     */
 
-    'logo' => '<div style="display:inline-block"><b>BarBer</b><br><p style="font-size: 8px;">DESARROLLOS</p></div>',
+    'logo' => '<div style="display:inline-block"><b>EcoSystems.ar</b><br></div>',
     // 'logo' => '<div style="display:inline-block"><b>BarBer</b><br><p style="font-size: 8px;">DESARROLLOS</p></div>',
     // 'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img' => 'images/BarBer.png',
+    'logo_img' => 'images/EcoSystems.jpg',
     // session('empresa_id');
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,

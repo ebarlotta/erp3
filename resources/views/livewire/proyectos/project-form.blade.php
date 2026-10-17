@@ -3,7 +3,7 @@
         <h2 class="text-2xl font-bold text-white">
             {{ $project ? 'Editar Proyecto' : 'Nuevo Proyecto' }}
         </h2>
-        <a href="{{ route('projects.index') }}">
+        <a href="{{ route('proyectos.index') }}">
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                 Volver
             </button>
@@ -96,7 +96,7 @@
             >
                 {{ $project ? 'Actualizar' : 'Crear Proyecto' }}
             </button>
-            <a href="{{ route('projects.index') }}" class="text-slate-400 hover:text-white px-6 py-2">
+            <a href="{{ route('proyectos.index') }}" class="text-slate-400 hover:text-white px-6 py-2">
                 Cancelar
             </a>
         </div>

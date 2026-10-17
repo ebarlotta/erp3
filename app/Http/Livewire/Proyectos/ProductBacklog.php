@@ -103,7 +103,7 @@ class ProductBacklog extends Component
     
     public function edit_tasks(Pbi $pbi)
     {
-        return redirect()->route('projects.tasks', ['project_id' => $pbi->project_id, 'pbi_id' => $pbi->id]);
+        return redirect()->route('proyectos.tasks', ['project_id' => $pbi->project_id, 'pbi_id' => $pbi->id]);
     }
 
     public function save()
@@ -151,7 +151,7 @@ class ProductBacklog extends Component
         }
         
         $this->showModal = false;
-        return redirect()->route('projects.product-backlog', ['project' => $this->project_id]);
+        return redirect()->route('proyectos.product-backlog', ['project' => $this->project_id]);
 
         // $this->resetForm();
     }

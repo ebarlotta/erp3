@@ -62,7 +62,7 @@
 
                 <!-- Contenedor de gráficos (DESPUÉS del foreach de empresas) -->
         <div class="chart-container mt-8" style="position: relative;">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <!-- Gráfico de Compras -->
                 <div class="bg-white p-4 rounded-lg shadow" wire:ignore>

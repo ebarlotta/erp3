@@ -6,9 +6,141 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/home/assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="/home/assets/css/noscript.css" /></noscript>
+		<!-- Agrega esto en el <head> de tu archivo -->
+<style>
+	.confeti {
+		 position: fixed;
+		 top: -10px;
+		 width: 10px;
+		 height: 10px;
+		 background-color: #f00;
+		 animation: caer linear forwards;
+		 z-index: 9999;
+		 pointer-events: none;
+	}
+	
+	@keyframes caer {
+		 to {
+			  transform: translateY(100vh) rotate(720deg);
+		 }
+	}
+	
+	.gracias-container {
+		 position: relative;
+		 overflow: hidden;
+	}
+</style>
+
+<!-- Agrega esto antes de cerrar </body> -->
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		 const graciasDiv = document.querySelector('.gracias-container');
+		 if (graciasDiv) {
+			  crearConfeti();
+		 }
+	});
+	
+	function crearConfeti() {
+		 const colores = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff69b4'];
+		 
+		 for (let i = 0; i < 150; i++) {
+			  setTimeout(() => {
+					const confeti = document.createElement('div');
+					confeti.classList.add('confeti');
+					
+					// Posición horizontal aleatoria
+					confeti.style.left = Math.random() * 100 + 'vw';
+					
+					// Color aleatorio
+					confeti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+					
+					// Duración de caída aleatoria (entre 2 y 5 segundos)
+					confeti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+					
+					// Tamaño aleatorio
+					const size = Math.random() * 10 + 5;
+					confeti.style.width = size + 'px';
+					confeti.style.height = size + 'px';
+					
+					// Forma aleatoria (círculo o cuadrado)
+					if (Math.random() > 0.5) {
+						 confeti.style.borderRadius = '50%';
+					}
+					
+					document.body.appendChild(confeti);
+					
+					// Eliminar el confeti después de que cae
+					setTimeout(() => {
+						 confeti.remove();
+					}, 5000);
+			  }, i * 50); // Crear un confeti cada 50ms
+		 }
+	}
+</script>
 	</head>
 	<body class="is-preload">
 
+	<!-- 🔹 AGREGA ESTO: Librería canvas-confetti -->
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+	<script>
+		// Efecto de confeti cuando se muestra el mensaje de agradecimiento
+		document.addEventListener('DOMContentLoaded', function() {
+			 // Verificar si el div de agradecimiento existe
+			 const graciasDiv = document.querySelector('h1');
+			 if (graciasDiv && graciasDiv.textContent.includes('Gracias por contactarse')) {
+				  
+				  // Lanzar confeti inicial
+				  lanzarConfeti();
+				  
+				  // Lanzar ráfagas adicionales por 3 segundos
+				  let duracion = 3 * 1000;
+				  let fin = Date.now() + duracion;
+				  
+				  (function frame() {
+						lanzarConfeti();
+						if (Date.now() < fin) {
+							 requestAnimationFrame(frame);
+						}
+				  }());
+			 }
+		});
+		
+		function lanzarConfeti() {
+			 var count = 200;
+			 var defaults = {
+				  origin: { y: 0.7 }
+			 };
+			 
+			 function fire(particleRatio, opts) {
+				  confetti(Object.assign({}, defaults, opts, {
+						particleCount: Math.floor(count * particleRatio)
+				  }));
+			 }
+			 
+			 fire(0.25, {
+				  spread: 26,
+				  startVelocity: 55,
+			 });
+			 fire(0.2, {
+				  spread: 60,
+			 });
+			 fire(0.35, {
+				  spread: 100,
+				  decay: 0.91,
+				  scalar: 0.8
+			 });
+			 fire(0.1, {
+				  spread: 120,
+				  startVelocity: 25,
+				  decay: 0.92,
+				  scalar: 1.2
+			 });
+			 fire(0.1, {
+				  spread: 120,
+				  startVelocity: 45,
+			 });
+		}
+	</script>
 		<!-- Wrapper -->
 			<div id="wrapper">
 
@@ -53,10 +185,10 @@
 									<li><a href="{{ route('register') }}" class="button next scrolly" style="border-radius: 5px;">Comenzar</a></li>
 								</ul>
 							</div>
-							<div style="justify-content:center; text-align:center; display: flex">
-								<h1>
-									Gracias por contactarse con nosotros.<br>
-									Nos pondremos en contacto a la brevedad!!!
+							<div style="justify-content:center; text-align:center; display: flex" class="gracias-container">
+								<h1 class="gracias-mensaje">
+								Gracias por contactarse con nosotros.<br>
+								Nos pondremos en contacto a la brevedad!!!
 								</h1>
 							</div>
 						</div>

@@ -1,9 +1,4 @@
 <!DOCTYPE HTML>
-<!--
-	Forty by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
 	<head>
 		<title>EcoSystems</title>
@@ -55,10 +50,7 @@
 								<h1>Hola, bienvenido a EcoSystems</h1>
 							</header>
 							<div class="content">
-								<p>Un sitio en el que podrá organizar<br />
-									todas sus proyectos.</p>
-								{{-- <p>A responsive site template designed by HTML5 UP<br />
-								and released under the Creative Commons.</p> --}}
+								<p>Un sitio en el que podrá organizar<br />todos sus proyectos.</p>
 								<ul class="actions">
 									<li><a href="#one" class="button next scrolly" style="border-radius: 5px;">Comenzar</a></li>
 								</ul>
@@ -235,8 +227,6 @@
                         </section>
                     </div>
                 </section>
-
-
 
 				<!-- Footer -->
                 <footer id="footer">

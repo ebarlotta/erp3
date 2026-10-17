@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Resúmen de Movimientos Cuenta Corriente - {{ $operacion }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    {{-- <link rel="icon" type="image/x-icon" href="images/BarBer.png"> --}}
+    {{-- <link rel="icon" type="image/x-icon" href="images/Ecosystems.jpg"> --}}
 
     {{-- <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>"> --}}
 

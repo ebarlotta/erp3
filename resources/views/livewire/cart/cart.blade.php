@@ -2055,7 +2055,7 @@
     <div class="copy-right">
         <div class="container">
             <p>© 2018 Grocery Shoppy. All rights reserved | Design by
-                <a href="http://barber.com/"> Barber.com.</a>
+                <a href="http://EcoSystems.ar/"> EcoSystems.ar</a>
             </p>
         </div>
     </div>

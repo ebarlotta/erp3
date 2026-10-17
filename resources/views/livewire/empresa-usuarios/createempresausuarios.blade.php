@@ -14,7 +14,7 @@
                     <div class="">
                         <div class="mb-4">
                             <div style="width: 100%;background-color: bisque;border-radius: 20px;height: 4rem;justify-content: center;display: flex;	align-items: center; text-align: center; padding-top:1px; font-size: 2rem;">
-                                {{ $empresaseleccionada->name }}
+                                {{ $empresaseleccionada->name }} - {{ $usuarioSeleccionado }}
                             </div>
                             <div style="display: flex; flex-wrap: wrap; justify-content: center;">
                                 @foreach ($usuariosNOempresa as $user)
@@ -58,7 +58,7 @@
                         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                              {{-- <x-guardar></x-guardar> --}}
                             <span class="mt-3 flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                                <button wire:click="AgregarUsuario({{ $user->id }})" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-300 text-base leading-6 font-bold text-white-900 shadow-sm hover:bg-red-400 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                <button wire:click="AgregarUsuario()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-300 text-base leading-6 font-bold text-white-900 shadow-sm hover:bg-red-400 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                     Guardar
                                 </button>
                             </span>

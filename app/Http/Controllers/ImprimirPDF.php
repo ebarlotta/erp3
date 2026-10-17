@@ -11,6 +11,8 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\DB;
 use App\Http\Livewire\erp\Haberes\HaberesComponent as Haber;
 use App\Models\erp\Venta;
+use Illuminate\Support\Facades\File;
+
 
 class ImprimirPDF extends Controller
 {
@@ -29,10 +31,16 @@ class ImprimirPDF extends Controller
         $html = $Compras->CuentasCorrientesHtml;
 
         $operacion = "Compras";
+        File::cleanDirectory(storage_path('framework/views'));
 
-        $pdf = PDF::loadView('livewire.compra.pdf_view_cta_cte',compact('html','operacion'));
+        $pdf = PDF::loadView('livewire.compra.pdf_view_cta_cte',compact('html','operacion'))->setPaper('a4', 'landscape');;
 
         // download PDF file with download method
+        return $pdf->stream('pdf_file_' . time() . '.pdf', [
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
         return $pdf->stream('pdf_file.pdf');
     }
 
@@ -50,9 +58,15 @@ class ImprimirPDF extends Controller
         $operacion = "Ventas";
 
         // Se utiliza el mismo archivo para ambas operaciones
+        File::cleanDirectory(storage_path('framework/views'));
         $pdf = PDF::loadView('livewire.compra.pdf_view_cta_cte',compact('html','operacion'));
 
         // download PDF file with download method
+        return $pdf->stream('pdf_file_' . time() . '.pdf', [
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
         return $pdf->stream('pdf_file.pdf');
 
     }
@@ -83,9 +97,15 @@ class ImprimirPDF extends Controller
         $operacion = $this->operacion;
         $html = $this->PrepararTabla($registros);
         // dd($sql);
+        File::cleanDirectory(storage_path('framework/views'));
         $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
 
         // download PDF file with download method
+        return $pdf->stream('pdf_file_' . time() . '.pdf', [
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
         return $pdf->stream('pdf_file.pdf');
     }
 
@@ -94,13 +114,13 @@ class ImprimirPDF extends Controller
         foreach($registros as $registro) {
             if ($this->operacion == 'deuda') {
                 if ($registro->Saldo > 1) {
-                    $html=$html."<tr><td class=\"border text-left pl-3 mr-3 pr-3\">". $registro->name . "</td><td class=\"border text-end mr-3 pr-3\">". number_format($registro->Saldo, 2, ',','.') ."</td></tr>";
+                    $html=$html."<tr><td class=\"border text-left pl-3 mr-3 pr-3\">". $registro->name . "</td><td class=\"border text-end mr-3 pr-3\" style=\"text-align: right;\">". number_format($registro->Saldo, 2, ',','.') ."</td></tr>";
                 } else {
 
                 }
             } else {
                 if ($registro->Saldo < 1) {
-                    $html=$html."<tr><td class=\"border text-left pl-3 mr-3 pr-3\">". $registro->name ."</td><td class=\"border text-end mr-3 pr-3\">". number_format($registro->Saldo * -1, 2, ',','.') ."</td></tr>";
+                    $html=$html."<tr><td class=\"border text-left pl-3 mr-3 pr-3\">". $registro->name ."</td><td class=\"border text-end mr-3 pr-3\" style=\"text-align: right;\">". number_format($registro->Saldo * -1, 2, ',','.') ."</td></tr>";
                 }
             }
         }
@@ -129,11 +149,16 @@ class ImprimirPDF extends Controller
         $saldototal = $saldo;
 
         $html = $this->PrepararTabla($registros);
-
+        File::cleanDirectory(storage_path('framework/views'));
         $pdf = PDF::loadView('livewire.compra.pdf_view',compact('html','saldototal','operacion'));
         // $pdf = PDF::loadView('livewire.compra.pdf_view',compact('registros','saldo','operacion'));
 
         // download PDF file with download method
+        return $pdf->stream('pdf_file_' . time() . '.pdf', [
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
         return $pdf->stream('pdf_file.pdf');
     }
 

@@ -38,7 +38,7 @@
 
 
     {{-- <title>{{ config('app.name', 'Laravel') }}</title> --}}
-    <title>{{ config('app.name', session('nombre_empresa') ? session('nombre_empresa') : "BarBer") }}</title>
+    <title>{{ config('app.name', session('nombre_empresa') ? session('nombre_empresa') : "BarBer Desarrollos") }}</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">

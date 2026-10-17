@@ -6,6 +6,7 @@ use App\Models\EmpresaUsuario;
 use App\Models\Empresa;
 use App\Models\Roles;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -39,8 +40,10 @@ class EmpresaUsuariosComponent extends Component
     public function render()
     {
                 // DB::table('empresas')->insert(['name' => 'Empresa de Pruebas','direccion' => 'Dirección','cuit' => '20123456789','ib' => '012345678','imagen' => 'BarBer.png','establecimiento' => '0','telefono' => '12345678','actividad' => 'Desarrollo','actividad1' => 'Software','email' => '','habilitada' => true,'nombretitular' => 'Juan de los Palotes','dnititular' => '1234',]);
-
-        if(auth()->user()->hasPermissionTo('empresausuarios.Ver','web'.session('empresa_id'))) {
+        $guardName = 'web' . session('empresa_id'); $permisoExiste = Permission::where('name', 'empresausuarios.Ver')->where('guard_name', $guardName)->exists();
+        // dd($guardName);
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('empresausuarios.Ver', $guardName)) {
+        // if(auth()->user()->hasPermissionTo('empresausuarios.Ver','web'.session('empresa_id'))) {
             if(session('empresa_id')) {
                 $this->usuariosglobales= User::all();
                 $this->empresas = Empresa::all()->sortBy('id');
@@ -99,13 +102,13 @@ class EmpresaUsuariosComponent extends Component
         $this->usuariosNOempresa=User::all();
     }
 
-    public function AgregarUsuario($user_id)
+    public function AgregarUsuario()
     {
         // dd($this->rol_nuevo_usuario);
         if(is_null($this->rol_nuevo_usuario)) {
             session()->flash('messageerrormodal', 'Debe seleccionar un rol');
         } else {
-            EmpresaUsuario::create(['empresa_id' => $this->empresaseleccionada->id, 'user_id' => $user_id,'rol_id'=>$this->rol_nuevo_usuario]);
+            EmpresaUsuario::create(['empresa_id' => $this->empresaseleccionada->id, 'user_id' => $this->user_id,'rol_id'=>$this->rol_nuevo_usuario]);
             $this->closeModalPopover();
             // $this->usuarios = User::all();
             $this->CargarUsuarios($this->empresaseleccionada->id);
@@ -138,6 +141,12 @@ class EmpresaUsuariosComponent extends Component
 
     public function CapturarIdUsuario($id) {
         $this->user_id = $id;
+        $temp = user::where('id', $this->user_id)->get('email');
+        // dd($temp);
+
+        $this->usuarioSeleccionado = $temp[0]['email'];
+
+        // dd($this->usuarioSeleccionado);
     }
 
     public function ActualizarRol() {

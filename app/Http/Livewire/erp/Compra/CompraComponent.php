@@ -51,7 +51,7 @@ class CompraComponent extends Component
     public $CreditoProveedoresFiltro, $MostrarCreditoProveedores;
 
     // Cuentas Corrientes
-    public $ccProveedores, $ccProveedor, $ccdesde, $cchasta, $detallesCC, $ccAgrupadoComp=true, $ccAgrupadoDeta=false, $saldo, $CuentasCorrientesHtml;
+    public $ccProveedores, $ccProveedor, $ccdesde, $cchasta, $detallesCC, $ccAgrupadoComp=true, $ccAgrupadoDeta=false, $ccArea=0, $ccCuenta=0, $saldo, $CuentasCorrientesHtml;
     public $font_size=13;
 
     // Libros de Iva
@@ -184,7 +184,10 @@ class CompraComponent extends Component
                     $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->NetoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
                 }
             }
-        } else {
+        }
+        
+        
+        if($this->ccAgrupadoDeta) {
             // Busca todos los registros que cumplen con los criterios de parámetros, de ahí toma los distintos números de comprobantes
             $subtotalesGenerales = DB::select('select detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle');
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, proveedor_id, proveedors.name');
@@ -230,6 +233,103 @@ class CompraComponent extends Component
                 }
             }
         }
+
+        if($this->ccArea<>0) {
+            // Busca todos los registros que cumplen con los criterios de parámetros, de ahí toma los distintos números de comprobantes
+            $subtotalesGenerales = DB::select('select area_id, detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY area_id, detalle');
+            // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, proveedor_id, proveedors.name');
+
+            //Genera el encabezado principal de la tabla
+            $html = '<div class="flex justify-center"><table class="table table-stripped w-75" style="font-size: 13px;"><thead><tr bgcolor="lightGray"><th align="center" width="100px">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Operaciones</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
+
+            $CantGeneral = count($subtotalesGenerales); // Cantidad de registros encontrados a nivel general
+
+            // Commienza a iterar la cantidad de registros a nivel general que ha encontrado
+            for($i=0; $CantGeneral>$i ; $i++) {
+
+                $ccArea = is_null($subtotalesGenerales[$i]->area_id) ? " is null " : "='".$subtotalesGenerales[$i]->area_id."'";
+
+                //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
+                $subParciales = DB::select('SELECT comprobantes.id, comprobantes.detalle, comprobantes.fecha, comprobantes.comprobante, comprobantes.NetoComp, comprobantes.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as proveedor_name from comprobantes inner join areas as a on comprobantes.area_id=a.id inner join cuentas as c on comprobantes.cuenta_id=c.id inner join proveedors as p on comprobantes.proveedor_id=p.id WHERE '.$proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') . ' and area_id' . $ccArea . ' ORDER by comprobantes.fecha;');
+
+                // Cantidad de registros encontrados a nivel detallado
+                $CantParcial = count($subParciales);
+
+                // Cambia el recordset por un array
+                $Parcial = $subParciales[0];
+
+                // $Parcial = $subParciales[$i];
+                // Imprime el registro inicial con el COMPROBANTE ORIGINARIO
+                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2 style=\"width: 300px;\">COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\"></td><td colspan=2></td></tr>";
+
+                // Registra el saldoFinal
+                $saldoFinal = $saldoFinal + $subtotalesGenerales[$i]->saldo;
+
+                $saldo = $subtotalesGenerales[$i]->saldo;
+                //Comienza a iterar en todos los registros a nivel detallado que encontró
+                for($j=0; $CantParcial>$j ; $j++) {
+                    // $sub = $subParciales[$CantParcial]; // Convierte el registro en un array para poder utilizarlo más adelante
+                    $sub = $subParciales[$j]; // Convierte el registro en un array para poder utilizarlo más adelante
+                    // ".number_format($subParciales[$i]->saldo, 2, ',', '.')."
+                    $saldo = $saldo - $sub->MontoPagadoComp;
+
+                    // Registra el saldoFinal
+                    $saldoFinal = $saldoFinal - $sub->MontoPagadoComp;
+
+                //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
+                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\" style=\" height: 10px;\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">0.00</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
+
+                }
+            }
+        }
+
+        if($this->ccCuenta<>0) {
+            // Busca todos los registros que cumplen con los criterios de parámetros, de ahí toma los distintos números de comprobantes
+            $subtotalesGenerales = DB::select('select cuenta_id, detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY cuenta_id, detalle');
+            // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, proveedor_id, proveedors.name');
+
+            //Genera el encabezado principal de la tabla
+            $html = '<div class="flex justify-center"><table class="table table-stripped w-75" style="font-size: 13px;"><thead><tr bgcolor="lightGray"><th align="center" width="100px">Fecha</th><th align="center">Comp.</th><th>Proveedor</th><th>Detalle</th><th align="right">Monto Operaciones</th><th align="right">Monto Pagado</th><th align="right">Saldo</th><th>Área</th><th>Cuenta</th></tr></thead><tbody style="height: 150px; overflow-y: scroll;">';
+
+            $CantGeneral = count($subtotalesGenerales); // Cantidad de registros encontrados a nivel general
+
+            // Commienza a iterar la cantidad de registros a nivel general que ha encontrado
+            for($i=0; $CantGeneral>$i ; $i++) {
+
+                $ccCuenta = is_null($subtotalesGenerales[$i]->cuenta_id) ? " is null " : "='".$subtotalesGenerales[$i]->cuenta_id."'";
+
+                //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
+                $subParciales = DB::select('SELECT comprobantes.id, comprobantes.detalle, comprobantes.fecha, comprobantes.comprobante, comprobantes.NetoComp, comprobantes.MontoPagadoComp, a.name as area_name, c.name as cuenta_name, p.name as proveedor_name from comprobantes inner join areas as a on comprobantes.area_id=a.id inner join cuentas as c on comprobantes.cuenta_id=c.id inner join proveedors as p on comprobantes.proveedor_id=p.id WHERE '.$proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id').' and cuenta_id'.$ccCuenta.' ORDER by comprobantes.fecha;');
+
+                // Cantidad de registros encontrados a nivel detallado
+                $CantParcial = count($subParciales);
+
+                // Cambia el recordset por un array
+                $Parcial = $subParciales[0];
+                // $Parcial = $subParciales[$i];
+                // Imprime el registro inicial con el COMPROBANTE ORIGINARIO
+                $html = $html ."<tr style=\"border-top: 4px solid;\"><td align=\"center\">".substr($Parcial->fecha,8,2).'-'.substr($Parcial->fecha,5,2).'-'.substr($Parcial->fecha,0,4)."</td><td>".$Parcial->comprobante."</td><td colspan=2 style=\"width: 300px;\">COMPROBANTE ORIGINARIO</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\">".number_format($subtotalesGenerales[$i]->saldo-$subtotalesGenerales[$i]->pagado, 2, ',', '.')."</td><td align=\"right\"></td><td colspan=2></td></tr>";
+
+                // Registra el saldoFinal
+                $saldoFinal = $saldoFinal + $subtotalesGenerales[$i]->saldo;
+
+                $saldo = $subtotalesGenerales[$i]->saldo;
+                //Comienza a iterar en todos los registros a nivel detallado que encontró
+                for($j=0; $CantParcial>$j ; $j++) {
+                    // $sub = $subParciales[$CantParcial]; // Convierte el registro en un array para poder utilizarlo más adelante
+                    $sub = $subParciales[$j]; // Convierte el registro en un array para poder utilizarlo más adelante
+                    // ".number_format($subParciales[$i]->saldo, 2, ',', '.')."
+                    $saldo = $saldo - $sub->MontoPagadoComp;
+
+                    // Registra el saldoFinal
+                    $saldoFinal = $saldoFinal - $sub->MontoPagadoComp;
+
+                //Busca todos los registros que tienen el mismo Nro de Comprobante y le falta el total de la cta cte
+                    $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\" style=\" height: 10px;\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">0.00</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
+                }
+            }
+        }
+
         $html = $html . '<tr><td colspan=9></td></tr><tr  bgcolor="lightGray" style="font-size:14px"><td colspan=7></td><td><b>Saldo Final</b></td><td><b>'.number_format($saldoFinal, 2, ',', '.') .'</b></td></tr>';
         $html = $html . ' </tbody></table></div>';
         $this->CuentasCorrientesHtml = $html;
@@ -495,25 +595,25 @@ class CompraComponent extends Component
             $NetoT = $NetoT + $registro->NetoComp;
             $this->filtro=$this->filtro."
             <tr wire:click=\"gCargarRegistro(". $registro->id .")\">
-                <td style=\"font-size:12px;white-space: nowrap\" class=\"p-1 text-right\">$Fecha</td>
-                <td class=\"p-1 text-right flex-1 d-none d-sm-table-cell\">&nbsp;$registro->comprobante</td>
-                <td class=\"p-1 flex-1 d-none d-sm-table-cell text-left\" style=\"white-space: nowrap;\">&nbsp; $Proveedor->name</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-left\">$registro->detalle</td>
-                <td class=\"p-1 text-right flex-1\">".number_format($registro->BrutoComp, 2,'.','')."</td>
-                <td class=\"p-1 text-right flex-1\">".number_format($MontoIva, 2,'.','')."</td>
-                <td class=\"p-1 text-right flex-1\">".number_format($registro->ExentoComp, 2,'.','')."</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-right flex-1\">".number_format($registro->ImpInternoComp, 2,'.','')."</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($registro->PercepcionIvaComp, 2,'.','')."</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($registro->RetencionIB, 2,'.','')."</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($registro->RetencionGan, 2,'.','')."</td>
-                <td class=\"p-1 text-right\">".number_format($registro->NetoComp, 2,'.','')."</td>
-                <td class=\"p-1 text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-center\">&nbsp;$registro->ParticIva</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-center\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-right\">&nbsp;$Area->name&nbsp;</td>
-                <td class=\"p-1 d-none d-sm-table-cell text-right\">$Cuenta->name</td>
+                <td class=\"p-0 text-right\" style=\"font-size:12px;white-space: nowrap\">$Fecha</td>
+                <td class=\"p-0 text-right flex-1 d-none d-sm-table-cell\">&nbsp;$registro->comprobante</td>
+                <td class=\"p-0 flex-1 d-none d-sm-table-cell text-left\" style=\"white-space: nowrap;\">&nbsp; $Proveedor->name</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-left\">$registro->detalle</td>
+                <td class=\"p-0 text-right flex-1\">".number_format($registro->BrutoComp, 2,'.','')."</td>
+                <td class=\"p-0 text-right flex-1\">".number_format($MontoIva, 2,'.','')."</td>
+                <td class=\"p-0 text-right flex-1\">".number_format($registro->ExentoComp, 2,'.','')."</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-right flex-1\">".number_format($registro->ImpInternoComp, 2,'.','')."</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-right\">".number_format($registro->PercepcionIvaComp, 2,'.','')."</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-right\">".number_format($registro->RetencionIB, 2,'.','')."</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-right\">".number_format($registro->RetencionGan, 2,'.','')."</td>
+                <td class=\"p-0 text-right\">".number_format($registro->NetoComp, 2,'.','')."</td>
+                <td class=\"p-0 text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-center\">&nbsp;$registro->ParticIva</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-center\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-right\">&nbsp;$Area->name&nbsp;</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-right\">$Cuenta->name</td>
                 </tr>";
         }
 

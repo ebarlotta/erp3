@@ -610,9 +610,9 @@ class VentaComponent extends Component
 
             $this->filtro=$this->filtro."
             <tr wire:click=\"gCargarRegistro(". $registro->id .")\">
-                <td style=\"font-size:12px;white-space: nowrap\" class=\"p-1 col-1 text-right\">$Fecha</td>
-                <td class=\"p-1 text-right flex-1 d-none d-sm-table-cell\">$registro->comprobante</td>
-                <td class=\"p-1 flex-1 d-none d-sm-table-cell text-left\" style=\"white-space: nowrap;\">$Cliente->name</td>";
+                <td class=\"p-0 col-1 text-right\" style=\"font-size:12px;white-space: nowrap\">$Fecha</td>
+                <td class=\"p-0 text-right flex-1 d-none d-sm-table-cell\">$registro->comprobante</td>
+                <td class=\"p-0 flex-1 d-none d-sm-table-cell text-left\" style=\"white-space: nowrap;\">$Cliente->name</td>";
 
                 //Comprobante común de color gris
                 if($registro->ParticIva=='No') { $this->filtro=$this->filtro."<td class=\" text-left\" style=\"padding: 0px 10px;\"><div style=\"background-color: lightslategray;width: 20px;border-radius: 7px;height: 20px;margin-right: 3px;\"></div></td>"; }
@@ -627,22 +627,22 @@ class VentaComponent extends Component
                 }
 // dd($this->filtro);
                 $this->filtro=$this->filtro."
-                <td class=\"p-1 d-none d-sm-table-cell text-left flex-1\">$registro->detalle</td>
-                <td class=\"p-1 col text-right flex-1\">".number_format($registro->BrutoComp, 2,'.','')."</td>
-                <td class=\"p-1 col text-right flex-1\">".number_format($MontoIva, 2,'.','')."</td>
-                <td class=\"p-1 col text-right flex-1\">".number_format($registro->ExentoComp, 2,'.','')."</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right flex-1\">".number_format($registro->ImpInternoComp, 2,'.','')."</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($registro->PercepcionIvaComp, 2,'.','')."</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionIB, 2,'.','')."</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionGan, 2,'.','')."</td>
-                <td class=\"p-1 col text-right\">".number_format($registro->NetoComp, 2,'.','')."</td>
-                <td class=\"p-1 col text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
-                <td class=\"p-1 col d-none d-sm-table-cell\">$registro->ParticIva</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right\">$Area->name</td>
-                <td class=\"p-1 col d-none d-sm-table-cell text-right\">$Cuenta->name</td>
+                <td class=\"p-0 d-none d-sm-table-cell text-left flex-1\">$registro->detalle</td>
+                <td class=\"p-0 col text-right flex-1\">".number_format($registro->BrutoComp, 2,'.','')."</td>
+                <td class=\"p-0 col text-right flex-1\">".number_format($MontoIva, 2,'.','')."</td>
+                <td class=\"p-0 col text-right flex-1\">".number_format($registro->ExentoComp, 2,'.','')."</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right flex-1\">".number_format($registro->ImpInternoComp, 2,'.','')."</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->PercepcionIvaComp, 2,'.','')."</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionIB, 2,'.','')."</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->RetencionGan, 2,'.','')."</td>
+                <td class=\"p-0 col text-right\">".number_format($registro->NetoComp, 2,'.','')."</td>
+                <td class=\"p-0 col text-right\">".number_format($registro->MontoPagadoComp, 2,'.','')."</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($Saldo, 2,'.','')."</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">".number_format($registro->CantidadLitroComp, 2,'.','')."</td>
+                <td class=\"p-0 col d-none d-sm-table-cell\">$registro->ParticIva</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Area->name</td>
+                <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Cuenta->name</td>
             </tr>";
         }
 

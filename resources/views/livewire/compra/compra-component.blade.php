@@ -663,51 +663,65 @@
 							<div class="{{ $tabActivo != 4 ? 'hidden' : '' }}">
 								<div class="block justify-center" style="background-color:rgb(208, 161, 206);">
 									<div class="flex d-flex flex-wrap mb-4 justify-center px-3 pb-4">
-                                        <div class="col-6">Proveedor</div><div class="col-6">Agrupado por:</div>
-                                        <select class="col-5 rounded-md h-8 mr-1 leading-none fondogris" wire:model="ccProveedor">
-                                            <option value="0">-- Todos -- </option>
-                                            @foreach ($ccProveedores as $proveedor)
-                                                <option value="{{ $proveedor->id }}">{{ $proveedor->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('ccProveedor') <span class="text-red-500">{{ $message }}</span>@enderror
-										<select class="col-5 rounded-md h-8 ml-1 leading-none fondogris" wire:model="ccAgrupadoComp">
-											<option value="1">Comprobante</option>
-											<option value="0">Detalle</option>
-										</select>
+                                        <div class="col-4">Proveedor<br>
+											<select class="col-12 rounded-md h-8 mr-1 leading-none fondogris" wire:model="ccProveedor">
+												<option value="0">-- Todos -- </option>
+												@foreach ($ccProveedores as $proveedor)
+													<option value="{{ $proveedor->id }}">{{ $proveedor->name }}</option>
+												@endforeach
+											</select>
+											@error('ccProveedor') <span class="text-red-500">{{ $message }}</span>@enderror
+										</div>
+										<div class="col-8">
+											<div class="col-12 flex bg-yellow-100 rounded-md">
+												<div class="col-4 block mb-4 justify-center">
+												Agrupado por: <select class="col-12 rounded-md h-8 ml-1 leading-none fondogris" wire:model="ccAgrupadoComp">
+													<option value="0">Detalle</option>
+													<option value="1">Comprobante</option>
+												</select>
+												</div>
+												<div class="col-4 block mb-4 justify-center">
+													Área <select class="col-12 rounded-md h-8 ml-2 leading-none fondogris" wire:model="ccArea">
+														<option value="0">Todas</option>
+														@foreach ($areas as $area)
+															<option value="{{ $area->id }}">{{ $area->name }}</option>
+														@endforeach
+													</select>
+												</div>
+												<div class="col-4 block mb-4 justify-center">
+													Cuenta <select class="col-12 rounded-md h-8 ml-2 leading-none fondogris" wire:model="ccCuenta">
+														<option value="0">Todas</option>
+														@foreach ($cuentas as $cuenta)
+															<option value="{{ $cuenta->id }}">{{ $cuenta->name }}</option>
+														@endforeach
+													</select>
+												</div>
+											</div>
+										</div>
 									</div>
-								</div>
-								<div class="flex justify-center" style="background-color:rgb(228, 141, 206);">
-									<div class="block mb-4 justify-start">
-										Desde <br>
-										<input class="text-xs rounded-md h-7 ml-5 fondoblanco" type="date" wire:model="ccdesde"><br>
-									</div>
+									<div class="flex justify-center" style="background-color:rgb(228, 141, 206);">
+										<div class="block mb-4 justify-start">
+											Desde <br>
+											<input class="text-xs rounded-md h-7 ml-5 fondoblanco" type="date" wire:model="ccdesde"><br>
+										</div>
 
-									<div class="block mb-4 justify-center">
-										Hasta <br>
-										<input class="ml-2 text-xs rounded-md h-7 fondoblanco" type="date" wire:model="cchasta"><br>
+										<div class="block mb-4 justify-center">
+											Hasta <br>
+											<input class="ml-2 text-xs rounded-md h-7 fondoblanco" type="date" wire:model="cchasta"><br>
+										</div>
+										<div class="block mb-4 justify-center">
+											Mes <br>
+											*
+										</div>
 									</div>
-									<div class="block mb-4 justify-center">
-										Mes <br>
-										*
+									<div class="flex justify-center">
+										<div class="block mb-4 justify-center">
+											<input class="ml-2 text-xs rounded-md h-7 btn btn-info px-8 py-1 mx-2 mt-3" type="button" wire:click="ListarCuentasCorrientes" value="Calcular"><br>
+										</div>
+										<a href="{{ URL::to('/pdf/cta-cte-compras'.'/'.$ccdesde.'/'.$cchasta) }}" target="_blank">
+											<button class="ml-2 text-xs rounded-md h-7 btn btn-info px-8 py-1 mx-2 mt-3">Imprimir Resumen</button>
+										</a><br>
 									</div>
-									<div class="block mb-4 justify-center">
-										Área <br>
-										*
-									</div>
-									<div class="block mb-4 justify-center">
-										Cuenta <br>
-										*
-									</div>
-								</div>
-								<div class="flex justify-center">
-									<div class="block mb-4 justify-center">
-										<input class="ml-2 text-xs rounded-md h-7 btn btn-info px-8 py-1 mx-2 mt-3" type="button" wire:click="ListarCuentasCorrientes" value="Calcular"><br>
-									</div>
-									<a href="{{ URL::to('/pdf/cta-cte-compras'.'/'.$ccdesde.'/'.$cchasta) }}" target="_blank">
-										<button class="ml-2 text-xs rounded-md h-7 btn btn-info px-8 py-1 mx-2 mt-3">Imprimir Resumen</button>
-									</a><br>
-								</div>
 								{!! $CuentasCorrientesHtml !!}
 							</div>
 							{{-- Libros de IVA  --}}

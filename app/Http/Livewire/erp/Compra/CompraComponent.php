@@ -136,6 +136,7 @@ class CompraComponent extends Component
     public function ListarCuentasCorrientes() {
 
         $saldoFinal = 0;
+        $html = 'Nada que mostrar';
 
         if($this->ccProveedor==0)  { $proveedor = ' comprobantes.proveedor_id >0 and '; }
         else { $proveedor = ' comprobantes.proveedor_id = '.$this->ccProveedor.' and '; }
@@ -613,7 +614,7 @@ class CompraComponent extends Component
                 <td class=\"p-0 d-none d-sm-table-cell text-center\">&nbsp;$registro->ParticIva</td>
                 <td class=\"p-0 d-none d-sm-table-cell text-center\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
                 <td class=\"p-0 d-none d-sm-table-cell text-right\">&nbsp;$Area->name&nbsp;</td>
-                <td class=\"p-0 d-none d-sm-table-cell text-right\">$Cuenta->name</td>
+                <td class=\"p-0 pr-1 d-none d-sm-table-cell text-right\">$Cuenta->name</td>
                 </tr>";
         }
 

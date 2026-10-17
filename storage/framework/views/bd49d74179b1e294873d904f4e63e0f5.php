@@ -1,0 +1,1 @@
+<?php /**PATH /home/enzo/Escritorio/proyectos/erp3/resources/views/livewire/geri/interfaces/vistaprevia.blade.php ENDPATH**/ ?>

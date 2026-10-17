@@ -1,0 +1,22 @@
+
+*** These modified files were found in JOE when it aborted on Sat Oct 17 18:38:39 2026
+*** JOE was aborted by UNIX signal 1
+
+*** File '/home/enzo/Escritorio/proyectos/erp3/.git/MERGE_MSG'
+Merge branch 'proyectos' of https://github.com/ebarlotta/erp3 into proyectos
+# Por favor ingresa un mensaje de commit que explique por qué es necesaria esta fusión,
+# especialmente si esto fusiona un upstream actualizado en una rama de tópico.
+#
+# Líneas comenzando con '#' serán ignoradas, y un mensaje vacío aborta
+Porque modifiqué Compras y Ventas
+*** File '(Unnamed)'
+ilu_new.sql
+/home/enzo/Escritorio/Hosting.desktop
+/home/enzo/Escritorio/Hosting.desktop
+/home/enzo/Escritorio/proyectos/erp3/.git/MERGE_MSG
+
+*** File '* Startup Log *'
+Processing '/etc/joe/editorrc'...
+Processing '/etc/joe/ftyperc'...
+Finished processing /etc/joe/ftyperc
+Finished processing /etc/joe/editorrc

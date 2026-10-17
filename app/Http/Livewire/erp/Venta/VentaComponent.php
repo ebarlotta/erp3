@@ -183,6 +183,8 @@ class VentaComponent extends Component
     public function ListarCuentasCorrientes() {
 
         $saldoFinal = 0;
+        $html = 'Nada que mostrar';
+
         if($this->ccCliente==0)  { $cliente = ' ventas.cliente_id >0 and '; }
         else { $cliente = ' ventas.cliente_id = '.$this->ccCliente.' and '; }
         if($this->ccAgrupadoComp) {
@@ -642,7 +644,7 @@ class VentaComponent extends Component
                 <td class=\"p-0 col d-none d-sm-table-cell\">$registro->ParticIva</td>
                 <td class=\"p-0 col d-none d-sm-table-cell text-right\">" . $this->ConvierteMesEnTexto($registro->PasadoEnMes) . "</td>
                 <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Area->name</td>
-                <td class=\"p-0 col d-none d-sm-table-cell text-right\">$Cuenta->name</td>
+                <td class=\"p-0 pr-1 col d-none d-sm-table-cell text-right\">$Cuenta->name</td>
             </tr>";
         }
 

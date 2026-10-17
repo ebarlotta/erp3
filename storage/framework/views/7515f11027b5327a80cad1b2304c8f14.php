@@ -1,0 +1,330 @@
+<div>
+    <?php if (isset($component)) { $__componentOriginal88538ab87cb05b41e7c48dce9d7aea72 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal88538ab87cb05b41e7c48dce9d7aea72 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.titulo','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('titulo'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>Liquidaciones de Haberes <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal88538ab87cb05b41e7c48dce9d7aea72)): ?>
+<?php $attributes = $__attributesOriginal88538ab87cb05b41e7c48dce9d7aea72; ?>
+<?php unset($__attributesOriginal88538ab87cb05b41e7c48dce9d7aea72); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal88538ab87cb05b41e7c48dce9d7aea72)): ?>
+<?php $component = $__componentOriginal88538ab87cb05b41e7c48dce9d7aea72; ?>
+<?php unset($__componentOriginal88538ab87cb05b41e7c48dce9d7aea72); ?>
+<?php endif; ?>
+     <?php $__env->slot('header', null, []); ?> 
+        <div class="flex">
+            <!-- //Comienza en submenu de encabezado -->
+
+            <!-- Navigation Links -->
+            
+        </div>
+     <?php $__env->endSlot(); ?>
+
+    <div class="content-center flex">
+
+        <div class="bg-white p-2 text-center rounded-lg shadow-lg w-full">
+            <?php if($ModalAgregar): ?>
+                <?php echo $__env->make('livewire.haberes.altaconcepto', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            <?php endif; ?>
+            <?php if($ModificarEscalaShow_modal): ?>
+                <?php echo $__env->make('livewire.haberes.modificarescala', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            <?php endif; ?>
+            <?php if($ModificarConceptoShow): ?>
+                <?php echo $__env->make('livewire.haberes.modificarconcepto', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            <?php endif; ?>
+            <?php if($EliminarConceptoReciboShow): ?>
+                <?php echo $__env->make('livewire.haberes.eliminarconceptorecibo', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            <?php endif; ?>
+            <?php if($GestionarConceptos): ?>
+                <?php echo $__env->make('livewire.haberes.gestionarconceptos', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            <?php endif; ?>
+
+            
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-1">
+                <?php if(session()->has('messageOk')): ?>
+                    <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                        role="alert">
+                        <div class="flex">
+                            <div>
+                                <p class="text-xm bg-lightgreen"><?php echo e(session('messageOk')); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <!-- Mensaje mostrado cuando se migran los conceptos de un recibo nuevo -->
+                <?php if(session()->has('messageOk1')): ?> 
+                    <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                        role="alert">
+                        <div class="flex">
+                            <div>
+                                <p class="text-xm bg-lightgreen"><?php echo e(session('messageOk1')); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <?php if(session()->has('messageError')): ?>
+                    <div class="bg-warning border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                        role="alert">
+                        <div class="flex">
+                            <div>
+                                <p class="text-xm bg-lightgreen"><?php echo e(session('messageError')); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <font size="1">
+                    <table class="table table-responsive table-hover" border="1">
+                        <tbody bordercolor="#FFFFFF" style="font-family : Verdana; font-size : 15px; font-weight : 300;"
+                            bgcolor="#AFF3F7">
+                            <tr align="center">
+                                <td valign="top" style="min-width: 80%">
+                                    
+                                    <table style="font-size:10px;" class="table table-responsive table-hover" border="1">
+                                        <tbody bordercolor="#FFFFFF" style="font-family : Verdana; font-size : 12px; font-weight : 300;" bgcolor="#EFF3F7">
+                                            <tr style="vertical-align: middle;">
+                                                <td align="center">Año</td>
+                                                <td align="center">Mes de Liquidación</td>
+                                                <td align="center">Empleados</td>
+                                            </tr>
+                                            <tr style="vertical-align: middle;">
+                                                <td style="vertical-align: top;">
+                                                    <select class="form-control" wire:model="anio">
+                                                        <option value="2025" selected>2025</option>
+                                                        <option value="2024">2024</option>
+                                                        <option value="2023">2023</option>
+													    <option value="2022">2022</option>
+                                                        <option value="2021">2021</option>
+                                                        <option value="2020">2020</option>
+                                                        <option value="2019">2019</option>
+                                                        <option value="2018">2018</option>
+                                                        <option value="2017">2017</option>
+                                                        <option value="2016">2016</option>
+                                                        <option value="2015">2015</option>
+                                                        <option value="2014">2014</option>
+                                                        <option value="2013">2013</option>
+                                                        <option value="2012">2012</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" wire:model="mes" wire:click="CargarEmpleadosActivosEnEsePeriodo();">
+                                                        <option value="00">-</option>
+                                                        <option value="01">enero</option>
+                                                        <option value="02">febrero</option>
+                                                        <option value="03">marzo</option>
+                                                        <option value="04">abril</option>
+                                                        <option value="05">mayo</option>
+                                                        <option value="06">junio</option>
+                                                        <option value="07">julio</option>
+                                                        <option value="08">agosto</option>
+                                                        <option value="09">setiembre</option>
+                                                        <option value="10">octubre</option>
+                                                        <option value="11">noviembre</option>
+                                                        <option value="12">diciembre</option>
+                                                        <option value="13">1erSAC</option>
+                                                        <option value="14">2doSAC</option>
+                                                        <option value="15">Vacaciones</option>
+                                                    </select>
+                                                </td>
+                                                <td style="vertical-align: top;">
+                                                    <?php if($EmpleadosActivos): ?>
+                                                        <select class="form-control" wire:model="IdEmpleado">
+                                                            <option value="00" selected>-</option>
+                                                            <?php $__currentLoopData = $EmpleadosActivos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $empleado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <option  style="text-decoration:line-through; color: rgb(246, 250, 0); background-color: rgb(5, 26, 1);" value="<?php echo e($empleado['id']); ?>" wire:click="cargaIdEmpleado(<?php echo e($empleado['id']); ?>);"><?php echo e(ucwords(strtolower($empleado['name']))); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div id="DivRecibo">
+                                        <div style="background-color: rgb(156 163 175 / var(--tw-bg-opacity));">
+                                            <?php echo e(session('message')); ?>
+
+                                            <?php if($IdRecibo): ?>
+                                                <table class="table table-responsive table-hover" style="font-size:12px;" border="1">
+                                                    <tbody style="height: 100px; overflow-y: auto;">
+                                                        <tr>
+                                                            <td colspan="2" style="border-bottom-width: 2px;border-color: black;">
+                                                                <strong>Nombre de la Empresa:<?php echo e($NombreEmpresa); ?></strong>
+                                                            </td>
+                                                            <td  colspan="2" align="center" style="border-bottom-width: 2px;border-color: black;">
+                                                                <strong>CUIT DE LA EMPRESA: <?php echo e($Cuit); ?></strong>
+                                                            </td>
+                                                            <td colspan="2" align="right" style="border-bottom-width: 2px;border-color: black;">
+                                                                Dirección: <?php echo e($DireccionEmpresa); ?>
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr bgcolor="lightGray">
+                                                            <td align="center"><strong>APELLIDO Y NOMBRES</strong></td>
+                                                            <td align="center"><strong>CUIL DEL EMPLEADO</strong></td>
+                                                            <td align="center"><strong>CONVENIO</strong></td>
+                                                            <td align="center"><strong>SECCION</strong></td>
+                                                            <td colspan="2" align="center"><strong>FECHA INGRESO/ANT</strong>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center"><?php echo e(ucwords($NombreEmpleado)); ?></td>
+                                                            <td align="center"><?php echo e($Cuil); ?></td>
+                                                            <td align="center"><?php echo e($CCT); ?> </td>
+                                                            <td align="center"><?php echo e($Seccion); ?></td>
+                                                            <td colspan="2" align="center"><?php echo e(substr($FechaIngreso, 0, 10)); ?> - <?php echo e($ano_diferencia.'a'.$mes_diferencia.'m'); ?></td>
+                                                        </tr>
+                                                        <tr bgcolor="lightGray">
+                                                            <td align="center"><strong>CATEGORIA</strong></td>
+                                                            <td align="center"><strong>CALIFICACION PROFESIONAL</strong></td>
+                                                            <td align="center"><strong>PERIODO DE PAGO</strong></td>
+                                                            <td align="center"><b>LEGAJO Nº </b>
+                                                            <td colspan="2" align="center"><strong>REMUNERACION ASIGNADA</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" style="border-bottom-width: 2px;border-color: black;"><?php echo e($NombreCategoria); ?></td>
+                                                            <td align="center" style="border-bottom-width: 2px;border-color: black;"><?php echo e($NombreSubCategoria); ?></td>
+                                                            <td align="center" style="border-bottom-width: 2px;border-color: black;"><strong><?php echo e($PerPago); ?></strong></td>
+                                                            <td align="center" style="border-bottom-width: 2px;border-color: black;"><strong><?php echo e($Legajo); ?></strong></td>
+                                                            <td colspan="2" align="center" style="border-bottom-width: 2px;border-color: black;">$ <?php echo e(number_format($TotHaberes, 2, ',', '.')); ?></td>
+                                                        </tr>
+                                                        <tr bgcolor="lightGray">
+                                                            <td align="left"><strong>CÓDIGO CONCEPTOS</strong></td>
+                                                            <td align="center"><strong>UNIDADES</strong></td>
+                                                            <td align="right"><strong>REM.SUJETAS A<br>RETENCIONES</strong></td>
+                                                            <td align="right"><strong>REMUNERACIONES<br> EXENTAS</strong></td>
+                                                            <td align="right"><strong>DESCUENTOS</strong></td>
+                                                            <td align="center"><strong>Acciones</strong></td>
+                                                        </tr>
+                                                        <?php if($Conceptos): ?>
+                                                            <?php $__currentLoopData = $Conceptos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $Concepto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                
+                                                                <tr wire:click="ModificarConceptoShowModal(<?php echo e($Concepto['id']); ?> ,'<?php echo e($Concepto['name']); ?>' ,<?php echo e($Concepto['cantidad']); ?>)">
+                                                                    <td><?php echo e(substr(str_repeat(0, 4).$Concepto['orden'], - 4)); ?> <?php echo e($Concepto['name']); ?></td>
+                                                                    <td align="center"><?php echo e('   '.$Concepto['cantidad']); ?></td>
+                                                                    <td align="right"><?php echo e(number_format($Concepto['Rem'], 2, ',', '.')); ?></td>
+                                                                    <td align="right"><?php echo e(number_format($Concepto['NoRem'], 2, ',', '.')); ?></td>
+                                                                    <td align="right"><?php echo e(number_format($Concepto['Descuento'], 2, ',', '.')); ?></td>
+                                                                    <td colspan="2" align="center">
+                                                                        
+                                                                        <a href="#" class="rounded-md bg-red-300 px-6 mx-2 py-1 mt-3"  wire:click="EliminarConceptoReciboShowModal(<?php echo e($Concepto['id']); ?> ,'<?php echo e($Concepto['name']); ?>' ,<?php echo e($Concepto['cantidad']); ?>)">Eliminar</a>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endif; ?>
+                                                        <tr>
+                                                            
+                                                            <td>-</td>
+                                                            <td align="center">-</td>
+                                                            <td align="right">-</td>
+                                                            <td align="right">-</td>
+                                                            <td align="right">-</td>
+                                                            <td align="center"><a href="#" class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" wire:click="MostrarOcultarModalAgregar">Agregar</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center"><strong></strong></td>
+                                                            <td align="center"><strong></strong></td>
+                                                            <td align="right"><strong><?php echo e(number_format($AcumRem, 2, ',', '.')); ?></strong></td>
+                                                            <td align="right"><strong><?php echo e(number_format($AcumNoRem, 2, ',', '.')); ?></strong></td>
+                                                            <td align="right"><strong><?php echo e(number_format($AcumDescuento, 2, ',', '.')); ?></strong></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border-bottom-width: 2px;border-color: black;"></td>
+                                                            <td colspan="2" align="center" style="border-bottom-width: 2px;border-color: black;"></td>
+                                                            <td colspan="2" align="center" style="border-bottom-width: 2px;border-color: black;"><strong>NETO A COBRAR</strong></td>
+                                                            <td bgcolor="lightGray" align="center" style="border-bottom-width: 2px;border-color: black; font-weight: bold;">
+                                                                <b>$ <?php echo e(number_format($NetoACobrar, 2, ',', '.')); ?> </b>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="6" bgcolor="lightGray"><strong>Son pesos: <?php echo e(strtoupper($NetoACobrarLetras)); ?> </strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>LUGAR</strong></td>
+                                                            <td align="left"><?php echo e($LugarPago); ?></td>
+                                                            <td><strong>BANCO</strong></td>
+                                                            <td align="left"><?php echo e($Banco); ?></td>
+                                                            <td rowspan="6" colspan="2">Recibí el importe de esta liquidación de pago de mi remuneración correspondiente al período indicado y duplicado de la misma conforme a la ley vigente.<br><br><br><br>
+                                                                <center><strong>FIRMA EMPLEADO/R</strong></center>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>FECHA DE LIQUIDACIÓN</strong></td>
+                                                            <td align="left">01-02-2022</td>
+                                                            <td><strong>ULTIMA LIQUIDACIÓN</strong></td>
+                                                            <td align="left">202112</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>FECHA DEPOSITO</strong></td>
+                                                            <td align="left"><?php echo e(substr($FechaUltLiq,8,2).'-'.substr($FechaUltLiq,5,2).'-'. substr($FechaUltLiq,0,4)); ?></td>
+                                                            <td><strong>ART 12 LEY 17250</strong></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            <?php else: ?>
+                                                <h1>SELECCIONE UN EMPLEADO</h1>
+                                            <?php endif; ?>
+            </div>
+        </div>
+        </td>
+        <td>
+            <!-- //Boton Alta Recibo  -->
+            <div class="General">
+                <div>
+<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black; " title="Dibuja el recibo por Pantalla" wire:click="cargaIdEmpleado(<?php echo e($IdEmpleado); ?>)">Graficar Recibo</button>
+                </div>
+                <div>
+<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black;" title="Genera un nuevo recibo de sueldo para el mes seleccionado" wire:click="AltaRecibo(<?php echo e($anio); ?>,'<?php echo e($mes); ?>')">Alta Recibo</button>
+                </div>
+                <div>
+<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black;" title="Genera un nuevo recibo del primer Aguinaldo" wire:click="AltaRecibo(<?php echo e($anio); ?>,'<?php echo e(13); ?>')">1erSAC</button>
+                </div>
+                <div>
+<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black;" title="Genera un nuevo recibo del segundo Aguinaldo" wire:click="AltaRecibo(<?php echo e($anio); ?>,'<?php echo e(14); ?>')">2doSAC</button>
+                </div>
+                <div>
+<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black;" title="Genera un nuevo recibo de Vacaciones" wire:click="AltaRecibo(<?php echo e($anio); ?>,'<?php echo e(15); ?>')">Vacaciones</button>
+                </div>
+                <div>
+<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black;" title="Genera un nuevo conjunto de recibos de sueldo para el mes seleccionado">Alta Grupal</button>
+                </div>
+                <!-- <div>
+<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999; color:black;" title="Agrega un nuevo concepto al recibo">Administrar Conceptos</button>
+                </div>
+                <div>
+<button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3" style="box-shadow: 2px 2px 5px #999; color:black;" title="Genera una vista previa del recibo">Graficar</button>
+                </div> -->
+                <div>
+                    <a href="<?php echo e(URL::to('/pdf/recibos'.'/'.$anio.'/'.$mes.'/'.$empleadoseleccionado)); ?>" target="_blank">
+                        <button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black; text-decoration: none">Imprimir PDF</button>
+                    </a><br>
+                </div>
+                <div>
+                    <button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black;" title="Cambia la escala salarial con la que se liquida el recibo" wire:click="ModificarEscalaShow()">Modificar Escala</button>
+                </div>
+                <div>
+                    <button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black;" title="Elimina el recibo seleccionado" wire:click="EliminarRecibo">Eliminar Recibo</button>
+                </div>
+                <div>
+                    <button class="rounded-md bg-green-300 px-6 mx-2 py-1 mt-3 btn btn-outline-success" style="box-shadow: 2px 2px 5px #999; color:black;" title="Elimina el recibo seleccionado" wire:click="GestionarConceptosShow()">Gestionar Conceptos</button>
+                </div>
+            </div>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        </font>
+    </div>
+</div>
+</div>
+</div>
+<?php /**PATH /home/enzo/Escritorio/proyectos/erp3/resources/views/livewire/haberes/haberes-component.blade.php ENDPATH**/ ?>

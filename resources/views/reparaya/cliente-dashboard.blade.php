@@ -54,7 +54,9 @@
                     <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full font-medium">2 presupuestos</span>
                 </div>
                 <p class="text-sm text-gray-600 mt-2 line-clamp-2">Se pierde agua debajo de la pileta hace 3 días...</p>
-                <button class="mt-3 text-sm text-blue-600 font-medium">Ver presupuestos →</button>
+                <a href="{{ route('cliente-ver-presupuestos') }} ">
+                    <button class="mt-3 text-sm text-blue-600 font-medium">Ver presupuestos →</button>
+                </a>
             </div>
 
             <!-- Card 2 -->

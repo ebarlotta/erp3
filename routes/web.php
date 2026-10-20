@@ -127,7 +127,7 @@ Route::get('/', function () {
 use App\Http\Controllers\Welcome;
 
 // Ruta dinámica para los productos
-Route::get('/producto/{slug}', [ProductController::class, 'show'])->name('product.show');
+// Route::get('/producto/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 // Opcional: Rutas específicas si prefieres URLs más limpias (redireccionan a la dinámica)
 Route::get('/erp' , function () { return view('welcome.erp' ); });
@@ -316,7 +316,13 @@ Route::view('/prestamos', 'prestamos.principal')->name('prestamos');
 
 Route::view('/biorritmos', 'biorritmos.principal')->name('biorritmos');
 
+Route::view('/reparaya', 'reparaya.principal')->name('reparaya');
+Route::view('/cliente-dashboard', 'reparaya.cliente-dashboard')->name('cliente-dashboard');
+Route::view('/reparador-panel', 'reparaya.reparador-panel')->name('reparador-panel');
+Route::view('/cliente-nueva-solicitud', 'reparaya.cliente-nueva-solicitud')->name('cliente-nueva-solicitud');
+
 Route::view('/registro', 'registro.principal')->name('registro');
+
 Route::view('/registro/transferenciadigital/first', 'registro.transferenciadigital.first')->name('transferenciadigital.first');
 Route::view('/registro/tramite_online/first', 'registro.tramite_online.first')->name('tramite_online.first');
 Route::view('/registro/tramite_online/second', 'registro.tramite_online.deepseek_html_20250809_cf6807')->name('tramite_online.second');

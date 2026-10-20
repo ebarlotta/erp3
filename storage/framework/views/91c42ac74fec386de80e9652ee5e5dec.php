@@ -1,1 +1,0 @@
-<?php /**PATH /home/casa-pc/Proyectos/erp3/resources/views/livewire/geri/interfaces/vistaprevia.blade.php ENDPATH**/ ?>

@@ -323,7 +323,6 @@ Route::view('/cliente-ver-presupuestos', 'reparaya.cliente-ver-presupuestos')->n
 Route::view('/cliente-detalle-presupuesto', 'reparaya.cliente-detalle-presupuesto')->name('cliente-detalle-presupuesto');
 Route::view('/reparador-panel', 'reparaya.reparador-panel')->name('reparador-panel');
 Route::view('/reparador-perfil', 'reparaya.reparador-perfil')->name('reparador-perfil');
-Route::view('/reparador-perfil', 'reparaya.reparador-perfil')->name('reparador-perfil');
 Route::view('/reparador-calendario', 'reparaya.reparador-calendario')->name('reparador-calendario');
 Route::view('/reparador-dashboard', 'reparaya.reparador-dashboard')->name('reparador-dashboard');
 

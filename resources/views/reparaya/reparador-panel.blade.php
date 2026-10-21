@@ -27,6 +27,8 @@
             <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm whitespace-nowrap">Plomería</button>
             <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm whitespace-nowrap">Electricidad</button>
             <button class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm whitespace-nowrap">Pintura</button>
+            <a href="{{route('reparador-calendario')}}" class="px-3 py-1 bg-orange-400 text-gray-700 rounded-full text-sm whitespace-nowrap">Calendario</a>
+            <a href="{{route('reparador-dashboard')}}" class="px-3 py-1 bg-red-400 text-gray-700 rounded-full text-sm whitespace-nowrap">Dashboard</a>
         </div>
 
         <!-- Solicitudes disponibles -->

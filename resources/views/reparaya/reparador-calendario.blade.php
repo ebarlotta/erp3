@@ -11,7 +11,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <header class="bg-[color:var(--repair-primary)] text-white px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+    <header class="bg-repair text-white px-4 py-3 flex items-center justify-between sticky top-0 z-10">
         <h1 class="font-bold text-lg">ReparaYa · Agenda</h1>
         <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">R</div>
     </header>

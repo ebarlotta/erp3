@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReparaYa - Perfil del Reparador</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Referencia a la hoja de estilos externa -->
+    <link rel="stylesheet" href="css/reparaya.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <header class="bg-blue-600 text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
-        <a href="cliente-ver-presupuestos.html" class="text-xl">←</a>
+    <header class="bg-client text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
+        <a href="{{ route('cliente-ver-presupuestos') }}" class="text-xl">←</a>
         <h1 class="font-bold">Perfil del reparador</h1>
     </header>
 
@@ -26,7 +28,7 @@
             </div>
             <div class="flex justify-center gap-2 mt-3 text-xs">
                 <span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium">✓ Verificado</span>
-                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">12 años exp.</span>
+                <span class="bg-blue-100 bg-client px-2 py-1 rounded-full font-medium">12 años exp.</span>
             </div>
         </div>
 
@@ -70,7 +72,7 @@
             <div class="border-b border-gray-100 pb-3">
                 <div class="flex justify-between items-start">
                     <p class="text-sm font-medium text-gray-800">María G.</p>
-                    <span class="text-yellow-500 text-sm">★★★★★</span>
+                    <span class="text-yellow-500 text-2xl">★★★★★</span>
                 </div>
                 <p class="text-xs text-gray-500">Hace 2 semanas</p>
                 <p class="text-sm text-gray-600 mt-1">Rápido, prolijo y muy amable. Solucionó la pérdida en el mismo día.</p>
@@ -79,7 +81,7 @@
             <div class="border-b border-gray-100 pb-3">
                 <div class="flex justify-between items-start">
                     <p class="text-sm font-medium text-gray-800">Diego P.</p>
-                    <span class="text-yellow-500 text-sm">★★★★★</span>
+                    <span class="text-yellow-500 text-2xl">★★★★★</span>
                 </div>
                 <p class="text-xs text-gray-500">Hace 1 mes</p>
                 <p class="text-sm text-gray-600 mt-1">Excelente trabajo y precio justo. Lo recomiendo.</p>
@@ -88,7 +90,7 @@
             <div>
                 <div class="flex justify-between items-start">
                     <p class="text-sm font-medium text-gray-800">Lucía R.</p>
-                    <span class="text-yellow-500 text-sm">★★★★☆</span>
+                    <span class="text-yellow-500 text-2xl">★★★★☆</span>
                 </div>
                 <p class="text-xs text-gray-500">Hace 2 meses</p>
                 <p class="text-sm text-gray-600 mt-1">Muy buen trabajo, aunque tardó un poco más de lo previsto.</p>
@@ -96,7 +98,7 @@
         </div>
 
         <!-- CTA -->
-        <a href="cliente-ver-presupuestos.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-xl font-medium hover:bg-blue-700 transition">
+        <a href="{{ route('cliente-ver-presupuestos') }} " class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium bg-client:hover transition">
             Volver a presupuestos
         </a>
     </main>

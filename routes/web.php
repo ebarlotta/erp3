@@ -316,13 +316,17 @@ Route::view('/prestamos', 'prestamos.principal')->name('prestamos');
 
 Route::view('/biorritmos', 'biorritmos.principal')->name('biorritmos');
 
-Route::view('/reparaya', 'reparaya.principal')->name('reparaya');
+Route::view('/reparaya', 'reparaya.index')->name('reparaya');
 Route::view('/cliente-dashboard', 'reparaya.cliente-dashboard')->name('cliente-dashboard');
-Route::view('/reparador-panel', 'reparaya.reparador-panel')->name('reparador-panel');
 Route::view('/cliente-nueva-solicitud', 'reparaya.cliente-nueva-solicitud')->name('cliente-nueva-solicitud');
 Route::view('/cliente-ver-presupuestos', 'reparaya.cliente-ver-presupuestos')->name('cliente-ver-presupuestos');
 Route::view('/cliente-detalle-presupuesto', 'reparaya.cliente-detalle-presupuesto')->name('cliente-detalle-presupuesto');
+Route::view('/reparador-panel', 'reparaya.reparador-panel')->name('reparador-panel');
 Route::view('/reparador-perfil', 'reparaya.reparador-perfil')->name('reparador-perfil');
+Route::view('/reparador-perfil', 'reparaya.reparador-perfil')->name('reparador-perfil');
+Route::view('/reparador-calendario', 'reparaya.reparador-calendario')->name('reparador-calendario');
+Route::view('/reparador-dashboard', 'reparaya.reparador-dashboard')->name('reparador-dashboard');
+
 
 
 Route::view('/registro', 'registro.principal')->name('registro');

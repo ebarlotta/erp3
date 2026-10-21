@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReparaYa - Presupuestos recibidos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Referencia a la hoja de estilos externa -->
+    <link rel="stylesheet" href="css/reparaya.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
 
     <!-- Header -->
-    <header class="bg-blue-600 text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
-        <a href="cliente-dashboard.html" class="text-xl">←</a>
+    <header class="bg-client text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
+        <a href="{{ route('cliente-dashboard') }}" class="text-xl">←</a>
         <h1 class="font-bold">Presupuestos recibidos</h1>
     </header>
 
@@ -64,7 +66,7 @@
                     <div class="flex flex-col sm:flex-row gap-2 mt-3">
                         <button onclick="abrirModal('Carlos Méndez', '$45.000')" class="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-700">Aceptar presupuesto</button>
                         <a href="{{ route('cliente-detalle-presupuesto') }}" class="flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver detalle</a>
-                        <button class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver perfil</button>
+                        <a href="{{ route('reparador-perfil') }}" class="bg-yellow-100 flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver Perfil</a>
                     </div>
                 </div>
             </div>
@@ -92,11 +94,9 @@
                         <span class="bg-gray-100 px-2 py-0.5 rounded-full">🛡 Garantía 12 meses</span>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-2 mt-3">
-                        <button onclick="abrirModal('Laura Ríos', '$52.000')" class="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Aceptar presupuesto</button>
+                        <button onclick="abrirModal('Laura Ríos', '$52.000')" class="flex-1 bg-client text-white py-2 rounded-lg text-sm font-medium bg-client:hover">Aceptar presupuesto</button>
                         <a href="{{ route('cliente-detalle-presupuesto') }}" class="flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver detalle</a>
-                        <a href="{{ route('reparador-perfil') }}">
-                            <button class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver perfil</button>
-                        </a>
+                        <a href="{{ route('reparador-perfil') }}" class="bg-yellow-100 flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver Perfil</a>                        
                     </div>
                 </div>
             </div>
@@ -124,9 +124,9 @@
                         <span class="bg-gray-100 px-2 py-0.5 rounded-full">⚠ Sin garantía</span>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-2 mt-3">
-                        <button onclick="abrirModal('Jorge Pérez', '$38.000')" class="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Aceptar presupuesto</button>.
+                        <button onclick="abrirModal('Jorge Pérez', '$38.000')" class="flex-1 bg-client text-white py-2 rounded-lg text-sm font-medium bg-client:hover">Aceptar presupuesto</button>.
                         <a href="{{ route('cliente-detalle-presupuesto') }}" class="flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver detalle</a>
-                        <button class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver perfil</button>
+                        <a href="{{ route('reparador-perfil') }}" class="bg-yellow-100 flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver Perfil</a>
                     </div>
                 </div>
             </div>
@@ -145,7 +145,7 @@
             <p class="text-xs text-gray-500">Al aceptar, se notificará al reparador y se habilitará el chat para coordinar.</p>
             <div class="flex flex-col sm:flex-row gap-2 pt-2">
                 <button onclick="cerrarModal()" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50">Cancelar</button>
-                <button onclick="window.location.href='cliente-dashboard.html'" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700">Confirmar</button>
+                <a href="{{ route('cliente-dashboard') }}" class="text-center flex-1 bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700">Confirmar</a>
             </div>
         </div>
     </div>

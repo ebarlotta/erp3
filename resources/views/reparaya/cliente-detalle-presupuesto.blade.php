@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReparaYa - Detalle del Presupuesto</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Referencia a la hoja de estilos externa -->
+    <link rel="stylesheet" href="css/reparaya.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <header class="bg-blue-600 text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
+    <header class="bg-client text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
         <a href="cliente-ver-presupuestos.html" class="text-xl">←</a>
         <h1 class="font-bold">Detalle del presupuesto</h1>
     </header>
@@ -85,7 +87,7 @@
 
         <!-- Acciones -->
         <div class="flex flex-col sm:flex-row gap-2">
-            <a href="reparador-perfil.html" class="flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver perfil</a>
+            <a href="{{ route('reparador-perfil') }}" class="bg-yellow-100 flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver Perfil</a>
             <button onclick="document.getElementById('modal-aceptar').classList.remove('hidden')" class="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-700">Aceptar presupuesto</button>
         </div>
     </main>
@@ -101,7 +103,7 @@
             <p class="text-xs text-gray-500">Al aceptar, se notificará al reparador y se habilitará el chat para coordinar.</p>
             <div class="flex flex-col sm:flex-row gap-2 pt-2">
                 <button onclick="document.getElementById('modal-aceptar').classList.add('hidden')" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50">Cancelar</button>
-                <button onclick="window.location.href='cliente-dashboard.html'" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700">Confirmar</button>
+                <a href="{{ route('cliente-dashboard') }}" class="text-center flex-1 bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700">Confirmar</a>
             </div>
         </div>
     </div>

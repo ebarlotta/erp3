@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReparaYa - Nueva Solicitud</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Referencia a la hoja de estilos externa -->
+    <link rel="stylesheet" href="css/reparaya.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <header class="bg-blue-600 text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
+    <header class="bg-client text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
         <a href="{{ route('cliente-dashboard') }} " class="text-xl">←</a>
         <h1 class="font-bold">Nueva solicitud</h1>
     </header>
@@ -68,7 +70,7 @@
 
             <div class="flex flex-col sm:flex-row gap-3 pt-2">
                 <a href="{{ route('cliente-dashboard') }} " class="flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50">Cancelar</a>
-                <button type="submit" onclick="window.location.href='{{ route('cliente-dashboard') }} " class="flex-1 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">Publicar solicitud</button>
+                <button type="submit" onclick="window.location.href='{{ route('cliente-dashboard') }} " class="flex-1 bg-client text-white py-2 rounded-lg font-medium bg-client:hover">Publicar solicitud</button>
             </div>
         </form>
     </main>

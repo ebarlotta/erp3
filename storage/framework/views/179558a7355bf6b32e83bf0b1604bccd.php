@@ -1,1 +1,0 @@
-<?php /**PATH /home/casa-pc/Proyectos/erp3/vendor/rappasoft/laravel-livewire-tables/resources/views/stubs/custom.blade.php ENDPATH**/ ?>

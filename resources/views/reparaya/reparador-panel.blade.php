@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReparaYa - Panel Reparador</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Referencia a la hoja de estilos externa -->
+    <link rel="stylesheet" href="css/reparaya.css">
+
 </head>
 <body class="bg-gray-100 min-h-screen">
 
@@ -37,7 +43,10 @@
                 </div>
                 <p class="text-sm text-gray-600 mt-2">Se pierde agua debajo de la pileta hace 3 días. Necesito solución pronto.</p>
                 <div class="flex flex-col sm:flex-row gap-2 mt-3">
-                    <button onclick="document.getElementById('modal-presupuesto').classList.remove('hidden')" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">Enviar presupuesto</button>
+                    <button onclick="document.getElementById('modal-presupuesto').classList.remove('hidden'); setTimeout(inicializarMapa, 100)" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">
+                        Enviar presupuesto
+                    </button>
+                    {{-- <button onclick="document.getElementById('modal-presupuesto').classList.remove('hidden')" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">Enviar presupuesto</button> --}}
                     <button class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Ver detalle</button>
                 </div>
             </div>
@@ -62,11 +71,18 @@
     <!-- Modal presupuesto -->
     <div id="modal-presupuesto" class="hidden fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
         <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4">
+
+
             <div class="flex justify-between items-center">
                 <h3 class="font-bold text-lg">Enviar presupuesto</h3>
                 <button onclick="document.getElementById('modal-presupuesto').classList.add('hidden')" class="text-gray-400 text-xl">✕</button>
             </div>
-
+            <!-- Mapa de ubicación del cliente -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Ubicación aproximada del cliente</label>
+                <div id="mapa-cliente" class="w-full h-48 rounded-lg border border-gray-300"></div>
+                <p class="text-xs text-gray-400 mt-1">El círculo representa el área del domicilio (radio aprox. 500m)</p>
+            </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Monto *</label>
                 <input type="number" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="$ 0">
@@ -90,6 +106,36 @@
             <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700">Enviar presupuesto</button>
         </div>
     </div>
+<script>
+    let mapCliente = null;
 
+function inicializarMapa() {
+    if (mapCliente) return; // evitar reinicialización
+    // Coordenadas de ejemplo: Belgrano, CABA
+    const lat = -34.5627;
+    const lng = -58.4569;
+
+    mapCliente = L.map('mapa-cliente').setView([lat, lng], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(mapCliente);
+
+    // Círculo de área del domicilio (radio en metros)
+    L.circle([lat, lng], {
+        radius: 500,
+        color: 'var(--repair-primary)',  // o '#008C45'
+        fillColor: 'var(--repair-primary)',
+        fillOpacity: 0.2,
+        weight: 2
+    }).addTo(mapCliente);
+
+    // Marcador central
+    L.marker([lat, lng]).addTo(mapCliente);
+}
+
+// Llamar al abrir el modal
+// Modificar el botón que abre el modal para que ejecute inicializarMapa()
+</script>
 </body>
 </html>

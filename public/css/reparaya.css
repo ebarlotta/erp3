@@ -1,0 +1,20 @@
+:root {
+   /* --color-client-primary: #5f767f; */
+   --color-client-primary: #0a778b;
+   --color-client-accent: #FFD20A;
+   --color-repair-primary: #008C45;
+   --color-repair-accent: #EC1B24;
+}
+.bg-client     { background-color: var(--color-client-primary); }
+.bg-client:hover { filter: brightness(0.9); }
+.text-client   { color: var(--color-client-primary); }
+.border-client { border-color: var(--color-client-primary); }
+.bg-client-accent { background-color: var(--color-client-accent); }
+.text-client-accent { color: var(--color-client-accent); }
+
+.bg-repair     { background-color: var(--color-repair-primary); }
+.bg-repair:hover { filter: brightness(0.9); }
+.text-repair   { color: var(--color-repair-primary); }
+.border-repair { border-color: var(--color-repair-primary); }
+.bg-repair-accent { background-color: var(--color-repair-accent); }
+.text-repair-accent { color: var(--color-repair-accent); }

@@ -19,6 +19,9 @@ use Database\Seeders\geri\EscalaSeeder;
 use Database\Seeders\erp\AreaSeeder;
 use Database\Seeders\erp\CuentaSeeder;
 
+use Database\Seeders\reparaya\MonedaSeeder;
+use Database\Seeders\reparaya\CategoriaServicioSeeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -125,5 +128,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PrimerUsuarioSeeder::class);
 
         $this->call(ModSeederAdmin::class);
+
+        $this->call(MonedaSeeder::class);
+        $this->call(CategoriaServicioSeeder::class);
     }
 }

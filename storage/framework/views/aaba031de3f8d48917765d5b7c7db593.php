@@ -45,7 +45,8 @@
                 <p class="text-xs text-gray-500">2 esta semana</p>
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-1">
+
          <!-- Gráfico A: Ingresos mensuales -->
          <div class="bg-white rounded-xl shadow-sm p-4">
                <h2 class="font-semibold text-gray-700 mb-2">A · Ingresos mensuales (últimos 6 meses)</h2>

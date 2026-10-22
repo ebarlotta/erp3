@@ -316,16 +316,41 @@ Route::view('/prestamos', 'prestamos.principal')->name('prestamos');
 
 Route::view('/biorritmos', 'biorritmos.principal')->name('biorritmos');
 
-Route::view('/reparaya', 'reparaya.index')->name('reparaya');
-Route::view('/cliente-dashboard', 'reparaya.cliente-dashboard')->name('cliente-dashboard');
-Route::view('/cliente-nueva-solicitud', 'reparaya.cliente-nueva-solicitud')->name('cliente-nueva-solicitud');
-Route::view('/cliente-ver-presupuestos', 'reparaya.cliente-ver-presupuestos')->name('cliente-ver-presupuestos');
-Route::view('/cliente-detalle-presupuesto', 'reparaya.cliente-detalle-presupuesto')->name('cliente-detalle-presupuesto');
-Route::view('/reparador-panel', 'reparaya.reparador-panel')->name('reparador-panel');
-Route::view('/reparador-perfil', 'reparaya.reparador-perfil')->name('reparador-perfil');
-Route::view('/reparador-calendario', 'reparaya.reparador-calendario')->name('reparador-calendario');
-Route::view('/reparador-dashboard', 'reparaya.reparador-dashboard')->name('reparador-dashboard');
+// Route::view('/reparaya', 'reparaya.index')->name('reparaya');
+// Route::view('/cliente-dashboard', 'reparaya.cliente-dashboard')->name('cliente-dashboard');
+// Route::view('/cliente-nueva-solicitud', 'reparaya.cliente-nueva-solicitud')->name('cliente-nueva-solicitud');
+// Route::view('/cliente-ver-presupuestos', 'reparaya.cliente-ver-presupuestos')->name('cliente-ver-presupuestos');
+// Route::view('/cliente-detalle-presupuesto', 'reparaya.cliente-detalle-presupuesto')->name('cliente-detalle-presupuesto');
+// Route::view('/reparador-panel', 'reparaya.reparador-panel')->name('reparador-panel');
+// Route::view('/reparador-perfil', 'reparaya.reparador-perfil')->name('reparador-perfil');
+// Route::view('/reparador-calendario', 'reparaya.reparador-calendario')->name('reparador-calendario');
+// Route::view('/reparador-dashboard', 'reparaya.reparador-dashboard')->name('reparador-dashboard');
 
+use App\Http\Controllers\Reparaya\DashboardController;
+use App\Http\Controllers\Reparaya\SolicitudController;
+use App\Http\Controllers\Reparaya\PresupuestoController;
+use App\Http\Controllers\Reparaya\ClienteDashboardController;
+use App\Http\Controllers\Reparaya\CitaController;
+
+Route::prefix('reparaya')->name('reparaya.')->middleware(['auth'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('reparaya.cliente.dashboard');
+
+    // Solicitudes
+    Route::resource('solicitudes', SolicitudController::class)->only(['index', 'create', 'store', 'show']);
+
+    // Presupuestos
+    Route::get('presupuestos/{presupuesto}', [PresupuestoController::class, 'show'])->name('presupuestos.show');
+    Route::post('presupuestos/{presupuesto}/aceptar', [PresupuestoController::class, 'aceptar'])->name('presupuestos.aceptar');
+
+    // Citas
+    Route::post('citas', [CitaController::class, 'store'])->name('citas.store');
+    Route::get('citas/{cita}', [CitaController::class, 'show'])->name('citas.show');
+    Route::patch('citas/{cita}/cancelar', [CitaController::class, 'cancelar'])->name('citas.cancelar');
+
+    // Route::view('cliente/dashboard', 'reparaya.cliente-dashboard')->name('cliente.dashboard');
+    Route::get('/cliente-dashboard', [ClienteDashboardController::class, 'index'])->name('cliente-dashboard')->middleware('auth');
+    Route::view('reparador/dashboard', 'reparaya.reparador-dashboard')->name('reparador.dashboard');
+});
 
 
 Route::view('/registro', 'registro.principal')->name('registro');

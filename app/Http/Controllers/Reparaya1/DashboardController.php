@@ -20,6 +20,7 @@ class DashboardController extends Controller
             return redirect()->route('reparaya.admin.dashboard');
         }
 
-        return redirect()->route('reparaya.cliente.dashboard');
+        // return redirect()->route('reparaya.cliente.dashboard');cliente-dashboard
+        return redirect()->route('reparaya.cliente-dashboard');
     }
 }

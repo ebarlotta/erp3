@@ -7,6 +7,9 @@
 
         <title>{{ config('app.name', session('nombre_empresa') ? session('nombre_empresa') : "BarBer Desarrollos") }}</title>
 
+        <!-- Etiqueta para la PWA -->
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

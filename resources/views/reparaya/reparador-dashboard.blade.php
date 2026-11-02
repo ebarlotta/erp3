@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
    <!-- Referencia a la hoja de estilos externa -->
-   <link rel="stylesheet" href="css/reparaya.css">
+   {{-- <link rel="stylesheet" href="css/reparaya.css"> --}}
 </head>
 <body class="bg-gray-100 min-h-screen">
 
@@ -19,6 +19,9 @@
             <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">R</div>
         </div>
     </header>
+    <a href="{{ route('reparaya.solicitudes.index')}} " class="block w-full bg-repair text-white text-center py-3 rounded-xl font-medium transition">
+        solicitudes
+    </a>
 
     <main class="p-4 max-w-5xl mx-auto space-y-4 pb-10">
 

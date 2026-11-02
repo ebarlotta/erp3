@@ -19,8 +19,8 @@ use Database\Seeders\geri\EscalaSeeder;
 use Database\Seeders\erp\AreaSeeder;
 use Database\Seeders\erp\CuentaSeeder;
 
-use Database\Seeders\reparaya\MonedaSeeder;
-use Database\Seeders\reparaya\CategoriaServicioSeeder;
+use Database\Seeders\MonedaSeeder;
+use Database\Seeders\CategoriaServicioSeeder;
 
 class DatabaseSeeder extends Seeder
 {

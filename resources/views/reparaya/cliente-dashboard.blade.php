@@ -11,13 +11,13 @@
 <body class="bg-gray-100 min-h-screen">
 
 <!-- Header -->
-<header class="bg-client text-white px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+{{-- <header class="bg-client text-white px-4 py-3 flex items-center justify-between sticky top-0 z-10">
     <h1 class="font-bold text-lg">ReparaYa</h1>
     <div class="flex items-center gap-3">
         <span class="text-sm hidden sm:inline">Hola, Juan</span>
         <div class="w-8 h-8 bg-client-accent text-gray-800 rounded-full flex items-center justify-center text-sm font-bold">J</div>
     </div>
-</header>
+</header> --}}
 
 <main class="p-4 max-w-3xl mx-auto space-y-4">
 

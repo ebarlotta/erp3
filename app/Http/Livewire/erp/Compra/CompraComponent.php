@@ -83,7 +83,7 @@ class CompraComponent extends Component
         if (!is_null(session('empresa_id'))) { $this->empresa_id = session('empresa_id'); }
         else {
             if(Auth::user()) {
-                $userid = auth()->user()->id;
+                $userid = Auth::user()->id;
                 $empresas= EmpresaUsuario::where('user_id',$userid)->get();
                 return view('livewire.empresa.empresa-component')->with('empresas', $empresas);
             } else {
@@ -186,7 +186,7 @@ class CompraComponent extends Component
                     $html = $html ."<tr wire:click=\"gCargarRegistro(".$sub->id.")\"><td align=\"center\" style=\"padding: 0px;\">".substr($sub->fecha,8,2).'-'.substr($sub->fecha,5,2).'-'.substr($sub->fecha,0,4)."</td><td style=\"padding: 0px;\">".$sub->comprobante."</td><td style=\"padding: 0px;\">".$sub->proveedor_name."</td><td style=\"padding: 0px;\">".$sub->detalle."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->NetoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($sub->MontoPagadoComp, 2, ',', '.')."</td><td align=\"right\" style=\"padding: 0px;\">".number_format($saldo, 2, ',', '.')."</td><td style=\"padding: 0px 10px 0px 10px;\">".$sub->area_name."</td><td style=\"padding: 0px;\">".$sub->cuenta_name."</td></tr>";
                 }
             }
-        } else {
+        } else{
             // Busca todos los registros que cumplen con los criterios de parámetros, de ahí toma los distintos números de comprobantes
             $subtotalesGenerales = DB::select('select detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle');
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, proveedor_id, proveedors.name');
@@ -235,7 +235,7 @@ class CompraComponent extends Component
 
         if($this->ccArea<>0) {
             // Busca todos los registros que cumplen con los criterios de parámetros, de ahí toma los distintos números de comprobantes
-            $subtotalesGenerales = DB::select('select area_id, detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY area_id, detalle');
+            $subtotalesGenerales = DB::select('select area_id, MAX(detalle) as detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY area_id');
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, proveedor_id, proveedors.name');
 
             //Genera el encabezado principal de la tabla
@@ -284,7 +284,7 @@ class CompraComponent extends Component
 
         if($this->ccCuenta<>0) {
             // Busca todos los registros que cumplen con los criterios de parámetros, de ahí toma los distintos números de comprobantes
-            $subtotalesGenerales = DB::select('select cuenta_id, detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY cuenta_id, detalle');
+            $subtotalesGenerales = DB::select('select cuenta_id, MAX(detalle) as detalle, sum(NetoComp) as saldo, sum(MontoPagadoComp) as pagado FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE '. $proveedor.' comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY cuenta_id');
             // $subtotalesGenerales = DB::select('select detalle, comprobante, sum(NetoComp-MontoPagadoComp) as saldo, comprobantes.empresa_id, proveedor_id, proveedors.name FROM comprobantes join proveedors on proveedors.id = comprobantes.proveedor_id WHERE comprobantes.proveedor_id = '.$this->ccProveedor.' and comprobantes.fecha >= "'.$this->ccdesde.'" and comprobantes.fecha <= "'.$this->cchasta.'" and comprobantes.empresa_id = '. session('empresa_id') .' GROUP BY detalle, comprobante, empresa_id, proveedor_id, proveedors.name');
 
             //Genera el encabezado principal de la tabla
@@ -411,7 +411,7 @@ class CompraComponent extends Component
                 'iva_id'            => $this->giva,
                 'area_id'           => $this->garea,
                 'cuenta_id'         => $this->gcuenta,
-                'user_id'           => auth()->user()->id,
+                'user_id'           => Auth::user()->id,
                 'empresa_id'        => session('empresa_id'),
                 'proveedor_id'      => $this->gproveedor,
             ]);
@@ -472,7 +472,7 @@ class CompraComponent extends Component
                 'iva_id'            => $this->giva,
                 'area_id'           => $this->garea,
                 'cuenta_id'         => $this->gcuenta,
-                'user_id'           => auth()->user()->id,
+                'user_id'           => Auth::user()->id,
                 'empresa_id'        => session('empresa_id'),
                 'proveedor_id'      => $this->gproveedor,
             ]);
@@ -967,7 +967,7 @@ class CompraComponent extends Component
         $detalle->productos_id = $this->gselect_productos;
         $detalle->cantidad = $this->gcantidad_prod;
         $detalle->precio = $this->gprecio_prod;
-        $detalle->user_id = $userid=auth()->user()->id;
+        $detalle->user_id = $userid=Auth::user()->id;
 
         $detalle->save();
 
@@ -990,7 +990,7 @@ class CompraComponent extends Component
         $detalle->productos_id = $eliminar->productos_id;
         $detalle->cantidad = $cant_a_eliminar;  //Actualiza el valor con la cantidad a eliminar
         $detalle->precio = $eliminar->precio;
-        $detalle->user_id = $userid=auth()->user()->id;
+        $detalle->user_id = $userid=Auth::user()->id;
 
         $detalle->save();
 

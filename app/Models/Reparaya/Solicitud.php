@@ -5,6 +5,7 @@ namespace App\Models\Reparaya;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Reparaya\Categorias;
+use App\Models\User;
 
 class Solicitud extends Model
 {

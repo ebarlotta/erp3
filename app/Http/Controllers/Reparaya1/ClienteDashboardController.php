@@ -16,13 +16,13 @@ class ClienteDashboardController extends Controller
             ->where('cliente_id', $user->id)
             ->latest()
             ->get();
-
+// dd($solicitudes);
         $resumen = [
             'abiertas'      => $solicitudes->where('estado', 'abierta')->count(),
             'con_presupuestos' => $solicitudes->where('estado', 'con_presupuestos')->count(),
             'finalizadas'   => $solicitudes->where('estado', 'finalizada')->count(),
         ];
 
-        return view('reparaya.cliente-dashboard', compact('solicitudes', 'resumen'));
+        return view('reparaya.cliente-dashboard', compact('solicitudes', 'resumen'))->extends('layouts.reparaya');
     }
 }

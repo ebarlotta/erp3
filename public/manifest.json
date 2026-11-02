@@ -1,0 +1,22 @@
+{
+        "name": "EcoSystems App",
+        "short_name": "EcoSystems",
+        "start_url": "/",
+        "background_color": "#ffffff",
+        "theme_color": "#000000",
+        "display": "standalone",
+        "orientation": "any",
+        "status_bar": "black",
+        "icons": [
+            {
+                "src": "/images/icons/icon-192x192.png",
+                "sizes": "192x192",
+                "type": "image/png"
+            },
+            {
+                "src": "/images/icons/icon-512x512.png",
+                "sizes": "512x512",
+                "type": "image/png"
+            }
+    ]
+}

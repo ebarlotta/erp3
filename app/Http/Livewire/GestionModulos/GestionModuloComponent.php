@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\GestionModulos;
 
 use App\Models\Modulo as Modulos;
+use App\Models\Empresa as Empresa;
 
 use Spatie\Permission\Models\Permission;
 
@@ -23,8 +24,22 @@ class GestionModuloComponent extends Component
 
     public $modulo_id;
 
+    public $empresa_id=0, $empresas;
+
+    public $permiso_ver;
+    public $permiso_agregar;
+    public $permiso_eliminar;
+    public $permiso_modificar;
+    
     use WithPagination;
 
+
+    public function mount() {
+        $permiso_ver = true;
+        $permiso_agregar = true;
+        $permiso_eliminar = true;
+        $permiso_modificar = true;
+    }
 
     public function render() {
 //        if(auth()->check() && auth()->user()->hasPermissionTo('gestionmodulo.Ver')) {
@@ -32,6 +47,7 @@ class GestionModuloComponent extends Component
         
             $this->filtrar();
 
+            $this->empresas = Empresa::all();
             // if ($this->buscar<>'') {
             //     $this->modulos = Modulos::where('name', 'LIKE', "%" . $this->buscar . "%")->get();
             //     return view('livewire.modulos.modulo-component',['datos'=> Modulos::where('name', 'LIKE', "%" . $this->buscar . "%")->orderby('name')->paginate(7),])->extends('layouts.adminlte');
@@ -70,6 +86,7 @@ class GestionModuloComponent extends Component
         $this->permisos=Permission::where('name', 'LIKE', '%'. $modulos->name . '%')
         ->orwhere('name', 'LIKE', '%'. $modulos->pagina . '%')
         ->get();
+        // dd($this->permisos);
     }
 
     public function showDelete($id)
@@ -118,10 +135,16 @@ class GestionModuloComponent extends Component
         $this->validate([
             'nombre_permiso' => 'required|max:255',
         ]);
-
         $this->name = $this->reemplazaEspaciosAcentos($this->name);
-        $name = $this->name.'.'.$this->nombre_permiso;
-        $permission = Permission::create(['name' => $name]);
+        if($this->permiso_ver) $permission = Permission::updateOrCreate(['name' => $this->name.'.Ver', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_agregar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Agregar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_eliminar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Eliminar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_modificar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Modificar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        
+        // $this->showEdit( $this->modulo_id);
+        // $this->name = $this->reemplazaEspaciosAcentos($this->name);
+        // $name = $this->name.'.'.$this->nombre_permiso;
+        // $permission = Permission::create(['name' => $name]);
 
         $this->nombre_permiso = null;
         session()->flash('mensaje', 'Se guardó el Permiso.');
@@ -146,7 +169,7 @@ class GestionModuloComponent extends Component
 
     public function destroyPermiso($id)
     {
-        Permission::destroy($id);
+        Permission::where('id',$id)->delete();
         $this->reset('name');
         session()->flash('mensaje', 'Se eliminó el permiso.');
         $this->showEdit( $this->modulo_id);

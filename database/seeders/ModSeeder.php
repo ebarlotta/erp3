@@ -36,7 +36,7 @@ class ModSeeder extends Seeder
         // $modulos = Modulo::whereIn('name', [ 'Dashboard', 'Administracion', 'estadosciviles', 'tiposdedocumentos', 'localidades', 'Tablas', 'Escolaridades', 'tablas-edit', 'tablasver','roles','empresas','empresagestion','empresamodulos','empresausuarios','modulos','modulousuarios','gestionmodulos','nacionalidad','provincias', 'empresagestion', 'empresamodulos', 'gestionmodulos', 'empresausuarios', 'modulousuarios', 'roles', 'certificados',
         // ])->get();
 
-        $modulos = array ('Dashboard', 'Administracion', 'estadosciviles', 'tiposdedocumentos', 'localidades', 'Tablas', 'Escolaridades', 'tablas-edit', 'tablasver','roles','empresas','empresagestion','empresamodulos','empresausuarios','modulos','modulousuarios','gestionmodulos','nacionalidad','provincias', 'certificados',
+        $modulos = array ('Dashboard', 'Administracion', 'estadosciviles', 'tiposdedocumentos', 'localidades', 'Tablas', 'Escolaridades', 'tablas-edit', 'tablasver','roles','empresas','empresagestion','empresamodulos','empresausuarios','modulos','modulousuarios','gestionmodulos','nacionalidad','provincias', 'certificados','stock',
         );
 
         foreach($modulos as $modulo) {

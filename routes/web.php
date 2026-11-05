@@ -442,9 +442,15 @@ Route::get('/projects/focus-widget', FocusWidget::class)->name('projects.focus-w
 |   <livewire:focus-widget /> */
 
 
+// *------------------------------------------------|
+// | Stock Manager Routes                           |
+// |------------------------------------------------|
+use App\Http\Livewire\Stock\DashboardStockComponent;
+
+Route::get('/stock/dashboard', DashboardStockComponent::class)->name('gestiondestock');
+// Route::get('/stock/dashboard', DashboardStockComponent::class)->name('stock.dashboard');
 
 
-// Route::get('/home', function () { return view('home'); });
 
 // Landing
 Route::post('/contacto/enviar', [ContactController::class, 'send'])->name('contact.send');

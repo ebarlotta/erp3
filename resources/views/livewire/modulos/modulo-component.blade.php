@@ -118,11 +118,11 @@
                                     <div class="flex flex-wrap" style="justify-content: space-between;">
                                     @foreach ($permisos as $permiso)
                                     {{-- <div class="d-flex"> --}}
-                                        
                                             <button type="button" class="btn btn-outline-success mb-1 flex">
                                                 <div>
                                                     <div>{{ $permiso->name }}</div>
-                                                    <div style="font-size: 10px;">{{ $permiso->getEmpresa($permiso->guard_name) }}</div>
+                                                    <div>{{ $permiso->guard_name }}</div>
+                                                    {{-- <div style="font-size: 10px;">{{ $permiso->guard_name==0 ? 'Administracion' : $permiso->getEmpresa($permiso->guard_name) }}</div> --}}
                                                 </div>
                                                 <div>                                                    
                                                     <span style="color:white; margin-left: 10px; background-color: rgb(189, 129, 129); border-radius: 3px; width: 20px; display: inline-block;vertical-align: middle;" aria-hidden="true" title="Eliminar Permiso" wire:click="getPermisoaEliminar({{$permiso->id}}, '{{ $permiso->name }}')" data-toggle="modal"   data-target="#ModalDeletePermiso" >&times;

@@ -40,8 +40,8 @@ class InformesonlineComponent extends Component
     }
 
     public function __construct() {
-        MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN_TEST'));
-        $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY_TEST');
+        MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN'));
+        $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY');
         //    MercadoPagoConfig::setAccessToken(config('mercadopago.MERCADOPAGO_ACCESS_TOKEN'));
         //    $this->publicKey = config('mercadopago.MERCADOPAGO_PUBLIC_KEY');
     }

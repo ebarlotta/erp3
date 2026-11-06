@@ -1,6 +1,13 @@
 <div>
     <div class="container-fluid pt-3">
-        <h4 class="mb-3">Stock — Panel General</h4>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-3">Stock — Panel General</h4>
+            <div class="d-flex gap-2">
+                <a href="{{ route('stock.almacenes') }}"><button class="btn btn-primary btn-sm">+ Nuevo Almacén</button></a>
+                <a href="{{ route('stock.stock-almacen') }}"><button wire:click="create" class="btn btn-primary btn-sm">+ Nuevo Registro</button></a>
+            </div>
+        </div>
+
 
         {{-- Tarjetas por almacén --}}
         <div class="row">
@@ -21,24 +28,25 @@
         </div>
 
         {{-- Alertas --}}
+                {{-- Alertas --}}
         <div class="card mb-3">
             <div class="card-header"><strong>⚠ Alertas</strong></div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $bajoMinimo }} productos bajo stock mínimo</span>
-                    <a href="#" class="btn btn-sm btn-outline-primary">Ver</a>
+                    <a href="{{ route('stock.alertas') }}" class="btn btn-sm btn-outline-primary">Ver</a>
                 </li>
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $porVencer }} productos vencen en &lt; 30 días</span>
-                    <a href="#" class="btn btn-sm btn-outline-primary">Ver</a>
+                    <a href="{{ route('stock.lotes', ['filtro_estado' => 'por_vencer']) }}" class="btn btn-sm btn-outline-primary">Ver</a>
                 </li>
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $sinMovimiento }} productos sin movimiento (90 días)</span>
-                    <a href="#" class="btn btn-sm btn-outline-primary">Ver</a>
+                    <a href="{{ route('stock.movimientos') }}" class="btn btn-sm btn-outline-primary">Ver</a>
                 </li>
-                <li class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $sobrestock }} productos con sobrestock</span>
-                    <a href="#" class="btn btn-sm btn-outline-primary">Ver</a>
+                    <a href="{{ route('stock.stock-almacen', ['filtro_estado' => 'sobrestock']) }}" class="btn btn-sm btn-outline-primary">Ver</a>
                 </li>
             </ul>
         </div>
@@ -63,7 +71,7 @@
                             <tr>
                                 <td>{{ $mov->created_at->format('d/m H:i') }}</td>
                                 <td>{{ ucfirst($mov->tipo) }}</td>
-                                <td>{{ $mov->elemento->name ?? '—' }}</td>
+                                <td>{{ $mov->elementoProducto->descripcion ?? '—' }}</td>
                                 <td class="text-end">{{ $mov->cantidad > 0 ? '+' : '' }}{{ $mov->cantidad }}</td>
                                 <td>{{ $mov->almacen->name ?? '—' }}</td>
                                 <td>{{ $mov->usuario->name ?? 'sistema' }}</td>

@@ -10,15 +10,15 @@ return new class extends Migration
     {
         Schema::create('stock_elemento_almacen', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('elemento_id');
+            $table->unsignedBigInteger('elemento_producto_id');
             $table->unsignedBigInteger('almacen_id');
             $table->double('existencia')->default(0);
             $table->double('stock_minimo')->default(0);
             $table->timestamps();
 
-            $table->foreign('elemento_id')->references('id')->on('elementos');
+            $table->foreign('elemento_producto_id')->references('id')->on('elemento_productos');
             $table->foreign('almacen_id')->references('id')->on('stock_almacen');
-            $table->unique(['elemento_id', 'almacen_id']);
+            $table->unique(['elemento_producto_id', 'almacen_id']);
         });
     }
 

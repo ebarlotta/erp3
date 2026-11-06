@@ -120,11 +120,11 @@ class ElementosComponent extends Component {
         $rutaPath = null;
             // $rutaPath = $this->ruta->store('photos', 'public');
 
-        if($this->ruta) {
-            $rutaPath = $this->ruta->store('photos', 'public');
-            // dd($rutaPath . '  -  ' . $rutaPath->temporaryUrl());
-            // $this->rutaTemporal = $rutaPath->temporaryUrl() ? $rutaPath->temporaryUrl() : null ;
-        }
+        // if($this->ruta) {
+        //     $rutaPath = $this->ruta->store('photos', 'public');
+        //     // dd($rutaPath . '  -  ' . $rutaPath->temporaryUrl());
+        //     // $this->rutaTemporal = $rutaPath->temporaryUrl() ? $rutaPath->temporaryUrl() : null ;
+        // }
 
         $this->validate([
             'name'=> 'required',

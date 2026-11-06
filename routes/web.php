@@ -446,10 +446,20 @@ Route::get('/projects/focus-widget', FocusWidget::class)->name('projects.focus-w
 // | Stock Manager Routes                           |
 // |------------------------------------------------|
 use App\Http\Livewire\Stock\DashboardStockComponent;
+use App\Http\Livewire\Stock\AlmacenComponent;
+use App\Http\Livewire\Stock\StockAlmacenComponent;
+use App\Http\Livewire\Stock\MovimientoComponent;
+use App\Http\Livewire\Stock\AlertaStockComponent;
+use App\Http\Livewire\Stock\LoteComponent;
+use App\Http\Livewire\Stock\AjusteComponent;
 
-Route::get('/stock/dashboard', DashboardStockComponent::class)->name('gestiondestock');
-// Route::get('/stock/dashboard', DashboardStockComponent::class)->name('stock.dashboard');
-
+Route::get('/stock/dashboard', DashboardStockComponent::class)->name('stock.dashboard');
+Route::get('/stock/almacenes', AlmacenComponent::class)->name('stock.almacenes');
+Route::get('/stock/stock-almacen', StockAlmacenComponent::class)->name('stock.stock-almacen');
+Route::get('/stock/movimientos/{elemento_producto_id?}', MovimientoComponent::class)->name('stock.movimientos');
+Route::get('/stock/alertas', AlertaStockComponent::class)->name('stock.alertas');
+Route::get('/stock/lotes', LoteComponent::class)->name('stock.lotes');
+Route::get('/stock/ajustes', AjusteComponent::class)->name('stock.ajustes');
 
 
 // Landing

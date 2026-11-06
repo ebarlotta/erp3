@@ -4,19 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Elementos\ElementoProducto;
 
 class StockMovimiento extends Model
 {
     protected $table = 'stock_movimientos';
 
     protected $fillable = [
-        'elemento_id', 'almacen_id', 'tipo', 'motivo',
+        'elemento_producto_id', 'almacen_id', 'tipo', 'motivo',
         'cantidad', 'saldo', 'lote', 'usuario_id'
     ];
 
-    public function elemento(): BelongsTo
+    public function elementoProducto(): BelongsTo
     {
-        return $this->belongsTo(Elemento::class, 'elemento_id');
+        return $this->belongsTo(ElementoProducto::class, 'elemento_producto_id');
     }
 
     public function almacen(): BelongsTo

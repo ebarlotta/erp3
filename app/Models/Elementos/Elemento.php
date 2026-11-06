@@ -5,10 +5,7 @@ namespace App\Models\Elementos;
 use App\Models\Categorias;
 use App\Models\Unidad;
 use App\Models\Empresa;
-use App\Models\StockElementoAlmacen;
-use App\Models\StockMovimiento;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -44,11 +41,4 @@ class Elemento extends Model
          return $this->hasOne(Empresa::class);
      }
 
-    public function stocks(): HasMany {
-        return $this->hasMany(StockElementoAlmacen::class, 'elemento_id');
-    }
-
-    public function movimientos(): HasMany {
-        return $this->hasMany(StockMovimiento::class, 'elemento_id');
-    }
 }

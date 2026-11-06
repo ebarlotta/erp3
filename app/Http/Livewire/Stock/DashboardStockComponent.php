@@ -2,7 +2,8 @@
 
 namespace App\Http\Livewire\Stock;
 
-use App\Models\Elemento;
+use App\Models\Elementos\Elemento;
+use App\Models\Elementos\ElementoProducto;
 use App\Models\StockAlmacen;
 use App\Models\StockElementoAlmacen;
 use App\Models\StockMovimiento;
@@ -17,9 +18,9 @@ class DashboardStockComponent extends Component
     public function render()
     {
         $guardName = 'web' . session('empresa_id');
-        $permisoExiste = Permission::where('name', 'stock.dashboard.Ver')->where('guard_name', $guardName)->exists();
+        $permisoExiste = Permission::where('name', 'stock.Ver')->where('guard_name', $guardName)->exists();
 
-        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('stock.dashboard.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('stock.Ver', $guardName)) {
             if (session('empresa_id')) {
                 $this->empresa_id = session('empresa_id');
 
@@ -28,7 +29,7 @@ class DashboardStockComponent extends Component
                     ->withSum('stocks as total_existencia', 'existencia')
                     ->orderBy('name')
                     ->get();
-
+// dd($almacenes);
                 // Alertas
                 $bajoMinimo = StockElementoAlmacen::whereHas('almacen', function ($q) {
                         $q->where('empresa_id', $this->empresa_id);
@@ -41,7 +42,14 @@ class DashboardStockComponent extends Component
                     ->whereBetween('vencimiento', [now(), now()->addDays(30)])
                     ->count();
 
-                $sinMovimiento = Elemento::where('empresa_id', $this->empresa_id)
+                // $sinMovimiento = Elemento::where('empresa_id', $this->empresa_id)
+                //     ->whereDoesntHave('movimientos', function ($q) {
+                //         $q->where('created_at', '>=', now()->subDays(90));
+                //     })
+                //     ->count();
+                $sinMovimiento = ElementoProducto::whereHas('elemento', function ($q) {
+                        $q->where('empresa_id', $this->empresa_id);
+                    })
                     ->whereDoesntHave('movimientos', function ($q) {
                         $q->where('created_at', '>=', now()->subDays(90));
                     })
@@ -58,7 +66,7 @@ class DashboardStockComponent extends Component
                 $ultimosMovimientos = StockMovimiento::whereHas('almacen', function ($q) {
                         $q->where('empresa_id', $this->empresa_id);
                     })
-                    ->with(['elemento', 'almacen', 'usuario'])
+                    ->with(['elementoProducto', 'almacen', 'usuario'])
                     ->orderByDesc('created_at')
                     ->limit(10)
                     ->get();

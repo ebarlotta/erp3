@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('stock_movimientos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('elemento_id');
+            $table->unsignedBigInteger('elemento_producto_id');
             $table->unsignedBigInteger('almacen_id');
             $table->string('tipo'); // entrada, salida, ajuste, transferencia
             $table->string('motivo')->nullable();
@@ -20,10 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('usuario_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('elemento_id')->references('id')->on('elementos');
+            $table->foreign('elemento_producto_id')->references('id')->on('elemento_productos');
             $table->foreign('almacen_id')->references('id')->on('stock_almacen');
             $table->foreign('usuario_id')->references('id')->on('users');
-            $table->index(['elemento_id', 'created_at']);
+            $table->index(['elemento_producto_id', 'created_at']);
         });
     }
 

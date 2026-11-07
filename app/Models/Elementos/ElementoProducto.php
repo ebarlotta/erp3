@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\StockElementoAlmacen;
 use App\Models\StockMovimiento;
+use App\Models\Proveedor;
+use App\Models\Estado;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
@@ -41,4 +43,20 @@ class ElementoProducto extends Model
         return $this->belongsTo(Elemento::class, 'elemento_id');
     }
 
+        // Agregá esta relación:
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class, 'proveedor_id');
+    }
+
+    // Y esta para el estado:
+    public function estado()
+    {
+        return $this->belongsTo(Estado::class, 'estado_id');
+    }
+    
+    public function recetas()
+    {
+        return $this->hasMany(\App\Models\StockReceta::class, 'producto_terminado_id');
+    }
 }

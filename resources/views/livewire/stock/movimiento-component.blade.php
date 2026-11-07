@@ -3,8 +3,8 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Control de Stock — Movimientos</h4>
             <div class="d-flex gap-2">
-                <button wire:click="create" class="btn btn-primary btn-sm">+ Registrar Movimiento</button>
-                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm"><- Volver</button></a>
+                <button wire:click="create" class="btn btn-primary btn-sm sombreado">+ Registrar Movimiento</button>
+                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><- Volver</button></a>
             </div>
         </div>
 
@@ -13,7 +13,7 @@
         @endif
 
         {{-- Filtros --}}
-        <div class="row mb-3">
+        <div class="row mb-3 sombreado">
             <div class="col-md-3">
                 <input type="text" wire:model="search" wire:keydown.enter="Filtrar" wire:keyup="Filtrar" class="form-control" placeholder="Buscar producto...">
             </div>
@@ -43,7 +43,7 @@
         <a href="{{ route('stock.movimientos') }}" class="btn btn-sm btn-outline-dark">Ver todos los movimientos</a>
     </div>
 @endif
-        <div class="table-responsive">
+        <div class="table-responsive sombreado">
             <table class="table table-striped table-sm align-middle">
                 <thead>
                     <tr>

@@ -45,6 +45,16 @@
         font-weight: 400;
         src: url('fonts/barlow-v13-latin_latin-ext_vietnamese-italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
         }
+        .sombreado {
+            border-radius: 0.5rem !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.9) !important;
+        }
+        .fondo_encabezado {
+             background-color: rgb(197, 181, 124) !important;
+        }
+        .fondo_encabezado_alerta {
+             background-color: rgba(237, 112, 112, 0.9) !important;
+        }
     </style>
 </head>
 

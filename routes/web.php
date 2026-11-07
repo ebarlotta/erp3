@@ -452,6 +452,8 @@ use App\Http\Livewire\Stock\MovimientoComponent;
 use App\Http\Livewire\Stock\AlertaStockComponent;
 use App\Http\Livewire\Stock\LoteComponent;
 use App\Http\Livewire\Stock\AjusteComponent;
+use App\Http\Livewire\Stock\ProductoComponent as StockProductoComponent;
+use App\Http\Livewire\Stock\ProduccionComponent;
 
 Route::get('/stock/dashboard', DashboardStockComponent::class)->name('stock.dashboard');
 Route::get('/stock/almacenes', AlmacenComponent::class)->name('stock.almacenes');
@@ -460,7 +462,8 @@ Route::get('/stock/movimientos/{elemento_producto_id?}', MovimientoComponent::cl
 Route::get('/stock/alertas', AlertaStockComponent::class)->name('stock.alertas');
 Route::get('/stock/lotes', LoteComponent::class)->name('stock.lotes');
 Route::get('/stock/ajustes', AjusteComponent::class)->name('stock.ajustes');
-
+Route::get('/stock/productos', StockProductoComponent::class)->name('stock.productos');
+Route::get('/stock/produccion', ProduccionComponent::class)->name('stock.produccion');
 
 // Landing
 Route::post('/contacto/enviar', [ContactController::class, 'send'])->name('contact.send');

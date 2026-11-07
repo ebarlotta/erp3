@@ -3,8 +3,8 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Almacenes</h4>
             <div class="d-flex gap-2">
-                <button wire:click="create" class="btn btn-primary btn-sm">+ Nuevo Almacén</button>
-                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm"><- Volver</button></a>
+                <button wire:click="create" class="btn btn-primary btn-sm sombreado">+ Nuevo Almacén</button>
+                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><- Volver</button></a>
             </div>  
         </div>
 
@@ -12,12 +12,12 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
 
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 sombreado">
             <input type="text" wire:model="search" wire:keydown.enter="Filtrar" wire:keyup="Filtrar" class="form-control" placeholder="Buscar por nombre...">
             <button wire:click="Filtrar" class="btn btn-outline-secondary">Filtrar</button>
         </div>
 
-        <div class="table-responsive">
+        <div class="table-responsive sombreado">
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>
@@ -32,8 +32,8 @@
                             <td>{{ $almacen->name }}</td>
                             <td>{{ $almacen->direccion ?? '—' }}</td>
                             <td class="text-end">
-                                <button wire:click="edit({{ $almacen->id }})" class="btn btn-sm btn-warning">Editar</button>
-                                <button wire:click="delete({{ $almacen->id }})" wire:confirm="¿Eliminar almacén?" class="btn btn-sm btn-danger">Eliminar</button>
+                                <button wire:click="edit({{ $almacen->id }})" class="btn btn-sm btn-warning sombreado">Editar</button>
+                                <button wire:click="delete({{ $almacen->id }})" wire:confirm="¿Eliminar almacén?" class="btn btn-sm btn-danger sombreado">Eliminar</button>
                             </td>
                         </tr>
                     @empty

@@ -3,9 +3,9 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Stock por Almacén</h4>
             <div class="d-flex gap-2">
-                <button wire:click="create" class="btn btn-primary btn-sm">+ Nuevo Registro</button>
-                <a href="{{ route('elementos') }}"><button class="btn btn-primary btn-sm">Productos</button></a>
-                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm"><- Volver</button></a>
+                <button wire:click="create" class="btn btn-primary btn-sm sombreado">+ Nuevo Movimiento</button>
+                <a href="{{ route('stock.productos') }}"><button class="btn btn-primary btn-sm sombreado">Productos</button></a>
+                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><- Volver</button></a>
             </div>
         </div>
 
@@ -13,9 +13,9 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
 
-        <div class="row mb-3">
+        <div class="row mb-3 sombreado">
             <div class="col-md-4">
-                <input type="text" wire:model="search" wire:keydown.enter="Filtrar" class="form-control" placeholder="Buscar producto...">
+                <input type="text" wire:model="search" wire:keydown.enter="Filtrar" wire:keyup="Filtrar" class="form-control" placeholder="Buscar producto...">
             </div>
             <div class="col-md-4">
                 <select wire:model="filtro_almacen" wire:change="Filtrar" class="form-control round shadow-md">
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="table-responsive">
+        <div class="table-responsive sombreado">
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>
@@ -59,9 +59,9 @@
                                 @endif
                             </td>
                             <td class="text-end">
-                                <a href="{{ route('stock.movimientos', $stock->elemento_producto_id) }}" class="btn btn-sm btn-info text-white">Kardex</a>
-                                <button wire:click="edit({{ $stock->id }})" class="btn btn-sm btn-warning">Editar</button>
-                                <button wire:click="delete({{ $stock->id }})" wire:confirm="¿Eliminar registro de stock?" class="btn btn-sm btn-danger">Eliminar</button>
+                                <a href="{{ route('stock.movimientos', $stock->elemento_producto_id) }}" class="btn btn-sm btn-info text-white sombreado">Kardex</a>
+                                <button wire:click="edit({{ $stock->id }})" class="btn btn-sm btn-warning sombreado">Editar</button>
+                                <button wire:click="delete({{ $stock->id }})" wire:confirm="¿Eliminar registro de stock?" class="btn btn-sm btn-danger sombreado">Eliminar</button>
                             </td>
                         </tr>
                     @empty

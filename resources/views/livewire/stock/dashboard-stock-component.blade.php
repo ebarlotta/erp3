@@ -3,8 +3,12 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-3">Stock — Panel General</h4>
             <div class="d-flex gap-2">
-                <a href="{{ route('stock.almacenes') }}"><button class="btn btn-primary btn-sm">+ Nuevo Almacén</button></a>
-                <a href="{{ route('stock.stock-almacen') }}"><button wire:click="create" class="btn btn-primary btn-sm">+ Nuevo Registro</button></a>
+                <a href="{{ route('stock.almacenes') }}"><button class="btn btn-primary btn-sm sombreado">+ Nuevo Almacén</button></a>
+                <a href="{{ route('stock.productos') }}"><button class="btn btn-primary btn-sm sombreado">Productos</button></a>
+                <a href="{{ route('stock.movimientos') }}"><button class="btn btn-primary btn-sm sombreado">Movimientos</button></a>
+                <a href="{{ route('stock.lotes') }}"><button class="btn btn-primary btn-sm sombreado">Lotes</button></a>
+                <a href="{{ route('stock.alertas') }}"><button class="btn btn-primary btn-sm sombreado">Alertas Stock mínimo</button></a>
+                <a href="{{ route('stock.stock-almacen') }}"><button wire:click="create" class="btn btn-primary btn-sm sombreado">+ Nuevo Movimiento</button></a>
             </div>
         </div>
 
@@ -14,7 +18,7 @@
             @forelse($almacenes as $almacen)
                 <div class="col-md-3 col-sm-6 mb-3">
                     <div class="card text-white bg-info h-100">
-                        <div class="card-body">
+                        <div class="card-body sombreado">
                             <h6 class="card-title">{{ $almacen->name }}</h6>
                             <h3 class="mb-0">{{ number_format($almacen->total_existencia ?? 0, 2) }} u</h3>
                         </div>
@@ -29,31 +33,31 @@
 
         {{-- Alertas --}}
                 {{-- Alertas --}}
-        <div class="card mb-3">
+        <div class="card mb-3 sombreado fondo_encabezado_alerta">
             <div class="card-header"><strong>⚠ Alertas</strong></div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $bajoMinimo }} productos bajo stock mínimo</span>
-                    <a href="{{ route('stock.alertas') }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                    <a href="{{ route('stock.alertas') }}" class="btn btn-sm btn-outline-primary sombreado">Ver</a>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $porVencer }} productos vencen en &lt; 30 días</span>
-                    <a href="{{ route('stock.lotes', ['filtro_estado' => 'por_vencer']) }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                    <a href="{{ route('stock.lotes', ['filtro_estado' => 'por_vencer']) }}" class="btn btn-sm btn-outline-primary sombreado">Ver</a>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $sinMovimiento }} productos sin movimiento (90 días)</span>
-                    <a href="{{ route('stock.movimientos') }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                    <a href="{{ route('stock.movimientos') }}" class="btn btn-sm btn-outline-primary sombreado">Ver</a>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>{{ $sobrestock }} productos con sobrestock</span>
-                    <a href="{{ route('stock.stock-almacen', ['filtro_estado' => 'sobrestock']) }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                    <a href="{{ route('stock.stock-almacen', ['filtro_estado' => 'sobrestock']) }}" class="btn btn-sm btn-outline-primary sombreado">Ver</a>
                 </li>
             </ul>
         </div>
 
         {{-- Últimos movimientos --}}
-        <div class="card">
-            <div class="card-header"><strong>Últimos movimientos</strong></div>
+        <div class="card sombreado">
+            <div class="card-header fondo_encabezado"><strong>Últimos movimientos</strong></div>
             <div class="table-responsive">
                 <table class="table table-sm table-striped mb-0">
                     <thead>

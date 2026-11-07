@@ -2,12 +2,15 @@
     <div class="container-fluid pt-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Alertas de Stock Mínimo</h4>
+            <div class="d-flex gap-2">
+                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><- Volver</button></a>
+            </div>
         </div>
 
         {{-- Filtros --}}
-        <div class="row mb-3">
+        <div class="row mb-3 sombreado">
             <div class="col-md-4">
-                <input type="text" wire:model="search" wire:keydown.enter="Filtrar" class="form-control" placeholder="Buscar producto...">
+                <input type="text" wire:model="search" wire:keydown.enter="Filtrar" wire:keyup="Filtrar" class="form-control" placeholder="Buscar producto...">
             </div>
             <div class="col-md-4">
                 <select wire:model="filtro_almacen" wire:change="Filtrar" class="form-control round shadow-md">
@@ -22,7 +25,7 @@
             </div>
         </div>
 
-        <div class="table-responsive">
+        <div class="table-responsive sombreado">
             <table class="table table-striped table-sm align-middle">
                 <thead>
                     <tr>
@@ -43,7 +46,7 @@
                             <td class="text-end">{{ number_format($alerta->stock_minimo, 2) }}</td>
                             <td class="text-end text-danger">{{ number_format($alerta->stock_minimo - $alerta->existencia, 2) }}</td>
                             <td class="text-end">
-                                <button wire:click="sugerirCompra({{ $alerta->id }})" class="btn btn-sm btn-primary">Sugerir Compra</button>
+                                <button wire:click="sugerirCompra({{ $alerta->id }})" class="btn btn-sm btn-primary sombreado">Sugerir Compra</button>
                             </td>
                         </tr>
                     @empty

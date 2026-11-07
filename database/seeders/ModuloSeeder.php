@@ -90,13 +90,18 @@ class ModuloSeeder extends Seeder
         DB::table('modulos')->insert(['name' => 'Registrar Bajas', 'pagina' => 'productobajas','imagen'=>'administracion.jpg','leyenda'=>'Registra Bajas','habilitado'=>1]);   // 60
         
         // Módulo 61    Stock
-        DB::table('modulos')->insert(['name' => 'Gestión de Stock', 'pagina' => 'stock/dashboard','imagen'=>'stock.jpg','leyenda'=>'Gestión de Stock','habilitado'=>1]);   // 61
-        DB::table('modulos')->insert(['name' => 'Almacenes', 'pagina' => 'stock/almacenes','imagen'=>'almacenes.jpg','leyenda'=>'Gestión de Almacenes','habilitado'=>1]);   // 62
-        DB::table('modulos')->insert(['name' => 'Stock por Almacén', 'pagina' => 'stock/stock-almacen','imagen'=>'stock.jpg','leyenda'=>'Gestión de Stock por Almacén','habilitado'=>1]);   // 63
-        DB::table('modulos')->insert(['name' => 'Movimientos Kardex', 'pagina' => 'stock/movimientos-kardex','imagen'=>'movimientos.jpg','leyenda'=>'Gestión de movimiento de Stock','habilitado'=>1]);   // 64
-        DB::table('modulos')->insert(['name' => 'Alertas Stock Mímino', 'pagina' => 'stock/alertas','imagen'=>'alertas.jpg','leyenda'=>'Gestión de Alertas de Stock','habilitado'=>1]);   // 65
-        DB::table('modulos')->insert(['name' => 'Lotes', 'pagina' => 'stock/lotes','imagen'=>'lotes.jpg','leyenda'=>'Gestión de Lotes','habilitado'=>1]);   // 66
-        DB::table('modulos')->insert(['name' => 'Stock Ajustes', 'pagina' => 'stock/ajustes','imagen'=>'ajustes.jpg','leyenda'=>'Gestión de Ajustes de Stock','habilitado'=>1]);   // 67
+        DB::table('modulos')->insert(['name' => 'Gestión de Stock', 'pagina' => 'stock.dashboard','imagen'=>'stock.jpg','leyenda'=>'Gestión de Stock','habilitado'=>1]);   // 61
+        DB::table('modulos')->insert(['name' => 'Almacenes', 'pagina' => 'stock.almacenes','imagen'=>'almacenes.jpg','leyenda'=>'Gestión de Almacenes','habilitado'=>1]);   // 62
+        DB::table('modulos')->insert(['name' => 'Stock por Almacén', 'pagina' => 'stock.stock-almacen','imagen'=>'stock.jpg','leyenda'=>'Gestión de Stock por Almacén','habilitado'=>1]);   // 63
+        DB::table('modulos')->insert(['name' => 'Movimientos Kardex', 'pagina' => 'stock.movimientos-kardex','imagen'=>'movimientos.jpg','leyenda'=>'Gestión de movimiento de Stock','habilitado'=>1]);   // 64
+        DB::table('modulos')->insert(['name' => 'Alertas Stock Mímino', 'pagina' => 'stock.alertas','imagen'=>'alertas.jpg','leyenda'=>'Gestión de Alertas de Stock','habilitado'=>1]);   // 65
+        DB::table('modulos')->insert(['name' => 'Lotes', 'pagina' => 'stock.lotes','imagen'=>'lotes.jpg','leyenda'=>'Gestión de Lotes','habilitado'=>1]);   // 66
+        DB::table('modulos')->insert(['name' => 'Stock Ajustes', 'pagina' => 'stock.ajustes','imagen'=>'ajustes.jpg','leyenda'=>'Gestión de Ajustes de Stock','habilitado'=>1]);   // 67
+
+        DB::table('modulos')->insert(['name' => 'Stock.Productos', 'pagina' => 'stock.productos','imagen'=>'productos.jpg','leyenda'=>'Gestión de Productos del Stock','habilitado'=>1]);   // 68
+        DB::table('modulos')->insert(['name' => 'Stock Producción', 'pagina' => 'stock.produccion','imagen'=>'produccion.jpg','leyenda'=>'Permite generar productos terminados','habilitado'=>1]);   // 69
+        DB::table('modulos')->insert(['name' => 'Stock Recetas', 'pagina' => 'stock.recetas','imagen'=>'recetas.jpg','leyenda'=>'Genera productos terminados mediante recetas','habilitado'=>1]);   // 67
+
 
     }
 }

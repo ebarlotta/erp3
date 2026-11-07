@@ -3,8 +3,8 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Trazabilidad de Lotes</h4>
             <div class="d-flex gap-2">
-                <button wire:click="create" class="btn btn-primary btn-sm">+ Nuevo Lote</button>
-                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm"><- Volver</button></a>
+                <button wire:click="create" class="btn btn-primary btn-sm sombreado">+ Nuevo Lote</button>
+                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><- Volver</button></a>
             </div>
         </div>
 
@@ -12,7 +12,7 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
 
-        <div class="row mb-3">
+        <div class="row mb-3 sombreado">
             <div class="col-md-3">
                 <input type="text" wire:model="search" wire:keydown.enter="Filtrar" class="form-control" placeholder="Buscar producto o lote...">
             </div>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="table-responsive">
+        <div class="table-responsive sombreado">
             <table class="table table-striped table-sm align-middle">
                 <thead>
                     <tr>
@@ -69,8 +69,8 @@
                             </td>
                             <td class="text-end">{{ number_format($item->existencia, 2) }}</td>
                             <td class="text-end">
-                                <button wire:click="edit({{ $item->id }})" class="btn btn-sm btn-warning">Editar</button>
-                                <button wire:click="delete({{ $item->id }})" wire:confirm="¿Eliminar este lote?" class="btn btn-sm btn-danger">Eliminar</button>
+                                <button wire:click="edit({{ $item->id }})" class="btn btn-sm btn-warning sombreado">Editar</button>
+                                <button wire:click="delete({{ $item->id }})" wire:confirm="¿Eliminar este lote?" class="btn btn-sm btn-danger sombreado">Eliminar</button>
                             </td>
                         </tr>
                     @empty

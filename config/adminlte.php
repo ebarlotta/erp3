@@ -480,7 +480,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Almacenes',
-                    'url'  => 'stock/almacenes',
+                    'url'  => 'stock/almacen',
                     'can' => 'stock.almacen.Ver',
                 ],
                 [

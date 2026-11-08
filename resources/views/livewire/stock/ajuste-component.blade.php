@@ -12,9 +12,9 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
 
-        <div class="row mb-3">
+        <div class="row mb-3 px-2 py-2 sombreado">
             <div class="col-md-4">
-                <input type="text" wire:model="search" wire:keydown.enter="Filtrar" class="form-control" placeholder="Buscar producto...">
+                <input type="text" wire:model="search" wire:keydown.enter="Filtrar" wire:keyup="Filtrar" class="form-control" placeholder="Buscar producto...">
             </div>
             <div class="col-md-4">
                 <select wire:model="filtro_almacen" wire:change="Filtrar" class="form-control round shadow-md">
@@ -29,10 +29,10 @@
             </div>
         </div>
 
-        <div class="table-responsive">
+        <div class="table-responsive sombreado">
             <table class="table table-striped table-sm align-middle">
                 <thead>
-                    <tr>
+                    <tr class="fondo_encabezado">
                         <th>Fecha</th>
                         <th>Producto</th>
                         <th>Almacén</th>

@@ -92,7 +92,7 @@ class ModuloSeeder extends Seeder
         // Módulo 61    Stock
         DB::table('modulos')->insert(['name' => 'Gestión de Stock', 'pagina' => 'stock.dashboard','imagen'=>'stock.jpg','leyenda'=>'Gestión de Stock','habilitado'=>1]);   // 61
         DB::table('modulos')->insert(['name' => 'Almacenes', 'pagina' => 'stock.almacenes','imagen'=>'almacenes.jpg','leyenda'=>'Gestión de Almacenes','habilitado'=>1]);   // 62
-        DB::table('modulos')->insert(['name' => 'Stock por Almacén', 'pagina' => 'stock.stock-almacen','imagen'=>'stock.jpg','leyenda'=>'Gestión de Stock por Almacén','habilitado'=>1]);   // 63
+        DB::table('modulos')->insert(['name' => 'Stock por Almacén', 'pagina' => 'stock.stock-almacen','imagen'=>'stock-almacen.jpg','leyenda'=>'Gestión de Stock por Almacén','habilitado'=>1]);   // 63
         DB::table('modulos')->insert(['name' => 'Movimientos Kardex', 'pagina' => 'stock.movimientos-kardex','imagen'=>'movimientos.jpg','leyenda'=>'Gestión de movimiento de Stock','habilitado'=>1]);   // 64
         DB::table('modulos')->insert(['name' => 'Alertas Stock Mímino', 'pagina' => 'stock.alertas','imagen'=>'alertas.jpg','leyenda'=>'Gestión de Alertas de Stock','habilitado'=>1]);   // 65
         DB::table('modulos')->insert(['name' => 'Lotes', 'pagina' => 'stock.lotes','imagen'=>'lotes.jpg','leyenda'=>'Gestión de Lotes','habilitado'=>1]);   // 66

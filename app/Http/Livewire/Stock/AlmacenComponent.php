@@ -22,7 +22,7 @@ class AlmacenComponent extends Component
     public function render()
     {
         $guardName = 'web' . session('empresa_id');
-        $permisoExiste = Permission::where('name', 'almacenes.Ver')->where('guard_name', $guardName)->exists();
+        $permisoExiste = Permission::where('name', 'stock.almacenes.Ver')->where('guard_name', $guardName)->exists();
 
         if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('almacenes.Ver', $guardName)) {
             if (session('empresa_id')) {

@@ -113,8 +113,9 @@ class RolesComponent extends Component {
         } else {
             $this->modulo_seleccionado = $id;
             $this->modulo_name = $nombreModulo;
+            
 
-            $sql = "SELECT * FROM permissions where name like '%" . $nombreModulo . "%'";
+            $sql = "SELECT * FROM permissions where name like '%" . $this->modulo_name . "%'";
             unset($this->permisos);
 
             // Busca los módulos habilitados para el rol elegido
@@ -128,9 +129,15 @@ class RolesComponent extends Component {
 
             $this->moduloshabilitados = EmpresaModulo::where('empresa_id', $this->empresaSeleccionada)
                 ->join('modulos', 'modulos.id', '=', 'empresa_modulos.modulo_id')
-                ->select('modulos.name as name', 'modulos.pagina as pagina', 'modulos.id as id')
+                ->select(
+                    'modulos.name as name', 
+                    'modulos.pagina as pagina', 
+                    'modulos.id as id'
+                )
+                ->selectRaw("REPLACE(modulos.pagina, '/', '.') as permission_name") // Asumiendo que usas el campo 'pagina' para armar el permiso
                 ->get();
-        // dd($this->moduloshabilitados);
+
+                // dd($this->moduloshabilitados);
 
             // Busca todos los permisos del módulo seleccionado y cuáles de ellos están habilitados para el rol elegido
             $sql = 'SELECT SUBSTRING_INDEX(p.name, ".", 1) as modulo, p.name, p.id as permission_id, role_id
@@ -152,7 +159,8 @@ class RolesComponent extends Component {
                 AND p.guard_name = "web'. $this->empresaSeleccionada . '"
                 AND p.name like "%'.$nombreModulo.'%"';
                 $permisosNoActivadoshabilitados = db::select($sql);
-        // dd( $permisosNoActivadoshabilitados);
+        
+                // dd( $permisosNoActivadoshabilitados);
 
             $this->permisosNoActivadoshabilitados = db::select($sql);
         }

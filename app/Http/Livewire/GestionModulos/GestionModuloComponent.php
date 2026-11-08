@@ -82,10 +82,12 @@ class GestionModuloComponent extends Component
         $this->habilitado = $modulos->habilitado;
         $this->ShowButtonActualizar = false;
         
+        $permission_name = str_replace("/", ".", $this->pagina);
         //Cargar todos los permisos desponibles del módulo
-        $this->permisos=Permission::where('name', 'LIKE', '%'. $modulos->name . '%')
-        ->orwhere('name', 'LIKE', '%'. $modulos->pagina . '%')
+        // dd($permission_name);
+        $this->permisos=Permission::where('name', 'LIKE', '%'. $permission_name . '%')
         ->get();
+        // ->orwhere('name', 'LIKE', '%'. $modulos->pagina . '%')
         // dd($this->permisos);
     }
 
@@ -135,15 +137,17 @@ class GestionModuloComponent extends Component
         $this->validate([
             'nombre_permiso' => 'required|max:255',
         ]);
+        (is_null($this->empresa_id) or $this->empresa_id==0) ? $this->empresa_id = '' : $this->empresa_id = $this->empresa_id;
         $this->name = $this->reemplazaEspaciosAcentos($this->name);
-        if($this->permiso_ver) $permission = Permission::updateOrCreate(['name' => $this->name.'.Ver', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
-        if($this->permiso_agregar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Agregar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
-        if($this->permiso_eliminar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Eliminar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
-        if($this->permiso_modificar) $permission = Permission::updateOrCreate(['name' => $this->name.'.Modificar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->name)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_ver) $permission = Permission::updateOrCreate(['name' => $this->nombre_permiso.'.Ver', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->nombre_permiso)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_agregar) $permission = Permission::updateOrCreate(['name' => $this->nombre_permiso.'.Agregar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->nombre_permiso)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_eliminar) $permission = Permission::updateOrCreate(['name' => $this->nombre_permiso.'.Eliminar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->nombre_permiso)->where('guard_name', 'web' . $this->empresa_id)->delete();
+        if($this->permiso_modificar) $permission = Permission::updateOrCreate(['name' => $this->nombre_permiso.'.Modificar', 'guard_name' => 'web' . $this->empresa_id]); else $permission = Permission::where('name', $this->nombre_permiso)->where('guard_name', 'web' . $this->empresa_id)->delete();
         
         // $this->showEdit( $this->modulo_id);
-        // $this->name = $this->reemplazaEspaciosAcentos($this->name);
-        // $name = $this->name.'.'.$this->nombre_permiso;
+        $this->name = $this->reemplazaEspaciosAcentos($this->name);
+        $name = $this->name.'.'.$this->nombre_permiso;
+        $permission = Permission::updateOrCreate(['name' => $this->nombre_permiso.'.Ver', 'guard_name' => 'web']);
         // $permission = Permission::create(['name' => $name]);
 
         $this->nombre_permiso = null;

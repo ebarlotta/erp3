@@ -108,12 +108,10 @@
 
 
                             <div class="mt-3">
-                                <label for="">
-                                    Permisos 
-                                    <button type="button" class="btn btn-success mb-1 ml-2">Agregar
-                                        <span class="col-1 fs-3 ml-1" aria-hidden="true" style="lightcoral;border-radius: 5px; text-align: center;vertical-align: middle;background-color: lightgreen;" wire:click="showNewPermiso()" data-toggle="modal" data-target="#ModalAddPermission">&plus;</span>
-                                    </button>
-                                </label><br>
+                                <label for="">Permisos del Módulo</label><br>
+                                <button type="button" class="btn btn-success mb-1 ml-2">Agregar
+                                    <span class="col-1 fs-3 ml-1" aria-hidden="true" style="lightcoral;border-radius: 5px; text-align: center;vertical-align: middle;background-color: lightgreen;" wire:click="showNewPermiso()"   data-toggle="modal" data-target="#ModalAddPermission">&plus;</span>
+                                </button>
                                 @if($permisos)
                                     <div class="flex flex-wrap" style="justify-content: space-between;">
                                     @foreach ($permisos as $permiso)
@@ -175,7 +173,7 @@
                         </div>
                         <div class="px-3 py-3">
                             <div>
-                                <label for="">Nombre del Permiso</label>
+                                <label for="">Nombre del Permiso</label> (Ejemplo: "Módulo.Ver", "Módulo.Agregar", "Módulo.Eliminar", "Módulo.Modificar")
                                 <input type="text" class="form-control" value="{{ old('name') }}" wire:model="nombre_permiso">
                                 @error('nombre_permiso')
                                     <div class="alert alert-danger">{{ $message }}</div>
@@ -187,9 +185,9 @@
                                 <input class="mx-2" type="checkbox" wire:model="permiso_modificar" value="Modificar" checked>Modificar
                                 <input class="mx-2" type="checkbox" wire:model="permiso_ver" value="Ver" checked>Ver
                             </div>
-                            <div class="pt-3 flex">
-                                Empresa 
-                                <select wire:model="empresa_id">
+                            <div class="pt-3">
+                                <label for="">Empresa</label>
+                                <select wire:model="empresa_id" class="form-control">
                                     @foreach($empresas as $empresa)
                                         <option value="{{ $empresa->id }}">{{ $empresa->name }}</option>
                                     @endforeach

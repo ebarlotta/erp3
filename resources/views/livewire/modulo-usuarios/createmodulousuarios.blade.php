@@ -70,6 +70,10 @@
                                         @endforeach
                                     </div>
                                 </div>
+                            @else
+                                <div style="width: 100%;background-color: bisque;border-radius: 20px;height: 5rem;justify-content: center;display: flex; margin: 4px;	align-items: center; text-align: center; padding-top:1px; font-size: 2rem;">
+                                    Seleccione un Módulo
+                                </div>
 							@endif
 						</div>
 						<div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

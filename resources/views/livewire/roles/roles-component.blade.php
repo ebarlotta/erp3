@@ -113,11 +113,11 @@
                                     @if($moduloshabilitados)
                                         @foreach ($moduloshabilitados as $modulo)
                                             @if($modulo_seleccionado == $modulo->id)
-                                                <button type="button" class="btn btn-success" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->pagina }}')">
+                                                <button type="button" class="btn btn-success" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->permission_name }}')">
                                                     <i class="fa-solid fa-pen-to-square"></i>{{ $modulo->name }}
                                                 </button>
                                             @else
-                                                <button type="button" class="btn btn-outline-success mb-1" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->pagina }}')">
+                                                <button type="button" class="btn btn-outline-success mb-1" wire:click="SeleccionarModulo({{ $modulo->id }},'{{ $modulo->permission_name }}')">
                                                     <i class="fa-solid fa-pen-to-square"></i>{{ $modulo->name }}
                                                 </button>
                                             @endif

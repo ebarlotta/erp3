@@ -51,6 +51,9 @@
         }
         .fondo_encabezado {
              background-color: rgb(197, 181, 124) !important;
+             vertical-align: middle !important;
+            text-align: center !important;
+            height: 2.5rem !important;
         }
         .fondo_encabezado_alerta {
              background-color: rgba(237, 112, 112, 0.9) !important;

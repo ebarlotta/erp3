@@ -8,7 +8,7 @@
                 <a href="{{ route('stock.movimientos') }}"><button class="btn btn-primary btn-sm sombreado">Movimientos</button></a>
                 <a href="{{ route('stock.lotes') }}"><button class="btn btn-primary btn-sm sombreado">Lotes</button></a>
                 <a href="{{ route('stock.alertas') }}"><button class="btn btn-primary btn-sm sombreado">Alertas Stock mínimo</button></a>
-                <a href="{{ route('stock.stock-almacen') }}"><button wire:click="create" class="btn btn-primary btn-sm sombreado">+ Nuevo Movimiento</button></a>
+                <a href="{{ route('stock.stock-almacen') }}">         <button wire:click="create" class="btn btn-primary btn-sm sombreado"><i class="fas fa-plus me-2"></i> Nuevo Movimiento</button></a>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
                 <div class="col-md-3 col-sm-6 mb-3">
                     <div class="card text-white bg-info h-100">
                         <div class="card-body sombreado">
-                            <h6 class="card-title">{{ $almacen->name }}</h6>
+                            <h6 class="card-title mt-2 mr-2">{{ $almacen->name }}</h6>
                             <h3 class="mb-0">{{ number_format($almacen->total_existencia ?? 0, 2) }} u</h3>
                         </div>
                     </div>

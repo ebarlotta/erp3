@@ -3,8 +3,8 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Trazabilidad de Lotes</h4>
             <div class="d-flex gap-2">
-                <button wire:click="create" class="btn btn-primary btn-sm sombreado">+ Nuevo Lote</button>
-                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><- Volver</button></a>
+                         <button wire:click="create" class="btn btn-primary btn-sm sombreado"><i class="fas fa-plus me-2"></i> Nuevo Lote</button>
+                                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><i class="fas fa-arrow-left"></i> Volver</button></a>
             </div>
         </div>
 
@@ -12,8 +12,8 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
 
-        <div class="row mb-3 sombreado">
-            <div class="col-md-3">
+        <div class="row mb-3 sombreado py-2 px-2">
+            <div class="col-md-4">
                 <input type="text" wire:model="search" wire:keydown.enter="Filtrar" class="form-control" placeholder="Buscar producto o lote...">
             </div>
             <div class="col-md-3">
@@ -39,7 +39,7 @@
         <div class="table-responsive sombreado">
             <table class="table table-striped table-sm align-middle">
                 <thead>
-                    <tr>
+                    <tr class="fondo_encabezado">
                         <th>Producto</th>
                         <th>Almacén</th>
                         <th>Lote</th>

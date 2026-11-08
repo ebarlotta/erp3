@@ -3,8 +3,8 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Control de Stock — Movimientos</h4>
             <div class="d-flex gap-2">
-                <button wire:click="create" class="btn btn-primary btn-sm sombreado">+ Registrar Movimiento</button>
-                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><- Volver</button></a>
+                <button wire:click="create" class="btn btn-primary btn-sm sombreado"><i class="fas fa-plus me-2"></i> Registrar Movimiento</button>
+                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><i class="fas fa-arrow-left"></i> Volver</button></a>
             </div>
         </div>
 
@@ -13,8 +13,8 @@
         @endif
 
         {{-- Filtros --}}
-        <div class="row mb-3 sombreado">
-            <div class="col-md-3">
+        <div class="row mb-3 sombreado py-2 px-2">
+            <div class="col-md-4">
                 <input type="text" wire:model="search" wire:keydown.enter="Filtrar" wire:keyup="Filtrar" class="form-control" placeholder="Buscar producto...">
             </div>
             <div class="col-md-3">
@@ -33,20 +33,20 @@
                     <option value="ajuste">Ajustes</option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <button wire:click="Filtrar" class="btn btn-outline-secondary">Filtrar</button>
             </div>
         </div>
-@if($filtro_producto)
-    <div class="alert alert-info d-flex justify-content-between align-items-center">
-        <span>Mostrando el Kardex del producto seleccionado.</span>
-        <a href="{{ route('stock.movimientos') }}" class="btn btn-sm btn-outline-dark">Ver todos los movimientos</a>
-    </div>
-@endif
+        @if($filtro_producto)
+            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                <span>Mostrando el Kardex del producto seleccionado.</span>
+                <a href="{{ route('stock.movimientos') }}" class="btn btn-sm btn-outline-dark">Ver todos los movimientos</a>
+            </div>
+        @endif
         <div class="table-responsive sombreado">
             <table class="table table-striped table-sm align-middle">
                 <thead>
-                    <tr>
+                    <tr class="fondo_encabezado">
                         <th>Fecha</th>
                         <th>Tipo</th>
                         <th>Producto</th>
@@ -63,14 +63,14 @@
                             <td>{{ $mov->created_at->format('d/m/Y H:i') }}</td>
                             <td>
                                 @if($mov->tipo == 'entrada') 
-                                    <span class="badge bg-success">Entrada</span>
+                                    <span class="badge bg-success sombreado" style="font-size: 1.1rem;">Entrada</span>
                                 @elseif($mov->tipo == 'salida') 
-                                    <span class="badge bg-danger">Salida</span>
+                                    <span class="badge bg-danger sombreado" style="font-size: 1.1rem;">Salida</span>
                                 @elseif($mov->tipo == 'ajuste') 
                                     @if($mov->cantidad > 0)
-                                        <span class="badge bg-info text-dark">Ajuste (+)</span>
+                                        <span class="badge bg-info text-dark sombreado" style="font-size: 1.1rem;">Ajuste (+)</span>
                                     @else
-                                        <span class="badge bg-warning text-dark">Ajuste (-)</span>
+                                        <span class="badge bg-warning text-dark sombreado" style="font-size: 1.1rem;">Ajuste (-)</span>
                                     @endif
                                 @endif
                             </td>

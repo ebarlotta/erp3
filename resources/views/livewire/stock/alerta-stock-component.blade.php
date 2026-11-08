@@ -3,13 +3,13 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Alertas de Stock Mínimo</h4>
             <div class="d-flex gap-2">
-                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><- Volver</button></a>
+                                <a href="{{ route('stock.dashboard') }}"><button class="btn btn-primary btn-sm sombreado"><i class="fas fa-arrow-left"></i> Volver</button></a>
             </div>
         </div>
 
         {{-- Filtros --}}
-        <div class="row mb-3 sombreado">
-            <div class="col-md-4">
+        <div class="row mb-3 sombreado py-2 px-2">
+            <div class="col-md-5">
                 <input type="text" wire:model="search" wire:keydown.enter="Filtrar" wire:keyup="Filtrar" class="form-control" placeholder="Buscar producto...">
             </div>
             <div class="col-md-4">
@@ -28,7 +28,7 @@
         <div class="table-responsive sombreado">
             <table class="table table-striped table-sm align-middle">
                 <thead>
-                    <tr>
+                    <tr class="fondo_encabezado">
                         <th>Producto</th>
                         <th>Almacén</th>
                         <th class="text-end">Existencia Actual</th>

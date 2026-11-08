@@ -6,8 +6,8 @@
                 <button type="button" class="btn-close" wire:click="$set('isModalOpen', false)"></button>
             </div>
             <form wire:submit.prevent="store">
-                <div class="modal-body">
-                    <div class="mb-3">
+                <div class="modal-body flex flex-wrap">
+                    <div class="mb-3 col-12 col-md-6">
                         <label class="form-label">Almacén</label>
                         <select wire:model="almacen_id" class="form-control round shadow-md">
                             <option value="">Seleccione...</option>
@@ -17,7 +17,7 @@
                         </select>
                         @error('almacen_id') <span class="text-danger small">{{ $message }}</span> @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 col-12 col-md-6">
                         <label class="form-label">Producto</label>
                         <select wire:model="elemento_producto_id" class="form-control round shadow-md">
                             <option value="">Seleccione...</option>
@@ -26,20 +26,18 @@
                             @endforeach
                         </select>
                         @error('elemento_producto_id') <span class="text-danger small">{{ $message }}</span> @enderror
+                    </div>                    
+                    <div class="mb-3 col-12 col-md-6">
+                        <label class="form-label">Código de Lote</label>
+                        <input type="text" wire:model="lote" class="form-control" placeholder="Ej: L-2024A">
+                        @error('lote') <span class="text-danger small">{{ $message }}</span> @enderror
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Código de Lote</label>
-                            <input type="text" wire:model="lote" class="form-control" placeholder="Ej: L-2024A">
-                            @error('lote') <span class="text-danger small">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Vencimiento</label>
-                            <input type="date" wire:model="vencimiento" class="form-control">
-                            @error('vencimiento') <span class="text-danger small">{{ $message }}</span> @enderror
-                        </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        <label class="form-label">Vencimiento</label>
+                        <input type="date" wire:model="vencimiento" class="form-control">
+                        @error('vencimiento') <span class="text-danger small">{{ $message }}</span> @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="col-12">
                         <label class="form-label">Existencia Inicial (Opcional)</label>
                         <input type="number" step="0.01" wire:model="existencia" class="form-control">
                         @error('existencia') <span class="text-danger small">{{ $message }}</span> @enderror

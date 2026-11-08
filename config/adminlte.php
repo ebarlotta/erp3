@@ -470,8 +470,56 @@ return [
             'icon' => 'fas fa-fw fa-chart-pie',
             'can' => 'ventas.Ver',
         ],
+        // ['header' => 'STOCK',
+        //         'can' => 'stock.Ver',
+        // ],
+        [
+            'text' => 'Stock',
+            'icon' => 'fa fa-tags',
+            'can' => 'stock.Ver',
+            'submenu' => [
+                [
+                    'text' => 'Almacenes',
+                    'url'  => 'stock/almacenes',
+                    'can' => 'stock.almacen.Ver',
+                ],
+                [
+                    'text' => 'Movimientos',
+                    'url'  => 'stock/movimientos',
+                    'can' => 'stock.movimientos.Ver',
+                ],
+                [
+                    'text' => 'Alertas',
+                    'url'  => 'stock/alertas',
+                    'can' => 'stock.alertas.Ver',
+                ],
+                [
+                    'text' => 'Lotes',
+                    'url'  => 'stock/lotes',
+                    'can' => 'stock.lotes.Ver',
+                ],
+                [
+                    'text' => 'Ajustes de Stock',
+                    'url'  => 'stock/ajustes',
+                    'can' => 'stock.ajustes.Ver',
+                ],
+                [
+                    'text' => 'Productos',
+                    'url'  => 'stock/productos',
+                    'can' => 'stock.productos.Ver',
+                ],
+                [
+                    'text' => 'Producción de Stock',
+                    'url'  => 'stock/produccion',
+                    'can' => 'stock.produccion.Ver',
+                ],
+            ],
+        ],
         ['header' => 'GESTIÓN CARRITO',
                 'can' => 'Carrito.Ver',
+        ],
+        ['header' => 'PRODUCTOS',
+                'can' => 'productos.Ver',
         ],
         [
             'text' => 'Productos',

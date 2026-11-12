@@ -481,7 +481,7 @@ return [
                 [
                     'text' => 'Almacenes',
                     'url'  => 'stock/almacen',
-                    'can' => 'stock.almacen.Ver',
+                    'can' => 'stock.almacenes.Ver',
                 ],
                 [
                     'text' => 'Movimientos',

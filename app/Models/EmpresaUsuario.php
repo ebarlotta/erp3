@@ -37,11 +37,12 @@ class EmpresaUsuario extends Model
         // $guardName = 'web' . session('empresa_id');
         $permisoExiste = DB::table('permissions')->where('name', $PermissionName)->where('guard_name', $GuardName)->first();
 // dd($permisoExiste);
-        $a = DB::table('model_has_permissions')
-            ->where('permission_id', $permisoExiste->id)
-            ->where('model_type', 'App\Models\User')
-            ->where('model_id', auth()->user()->id)
-            ->get();
+        if(!is_null($permisoExiste->id)) {
+            $a = DB::table('model_has_permissions')
+                ->where('permission_id', $permisoExiste->id)
+                ->where('model_type', 'App\Models\User')
+                ->where('model_id', auth()->user()->id)
+                ->get();
             
 //dd($a);
         if(is_null(session('empresa_id'))) return false;
@@ -60,6 +61,10 @@ class EmpresaUsuario extends Model
         } else {
             return false;
         }
+        // si no tiene permiso por defecto va a false;
+        return false;
+    }
+        
     }
 
 }

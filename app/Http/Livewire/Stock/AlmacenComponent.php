@@ -24,7 +24,7 @@ class AlmacenComponent extends Component
         $guardName = 'web' . session('empresa_id');
         $permisoExiste = Permission::where('name', 'stock.almacenes.Ver')->where('guard_name', $guardName)->exists();
 
-        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('almacenes.Ver', $guardName)) {
+        if (auth()->check() && $permisoExiste && EmpresaUsuario::PermisoHabilitado('stock.almacenes.Ver', $guardName)) {
             if (session('empresa_id')) {
                 $this->empresa_id = session('empresa_id');
                 $this->almacenes = StockAlmacen::where('empresa_id', $this->empresa_id)

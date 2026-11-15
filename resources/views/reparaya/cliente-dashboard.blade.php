@@ -22,7 +22,7 @@
 <main class="p-4 max-w-3xl mx-auto space-y-4">
 
     <!-- Botón nueva -->
-    <a href="{{ route('reparaya.solicitudes.create') }}" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">
+    <a href="{{ route('cliente-nueva-solicitud') }}" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">
         + Nueva solicitud
     </a>
 

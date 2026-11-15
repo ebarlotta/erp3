@@ -18,7 +18,7 @@ class PresupuestosComponent extends Component
         $presupuesto = Solicitud::where('id', $request->solicitud)
             ->where('cliente_id', $user)
             ->get();
-        dd($presupuesto);
+        // dd($presupuesto);
 
         return view('livewire.reparaya.presupuestos-component')->extends('layouts.reparaya');
     }

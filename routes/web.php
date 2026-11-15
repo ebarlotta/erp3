@@ -336,7 +336,6 @@ use App\Http\Livewire\Reparaya\PresupuestosComponent;
 
 Route::prefix('reparaya')->name('reparaya.')->middleware(['auth'])->group(function () {
     Route::get('/reparaya', ReparayaClienteComponent::class)->name('reparaya.cliente');
-
     Route::get('/cliente/solicitud/{solicitud}', PresupuestosComponent::class)->name('reparaya.cliente.solicitud');
 
     // Route::get('/', [DashboardController::class, 'index'])->name('reparaya.cliente.dashboard');

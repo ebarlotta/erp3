@@ -1,8 +1,8 @@
-<div class="px-2 text-center justify-center">
-{{-- <a href="" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">
-        + Nueva solicitud
-    </a> --}}
-<button onclick="abrirModal()" class="block bg-client text-white text-center py-3 px-3 rounded-xl font-medium transition">+ Nueva solicitud</button>
+<div class="px-2 text-center justify-center space-y-4">
+<a href="{{ route('reparaya.reparaya.cliente.solicitud',0) }}" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">
+    + Nueva solicitud s
+</a>
+{{-- <button onclick="{{ route('reparaya.reparaya.cliente.solicitud',0) }}" class="mt-3 w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">+ Nueva solicitud</button> --}}
 
     <!-- Resumen rápido -->
     <div class="grid grid-cols-3 gap-3">
@@ -46,9 +46,14 @@
         @endforelse
     </div>
 
-    <a href="" class="block w-full bg-repair text-white text-center py-3 rounded-xl font-medium transition">
-        Menú Reparador
-    </a>
+    <button onclick="abrirModal()" class="mt-3 mb-3 w-full bg-repair text-white text-center py-3 rounded-xl font-medium transition">Menú Reparador</button>
+
+    {{-- <div class="px-2 text-center justify-center space-y-4">
+        <a href="" class="mt-3 w-full bg-repair text-white text-center py-3 rounded-xl font-medium transition">
+            Menú Reparador
+        </a>
+    </div> --}}
+
 
     <!-- Modal confirmar aceptación -->
     <div id="modal-aceptar" class="hidden fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:mt-4 sm:p-4 z-50">
@@ -59,39 +64,38 @@
             </div>
             <div class="bg-white rounded-xl shadow p-5 space-y-4">
                 <form wire:submit="guardar" class="text-left">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Título *</label>
-                        <input type="text" wire:model="titulo" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                        @error('titulo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Título *</label>
+                            <input type="text" wire:model="titulo" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            @error('titulo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Categoría *</label>
+                            <select wire:model="categoria_id" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option value="">Seleccioná</option>
+                                @foreach ($categorias as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->nombrecategoria }}</option>
+                                @endforeach
+                            </select>
+                            @error('categoria_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Categoría *</label>
-                        <select wire:model="categoria_id" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                            <option value="">Seleccioná</option>
-                            @foreach ($categorias as $cat)
-                                <option value="{{ $cat->id }}">{{ $cat->nombrecategoria }}</option>
-                            @endforeach
-                        </select>
-                        @error('categoria_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Dirección *</label>
+                            <input type="text" wire:model="direccion" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            @error('direccion') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción *</label>
-                        <textarea wire:model="descripcion" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
-                        @error('descripcion') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Dirección *</label>
-                        <input type="text" wire:model="direccion" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                        @error('direccion') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Localidad *</label>
-                        <input type="text" wire:model="localidad" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                        @error('localidad') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Localidad *</label>
+                            <input type="text" wire:model="localidad" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            @error('localidad') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -110,12 +114,18 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción *</label>
+                        <textarea wire:model="descripcion" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
+                        @error('descripcion') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Fotos</label>
                         <input type="file" wire:model="fotos" multiple class="w-full text-sm">
                         @error('fotos.*') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
-                    <button type="submit" class="w-full bg-client text-white py-2 rounded-lg font-medium">
+                    <button type="submit" class="mt-3 w-full bg-client text-white py-2 rounded-lg font-medium">
                         Publicar solicitud
                     </button>
                 </form>

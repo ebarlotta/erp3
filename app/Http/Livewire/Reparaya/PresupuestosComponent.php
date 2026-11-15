@@ -11,15 +11,21 @@ use Illuminate\Support\Facades\Auth;
 
 class PresupuestosComponent extends Component
 {
+    public $solicitud;
+
     public function render(Request $request)
     {
         $user = Auth::user()->id;
 
-        $presupuesto = Solicitud::where('id', $request->solicitud)
-            ->where('cliente_id', $user)
-            ->get();
-        dd($presupuesto);
-
-        return view('livewire.reparaya.presupuestos-component')->extends('layouts.reparaya');
+        if($request->solicitud<>0) {
+            $this->solicitud = Solicitud::where('id', $request->solicitud)
+                ->where('cliente_id', $user)
+                ->first();
+                // dd($presupuesto[0]->presupuestos);
+                // dd($presupuesto);
+            return view('livewire.reparaya.listado-presupuestos-component')->extends('layouts.reparaya');
+        } else {
+            return view('livewire.reparaya.presupuestos-component')->extends('layouts.reparaya');
+        }
     }
 }

@@ -22,10 +22,16 @@
 <main class="p-4 max-w-3xl mx-auto space-y-4">
 
     <!-- Botón nueva -->
-    <a href="{{ route('reparaya.solicitudes.create') }}" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">
+    <a href="#" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">
+    {{-- <a href="{{ route('reparaya.solicitudes.create') }}" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition"> --}}
         + Nueva solicitud
     </a>
-
+@php
+    $resumen['abiertas']=2;
+    $resumen['con_presupuestos']=3;
+    $resumen['finalizadas']=1;
+    $solicitudes=[];
+@endphp
     <!-- Resumen rápido -->
     <div class="grid grid-cols-3 gap-3">
         <div class="bg-white rounded-xl p-3 text-center shadow-sm">
@@ -67,8 +73,9 @@
             <p class="text-center text-gray-500 py-6">Todavía no tenés solicitudes.</p>
         @endforelse
     </div>
-
-    <a href="{{ route('reparaya.reparador.dashboard')}} " class="block w-full bg-repair text-white text-center py-3 rounded-xl font-medium transition">
+    
+    <a href="{{ route('cliente-dashboard')}} " class="block w-full bg-repair text-white text-center py-3 rounded-xl font-medium transition">
+        {{-- <a href="{{ route('reparaya.reparador.dashboard')}} " class="block w-full bg-repair text-white text-center py-3 rounded-xl font-medium transition"> --}}
         Menú Reparador
     </a>
 </main>

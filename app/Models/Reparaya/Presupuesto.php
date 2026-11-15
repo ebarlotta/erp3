@@ -49,6 +49,11 @@ class Presupuesto extends Model
         return $this->hasOne(Cita::class, 'presupuesto_id');
     }
 
+    public function categoria()
+    {
+        return $this->hasOne(categoria::class, 'categoria_id');
+    }
+
     /* ---------- Scopes ---------- */
 
     public function scopeEnviados($query)

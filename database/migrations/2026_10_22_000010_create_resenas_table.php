@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cita_id')->unique()->constrained('repa_citas')->cascadeOnDelete();
             $table->foreignId('cliente_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('reparador_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('reparador_id')->constrained('actor_reparador')->cascadeOnDelete();
             $table->tinyInteger('puntuacion'); // 1 a 5
             $table->text('comentario')->nullable();
             $table->timestamps();

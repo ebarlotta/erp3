@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('repa_presupuestos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('solicitud_id')->constrained('repa_solicitudes')->cascadeOnDelete();
-            $table->foreignId('reparador_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('reparador_id')->constrained('actor_reparador')->cascadeOnDelete();
             $table->foreignId('moneda_id')->constrained('monedas')->restrictOnDelete();
             $table->decimal('monto', 12, 2);
             $table->unsignedInteger('plazo_dias');
@@ -23,6 +23,7 @@ return new class extends Migration
 
             $table->index(['solicitud_id', 'estado']);
             $table->index('reparador_id');
+
         });
     }
 

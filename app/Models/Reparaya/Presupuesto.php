@@ -4,6 +4,8 @@ namespace App\Models\Reparaya;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Reparaya\Reparadores;
+use App\Models\Categorias;
 
 class Presupuesto extends Model
 {
@@ -29,9 +31,9 @@ class Presupuesto extends Model
         return $this->belongsTo(Solicitud::class, 'solicitud_id');
     }
 
-    public function reparador()
-    {
-        return $this->belongsTo(User::class, 'reparador_id');
+    //$a=$this->belongsTo(Reparadores::class, 'actor_id', 'id');
+    public function reparador() {
+        return $this->belongsTo(Reparadores::class, 'reparador_id', 'id');
     }
 
     public function moneda()

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('repa_agenda_bloqueos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('reparador_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('reparador_id')->constrained('actor_reparador')->cascadeOnDelete();
             $table->dateTime('fecha_inicio');
             $table->dateTime('fecha_fin');
             $table->string('motivo', 150)->nullable();

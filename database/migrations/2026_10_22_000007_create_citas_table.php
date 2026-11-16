@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('solicitud_id')->constrained('repa_solicitudes')->cascadeOnDelete();
             $table->foreignId('presupuesto_id')->unique()->constrained('repa_presupuestos')->cascadeOnDelete();
-            $table->foreignId('cliente_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('reparador_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('cliente_id')->constrained('actor_clientes')->cascadeOnDelete();
+            $table->foreignId('reparador_id')->constrained('actor_reparador')->cascadeOnDelete();
             $table->dateTime('fecha_hora');
             $table->unsignedInteger('duracion_min')->default(60);
             $table->enum('estado', ['propuesta', 'confirmada', 'realizada', 'cancelada'])->default('propuesta');

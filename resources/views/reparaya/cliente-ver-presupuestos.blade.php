@@ -61,7 +61,7 @@
                     <p class="text-sm text-gray-600 mt-2">Incluye mano de obra y materiales. Plazo: 1 día. Garantía 6 meses.</p>
                     <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
                         <span class="bg-gray-100 px-2 py-0.5 rounded-full">⏱ 1 día</span>
-                        <span class="bg-gray-100 px-2 py-0.5 rounded-full">🛡 Garantía 6 meses</span>
+                        <span class="bg-gray-100 px-2 py-0.5 rounded-full">🛡 Garantía 5 meses</span>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-2 mt-3">
                         <button onclick="abrirModal('Carlos Méndez', '$45.000')" class="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-700">Aceptar presupuesto</button>

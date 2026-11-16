@@ -13,19 +13,20 @@ return new class extends Migration
     {
         Schema::create('actor_reparador', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('actor_id');
             $table->string('nombre');
             $table->string('apellido');
             $table->string('iniciales', 4)->nullable();
             $table->string('especialidad');           // plomeria, electricidad, pintura
             $table->string('matricula')->nullable();
             $table->string('zona');
-            $table->string('ciudad')->default('CABA');
+            $table->string('domicilio')->default('CABA');
             $table->unsignedTinyInteger('experiencia_anios')->default(0);
             $table->boolean('verificado')->default(false);
             $table->boolean('activo')->default(true);
             $table->text('sobre_mi')->nullable();
-            $table->string('foto_perfil')->nullable();
+            $table->string('urlfoto')->nullable();
             $table->decimal('calificacion_promedio', 3, 2)->default(0);
             $table->unsignedInteger('total_resenas')->default(0);
             $table->unsignedInteger('total_trabajos')->default(0);
@@ -34,7 +35,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unsignedBigInteger('actor_id');
             $table->foreign('actor_id')->references('id')->on('actors');
         });
     }

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('repa_agenda_disponibilidad', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('reparador_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('reparador_id')->constrained('actor_reparador')->cascadeOnDelete();
             $table->enum('tipo', ['recurrente', 'puntual']);
             $table->tinyInteger('dia_semana')->nullable(); // 0=domingo ... 6=sábado, solo recurrente
             $table->date('fecha')->nullable();             // solo puntual

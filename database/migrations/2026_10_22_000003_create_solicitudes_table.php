@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('repa_solicitudes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('cliente_id')->constrained('actor_clientes')->cascadeOnDelete();
             $table->foreignId('categoria_id')->constrained('categorias')->restrictOnDelete();
             $table->string('titulo', 150);
             $table->text('descripcion');

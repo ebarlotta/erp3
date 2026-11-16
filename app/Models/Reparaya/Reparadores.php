@@ -2,8 +2,6 @@
 
 namespace App\Models\Reparaya;
 
-namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,11 +11,12 @@ class Reparadores extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'reparadores';
+    protected $table = 'actor_reparador';
 
     protected $fillable = [
         'user_id',
         'nombre',
+        'actor_id',
         'apellido',
         'iniciales',
         'especialidad',
@@ -60,7 +59,9 @@ class Reparadores extends Model
 
     public function especialidades()
     {
-        return $this->hasMany(ReparadorEspecialidad::class);
+        $a = $this->hasMany(ReparadorEspecialidad::class, 'actor_id');
+        //dd($a) ; // = $a->pluck('nombre')->toArray();
+        return $a;
     }
 
     public function resenas()
@@ -351,5 +352,15 @@ class Reparadores extends Model
             ->where('especialidad', $this->especialidad)
             ->where('reparador_id', null)
             ->orderByDesc('created_at');
+    }
+
+    public function getEstrellasTextoAttribute() {
+        $llenas = (int) round($this->calificacion_promedio ?? 0);
+        $llenas = max(0, min(5, $llenas)); // Asegura que esté entre 0 y 5
+        $vacias = 5 - $llenas;
+        
+        $estrellas = str_repeat('★', $llenas) . str_repeat('☆', $vacias);
+        $textoResenas = $this->total_resenas == 1 ? '1 reseña' : "{$this->total_resenas} reseñas";
+        return "{$estrellas} ({$textoResenas})";
     }
 }

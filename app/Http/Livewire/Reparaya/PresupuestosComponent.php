@@ -30,6 +30,7 @@ class PresupuestosComponent extends Component
             $this->presupuestos = Presupuesto::with('reparador')
             ->where('solicitud_id','=',$request->solicitud)
             ->where('estado','enviado')
+            ->orderby('monto','asc')
             ->get();
             // dd($this->presupuestos->first()->reparador);
             // dd($this->presupuestos);

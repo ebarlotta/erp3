@@ -10,14 +10,15 @@ return new class extends Migration
     {
         Schema::create('repa_resenas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cita_id')->unique()->constrained('repa_citas')->cascadeOnDelete();
-            $table->foreignId('cliente_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('solicitud_id')->unique()->constrained('repa_solicitudes')->cascadeOnDelete();
+            $table->foreignId('cliente_id')->unique()->constrained('actor_clientes')->cascadeOnDelete();
             $table->foreignId('reparador_id')->constrained('actor_reparador')->cascadeOnDelete();
             $table->tinyInteger('puntuacion'); // 1 a 5
             $table->text('comentario')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
+            
+            // $table->foreignId('cita_id')->unique()->constrained('repa_citas')->cascadeOnDelete();
             $table->index('reparador_id');
         });
     }

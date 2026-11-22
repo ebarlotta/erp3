@@ -14,7 +14,7 @@ return new class extends Migration
 
     Schema::create('repa_especialidads', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('actor_id')->constrained('actor_reparador')->onDelete('cascade');
+        $table->foreignId('reparador_id')->constrained('actor_reparador')->onDelete('cascade');
         $table->string('nombre');
         $table->timestamps();
     });

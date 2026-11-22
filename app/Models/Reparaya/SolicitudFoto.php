@@ -12,7 +12,8 @@ class SolicitudFoto extends Model
     protected $table = 'repa_solicitud_fotos';
 
     protected $fillable = [
-        'solicitud_id', 'path',
+        'solicitud_id',
+        'path',
     ];
 
     public function solicitud()

@@ -37,7 +37,7 @@
                     </span>
                 </div>
                 <p class="text-sm text-gray-600 mt-2 line-clamp-2">{{ $solicitud->descripcion }}</p>
-                <a href="{{ route('reparaya.reparaya.cliente.solicitud', $solicitud) }}" class="mt-3 inline-block text-sm text-client font-medium">
+                <a href="{{ route('reparaya.reparaya.cliente.solicitud', $solicitud) }}" class="mt-3 inline-block text-md text-client font-medium text-blue-600 bg-gray-200 p-1 rounded-md">
                     Ver presupuestos →
                 </a>
             </div>

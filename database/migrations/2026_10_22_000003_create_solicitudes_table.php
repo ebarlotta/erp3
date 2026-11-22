@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cliente_id')->constrained('actor_clientes')->cascadeOnDelete();
             $table->foreignId('categoria_id')->constrained('categorias')->restrictOnDelete();
-            $table->string('titulo', 150);
+            $table->string('titulo', 250);
             $table->text('descripcion');
             $table->string('direccion', 200);
             $table->string('localidad', 100);
@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('longitud', 10, 7)->nullable();
             $table->enum('urgencia', ['normal', 'urgente', 'muy_urgente'])->default('normal');
             $table->decimal('presupuesto_estimado', 12, 2)->nullable();
+            $table->unsignedInteger('radio_metros')->default(500);
             $table->enum('estado', [
                 'abierta',
                 'con_presupuestos',

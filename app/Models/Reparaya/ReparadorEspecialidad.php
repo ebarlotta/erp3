@@ -18,6 +18,6 @@ class ReparadorEspecialidad extends Model
 
     public function reparador()
     {
-        return $this->belongsTo(Reparadores::class);
+        return $this->belongsTo(Reparadores::class,'actor_id');
     }
 }

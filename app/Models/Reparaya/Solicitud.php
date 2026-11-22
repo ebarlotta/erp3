@@ -14,9 +14,19 @@ class Solicitud extends Model
     protected $table = 'repa_solicitudes';
 
     protected $fillable = [
-        'cliente_id', 'categoria_id', 'titulo', 'descripcion',
-        'direccion', 'localidad', 'latitud', 'longitud',
-        'urgencia', 'presupuesto_estimado', 'estado',
+        'cliente_id', 
+        
+        'titulo', 
+        'descripcion',
+        
+        'localidad', 
+        'direccion', 
+        'categoria_id', 
+        'latitud', 
+        'longitud',
+        'urgencia', 
+        'presupuesto_estimado', 
+        'estado',
     ];
 
     protected $casts = [
@@ -31,24 +41,24 @@ class Solicitud extends Model
     {
         return $this->belongsTo(User::class, 'cliente_id');
     }
-
-    public function categoria()
-    {
+    
+    public function especialidad() {
         return $this->belongsTo(Categorias::class, 'categoria_id');
     }
 
-    public function fotos()
-    {
+    public function categoria() {
+        return $this->belongsTo(Categorias::class, 'categoria_id');
+    }
+
+    public function fotos() {
         return $this->hasMany(SolicitudFoto::class, 'solicitud_id');
     }
 
-    public function presupuestos()
-    {
+    public function presupuestos() {
         return $this->hasMany(Presupuesto::class, 'solicitud_id');
     }
 
-    public function cita()
-    {
+    public function cita() {
         return $this->hasOne(Cita::class, 'solicitud_id');
     }
 

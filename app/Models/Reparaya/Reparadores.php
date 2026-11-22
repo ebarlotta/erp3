@@ -15,9 +15,9 @@ class Reparadores extends Model
 
     protected $fillable = [
         'user_id',
-        'nombre',
         'actor_id',
         'apellido',
+        'nombre',
         'iniciales',
         'especialidad',
         'matricula',
@@ -59,8 +59,9 @@ class Reparadores extends Model
 
     public function especialidades()
     {
-        $a = $this->hasMany(ReparadorEspecialidad::class, 'actor_id');
-        //dd($a) ; // = $a->pluck('nombre')->toArray();
+        $a = $this->hasMany(ReparadorEspecialidad::class, 'id');
+        // $a->pluck('nombre')->toArray();
+        //dd($a);
         return $a;
     }
 
@@ -347,7 +348,7 @@ class Reparadores extends Model
      * Solicitudes disponibles para este reparador (según su especialidad).
      */
     public function solicitudesDisponibles()
-    {
+    {   
         return Solicitud::disponibles()
             ->where('especialidad', $this->especialidad)
             ->where('reparador_id', null)

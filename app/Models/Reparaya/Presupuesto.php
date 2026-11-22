@@ -14,8 +14,14 @@ class Presupuesto extends Model
     protected $table = 'repa_presupuestos';
 
     protected $fillable = [
-        'solicitud_id', 'reparador_id', 'moneda_id', 'monto',
-        'plazo_dias', 'garantia_meses', 'comentario', 'estado',
+        'solicitud_id', 
+        'reparador_id', 
+        'moneda_id', 
+        'monto',
+        'plazo_dias', 
+        'garantia_meses', 
+        'comentario', 
+        'estado',
     ];
 
     protected $casts = [
@@ -31,9 +37,8 @@ class Presupuesto extends Model
         return $this->belongsTo(Solicitud::class, 'solicitud_id');
     }
 
-    //$a=$this->belongsTo(Reparadores::class, 'actor_id', 'id');
     public function reparador() {
-        return $this->belongsTo(Reparadores::class, 'reparador_id', 'id');
+        return $this->belongsTo(Reparadores::class, 'reparador_id');
     }
 
     public function moneda()
@@ -66,5 +71,14 @@ class Presupuesto extends Model
     public function scopeAceptados($query)
     {
         return $query->where('estado', 'aceptado');
+    }
+
+    public function scopeDelMes($query, $fecha = null)
+    {
+        $fecha = $fecha ?? now();
+        return $query->whereBetween('created_at', [
+            $fecha->copy()->startOfMonth(),
+            $fecha->copy()->endOfMonth(),
+        ]);
     }
 }

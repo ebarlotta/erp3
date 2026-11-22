@@ -12,7 +12,11 @@ class Resena extends Model
     protected $table = 'repa_resenas';
 
     protected $fillable = [
-        'cita_id', 'cliente_id', 'reparador_id', 'puntuacion', 'comentario',
+        'solicitud_id', 
+        'reparador_id', 
+        'cliente_id', 
+        'puntuacion', 
+        'comentario',
     ];
 
     protected $casts = [
@@ -21,9 +25,9 @@ class Resena extends Model
 
     /* ---------- Relaciones ---------- */
 
-    public function cita()
+    public function solicitud()
     {
-        return $this->belongsTo(Cita::class, 'cita_id');
+        return $this->belongsTo(Solicitud::class, 'solicitud_id');
     }
 
     public function cliente()
@@ -34,5 +38,21 @@ class Resena extends Model
     public function reparador()
     {
         return $this->belongsTo(User::class, 'reparador_id');
+    }
+
+    /**
+     * Estrellas: "★★★★★" o "★★★★☆"
+     */
+    public function getEstrellasAttribute(): string
+    {
+        return str_repeat('★', $this->puntaje) . str_repeat('☆', 5 - $this->puntaje);
+    }
+
+    /**
+     * Tiempo relativo: "Hace 2 semanas"
+     */
+    public function getTiempoRelativoAttribute(): string
+    {
+        return $this->created_at->diffForHumans();
     }
 }

@@ -96,7 +96,7 @@
                 @if(count($solicitud->fotos))
                     <div class="flex flex-wrap">
                         @foreach ($solicitud->fotos as $foto)
-                            {{-- <img src="{{ asset('reparaya/'.$foto->path) }}" width="100px" height="100px" style="border: 2px solid gray; border-radius: 10px;" class="mx-1 p-2 my-1"> --}}
+                            {{-- <img src="{{ asset('reparaya/'.$foto-  >path) }}" width="100px" height="100px" style="border: 2px solid gray; border-radius: 10px;" class="mx-1 p-2 my-1"> --}}
                             <img src="{{ asset('reparaya/'.$foto->path) }}" 
                             width="100px" height="100px" 
                             style="border: 2px solid gray; border-radius: 10px;" 

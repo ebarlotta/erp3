@@ -18,13 +18,14 @@
         <h2 class="font-semibold text-gray-700">Solicitudes disponibles</h2>
 
     @foreach($solicitudes as $solicitud)
-        <div class="bg-white rounded-xl p-4 shadow-sm">
+        <div wire:key="solicitud-{{ $solicitud->id }}" class="bg-white rounded-xl p-4 shadow-sm">
             <div class="flex justify-between items-start">
                 <div>
                     <h3 class="font-semibold text-gray-800">{{ $solicitud->titulo }}</h3>
                     <p class="text-sm text-gray-500">
                         {{ ucfirst($solicitud->especialidad->nombrecategoria) }} · {{ $solicitud->localidad }} · {{ $solicitud->direccion }}
                     </p>
+                    <span class="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-700">{{ $solicitud->estado }}</span>
                 </div>
                 <span class="text-xs px-2 py-1 rounded-full font-medium
                     {{ $solicitud->urgencia=='normal' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}
@@ -38,13 +39,9 @@
                 <button onclick="document.getElementById('modal-presupuesto').classList.remove('hidden'); setTimeout(inicializarMapa, 100)" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">
                     Enviar presupuesto
                 </button>
-                <button onclick="document.getElementById('modal-detalle').classList.remove('hidden');" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">
+                <button onclick="document.getElementById('modal-detalle').classList.remove('hidden');" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50" wire:click="cargaritems({{ $solicitud->id }})" >
                     Ver detalle
                 </button>
-
-                {{-- <button class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">
-                    Ver detalle
-                </button> --}}
             </div>
         </div>
     @endforeach
@@ -85,10 +82,11 @@
     </div>
 
     <!-- Modal detalle -->
-    <div id="modal-detalle" class="hidden fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
-        <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4">
+    <div id="modal-detalle" class="{{ $mostrarDetalle ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50' : 'hidden' }}">
+        <div class="bg-white w-full sm:max-w-xl rounded-t-2xl sm:rounded-2xl p-5 space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="font-bold text-lg">Detalles</h3>
+                <span class="text-md px-2 py-1 rounded-full font-large bg-green-100 text-green-700">Presupuesto: {{ $estado_presupuesto }}</span>
                 <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="text-gray-400 text-xl">✕</button>
             </div>
 
@@ -109,22 +107,125 @@
                     <img src="{{ asset('images/sin_imagen.jpg')}}">
 
                 @endif
-                <label class="block text-sm font-medium text-gray-700 mb-1">Comentario</label>
-                <textarea rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Detalles del presupuesto..."></textarea>
+                @if (session()->has('message'))
+                    <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                        role="alert">
+                        <div class="flex">
+                            <div>
+                                <p class="text-xm bg-lightgreen">{{ session('message') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @if (session()->has('messageerror'))
+                    <div class="bg-red-100 border-t-4 border-red-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                        role="alert">
+                        <div class="flex">
+                            <div>
+                                <p class="text-xm bg-lightgreen">{{ session('messageerror') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <div class="flex">
+                    <button type="button" wire:click="crearPresupuesto({{ $solicitud->id }})"  class="col-6 h-10 mt-auto flex-1 inline-flex items-center justify-center gap-1.5 bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                        <svg xmlns="http://w3.org" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                        </svg>
+                        <span>Crear Presupuesto</span>
+                    </button>
+                    <div class="col-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+                        <input type="number" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="$ 0" wire:model="montototal" disabled>
+                    </div>
+                </div>
+                @if($items)
+                @else
+                    No hay detalles Cargados aún
+                @endif
+
+                {{-- @if($presu_solicitud_id)
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1 mt-3">Descripción del procedimiento</label>
+                        <textarea rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Detalles del presupuesto..."></textarea>
+                    </div>
+                @endif --}}
+                <table class="mt-2">
+                    <thead class="bg-blue-400 text-white">
+                    <tr>
+                        <th class="px-4 text-left font-semibold align-items-center">Descripción</th>
+                        <th class="px-4 text-left font-semibold align-items-center">Monto</th>
+                        <th class="px-4 text-left font-semibold align-items-center">
+                            <div class="d-flex align-items-center" style="justify-content: space-evenly;">
+                                <p>Acciones</p>
+                                <button class="bg-emerald-600 text-white p-2 rounded-lg hover:bg-emerald-700" wire:click="edit(0)">+ Agregar</button>
+                            </flex>
+                        </th>
+                    </tr>
+                    </thead>
+                    @if($items)
+                        @foreach ($items as $item)
+                        <tr>
+                            <td>{{ $item->concepto}}</td>
+                            <td>{{ $item->monto}}</td>
+                            <td>
+                                <div class="flex justify-center">
+                                    <x-editar id="{{ $item->id }}"></x-editar>
+                                    <x-eliminar id="{{ $item->id }}"></x-eliminar>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @endif
+                </table>
             </div>
-            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700">Enviar presupuesto</button>
+            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700"  wire:click="preguntar_cambiar_estado()">Enviar presupuesto</button>
         </div>
     </div>
 
     <!-- MODAL (Oculto por defecto) -->
-<div id="modalImagen" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-75 p-4" onclick="cerrarModalImagen()">
+    <div id="modalImagen" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-75 p-4" onclick="cerrarModalImagen()">
     <!-- Botón de cerrar (X) -->
     <button class="absolute top-4 right-4 text-white text-3xl font-bold hover:text-red-500 transition-colors" onclick="cerrarModalImagen()">&times;</button>
     
     <!-- Imagen en detalle -->
     <!-- stopPropagation evita que al hacer clic en la imagen se cierre el modal -->
     <img id="imagenDetalle" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain" onclick="event.stopPropagation()">
-</div>
+    </div>
+
+    <!-- Modal mostrarNuevoItem -->
+    <div id="modal-mostrarNuevoItem" class="{{ $mostrarNuevoItem ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50' : 'hidden' }}">
+        <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Agregar/Modificar Items</h3>
+                <button onclick="document.getElementById('modal-mostrarNuevoItem').classList.add('hidden')" class="text-gray-400 text-xl">✕</button>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Descripción" wire:model="concepto">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+                <input type="number" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="$ 0" wire:model="monto">
+            </div>
+            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700" wire:click="save()">Guardar Item</button>
+        </div>
+    </div>
+
+    <!-- Modal PreguntarCambiarEstado -->
+    <div id="modal-PreguntarCambiarEstado" class="{{ $PreguntarCambiarEstado ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50' : 'hidden' }}">
+        <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Agregar/Modificar Items</h3>
+                <button onclick="document.getElementById('modal-PreguntarCambiarEstado').classList.add('hidden')" class="text-gray-400 text-xl">✕</button>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Está seguro de cambiar el estado de creado a enviado? Una vez realizada esta acción ya no podrá modificar los items!</label>
+            </div>
+            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700"  wire:click="CambiarEstado('enviado')">Enviar presupuesto</button>
+        </div>
+    </div>
+
 
     <script>
         let mapCliente = null;

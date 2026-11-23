@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('plazo_dias');
             $table->unsignedInteger('garantia_meses')->nullable();
             $table->text('comentario')->nullable();
-            $table->enum('estado', ['enviado', 'aceptado', 'rechazado', 'vencido'])->default('enviado');
+            $table->enum('estado', ['creado','enviado', 'aceptado', 'rechazado', 'vencido'])->default('creado');
             $table->timestamps();
             $table->softDeletes();
 

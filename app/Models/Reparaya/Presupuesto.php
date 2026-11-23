@@ -21,7 +21,7 @@ class Presupuesto extends Model
         'plazo_dias', 
         'garantia_meses', 
         'comentario', 
-        'estado',
+        'estado',   // creado, enviado, aceptado, rechazado, vencido
     ];
 
     protected $casts = [

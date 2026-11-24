@@ -12,14 +12,14 @@ class ReparayaReparadorComponent extends Component
 
     public $solicitudes;
     public $solicitud_id;
-    public $mostrarDetalle=false, $mostrarNuevoItem=false, $PreguntarCambiarEstado=false;
+    public $mostrarDetalle=false, $mostrarNuevoItem=false, $PreguntarCambiarEstado=false, $mostrarEnviarPresupuesto=false, $PreguntarCambiarEstadoPresupuesto=false;
     public $items;
     public $presu_solicitud_id;
     public $concepto, $monto, $montototal;
     public $presupuesto;
     public $estado_presupuesto;
     public $modificable;
-    
+    public $plazo_dias, $garantia_meses, $comentario;
 
     
     public function dashboard()
@@ -92,6 +92,7 @@ class ReparayaReparadorComponent extends Component
     public function getModificable() {
         switch ($this->getEstado()) {
             case 'creado': return true;
+            case 'preparado': return true;
             case 'enviado': return false;
             case 'rechazado': return false;
             case 'aceptado': return false;
@@ -148,16 +149,37 @@ class ReparayaReparadorComponent extends Component
                 ->where('reparador_id',5)
                 ->update([
                     'estado' => $NuevoEstado,
+                    'comentario' => $this->comentario,
+                    'monto'=> (float) $this->montototal,
+                    'plazo_dias' => $this->plazo_dias,
+                    'garantia_meses' => $this->garantia_meses
                 ]);
                 session()->flash('message', 'Estado Actualizado.');
-                $this->PreguntarCambiarEstado = false ;
         } else {    
-            session()->flash('messageerror', 'El prosupuesto no se puede modificar.');
+            session()->flash('messageerror', 'El presupuesto no se puede modificar.');
         }
-
+        $this->PreguntarCambiarEstado = false ;
+        $this->PreguntarCambiarEstadoPresupuesto = false;
     }
 
-    public function preguntar_cambiar_estado() {
-        $this->PreguntarCambiarEstado = true ;
+    public function preguntar_cambiar_estado() { $this->PreguntarCambiarEstado = true ; }
+    public function preguntar_cambiar_estado_presupuesto() { 
+        $validatedData = $this->validate([
+            'montototal'     => 'required|string|min:0', // Usa numeric si lleva decimales (ej. 1500.50) o integer si es entero
+            'plazo_dias'     => 'required|integer|min:1',
+            'garantia_meses' => 'required|integer|min:1',
+            'comentario'     => 'nullable|string|max:1000', // Cambia 'nullable' por 'required' si es obligatorio
+        ]);
+        
+        $this->PreguntarCambiarEstadoPresupuesto = true ; 
+    }
+
+    public function MostrarModalEnviarPresupuesto($solicitud_id) {
+        $this->solicitud_id = $solicitud_id;
+        $montoAux = Presupuesto::where('solicitud_id',$this->solicitud_id)
+        ->where('reparador_id',5)
+        ->get('monto');
+        $this->montototal = number_format($montoAux[0]['monto'],2,',','.');
+        $this->mostrarEnviarPresupuesto = !$this->mostrarEnviarPresupuesto;
     }
 }

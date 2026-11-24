@@ -62,12 +62,34 @@
                 </div>
             </div>
 
-            <div>
+            <form action="{{ route('reparaya.cliente.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-sm max-w-lg mx-auto">
+                @csrf
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Fotos (opcional)</label>
+                    
+                    <!-- Zona de arrastrar/soltar (Dropzone visual) -->
+                    <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition cursor-pointer">
+                        <input type="file" name="fotos[]" id="fotos" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImages(event)">
+                        <div class="text-gray-500 flex justify-center items-center gap-2">
+                            <span>📷</span> Tocá para subir fotos
+                        </div>
+                    </div>
+            
+                    <!-- Contenedor para las previsualizaciones (miniaturas) -->
+                    <div id="preview-container" class="flex flex-wrap gap-2 mt-3 hidden"></div>
+                    
+                    @error('fotos.*')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+            </form>
+
+            {{-- <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Fotos (opcional)</label>
                 <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-500 text-sm">
                     📷 Tocá para subir fotos
                 </div>
-            </div>
+            </div> --}}
 
             <div class="flex flex-col sm:flex-row gap-3 pt-2">
                 <a href="{{ route('reparaya.reparaya.cliente') }} " class="flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50">Cancelar</a>
@@ -78,4 +100,33 @@
 </body>
 </html>
 
+<script>
+    function previewImages(event) {
+        const container = document.getElementById('preview-container');
+        container.innerHTML = ''; // Limpiar previsualizaciones anteriores
+        
+        const files = event.target.files;
+    
+        if (files.length > 0) {
+            container.classList.remove('hidden');
+        } else {
+            container.classList.add('hidden');
+            return;
+        }
+    
+        Array.from(files).forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+    
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-16 h-16 object-cover rounded-lg border border-gray-200 shadow-sm';
+                container.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+    </script>
+    
 </div>

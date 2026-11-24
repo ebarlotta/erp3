@@ -338,6 +338,8 @@ use App\Http\Livewire\Reparaya\ReparayaReparadorComponent;
 Route::prefix('reparaya')->name('reparaya.')->middleware(['auth'])->group(function () {
     Route::get('/reparaya', ReparayaClienteComponent::class)->name('reparaya.cliente');
     Route::get('/cliente/solicitud/{solicitud}', PresupuestosComponent::class)->name('reparaya.cliente.solicitud');
+    Route::get('/cliente/store', PresupuestosComponent::class)->name('cliente.store');
+    
 
     Route::get('/reparador', ReparayaReparadorComponent::class)->name('reparaya.reparador');
 

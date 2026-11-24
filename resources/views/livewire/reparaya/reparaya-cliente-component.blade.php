@@ -63,7 +63,7 @@
                 <button onclick="cerrarModal()" class="text-gray-400 text-xl">✕</button>
             </div>
             <div class="bg-white rounded-xl shadow p-5 space-y-4">
-                <form wire:submit="guardar" class="text-left">
+                {{-- <form wire:submit="guardar" class="text-left"> --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
                         <div>
@@ -119,16 +119,63 @@
                         @error('descripcion') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
-                    <div>
+                        <!-- Carga de Fotos -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Fotos (opcional)</label>
+                        
+                        <!-- Zona de subida -->
+                        <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition cursor-pointer">
+                            <!-- wire:model="fotos" con multiple permite subir varias -->
+                            <input type="file" wire:model="fotos" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            
+                            <!-- Spinner de carga de Livewire -->
+                            <div wire:loading wire:target="fotos" class="text-teal-600 font-medium">
+                                Subiendo imágenes...
+                            </div>
+                            
+                            <!-- Texto por defecto -->
+                            <div wire:loading.remove wire:target="fotos" class="text-gray-500 flex justify-center items-center gap-2">
+                                <span>📷</span> Tocá para subir fotos
+                            </div>
+                        </div>
+
+                        <!-- Errores de validación de fotos -->
+                        @error('fotos.*') <span class="text-red-500 text-xs block mt-1">{{ $message }}</span> @enderror
+
+                        <!-- Previsualización de fotos cargadas (temporal) -->
+                        @if ($fotos)
+                            <div class="flex flex-wrap gap-2 mt-3">
+                                @foreach ($fotos as $index => $foto)
+                                    <div class="relative w-16 h-16 group">
+                                        <img src="{{ $foto->temporaryUrl() }}" class="w-full h-full object-cover rounded-lg border border-gray-200 shadow-sm">
+                                        
+                                        <!-- Botón para eliminar la foto -->
+                                        <button type="button" wire:click="eliminarFoto({{ $index }})" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition">
+                                            ✕
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Fotos</label>
                         <input type="file" wire:model="fotos" multiple class="w-full text-sm">
                         @error('fotos.*') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
+                    </div> --}}
 
+                            <!-- Botón Submit con estado de carga -->
+                    
+                    <button wire:click="guardar" wire:loading.attr="disabled" class="flex-1 bg-teal-700 text-white py-2 rounded-lg font-medium hover:bg-teal-800 transition flex justify-center items-center">
+                        <span wire:loading.remove wire:target="guardar">Publicar solicitud</span>
+                        <span wire:loading wire:target="guardar">Guardando...</span>
+                    </button>
+        
                     <button type="submit" class="mt-3 w-full bg-client text-white py-2 rounded-lg font-medium">
                         Publicar solicitud
                     </button>
-                </form>
+                {{-- </form> --}}
             </div>
         </div>
     </div>

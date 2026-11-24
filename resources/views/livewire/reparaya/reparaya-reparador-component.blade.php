@@ -36,7 +36,7 @@
             </div>
             <p class="text-sm text-gray-600 mt-2">{{ $solicitud->descripcion }}</p>
             <div class="flex flex-col sm:flex-row gap-2 mt-3">
-                <button onclick="document.getElementById('modal-presupuesto').classList.remove('hidden'); setTimeout(inicializarMapa, 100)" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">
+                <button wire:click="MostrarModalEnviarPresupuesto({{ $solicitud->id }})" onclick="document.getElementById('modal-presupuesto').classList.remove('hidden'); setTimeout(inicializarMapa, 100)" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-emerald-700">
                     Enviar presupuesto
                 </button>
                 <button onclick="document.getElementById('modal-detalle').classList.remove('hidden');" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-50" wire:click="cargaritems({{ $solicitud->id }})" >
@@ -48,11 +48,23 @@
 </main>
 
     <!-- Modal presupuesto -->
-    <div id="modal-presupuesto" class="hidden fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+    <div id="modal-presupuesto" class="{{ $mostrarEnviarPresupuesto ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50' : 'hidden' }}">
         <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4">
+            @if (session()->has('message'))
+                    <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3"
+                        role="alert">
+                        <div class="flex">
+                            <div>
+                                <p class="text-xm bg-lightgreen">{{ session('message') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             <div class="flex justify-between items-center">
                 <h3 class="font-bold text-lg">Enviar presupuesto</h3>
-                <button onclick="document.getElementById('modal-presupuesto').classList.add('hidden')" class="text-gray-400 text-xl">✕</button>
+                
+                <button wire:click="MostrarModalEnviarPresupuesto({{ $solicitud->id }})"  class="text-gray-400 text-xl">✕</button>
+                {{-- <button onclick="document.getElementById('modal-presupuesto').classList.add('hidden')" class="text-gray-400 text-xl">✕</button> --}}
             </div>
             <!-- Mapa de ubicación del cliente -->
             <div>
@@ -62,22 +74,39 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Monto *</label>
-                <input type="number" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="$ 0">
+                <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="$ 0" wire:model="montototal" disabled>
+                @error('montototal') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Plazo estimado</label>
-                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                    <option>1 día</option>
-                    <option>2-3 días</option>
-                    <option>1 semana</option>
-                    <option>Más de 1 semana</option>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" wire:model="plazo_dias">
+                    <option value="0">Seleccione una opción</option>
+                    <option value="1">1 día</option>
+                    <option value="3">2-3 días</option>
+                    <option value="7">1 semana</option>
+                    <option value="15">Más de 1 semana</option>
                 </select>
+                @error('plazo_dias') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Garantía en meses</label>
+                <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" wire:model="garantia_meses">
+                    <option value="0">Seleccione una opción</option>
+                    <option value="1">1 mes</option>
+                    <option value="2">2 meses</option>
+                    <option value="3">3 meses</option>
+                    <option value="4">6 meses</option>
+                    <option value="12">12 meses</option>
+                </select>
+                @error('garantia_meses') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Comentario</label>
-                <textarea rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Detalles del presupuesto..."></textarea>
+                <textarea rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Detalles del presupuesto..." wire:model="comentario"></textarea>
+                @error('comentario') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700">Enviar presupuesto</button>
+            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700" wire:click="preguntar_cambiar_estado_presupuesto()" x-data
+            :disabled="!$wire.modificable"  >Enviar presupuesto</button>
         </div>
     </div>
 
@@ -87,7 +116,8 @@
             <div class="flex justify-between items-center">
                 <h3 class="font-bold text-lg">Detalles</h3>
                 <span class="text-md px-2 py-1 rounded-full font-large bg-green-100 text-green-700">Presupuesto: {{ $estado_presupuesto }}</span>
-                <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="text-gray-400 text-xl">✕</button>
+                <button wire:click="$set('mostrarDetalle', false)" class="text-gray-400 text-xl">✕</button>
+                {{-- <button onclick="document.getElementById('modal-detalle').classList.add('hidden')" class="text-gray-400 text-xl">✕</button> --}}
             </div>
 
             <div>
@@ -158,7 +188,12 @@
                         <th class="px-4 text-left font-semibold align-items-center">
                             <div class="d-flex align-items-center" style="justify-content: space-evenly;">
                                 <p>Acciones</p>
-                                <button class="bg-emerald-600 text-white p-2 rounded-lg hover:bg-emerald-700" wire:click="edit(0)">+ Agregar</button>
+                                <button wire:click="edit(0)" class=" bg-emerald-300 hover:bg-eerald-400 text-black-900 font-bold py-1 px-1 mt-0 ml-1 rounded-md">+ Agregar
+                                    {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                    </svg> --}}
+                                </button>
+                                {{-- <button class="bg-emerald-600 text-white p-2 rounded-lg hover:bg-emerald-700" wire:click="edit(0)">+ Agregar</button> --}}
                             </flex>
                         </th>
                     </tr>
@@ -170,8 +205,18 @@
                             <td>{{ $item->monto}}</td>
                             <td>
                                 <div class="flex justify-center">
-                                    <x-editar id="{{ $item->id }}"></x-editar>
-                                    <x-eliminar id="{{ $item->id }}"></x-eliminar>
+                                    <button wire:click="edit({{ $item->id }})" class=" bg-blue-300 hover:bg-blue-400 text-black-900 font-bold py-1 px-1 mt-1 ml-1 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                        </svg>
+                                    </button>
+                                    <button wire:click="delete({{ $item->id }})" class=" flex bg-red-300 hover:bg-red-400 text-black-900 font-bold py-1 px-1 rounded mt-1 ml-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                    {{-- <x-editar id="{{ $item->id }}"></x-editar> --}}
+                                    {{-- <x-eliminar id="{{ $item->id }}"></x-eliminar> --}}
                                 </div>
                             </td>
                         </tr>
@@ -179,7 +224,7 @@
                     @endif
                 </table>
             </div>
-            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700"  wire:click="preguntar_cambiar_estado()">Enviar presupuesto</button>
+            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700" wire:click="preguntar_cambiar_estado()">Dejar Preparado el presupuesto</button>
         </div>
     </div>
 
@@ -216,16 +261,29 @@
     <div id="modal-PreguntarCambiarEstado" class="{{ $PreguntarCambiarEstado ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50' : 'hidden' }}">
         <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="font-bold text-lg">Agregar/Modificar Items</h3>
-                <button onclick="document.getElementById('modal-PreguntarCambiarEstado').classList.add('hidden')" class="text-gray-400 text-xl">✕</button>
+                <h3 class="font-bold text-lg">Dejar Presupuesto Preparado</h3>
+                <button wire:click="$set('PreguntarCambiarEstado', false)" class="text-gray-400 text-xl">✕</button>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Está seguro de cambiar el estado de creado a enviado? Una vez realizada esta acción ya no podrá modificar los items!</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Está seguro de cambiar el estado de creado a preparado? Una vez realizada esta acción ya no podrá modificar los items!</label>
             </div>
-            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700"  wire:click="CambiarEstado('enviado')">Enviar presupuesto</button>
+            <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700"  wire:click="CambiarEstado('preparado')">Preparar presupuesto</button>
         </div>
     </div>
 
+        <!-- Modal PreguntarCambiarEstadoPresupuesto -->
+        <div id="modal-PreguntarCambiarEstadoPresupuesto" class="{{ $PreguntarCambiarEstadoPresupuesto ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50' : 'hidden' }}">
+            <div class="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-lg">Enviar Presupuesto Preparado</h3>
+                    <button wire:click="$set('PreguntarCambiarEstadoPresupuesto', false)" class="text-gray-400 text-xl">✕</button>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Está seguro de enviar al cliente el presupuesto? Una vez realizada esta acción ya no podrá modificar el mismo!</label>
+                </div>
+                <button class="w-full bg-emerald-600 text-white py-2 rounded-lg font-medium hover:bg-emerald-700"  wire:click="CambiarEstado('enviado')">Enviar presupuesto</button>
+            </div>
+        </div>
 
     <script>
         let mapCliente = null;

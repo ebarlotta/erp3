@@ -168,12 +168,12 @@
                             <!-- Botón Submit con estado de carga -->
                     
                     <button wire:click="guardar" wire:loading.attr="disabled" class="flex-1 bg-teal-700 text-white py-2 rounded-lg font-medium hover:bg-teal-800 transition flex justify-center items-center">
-                        <span wire:loading.remove wire:target="guardar">Publicar solicitud</span>
+                        <span wire:loading.remove wire:target="guardar">Publicar solicitudsssss</span>
                         <span wire:loading wire:target="guardar">Guardando...</span>
                     </button>
         
                     <button type="submit" class="mt-3 w-full bg-client text-white py-2 rounded-lg font-medium">
-                        Publicar solicitud
+                        Publicar solicitudsdasdsaweb
                     </button>
                 {{-- </form> --}}
             </div>

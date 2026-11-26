@@ -17,44 +17,51 @@
     </header>
 
     <main class="p-4 max-w-2xl mx-auto">
-        <form class="bg-white rounded-xl shadow p-5 space-y-4">
-
+        {{-- <form class="bg-white rounded-xl shadow p-5 space-y-4"> --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Título del trabajo *</label>
-                <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Ej: Pérdida de agua en cocina">
+                <input type="text" wire:model="titulo" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Ej: Pérdida de agua en cocina">
+                @error('titulo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Categoría *</label>
-                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                        <option>Seleccioná una categoría</option>
-                        <option>Plomería</option>
-                        <option>Electricidad</option>
-                        <option>Pintura</option>
-                        <option>Carpintería</option>
-                        <option>Albañilería</option>
-                        <option>Otros</option>
+                    <select wire:model="categoria_id" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option value="">Seleccioná</option>
+                        @foreach ($categorias as $cat)
+                            <option value="{{ $cat->id }}">{{ $cat->nombrecategoria }}</option>
+                        @endforeach
                     </select>
+                    @error('categoria_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Calle, número, localidad">
+                    <input type="text" wire:model="direccion" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Calle, número">
+                    @error('direccion') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Localidad *</label>
+                    <input type="text" wire:model="localidad" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Localidad"">
+                    @error('localidad') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Descripción *</label>
-                <textarea rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Describí el problema con el mayor detalle posible..."></textarea>
+                <textarea wire:model="descripcion" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:outline-none" placeholder="Describí el problema con el mayor detalle posible..." ></textarea>
+                @error('descripcion') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Urgencia</label>
-                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                        <option>Normal</option>
-                        <option>Urgente (48hs)</option>
-                        <option>Muy urgente (24hs)</option>
+                    <select wire:model="urgencia" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">Selecciona una...</option>
+                        <option value="normal">Normal</option>
+                        <option value="urgente">Urgente (48hs)</option>
+                        <option value="muy_urgente">Muy urgente (24hs)</option>
                     </select>
+                    @error('urgencia') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Presupuesto estimado</label>
@@ -62,40 +69,47 @@
                 </div>
             </div>
 
-            <form action="{{ route('reparaya.cliente.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-sm max-w-lg mx-auto">
-                @csrf
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Fotos (opcional)</label>
-                    
-                    <!-- Zona de arrastrar/soltar (Dropzone visual) -->
-                    <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition cursor-pointer">
-                        <input type="file" name="fotos[]" id="fotos" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImages(event)">
-                        <div class="text-gray-500 flex justify-center items-center gap-2">
-                            <span>📷</span> Tocá para subir fotos
-                        </div>
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Fotos (opcional)</label>
+                
+                <!-- Zona de arrastrar/soltar -->
+                <div class="relative border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition cursor-pointer">
+                    <input type="file" wire:model="fotos" id="fotos" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                    <div class="text-gray-500 flex justify-center items-center gap-2">
+                        <span>📷</span> Tocá para subir fotos
                     </div>
+                </div>
             
-                    <!-- Contenedor para las previsualizaciones (miniaturas) -->
-                    <div id="preview-container" class="flex flex-wrap gap-2 mt-3 hidden"></div>
-                    
-                    @error('fotos.*')
-                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                    @enderror
+                <!-- Indicador de carga mientras sube la imagen temporal -->
+                <div wire:loading wire:target="fotos" class="text-xs text-teal-600 mt-2">
+                    Subiendo imágenes...
                 </div>
-            </form>
-
-            {{-- <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Fotos (opcional)</label>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-500 text-sm">
-                    📷 Tocá para subir fotos
-                </div>
-            </div> --}}
+            
+                <!-- Previsualización nativa de Livewire -->
+                @if ($fotos)
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        @foreach ($fotos as $foto)
+                            <img src="{{ $foto->temporaryUrl() }}" class="w-20 h-20 object-cover rounded-lg border">
+                        @endforeach
+                    </div>
+                @endif
+                
+                @error('fotos.*')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
+            </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                <a href="{{ route('reparaya.reparaya.cliente') }} " class="flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50">Cancelar</a>
-                <button type="submit"  class="flex-1 bg-client text-white py-2 rounded-lg font-medium bg-client:hover">Publicar solicitud</button>
-            </div>
-        </form>
+            {{-- <button type="submit"  class="flex-1 bg-client text-white py-2 rounded-lg font-medium bg-client:hover">Publicar solicitud</button> --}}
+                
+            <a href="{{ route('reparaya.reparaya.cliente') }} " class="flex-1 text-center border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50">Cancelar</a>
+            <button wire:click="guardar" wire:loading.attr="disabled" class="flex-1 bg-teal-700 text-white py-2 rounded-lg font-medium hover:bg-teal-800 transition flex justify-center items-center">
+                <span wire:loading.remove wire:target="guardar">Publicar solicitud</span>
+                <span wire:loading wire:target="guardar">Guardando...</span>
+            </button>
+        </div>
+
+        <!-- </form> -->
     </main>
 </body>
 </html>

@@ -2,24 +2,14 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport"content="width=device-width, user-scaable=no, initial-scale=1.0 maximum-scale=1.0, minimum-scale=1.0"/>
-        <title>MCR Soft</title>
         <link rel="stylesheet" href="/css/estilosMario.css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <!-- incorporacion de Letra Jockey One -->
-        {{-- <link rel="preconnect" href="https://fonts.googleapis.com" /> --}}
-        {{-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> --}}
-        <!-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
-    
-        {{-- <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script> --}}
-        <!--     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">  -->
       </head>
     
       <body> 
-        {{-- <main> --}}
-          <!-- desde aca o anterior -->
-          {{-- <div cass="container"> --}}
             <div>
               <div class="text-center">
                 @if(session()->has('message')) 
@@ -32,7 +22,23 @@
                         </div>
                     </div>
                 @endif
-                <div class="pelotero">
+
+                <div class="w-3/4" style="display: flex; justify-content: space-around; margin: auto;">
+                  <a href="VentaSimple?Compras">
+                    <img src="{{ asset('images/billetera-ingreso.jpg')}}" width="150px" alt="Ingresos" class="rounded-xl">
+                    <label for="">Ingresos</label>
+                  </a>
+                  <a href="VentaSimple?Ventas">
+                    <img src="{{ asset('images/billetera-egreso.jpg')}}" width="150px"  alt="" class="rounded-xl">
+                    <label for="">Egresos</label>
+                  </a>
+                  <a href="VentaSimple?Ventas">
+                    <img src="{{ asset('images/billetera-factura.jpg')}}" width="150px"  alt="" class="rounded-xl">
+                    <label for="">Escanear</label>
+                  </a>
+                </div>
+
+                {{-- <div class="pelotero">
 
                   <a href="VentaSimple?Compras">
                     <div class="pelotitaE">
@@ -63,7 +69,7 @@
                     </svg>
                   </div>
                     </a>
-                </div>
+                </div> --}}
     
                 <input wire:model="monto_simple" class="Monto" type="number" placeholder="Monto $" autofocus/><br />
                 {{-- <input wire:model="monto_simple" wire:keyup="ActualizaMonto()" class="Monto" type="text" placeholder="Monto $" autofocus/><br /> --}}
@@ -77,40 +83,60 @@
     
                 <!-- Cliente -->
                 @if($modulo=="Ventas")
-                    <select class="Clientes" wire:model="cliente_simple">
+                  <div style="width: 80%; display: flex; justify-content: space-around; margin: auto;">
+                    <select class="col-11 mr-1 Clientes" wire:model="cliente_simple">
                     <option value="">Seleccione un Cliente</option>
                         @foreach ($clientes as $cliente)
                             <option value="{{ $cliente->id }}">{{ $cliente->name }}</option>
                         @endforeach
                     </select>
+                    <a class="col-1 Clientes" style="align-content: center;" href="{{ route('clientes')}}">
+                      <button>+</button>
+                    </a>
+                  </div>
                 @else
-                    <select class="Proveedores" wire:model="proveedor_simple">
+                  <div style="width: 80%; display: flex; justify-content: space-around; margin: auto;">
+                    <select class="col-11 mr-1 Proveedores" wire:model="proveedor_simple">
                         <option value="">Seleccione un Proveedor</option>
                         @foreach ($proveedores as $proveedor)
                             <option value="{{ $proveedor->id }}">{{ $proveedor->name }}</option>
                         @endforeach
                     </select>
+                    <a class="col-1 Proveedores" style="align-content: center;" href="{{ route('proveedores')}}">
+                      <button>+</button>
+                    </a>
+                  </div>
                 @endif
                 <br />
     
                 <!-- Area -->
-                <select class="areas" wire:model="area_simple">
-                  <option value="">Seleccione un Área</option>
-                    @foreach ($areas as $area)
+                <div style="width: 80%; display: flex; justify-content: space-around; margin: auto;">
+                  <select class="col-11 mr-1 areas" wire:model="area_simple">
+                    <option value="">Seleccione un Área</option>
+                      @foreach ($areas as $area)
                         <option value="{{ $area->id }}">{{ $area->name }}</option>
-                    @endforeach
-                </select>
-                <br />
-    
+                      @endforeach
+                  </select>
+                  <a class="col-1 areas" style="align-content: center;" href="{{ route('areas')}}">
+                    <button>+</button>
+                  </a>
+                </div>
+                <br/>
+
                 <!-- Cuenta  -->
-                <select class="cuentas" wire:model="cuenta_simple">
-                  <option value="">Seleccione una Cuenta</option>
-                  @foreach ($cuentas as $cuenta)
-                    <option value="{{ $cuenta->id }}">{{ $cuenta->name }}</option>
-                  @endforeach
-                </select>
+                <div style="width: 80%; display: flex; justify-content: space-around; margin: auto;">
+                  <select class="col-11 mr-1 cuentas" wire:model="cuenta_simple">
+                    <option value="">Seleccione una Cuenta</option>
+                    @foreach ($cuentas as $cuenta)
+                      <option value="{{ $cuenta->id }}">{{ $cuenta->name }}</option>
+                    @endforeach
+                  </select>
+                  <a class="col-1 cuentas" style="align-content: center;" href="{{ route('cuentas')}}">
+                    <button>+</button>
+                  </a>
+                </div>
                 <br />
-    
+
                 <!-- Destacado de Ingresos  -->
               </div>
               @if($modulo=="Ventas")

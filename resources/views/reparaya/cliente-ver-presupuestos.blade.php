@@ -12,7 +12,7 @@
 
     <!-- Header -->
     <header class="bg-client text-white px-4 py-3 flex items-center gap-3 sticky top-0 z-10">
-        <a href="{{ route('cliente-dashboard') }}" class="text-xl">←</a>
+        <a href="{{ route('reparaya.reparaya.cliente') }}" class="text-xl">←</a>
         <h1 class="font-bold">Presupuestos recibidos</h1>
     </header>
 
@@ -149,6 +149,8 @@
             </div>
         </div>
     </div>
+
+
 
     <script>
         function abrirModal(nombre, monto) {

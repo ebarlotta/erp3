@@ -1,6 +1,6 @@
 <div class="px-2 text-center justify-center space-y-4">
-<a href="{{ route('reparaya.reparaya.cliente.solicitud',0) }}" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">
-    + Nueva solicitud s
+<a href="{{ route('reparaya.reparaya.cliente.solicitud',0) }}" class="block w-full bg-client text-white text-center py-3 rounded-xl font-medium transition mt-2">
+    + Nueva solicitud
 </a>
 {{-- <button onclick="{{ route('reparaya.reparaya.cliente.solicitud',0) }}" class="mt-3 w-full bg-client text-white text-center py-3 rounded-xl font-medium transition">+ Nueva solicitud</button> --}}
 

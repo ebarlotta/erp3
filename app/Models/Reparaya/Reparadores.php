@@ -67,7 +67,7 @@ class Reparadores extends Model
 
     public function resenas()
     {
-        return $this->hasMany(Resena::class);
+        return $this->hasMany(Resena::class, 'reparador_id');
     }
 
     public function presupuestos()
@@ -277,7 +277,7 @@ class Reparadores extends Model
         $rows = $this->resenas()
             ->select(
                 DB::raw("DATE_FORMAT(created_at, '%Y-%m') as periodo"),
-                DB::raw('AVG(puntaje) as promedio'),
+                DB::raw('AVG(puntuacion) as promedio'),
                 DB::raw('COUNT(*) as total')
             )
             ->where('created_at', '>=', $desde)
@@ -289,11 +289,13 @@ class Reparadores extends Model
         $meses_nombres = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
         $labels = $promedios = $totales = [];
 
+
         for ($i = 0; $i < $meses; $i++) {
             $fecha = now()->subMonths($meses - 1 - $i);
             $key   = $fecha->format('Y-m');
+            
             $labels[]    = $meses_nombres[(int) $fecha->format('n') - 1];
-            $promedios[] = $rows[$key] ? round((float) $rows[$key]->promedio, 1) : null;
+            $promedios[] = isset($rows[$key]) ? round((float) $rows[$key]->promedio, 1) : null;
             $totales[]   = (int) ($rows[$key]->total ?? 0);
         }
 

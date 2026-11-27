@@ -31,6 +31,8 @@ class PresupuestosComponent extends Component
     public $presupuesto_estimado = '';
     public $fotos = [];
 
+    public $modal_ver_perfil=false;
+
     protected $rules = [
         'titulo'               => 'required|string|max:150',
         'categoria_id'         => 'required|exists:categorias,id',
@@ -51,6 +53,7 @@ class PresupuestosComponent extends Component
         ];
 
     public function render(Request $request) {
+        //dd($request);
         $user = Auth::user()->id;
         $this->categorias = \App\Models\Reparaya\Categorias::where('empresa_id', 1)->get();
 
@@ -60,17 +63,19 @@ class PresupuestosComponent extends Component
                 ->first();
                 // dd($presupuesto[0]->presupuestos);
 
-            $this->presupuestos = Presupuesto::with('reparador')
-            ->where('solicitud_id','=',$request->solicitud)
+            //$this->presupuestos = Presupuesto::with('reparador')
+            $this->presupuestos = Presupuesto::where('solicitud_id','=',$request->solicitud)
             ->where('estado','enviado')
             ->orderby('monto','asc')
             ->get();
             // dd($this->presupuestos->first()->reparador);
-            // dd($this->presupuestos);
-            return view('livewire.reparaya.listado-presupuestos-component')->extends('layouts.reparaya');
-        } else {
-            return view('livewire.reparaya.presupuestos-component')->extends('layouts.reparaya');
+            //dd($this->presupuestos);
+            //return view('livewire.reparaya.listado-presupuestos-component')->extends('layouts.reparaya');
+        //} else {
+        //    return view('livewire.reparaya.presupuestos-component')->extends('layouts.reparaya');
         }
+        return view('livewire.reparaya.listado-presupuestos-component')->extends('layouts.reparaya');
+
     }
 
     public function guardar() {
@@ -120,4 +125,7 @@ class PresupuestosComponent extends Component
 
         // $this->render();
     }
+
+    public function Mostrar_modal_ver_perfil() { $this->modal_ver_perfil = !$this->modal_ver_perfil ; }
+
 }
